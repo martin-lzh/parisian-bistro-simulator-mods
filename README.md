@@ -1,11 +1,11 @@
 # Parisian Bistro Simulator Mods
 
-法式小馆儿模拟器的非官方 Mod 开发项目。仓库保持私密；已提供两个 Mod 的正式版，目前 Auto Checkout 继续开发后续修复。
+法式小馆儿模拟器的非官方 Mod 开发项目。仓库保持私密；已提供两个 Mod 的正式版，Auto Checkout 最新正式版为 0.1.2。
 
 | Mod | 功能 | 状态 |
 | --- | --- | --- |
 | [Bartender's Note](bartenders-note-mod/README.md) | 在餐厅名称下方汇总本地玩家认领的待做饮料 | 0.1.0 正式版 |
-| [Auto Checkout](auto-checkout-mod/README.md) | 自动处理顾客柜台付款和收银机结账交互 | 0.1.2-dev，现金/刷卡及远距离结账已获实机确认 |
+| [Auto Checkout](auto-checkout-mod/README.md) | 自动处理顾客柜台付款和收银机结账交互 | 0.1.2 正式版 |
 
 实机确认日期和范围见[验收记录](releases/validation.md)。CI 执行离线测试、打包及文件校验，产物从对应 [Actions 运行](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)下载。
 

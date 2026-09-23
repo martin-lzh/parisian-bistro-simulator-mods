@@ -1,13 +1,13 @@
 # 版本记录
 
-当前 Auto Checkout 开发包为 `AutoCheckout-0.1.2-dev.zip`，用户已确认 3 笔现金和 2 笔刷卡全部首次尝试完成，包含超过原交互范围的结账，详见[验收记录](validation.md)。版本继续保留开发标识；下表保留既有正式版记录，CI 产物按当前源码版本构建。
+当前 Auto Checkout 正式包为 `AutoCheckout-0.1.2.zip`，用户已确认 3 笔现金和 2 笔刷卡全部首次尝试完成，包含超过原交互范围的结账，详见[验收记录](validation.md)。按用户要求将已验收开发版转为 0.1.2 正式版；下表记录最新正式版，CI 产物按当前源码版本构建。
 
 ## 正式版本
 
 | Mod | 版本 | 实机确认日期 | ZIP |
 | --- | --- | --- | --- |
 | Bartender's Note | 0.1.0 | 2026-09-24 | `BartendersNote-0.1.0.zip` |
-| Auto Checkout | 0.1.1 | 2026-09-24 | `AutoCheckout-0.1.1.zip` |
+| Auto Checkout | 0.1.2 | 2026-09-24 | `AutoCheckout-0.1.2.zip` |
 
 用户已确认两个开发包实机测试成功，并要求转为正式版。确认范围见[验收记录](validation.md)。正式版本号与 GitHub Release 发布是独立步骤；目前安装包可由本地构建或 [CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)取得。
 

@@ -6,7 +6,7 @@
 
 ## 状态与依赖
 
-**0.1.2-dev 开发版，现金、刷卡及远距离结账已获实机确认。** 2026-09-24 用户反馈 3 笔现金和 2 笔刷卡均完成两步交互，全部首次尝试成功，无重试失败或新异常；关闭钱柜时距离超过原范围也能清空账单并关闭钱柜。本版修正原生玩家距离和摆放家具限制，保留交易检查、AI 收银任务抑制及提醒监听；实际验证范围见[开发说明](DEVELOPMENT.md)。
+**0.1.2 正式版，现金、刷卡及远距离结账已获实机确认。** 2026-09-24 用户反馈 3 笔现金和 2 笔刷卡均完成两步交互，全部首次尝试成功，无重试失败或新异常；关闭钱柜时距离超过原范围也能清空账单并关闭钱柜。正式版沿用已验收开发包的运行逻辑，修正原生玩家距离和摆放家具限制，保留交易检查、AI 收银任务抑制及提醒监听；实际验证范围见[开发说明](DEVELOPMENT.md)。
 
 - 目标基线：Steam Build 25393699，ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。
 - 依赖支持 UE 5.4 的 [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)。本机核对源码版本为 `f58e8f84`；旧稳定版 3.0.1 不作为目标加载器。
@@ -33,7 +33,7 @@
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.2-dev` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `START version=0.1.2` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 已处理提醒，附对应柜台在游戏线程检查时的状态和合并的提醒次数 |
 | `EVENT_IGNORED` | 当前不是房主，或提醒对应的柜台已失效、不属于当前世界 |
@@ -46,7 +46,7 @@
 | `SKIP` | 最后复查发现条件改变，未发送请求，不消耗重试次数 |
 | `WARN` / `ERROR` | 多次无进展，或异常导致停止；异常附执行阶段、最近状态及可用的 Lua 堆栈 |
 
-更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.2-dev` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。若日志报告无法恢复交互限制，请重新载入世界。
+更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.2` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。若日志报告无法恢复交互限制，请重新载入世界。
 
 ## 安装与卸载
 
