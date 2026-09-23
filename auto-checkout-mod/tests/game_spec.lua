@@ -101,21 +101,25 @@ test('clients, remote controllers and unpossessed pawns never run checkout', fun
     assert(Game.session(f.api) == nil)
 end)
 
-test('menu, pause, chat, carried items and active player interactions suspend checkout', function()
+test('other player actions do not block checkout or call the broad interaction getter', function()
     for _, field in ipairs({ 'bIsInWidgetMode', 'frozen', 'locally_frozen', 'interacting', 'placing', 'wheel' }) do
         local f = fixture()
         f.player[field] = true
-        assert(Game.session(f.api).blocked, field)
+        f.player.IsInteracting = function() error('must not query broad player interaction state') end
+        local s = Game.session(f.api)
+        assert(not s.blocked, field)
+        assert(Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take'))
+        assert(#f.calls == 1, field)
     end
     local f = fixture()
     f.player.CarriedObject = f.cash
-    assert(Game.session(f.api).blocked)
+    assert(not Game.session(f.api).blocked)
     f.player.CarriedObject, f.controller.chat = nil, true
-    assert(Game.session(f.api).blocked)
+    assert(not Game.session(f.api).blocked)
     f.controller.chat, f.api.gameplay.paused = false, true
     assert(Game.session(f.api).blocked)
     f.api.gameplay.paused, f.controller.bIsLocalPauseRequested = false, true
-    assert(Game.session(f.api).blocked)
+    assert(not Game.session(f.api).blocked)
 end)
 
 test('stale worlds, templates, clients and destroyed registers are excluded', function()
@@ -182,7 +186,7 @@ test('unexpected reflected types fail before any action', function()
     assert(#f.calls == 0)
 end)
 
-test('waiting reasons distinguish guest, missing pawn, pause and carried objects', function()
+test('waiting reasons distinguish guest, missing pawn and game pause', function()
     local f = fixture()
     f.controller.authority = false
     local s, reason = Game.session(f.api)
@@ -192,7 +196,7 @@ test('waiting reasons distinguish guest, missing pawn, pause and carried objects
     assert(s == nil and reason == 'host-pawn-unavailable')
     f.controller.Pawn, f.player.CarriedObject = f.player, f.cash
     s = Game.session(f.api)
-    assert(s.block_reason == 'carrying=' .. Game.identity(f.cash))
+    assert(s.block_reason == nil)
     f.api.gameplay.paused = true
     assert(Game.session(f.api).block_reason == 'game-paused')
 end)
@@ -218,6 +222,70 @@ test('skipped actions report a reason and never invoke the dispatch observer', f
         error('must not report an unsent request')
     end)
     assert(sent == false and reason == 'register-being-handled' and #f.calls == 0)
+end)
+
+test('manual payment invalidates a pending take and the next scan can finish cash or card', function()
+    for _, method in ipairs({ 1, 2 }) do
+        local f = fixture()
+        f.register.RepPaymentData.PaymentMethod = method
+        f.register.RegisteredPaymentMethod = method == 1 and f.cash or f.card
+        local s = Game.session(f.api)
+        local pending = Game.snapshot(f.api, s, f.register)
+        f.register.RegisteredPaymentMethod = nil
+        f.register.bIsDrawerOpen = true
+        f.register.RepPaymentData.bPaymentSuccessful = true
+        local sent, reason = Game.request(f.api, s, f.register, pending, 'take')
+        assert(not sent and reason == 'payment-stage-changed' and #f.calls == 0)
+        local current = Game.snapshot(f.api, s, f.register)
+        assert(Game.request(f.api, s, f.register, current, 'finish') and #f.calls == 1)
+        assert(f.calls[1].target == f.register)
+    end
+end)
+
+test('manual drawer completion and destroyed objects abort only the pending request', function()
+    local f = fixture()
+    f.register.RegisteredPaymentMethod, f.register.bIsDrawerOpen = nil, true
+    local s = Game.session(f.api)
+    local pending = Game.snapshot(f.api, s, f.register)
+    f.register.bIsDrawerOpen = false
+    local sent, reason = Game.request(f.api, s, f.register, pending, 'finish')
+    assert(not sent and reason == 'drawer-stage-changed')
+    f.register.RepPaymentData.Dishes.GetArrayNum = function() return 0 end
+    sent, reason = Game.request(f.api, s, f.register, pending, 'finish')
+    assert(not sent and reason == 'bill-unavailable')
+    f.register.destroying = true
+    sent, reason = Game.request(f.api, s, f.register, pending, 'finish')
+    assert(not sent and reason == 'register-unavailable-or-not-authoritative' and #f.calls == 0)
+end)
+
+test('an invalid payment target skips dispatch without calling the missing actor', function()
+    local f = fixture()
+    local s = Game.session(f.api)
+    local pending = Game.snapshot(f.api, s, f.register)
+    f.cash.valid = false
+    local sent, reason = Game.request(f.api, s, f.register, pending, 'take')
+    assert(not sent and reason == 'payment-stage-changed' and #f.calls == 0)
+end)
+
+test('AI discovery selects the current world and deduplicates shared role containers', function()
+    local f = fixture()
+    local subsystem, old = f.object('JobSubsystem', f.world), f.object('JobSubsystem', f.object('OtherWorld'))
+    local template = f.object('JobSubsystem', f.world)
+    template.template = true
+    local container = f.object('TaskEvaluatorContainer', f.world)
+    subsystem.EvaluatorsByJob = { ForEach = function(_, fn)
+        fn(nil, { get = function() return container end })
+        fn(nil, { get = function() return container end })
+    end }
+    old.EvaluatorsByJob = { ForEach = function() end }
+    local find = FindAllOf
+    FindAllOf = function(class)
+        if class == 'JobSubsystem' then return { subsystem, old, template } end
+        return find(class)
+    end
+    local contexts = Game.ai_contexts(Game.session(f.api))
+    assert(#contexts == 1 and #contexts[1].containers == 1 and contexts[1].containers[1] == container)
+    assert(#Game.ai_contexts() == 2, 'restore can rediscover surviving old-world contexts')
 end)
 
 print(string.format('Game adapter: %d tests passed', count))

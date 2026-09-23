@@ -12,6 +12,7 @@ local function test_mode(modern)
             return session, session and 'host' or 'no-local-controller'
         end,
         registers = function() return { {} }, 1 end,
+        ai_contexts = function() return {} end,
         identity = function() return 'register' end,
         snapshot = function() return snapshot end,
         request = function(_, _, _, _, action, on_dispatch)
@@ -38,7 +39,7 @@ local function test_mode(modern)
     end
     flush()
     assert(reads == 1 and calls == 1)
-    session.blocked, session.block_reason, snapshot.blocked = true, 'player-widget', true
+    session.blocked, session.block_reason, snapshot.blocked = true, 'game-paused', true
     session.now = 1
     loops[1](); flush()
     assert(calls == 1)
@@ -59,7 +60,8 @@ local function test_mode(modern)
     assert(logs[#logs]:find('stage=session', 1, true) and logs[#logs]:find('stack traceback', 1, true))
     local text = table.concat(logs, '\n')
     assert(text:find('version=0.1.1-dev', 1, true))
-    assert(text:find('blocked=player-widget', 1, true))
+    assert(text:find('blocked=game-paused', 1, true))
+    assert(text:find('player_guard=transaction-only', 1, true))
     assert(text:find('REQUEST phase=take attempt=1 target=payment', 1, true))
     assert(text:find('DISPATCH_RETURNED', 1, true) and text:find('acceptance=unconfirmed', 1, true))
     assert(text:find('AFTER register=register', 1, true))
@@ -80,6 +82,7 @@ local function diagnostic_paths()
         contract = function() return { action = 57, cash_method = 1, card_method = 2 } end,
         identity = function() return 'register' end,
         session = function() return session end,
+        ai_contexts = function() return {} end,
         registers = function()
             if mode == 'no-registers' then return {}, 0 end
             return { {} }, 1

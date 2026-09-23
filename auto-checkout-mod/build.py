@@ -13,6 +13,7 @@ FILES = (
     "Scripts/game.lua",
     "Scripts/checkout.lua",
     "Scripts/diagnostics.lua",
+    "Scripts/ai.lua",
     "README.md",
     "CHANGELOG.md",
 )

@@ -51,23 +51,12 @@ function Game.contract()
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         cash = required('/Script/BrasserieSimulator.Cash'),
         card = required('/Script/BrasserieSimulator.CreditCard'),
+        billing_task = required('/Script/BrasserieSimulator.BillingStartTaskEvaluator'),
         action = enum_value('/Script/BrasserieSimulator.EInteractionActions', 'EIA_DefaultAction'),
         cash_method = enum_value('/Script/BrasserieSimulator.EPaymentMethods', 'EPM_Cash'),
         card_method = enum_value('/Script/BrasserieSimulator.EPaymentMethods', 'EPM_CreditCard'),
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
     }
-end
-
-local function player_blocked(controller, player)
-    if boolean(controller.bIsLocalPauseRequested, 'bIsLocalPauseRequested') then return 'local-pause' end
-    if boolean(player.bIsInWidgetMode, 'bIsInWidgetMode') then return 'player-widget' end
-    if player:IsPlayerFrozen() then return 'player-frozen' end
-    if player:IsPlayerLocallyFrozen() then return 'player-locally-frozen' end
-    if player:IsInteracting() then return 'player-interacting' end
-    if player:IsInPlacingMode() then return 'player-placing' end
-    if player:IsInteractionWheelOpen() then return 'interaction-wheel' end
-    if Game.valid(player.CarriedObject) then return 'carrying=' .. identity(player.CarriedObject) end
-    if controller:IsMultiplayerChatOpen() then return 'chat-open' end
 end
 
 function Game.session(api)
@@ -83,8 +72,7 @@ function Game.session(api)
             if Game.valid(world) and actor(player, world) and player:IsA(api.player)
                 and same(player.Controller, controller) and player:HasAuthority() then
                 assert(result == nil, 'Multiple local host players; checkout is suspended')
-                local blocked = api.gameplay:IsGamePaused(controller) and 'game-paused'
-                    or player_blocked(controller, player)
+                local blocked = api.gameplay:IsGamePaused(controller) and 'game-paused' or nil
                 result = {
                     controller = controller, player = player, world = world,
                     id = identity(world) .. '/' .. identity(player),
@@ -95,6 +83,29 @@ function Game.session(api)
         end
     end
     return result, result and 'host' or reason
+end
+
+function Game.ai_contexts(session)
+    local result = {}
+    for _, subsystem in ipairs(FindAllOf('JobSubsystem') or {}) do
+        if Game.valid(subsystem) and not subsystem:HasAnyFlags(TEMPLATE_FLAGS)
+            and (not session or same(subsystem:GetWorld(), session.world)) then
+            local containers, seen = {}, {}
+            subsystem.EvaluatorsByJob:ForEach(function(_, value)
+                local container = value:get()
+                if Game.valid(container) then
+                    local id = identity(container)
+                    if not seen[id] then
+                        seen[id] = true
+                        containers[#containers + 1] = container
+                    end
+                end
+            end)
+            result[#result + 1] = { id = identity(subsystem), containers = containers,
+                evaluators = subsystem.AllEvaluators }
+        end
+    end
+    return result
 end
 
 function Game.registers(session)
@@ -150,10 +161,11 @@ end
 
 function Game.request(api, session, register, expected, action, on_dispatch)
     if not actor(session.controller, session.world) or not session.controller:HasAuthority()
+        or not session.controller:IsLocalController()
+        or not actor(session.player, session.world) or not session.player:HasAuthority()
+        or not same(session.player.Controller, session.controller)
         or not same(session.controller.Pawn, session.player) then return false, 'host-changed' end
-    local blocked = api.gameplay:IsGamePaused(session.controller) and 'game-paused'
-        or player_blocked(session.controller, session.player)
-    if blocked then return false, blocked end
+    if api.gameplay:IsGamePaused(session.controller) then return false, 'game-paused' end
     local current, reason = Game.snapshot(api, session, register)
     if not current then return false, reason end
     if current.id ~= expected.id then return false, 'register-changed' end

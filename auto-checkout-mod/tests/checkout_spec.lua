@@ -58,7 +58,7 @@ test('card: never finish while terminal is processing', function()
     assert(calls[2] == 'finish')
 end)
 
-test('employee, player activity and drawer motion each block both actions', function()
+test('existing employee claim, game pause and drawer motion each block both actions', function()
     for _, field in ipairs({ 'being_handled', 'blocked', 'moving', 'card_in_machine' }) do
         local _, calls, _, step = harness()
         step(bill({ [field] = true }))
@@ -147,7 +147,7 @@ test('skipped dispatches wait but do not consume the three-request budget', func
 end)
 
 test('diagnostic phases identify blocked, missing, and incomplete payment states', function()
-    assert(Checkout.phase(bill({ blocked = true, block_reason = 'player-widget' })) == 'wait-player-widget')
+    assert(Checkout.phase(bill({ blocked = true, block_reason = 'game-paused' })) == 'wait-game-paused')
     assert(Checkout.phase(bill({ has_bill = false })) == 'wait-bill')
     assert(Checkout.phase(bill({ drawer_open = true })) == 'wait-payment-removal')
     local s = bill({ drawer_open = true, method = 'card' })

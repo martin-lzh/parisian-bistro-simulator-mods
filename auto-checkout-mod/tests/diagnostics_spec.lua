@@ -6,7 +6,7 @@ for tick = 2, 30 do d:observe('session', 'waiting=host', tick) end
 assert(#logs == 1, 'unchanged polls must not spam the log')
 d:observe('session', 'waiting=host', 31)
 assert(#logs == 2, 'a stationary game still needs periodic evidence of polling')
-d:observe('session', 'blocked=player-widget', 32)
+d:observe('session', 'blocked=game-paused', 32)
 assert(#logs == 3, 'changed wait reasons must be visible immediately')
 d:observe('register', 'phase=take', 33)
 d:prune({ session = true })

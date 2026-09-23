@@ -25,6 +25,7 @@ local function fixture(modern, failure)
         valid = function(r) return r and not r.invalid end,
         identity = function(r) return r.id end,
         contract = function() return {} end,
+        ai_contexts = function() return {} end,
         session = function()
             f.reads = f.reads + 1
             return f.session, f.session and 'host' or 'client-not-host'
@@ -145,12 +146,12 @@ test('notification callbacks never bypass host, world, or object lifetime filter
     assert(#f.queue == 0)
 end)
 
-test('notifications respect busy hosts, card processing, and unavailable snapshots', function()
+test('notifications respect paused games, card processing, and unavailable snapshots', function()
     local f = fixture(true)
     f.registers[2] = nil
-    f.session.blocked, f.session.block_reason = true, 'player-widget'
+    f.session.blocked, f.session.block_reason = true, 'game-paused'
     f.emit(f.registers[1]); f.flush()
-    assert(#f.calls == 0 and f.contains('phase=wait-player-widget'))
+    assert(#f.calls == 0 and f.contains('phase=wait-game-paused'))
     f.session.blocked, f.session.block_reason = false, nil
     f.states['register-a'].card_in_machine = true
     f.emit(f.registers[1]); f.flush()

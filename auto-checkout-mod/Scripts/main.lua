@@ -7,15 +7,38 @@ local function start()
     local Diagnostics = require('diagnostics')
     local Game = require('game')
     local Checkout = require('checkout')
+    local AI = require('ai')
     local diagnostics = Diagnostics.new(function(message) print(message .. '\n') end)
     local checkout = Checkout.new()
+    local ai = AI.new(Game)
     local api, session_id
     local failed, queued = false, false
     local ticks, dispatched = 0, 0
     local stage, detail = 'startup', ''
 
-    local function stop(err)
+    local function restore_ai()
+        if ai:active() then
+            local restored = ai:restore(Game.ai_contexts())
+            diagnostics:log('AI', 'restored_containers=' .. restored)
+        end
+    end
+
+    local function stop(err, on_game_thread)
         failed = true
+        if ai:active() then
+            local function cleanup()
+                local ok, cleanup_error = pcall(restore_ai)
+                if not ok then
+                    diagnostics:log('WARN', 'AI task restoration failed; reload the world. ' .. tostring(cleanup_error))
+                end
+            end
+            if on_game_thread then cleanup() else
+                local ok, scheduling_error = pcall(ExecuteInGameThread, cleanup)
+                if not ok then
+                    diagnostics:log('WARN', 'Cannot schedule AI task restoration; reload the world. ' .. tostring(scheduling_error))
+                end
+            end
+        end
         diagnostics:log('ERROR', 'Stopped after an error; manual checkout remains available. stage='
             .. stage .. ' ' .. detail .. '\n' .. tostring(err))
     end
@@ -33,6 +56,7 @@ local function start()
         stage = 'session'
         local session, reason = Game.session(api)
         if not session then
+            restore_ai()
             checkout:reset()
             session_id = nil
             diagnostics:prune({ session = true })
@@ -45,16 +69,19 @@ local function start()
             return
         end
         if session.id ~= session_id then
+            restore_ai()
             checkout:reset()
             diagnostics:prune({})
             session_id = session.id
             diagnostics:log('HOST', 'Host checkout active. session=' .. session_id)
         end
+        stage, detail = 'ai-policy', ''
+        diagnostics:observe('ai', ai:sync(Game.ai_contexts(session), api.billing_task), ticks)
         stage = 'register-discovery'
         local registers, discovered = Game.registers(session)
         diagnostics:observe('session', string.format('host=true blocked=%s registers=%d discovered=%s dispatched=%d',
             session.block_reason or 'none', #registers, tostring(discovered), dispatched), ticks)
-        local present, observed = {}, { session = true }
+        local present, observed = {}, { session = true, ai = true }
         for _, register in ipairs(registers) do
             stage, detail = 'snapshot', ''
             local id = Game.identity(register)
@@ -119,7 +146,7 @@ local function start()
     local function run(signals)
         if not failed then
             local ok, err = xpcall(function() tick(signals) end, traceback)
-            if not ok then stop(err) end
+            if not ok then stop(err, true) end
         end
         return false
     end
@@ -170,7 +197,7 @@ local function start()
     -- Discovery, diagnostics, and reflected calls all run on the game thread.
     if type(LoopInGameThreadWithDelay) == 'function' then
         LoopInGameThreadWithDelay(1000, run)
-        diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=game-thread-loop host-only=true')
+        diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=game-thread-loop host-only=true player_guard=transaction-only')
     else
         LoopAsync(1000, function()
             if queued or failed then return false end
@@ -188,7 +215,7 @@ local function start()
             end
             return false
         end)
-        diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=async-to-game-thread host-only=true')
+        diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=async-to-game-thread host-only=true player_guard=transaction-only')
     end
 
     -- Install only after polling is scheduled so a startup timer failure
