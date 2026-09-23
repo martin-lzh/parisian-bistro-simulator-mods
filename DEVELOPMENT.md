@@ -20,7 +20,7 @@
 
 ## 提交
 
-直接使用当前工作目录，不创建临时 worktree。若当前分支为 `development`，通过 PR 合并到 `main`；否则可以在 `main` 开发并直接推送。遵循远端实际保护规则。
+直接使用当前工作目录，不创建临时 worktree。`main` 启用保护后，在 `development` 或功能分支开发，通过 PR 合并到 `main`，不可直接推送或绕过保护。
 
 每次任务结束检查差异、提交并推送，除非用户明确要求不推送。推送前执行：
 
@@ -31,3 +31,26 @@ git status --short
 ```
 
 检查器审查 Git 已跟踪和暂存的路径；新增文件应先有选择地暂存再检查。`work/` 和 `outputs/` 在本地保留，干净的 Git 工作区不代表删除它们。
+
+## CI 与 main 保护
+
+GitHub Actions 工作流 `.github/workflows/mods.yml` 在 `main`、`development` 推送，目标为 `main` 的 PR，以及手动运行时执行。使用 GitHub 托管 Windows Runner、Python 3.12、uv 0.10.7 和 lupa 2.6（Lua 5.4），无需游戏安装、UE4SS 或 `work/` 资料。
+
+- `Script, data and workflow syntax`：审查仓库文件边界、Python/JSON 语法、空白错误和工作流语法。actionlint 下载使用固定版本和 SHA-256 校验。
+- `Lua tests and packages`：核对版本、编号 CHANGELOG、诊断版本与打包白名单，测试包校验器，运行两个 Mod 的全部离线测试，构建 ZIP 并逐文件核对源码与 SHA-256。
+- `mod-packages` artifact 保存两个 ZIP、各自校验文件及记录提交号的 `build-info.json`，保留 14 天。GitHub Actions 均固定提交 SHA，默认仅授予仓库读取权限。
+
+本地运行相同核心检查：
+
+```powershell
+python tools/check_repository.py
+python tools/check_syntax.py
+python -m unittest discover -s tools/tests -v
+python tools/ci.py build
+```
+
+`outputs/ci/` 必须为空或只含本次版本的产物；升级版本后先移走该目录旧产物，以免混入当前 artifact。每个 Mod 独立的 `build.py` 仍可直接使用。
+
+`main` 保护配置保存在 `.github/main-ruleset.json`，通过 GitHub Rulesets 管理：必须经 PR、分支包含最新 `main`、上述两个 GitHub Actions 检查均通过；禁止强推和删除，无绕过者。沿用参考项目的零审批人数，不要求另一位维护者批准自己的 PR。仓库继续保持私密。
+
+规则集属于 GitHub 仓库设置；修改 JSON 不会自动更改远端规则。维护时通过 REST API 显式应用，再读取远端配置核对；CI 不持有仓库管理凭据。

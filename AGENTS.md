@@ -1,7 +1,7 @@
 # 项目规则
 
 - 本仓库用于 Parisian Bistro Simulator 的原创 Mod 开发。先读 README.md 和 DEVELOPMENT.md。
-- 不创建临时工作树。若当前分支为 development，PR 的方向为 development → main；其他情况可直接提交并推送 main，遵守实际分支保护。
+- 不创建临时工作树。main 受保护；在 development 或功能分支提交推送，再通过 PR 合并到 main。若当前分支为 development，PR 的方向为 development → main；不得绕过保护。
 - 每次任务结束提交并推送任务相关改动，除非用户明确要求不要；保持 Git 工作区干净，保留无关用户改动。
 - 所有反编译相关内容必须位于被忽略的 work/：游戏文件、资源、映射、蓝图、原生代码分析、SDK/头文件导出、内存快照、日志、第三方工具、提取脚本和分析笔记。私密仓库也禁止上传。
 - 不使用 git add -f 绕过忽略规则，不把参考资料复制到被跟踪路径；包内不得包含原游戏内容或反编译内容。

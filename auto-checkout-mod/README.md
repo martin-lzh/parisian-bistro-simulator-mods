@@ -6,7 +6,7 @@
 
 ## 状态与依赖
 
-**0.1.1-dev：用于排查柜台结账停滞的开发版本。** 远端日志已定位到 `player-interacting` 拦截，累计请求为零。本次移除玩家忙碌检查，并在房主端抑制 AI 领取新的柜台收银任务；保留运行诊断和“顾客到柜台”提醒监听。真实交互是否被游戏接受、现金与刷卡能否完成，仍待游戏内验收。
+**0.1.1 正式版。** 2026-09-24 用户确认最新开发包实机测试成功。正式版保留已测试的交易检查、AI 收银任务抑制、运行诊断和“顾客到柜台”提醒监听；验证范围见[开发说明](DEVELOPMENT.md)。
 
 - 目标基线：Steam Build 25393699，ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。
 - 依赖支持 UE 5.4 的 [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)。本机核对源码版本为 `f58e8f84`；旧稳定版 3.0.1 不作为目标加载器。
@@ -31,8 +31,8 @@
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.1-dev` | 已加载，并显示调度方式；本次构建附 `player_guard=transaction-only` |
-| `HOOK installed event=customer-at-billing` | 提醒监听注册成功；用于辨认加入监听后的同名开发包 |
+| `START version=0.1.1` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 已处理提醒，附对应柜台在游戏线程检查时的状态和合并的提醒次数 |
 | `EVENT_IGNORED` | 当前不是房主，或提醒对应的柜台已失效、不属于当前世界 |
 | `API` / `HOST` | 接口枚举值与当前房主会话 |
@@ -44,7 +44,7 @@
 | `SKIP` | 最后复查发现条件改变，未发送请求，不消耗重试次数 |
 | `WARN` / `ERROR` | 多次无进展，或异常导致停止；异常附执行阶段、最近状态及可用的 Lua 堆栈 |
 
-在测试电脑上用新包更新原有 `AutoCheckout` 文件夹。本次继续使用 `0.1.1-dev` 包名，请检查 `START` 中的 `player_guard=transaction-only`，辨认是否已替换到本次构建。进入餐厅后，分别测试现金、刷卡、玩家进行其他工作，以及玩家抢先点击付款或收银机。若仍不结账，回传从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。新的代码不会再产生 `blocked=player-interacting`。
+更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.1` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。
 
 ## 安装与卸载
 
