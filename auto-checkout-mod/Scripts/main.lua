@@ -20,8 +20,10 @@ local function start()
             .. stage .. ' ' .. detail .. '\n' .. tostring(err))
     end
 
-    local function tick()
-        ticks = ticks + 1
+    local function tick(signals)
+        -- Notification bursts must not accelerate periodic diagnostic logging.
+        if not signals then ticks = ticks + 1 end
+        local source = signals and 'notification' or 'poll'
         stage, detail = 'contract', ''
         if not api then
             api = Game.contract()
@@ -35,6 +37,11 @@ local function start()
             session_id = nil
             diagnostics:prune({ session = true })
             diagnostics:observe('session', 'waiting=' .. tostring(reason) .. ' dispatched=' .. dispatched, ticks)
+            if signals then
+                for id, count in pairs(signals) do
+                    diagnostics:log('EVENT_IGNORED', 'register=' .. id .. ' count=' .. count .. ' reason=' .. tostring(reason))
+                end
+            end
             return
         end
         if session.id ~= session_id then
@@ -53,17 +60,24 @@ local function start()
             local id = Game.identity(register)
             detail = 'register=' .. id
             present[id], observed[id] = true, true
+            -- A notification only wakes its own register. Other registers keep
+            -- their existing history and are handled by the periodic scan.
+            if signals and not signals[id] then goto continue end
             local snapshot, unavailable = Game.snapshot(api, session, register)
             if snapshot then
                 local state_text = Diagnostics.snapshot(snapshot)
+                if signals then
+                    diagnostics:log('EVENT', 'customer-at-billing count=' .. signals[id]
+                        .. ' phase=' .. Checkout.phase(snapshot) .. ' ' .. state_text)
+                end
                 diagnostics:observe(id, 'phase=' .. Checkout.phase(snapshot) .. ' ' .. state_text, ticks)
                 stage, detail = 'checkout', state_text
                 checkout:step(snapshot, session.now, function(action, attempt)
                     stage, detail = 'request-' .. action, state_text
                     local sent, skipped = Game.request(api, session, register, snapshot, action, function(target, action_key)
                         diagnostics:log('REQUEST', string.format(
-                            'phase=%s attempt=%d target=%s action=%s before={%s}',
-                            action, attempt, target, tostring(action_key), state_text))
+                            'phase=%s attempt=%d target=%s action=%s before={%s} source=%s',
+                            action, attempt, target, tostring(action_key), state_text, source))
                         dispatched = dispatched + 1
                     end)
                     if sent then
@@ -82,21 +96,77 @@ local function start()
                     diagnostics:log('WARN', message .. ' ' .. state_text)
                 end)
             else
+                if signals then
+                    diagnostics:log('EVENT', 'customer-at-billing count=' .. signals[id]
+                        .. ' register=' .. id .. ' unavailable=' .. tostring(unavailable))
+                end
                 diagnostics:observe(id, 'unavailable=' .. tostring(unavailable), ticks)
+            end
+            ::continue::
+        end
+        if signals then
+            for id, count in pairs(signals) do
+                if not present[id] then
+                    diagnostics:log('EVENT_IGNORED', 'register=' .. id .. ' count=' .. count
+                        .. ' reason=not-current-authoritative-register')
+                end
             end
         end
         checkout:prune(present)
         diagnostics:prune(observed)
     end
 
-    local function run()
+    local function run(signals)
         if not failed then
-            local ok, err = xpcall(tick, traceback)
+            local ok, err = xpcall(function() tick(signals) end, traceback)
             if not ok then stop(err) end
         end
         return false
     end
 
+    -- Copy only the receiver's identity while the hook context is alive; never
+    -- retain Context or a UObject in a deferred callback. Gameplay reads and
+    -- interaction requests stay in the game-thread scan above.
+    local notification_path = '/Script/BrasserieSimulator.CashRegister:Multicast_DisplayCustomerAtBillingNotification'
+    local pending, notification_queued, notifications_enabled = {}, false, true
+    local function disable_notifications(err)
+        notifications_enabled = false
+        pending = {}
+        diagnostics:log('WARN', 'Billing notification listener unavailable; polling remains active. ' .. tostring(err))
+    end
+    local function queue_notifications()
+        if notification_queued then return end
+        notification_queued = true
+        local function drain()
+            local signals = pending
+            pending = {}
+            -- Keep the flag set through dispatch to avoid nested requests
+            -- if an interaction itself emits another notification.
+            if notifications_enabled and next(signals) then run(signals) end
+            notification_queued = false
+            if not failed and notifications_enabled and next(pending) then
+                local ok, err = xpcall(queue_notifications, traceback)
+                if not ok then disable_notifications(err) end
+            end
+        end
+        if type(ExecuteInGameThreadWithDelay) == 'function' then
+            ExecuteInGameThreadWithDelay(50, drain)
+        else
+            ExecuteInGameThread(drain)
+        end
+    end
+    local function on_notification(context)
+        if failed or not notifications_enabled then return end
+        local ok, err = xpcall(function()
+            local register = context:get()
+            if not Game.valid(register) then return end
+            local id = Game.identity(register)
+            pending[id] = (pending[id] or 0) + 1
+            queue_notifications()
+        end, traceback)
+        if not ok then disable_notifications(err) end
+        -- Never override the game's notification return value or parameters.
+    end
     -- Discovery, diagnostics, and reflected calls all run on the game thread.
     if type(LoopInGameThreadWithDelay) == 'function' then
         LoopInGameThreadWithDelay(1000, run)
@@ -119,6 +189,15 @@ local function start()
             return false
         end)
         diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=async-to-game-thread host-only=true')
+    end
+
+    -- Install only after polling is scheduled so a startup timer failure
+    -- cannot leave an event-only automation running behind an error message.
+    local hook_ok, pre_id, post_id = pcall(RegisterHook, notification_path, function() end, on_notification)
+    if hook_ok and type(pre_id) == 'number' and type(post_id) == 'number' then
+        diagnostics:log('HOOK', 'installed event=customer-at-billing')
+    else
+        disable_notifications(hook_ok and 'Hook registration did not return callback IDs.' or pre_id)
     end
 end
 
