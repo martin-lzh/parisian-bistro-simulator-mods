@@ -34,7 +34,7 @@ git status --short
 
 ## CI 与 main 保护
 
-GitHub Actions 工作流 `.github/workflows/mods.yml` 在 `main`、`development` 推送，目标为 `main` 的 PR，以及手动运行时执行。使用 GitHub 托管 Windows Runner、Python 3.12、uv 0.10.7 和 lupa 2.6（Lua 5.4），无需游戏安装、UE4SS 或 `work/` 资料。
+GitHub Actions 工作流 `.github/workflows/mods.yml` 在 `main`、`dev`、`development` 推送，目标为 `main` 的 PR，以及手动运行时执行。使用 GitHub 托管 Windows Runner、Python 3.12、uv 0.10.7 和 lupa 2.6（Lua 5.4），无需游戏安装、UE4SS 或 `work/` 资料。
 
 - `Script, data and workflow syntax`：审查仓库文件边界、Python/JSON 语法、空白错误和工作流语法。actionlint 下载使用固定版本和 SHA-256 校验。
 - `Lua tests and packages`：核对版本、编号 CHANGELOG、诊断版本与打包白名单，测试包校验器，运行两个 Mod 的全部离线测试，构建 ZIP 并逐文件核对源码与 SHA-256。
