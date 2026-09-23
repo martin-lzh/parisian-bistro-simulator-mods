@@ -2,7 +2,6 @@ local Game = require('game')
 local Checkout = require('checkout')
 local checkout = Checkout.new()
 local api, session_id
-local enabled = true
 local failed = false
 local queued = false
 
@@ -11,7 +10,7 @@ local function log(message)
 end
 
 local function tick()
-    if not enabled or failed then return end
+    if failed then return end
     if not api then api = Game.contract() end
     local session = Game.session(api)
     if not session then
@@ -52,7 +51,7 @@ if type(LoopInGameThreadWithDelay) == 'function' then
     LoopInGameThreadWithDelay(1000, run)
 else
     LoopAsync(1000, function()
-        if queued or not enabled or failed then return false end
+        if queued or failed then return false end
         queued = true
         local ok, err = pcall(function()
             ExecuteInGameThread(function()
@@ -69,17 +68,4 @@ else
     end)
 end
 
-RegisterKeyBind(Key.F8, { ModifierKey.CONTROL }, function()
-    ExecuteInGameThread(function()
-        if failed then
-            log('Stopped due to an error. Check the log and reload the mod after correcting it.')
-            return
-        end
-        enabled = not enabled
-        -- Preserve request history across toggles so an unfinished transaction
-        -- cannot be submitted again just by disabling and enabling the mod.
-        log(enabled and 'Enabled.' or 'Disabled.')
-    end)
-end)
-
-log('Loaded. Automatic checkout enabled; Ctrl+F8 toggles it. Host only.')
+log('Loaded. Automatic checkout active for the host.')

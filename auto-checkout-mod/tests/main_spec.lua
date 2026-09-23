@@ -1,6 +1,6 @@
 local original_game = package.loaded.game
 local function test_mode(modern)
-    local loops, queue, logs, key = {}, {}, {}, nil
+    local loops, queue, logs = {}, {}, {}
     local reads, calls, stopped = 0, 0, false
     local session = { id = 'world-a', now = 0, blocked = false }
     local snapshot = { id = 'register', payment_id = 'payment', has_bill = true, method = 'cash' }
@@ -18,8 +18,6 @@ local function test_mode(modern)
     LoopInGameThreadWithDelay = modern and function(_, fn) loops[1] = fn end or nil
     LoopAsync = function(_, fn) loops[1] = fn end
     ExecuteInGameThread = function(fn) queue[#queue + 1] = fn end
-    RegisterKeyBind = function(_, _, fn) key = fn end
-    Key, ModifierKey = { F8 = 119 }, { CONTROL = 17 }
     local saved_print = print
     print = function(text) logs[#logs + 1] = text end
     dofile(MOD_ROOT .. '/Scripts/main.lua')
@@ -35,13 +33,13 @@ local function test_mode(modern)
     end
     flush()
     assert(reads == 1 and calls == 1)
-    key(); flush()
+    session.blocked = true
     session.now = 1
     loops[1](); flush()
     assert(calls == 1)
-    key(); flush()
+    session.blocked = false
     loops[1](); flush()
-    assert(calls == 1, 'toggle must not reset transaction history')
+    assert(calls == 1, 'waiting for the player must not reset transaction history')
     session = nil
     loops[1](); flush()
     session = { id = 'world-b', now = 0, blocked = false }
