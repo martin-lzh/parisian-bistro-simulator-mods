@@ -16,7 +16,7 @@ local function test_mode(modern)
         identity = function() return 'register' end,
         snapshot = function() return snapshot end,
         request = function(_, _, _, _, action, on_dispatch)
-            on_dispatch(action == 'take' and 'payment' or 'register', 57)
+            on_dispatch(action == 'take' and 'payment' or 'register', 57, 'scope=target-call distance=5000.0')
             calls = calls + 1
             return true
         end,
@@ -59,10 +59,11 @@ local function test_mode(modern)
     assert(logs[#logs]:find('Stopped after an error', 1, true))
     assert(logs[#logs]:find('stage=session', 1, true) and logs[#logs]:find('stack traceback', 1, true))
     local text = table.concat(logs, '\n')
-    assert(text:find('version=0.1.1 ', 1, true))
+    assert(text:find('version=0.1.2-dev ', 1, true))
     assert(text:find('blocked=game-paused', 1, true))
     assert(text:find('player_guard=transaction-only', 1, true))
     assert(text:find('REQUEST phase=take attempt=1 target=payment', 1, true))
+    assert(text:find('context={scope=target-call distance=5000.0}', 1, true))
     assert(text:find('DISPATCH_RETURNED', 1, true) and text:find('acceptance=unconfirmed', 1, true))
     assert(text:find('AFTER register=register', 1, true))
     assert(text:find('waiting=no-local-controller', 1, true))

@@ -101,10 +101,10 @@ local function start()
                 stage, detail = 'checkout', state_text
                 checkout:step(snapshot, session.now, function(action, attempt)
                     stage, detail = 'request-' .. action, state_text
-                    local sent, skipped = Game.request(api, session, register, snapshot, action, function(target, action_key)
+                    local sent, skipped = Game.request(api, session, register, snapshot, action, function(target, action_key, context)
                         diagnostics:log('REQUEST', string.format(
-                            'phase=%s attempt=%d target=%s action=%s before={%s} source=%s',
-                            action, attempt, target, tostring(action_key), state_text, source))
+                            'phase=%s attempt=%d target=%s action=%s before={%s} source=%s context={%s}',
+                            action, attempt, target, tostring(action_key), state_text, source, context or 'unavailable'))
                         dispatched = dispatched + 1
                     end)
                     if sent then

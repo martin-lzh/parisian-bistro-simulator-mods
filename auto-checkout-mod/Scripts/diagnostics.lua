@@ -1,7 +1,7 @@
 -- Keep diagnostics independent of Unreal objects and suppress unchanged polls.
 local Diagnostics = {}
 Diagnostics.__index = Diagnostics
-Diagnostics.VERSION = '0.1.1'
+Diagnostics.VERSION = '0.1.2-dev'
 
 function Diagnostics.new(write)
     return setmetatable({ write = write, observed = {} }, Diagnostics)

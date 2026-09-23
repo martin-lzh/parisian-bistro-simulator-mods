@@ -6,7 +6,7 @@
 
 ## 状态与依赖
 
-**0.1.1 正式版。** 2026-09-24 用户确认最新开发包实机测试成功。正式版保留已测试的交易检查、AI 收银任务抑制、运行诊断和“顾客到柜台”提醒监听；验证范围见[开发说明](DEVELOPMENT.md)。
+**0.1.2-dev 开发版，尚待实机验证。** 针对请求已发出但收款或关闭钱柜间歇无效的问题，修正原生玩家距离和摆放家具限制；保留交易检查、AI 收银任务抑制及提醒监听。此前 0.1.1 的确认记录及本次验证范围见[开发说明](DEVELOPMENT.md)。
 
 - 目标基线：Steam Build 25393699，ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。
 - 依赖支持 UE 5.4 的 [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)。本机核对源码版本为 `f58e8f84`；旧稳定版 3.0.1 不作为目标加载器。
@@ -21,6 +21,8 @@
 
 玩家手持物品、做其他工作或打开界面不再使自动结账等待。每一步请求前重新核对这笔交易：如果玩家抢先收款、关闭抽屉，或付款对象失效，就取消当前请求，之后按最新柜台状态继续判断。游戏实际暂停、刷卡进行中或抽屉运动时仍会等待。
 
+自动请求不要求房主站在柜台附近。Mod 只在单次调用期间调整当前付款物件或钱柜的交互距离和摆放限制，随后立即恢复；不移动玩家，不改变玩家正在做的工作。这仍使用游戏原本的玩家交互入口，并非模拟员工任务。
+
 运行期间，房主端从 AI 的工作候选列表中移除柜台收银任务，保留饮料、上菜及其他任务，不改变员工配置或存档。已经领取的收银任务允许完成，期间 Mod 等待该柜台释放。切换世界、离开房主会话或自动流程异常停止时尝试恢复本次移除的任务；恢复失败会明确告警，需重新载入世界。更新和卸载请关闭游戏后进行，不使用脚本热重载。
 
 同一阶段的请求间隔至少三秒，最多三次。请求未使游戏状态推进时，停止重试该阶段并记录日志，可手动完成这笔结账；后续顾客仍会自动处理。读取接口或执行请求发生异常时，本次加载的自动功能停止，需查看日志并修正原因后重新加载 Mod。
@@ -31,7 +33,7 @@
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.1` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `START version=0.1.2-dev` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 已处理提醒，附对应柜台在游戏线程检查时的状态和合并的提醒次数 |
 | `EVENT_IGNORED` | 当前不是房主，或提醒对应的柜台已失效、不属于当前世界 |
@@ -39,12 +41,12 @@
 | `STATE session` | 游戏暂停状态、找到的柜台数量和累计发起请求次数 |
 | `STATE ai` / `AI` | AI 收银任务策略、发现与已处理的任务容器数量；`restored_containers` 为恢复数量。`suppressed=0` 不能证明 AI 收银已受抑制 |
 | `STATE` 的 `phase=wait-...` / `unavailable=...` | 具体等待或排除原因，附账单、付款物件、抽屉、刷卡、占用状态 |
-| `REQUEST` | 即将调用原生交互，附阶段、次数、目标和调用前状态；`source=notification` 表示提醒触发，`source=poll` 表示定时检查触发 |
+| `REQUEST` | 即将调用原生交互，附阶段、次数、目标和调用前状态；`source` 区分提醒与轮询。`context` 中 `distance` 是房主到目标的距离，`range_before` 是原交互范围，`range_for_call` 是本次临时范围，`scope=target-call` 表示仅作用于当前调用 |
 | `DISPATCH_RETURNED` / `AFTER` | 调用返回及即时状态；调用返回不代表游戏接受请求或结账成功，后续 `STATE` 可显示延迟变化 |
 | `SKIP` | 最后复查发现条件改变，未发送请求，不消耗重试次数 |
 | `WARN` / `ERROR` | 多次无进展，或异常导致停止；异常附执行阶段、最近状态及可用的 Lua 堆栈 |
 
-更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.1` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。
+更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.2-dev` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。若日志报告无法恢复交互限制，请重新载入世界。
 
 ## 安装与卸载
 

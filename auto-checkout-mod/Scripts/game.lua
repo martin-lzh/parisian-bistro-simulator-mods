@@ -47,6 +47,7 @@ end
 
 function Game.contract()
     required('/Script/BrasserieSimulator.NetPlayerController:Server_RequestInteraction')
+    required('/Script/Engine.Actor:GetDistanceTo')
     return {
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         cash = required('/Script/BrasserieSimulator.Cash'),
@@ -55,6 +56,7 @@ function Game.contract()
         action = enum_value('/Script/BrasserieSimulator.EInteractionActions', 'EIA_DefaultAction'),
         cash_method = enum_value('/Script/BrasserieSimulator.EPaymentMethods', 'EPM_Cash'),
         card_method = enum_value('/Script/BrasserieSimulator.EPaymentMethods', 'EPM_CreditCard'),
+        actor_distance = enum_value('/Script/BrasserieSimulator.EDistanceReference', 'Actor'),
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
     }
 end
@@ -159,6 +161,66 @@ function Game.snapshot(api, session, register)
     }
 end
 
+local function interaction_distance(value)
+    assert(type(value) == 'number' and value >= 0 and value < 3e38,
+        'Invalid checkout interaction distance')
+    return value
+end
+
+-- The authoritative RPC executes synchronously, but still applies the ordinary
+-- player's reach and furniture-placement checks. Relax only this target for
+-- this call, then restore its settings even if preparation or dispatch throws.
+local function with_interaction_limits(api, session, target, dispatch)
+    local distance = interaction_distance(target:GetDistanceTo(session.player))
+    local original_range = interaction_distance(target.DistanceToInteract)
+    local original_reference = target.DistanceReference
+    assert(type(original_reference) == 'number' and type(api.actor_distance) == 'number',
+        'Unsupported checkout distance reference')
+    local original_placing = boolean(target.bCanInteractWhilePlacing, 'bCanInteractWhilePlacing')
+    -- Match the reference used by GetDistanceTo, with room for float rounding.
+    local range = math.max(original_range, distance + 100)
+    local settings = {
+        { 'DistanceReference', original_reference, api.actor_distance },
+        { 'DistanceToInteract', original_range, range },
+        { 'bCanInteractWhilePlacing', original_placing, true },
+    }
+    local changed = {}
+    local ok, err = xpcall(function()
+        for _, setting in ipairs(settings) do
+            if setting[2] ~= setting[3] then
+                changed[#changed + 1] = setting
+                target[setting[1]] = setting[3]
+            end
+        end
+        assert(target.DistanceReference == api.actor_distance
+            and target.DistanceToInteract >= distance and target.bCanInteractWhilePlacing == true,
+            'Checkout interaction limits were not applied')
+        dispatch(string.format('scope=target-call distance=%.1f range_before=%.1f range_for_call=%.1f reference_before=%s placing_before=%s',
+            distance, original_range, range, tostring(original_reference), tostring(original_placing)))
+    end, function(message)
+        return debug and debug.traceback and debug.traceback(tostring(message), 2) or tostring(message)
+    end)
+    local restore_errors = {}
+    for i = #changed, 1, -1 do
+        local setting = changed[i]
+        local restored, restore_error = pcall(function()
+            -- Taking payment normally destroys the cash/card actor.
+            if Game.valid(target) and not target:IsActorBeingDestroyed() then
+                target[setting[1]] = setting[2]
+                assert(target[setting[1]] == setting[2], 'value did not restore')
+            end
+        end)
+        if not restored then
+            restore_errors[#restore_errors + 1] = setting[1] .. ': ' .. tostring(restore_error)
+        end
+    end
+    if #restore_errors > 0 then
+        error('Failed to restore checkout interaction limits; reload the world. '
+            .. table.concat(restore_errors, '; ') .. (not ok and '\n' .. tostring(err) or ''), 0)
+    end
+    if not ok then error(err, 0) end
+end
+
 function Game.request(api, session, register, expected, action, on_dispatch)
     if not actor(session.controller, session.world) or not session.controller:HasAuthority()
         or not session.controller:IsLocalController()
@@ -188,12 +250,14 @@ function Game.request(api, session, register, expected, action, on_dispatch)
     -- This RPC rebuilds the interactor from the controller's possessed pawn.
     -- Only request the normal default action; never construct a Mass entity,
     -- call FinishPayment directly, or write the game's payment state.
-    if on_dispatch then on_dispatch(identity(target), api.action) end
-    session.controller:Server_RequestInteraction(target, {
-        bIsPlayer = true,
-        Action = api.action,
-        HitComponentName = FName('None'),
-    })
+    with_interaction_limits(api, session, target, function(context)
+        if on_dispatch then on_dispatch(identity(target), api.action, context) end
+        session.controller:Server_RequestInteraction(target, {
+            bIsPlayer = true,
+            Action = api.action,
+            HitComponentName = FName('None'),
+        })
+    end)
     -- A void RPC returning only confirms dispatch, not acceptance or payment.
     return true
 end
