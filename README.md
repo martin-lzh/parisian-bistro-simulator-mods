@@ -1,10 +1,11 @@
 # Parisian Bistro Simulator Mods
 
-法式小馆儿模拟器的非官方 Mod 开发项目。仓库保持私密；首个 Mod 已提供开发包，尚待游戏内验收。
+法式小馆儿模拟器的非官方 Mod 开发项目。仓库保持私密；已有 Mod 提供开发包，尚待游戏内验收。
 
 | Mod | 功能 | 状态 |
 | --- | --- | --- |
 | [Bartender's Note](bartenders-note-mod/README.md) | 在餐厅名称下方汇总本地玩家认领的待做饮料 | 开发版本，离线测试通过；游戏内未验收 |
+| [Auto Checkout](auto-checkout-mod/README.md) | 自动处理顾客柜台付款和收银机结账交互 | 开发版本，离线测试通过；游戏内未验收 |
 
 目录组织参考 Old Market Simulator Mods：每个 Mod 在根目录拥有独立的 `<feature>-mod/` 文件夹，独立维护源码、构建入口、说明和变更记录。
 
