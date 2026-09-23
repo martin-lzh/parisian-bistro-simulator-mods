@@ -10,7 +10,7 @@
 
 ## 状态与依赖
 
-**0.1.0-dev：供手动游戏内验收的开发版本。** 已核对本机接口并完成离线行为测试，尚未安装加载器或进行游戏内功能、视觉、性能与联机验收。
+**0.1.0-dev：供游戏内验收的开发版本。** 已核对本机接口并完成离线行为测试，尚未进行游戏内功能、视觉、性能与联机验收。安装文件后需重启游戏才会加载。
 
 - 目标：Parisian Bistro Simulator，Unreal Engine 5.4；本机参考基线 Steam Build 25393699，ProjectVersion 1.0.0.44eb。
 - 依赖：[UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)，需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`。本次核对的 API 版本为 `v3.0.1-1140-gf58e8f84`；这是实验分支版本号，**不是**旧的稳定版 3.0.1。加载器在本游戏上的兼容性尚待实测。
