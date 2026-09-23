@@ -5,13 +5,14 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.1.0-dev"
+VERSION = "0.1.1-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "auto-checkout"
 FILES = (
     "Scripts/main.lua",
     "Scripts/game.lua",
     "Scripts/checkout.lua",
+    "Scripts/diagnostics.lua",
     "README.md",
     "CHANGELOG.md",
 )

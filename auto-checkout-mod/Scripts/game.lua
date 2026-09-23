@@ -19,6 +19,7 @@ end
 local function identity(object)
     return object:GetFullName() .. '@' .. tostring(object:GetAddress())
 end
+Game.identity = identity
 
 local function boolean(value, field)
     assert(type(value) == 'boolean', 'Unsupported checkout field: ' .. field)
@@ -58,47 +59,59 @@ function Game.contract()
 end
 
 local function player_blocked(controller, player)
-    return boolean(controller.bIsLocalPauseRequested, 'bIsLocalPauseRequested')
-        or boolean(player.bIsInWidgetMode, 'bIsInWidgetMode')
-        or player:IsPlayerFrozen() or player:IsPlayerLocallyFrozen()
-        or player:IsInteracting() or player:IsInPlacingMode()
-        or player:IsInteractionWheelOpen() or Game.valid(player.CarriedObject)
-        or controller:IsMultiplayerChatOpen()
+    if boolean(controller.bIsLocalPauseRequested, 'bIsLocalPauseRequested') then return 'local-pause' end
+    if boolean(player.bIsInWidgetMode, 'bIsInWidgetMode') then return 'player-widget' end
+    if player:IsPlayerFrozen() then return 'player-frozen' end
+    if player:IsPlayerLocallyFrozen() then return 'player-locally-frozen' end
+    if player:IsInteracting() then return 'player-interacting' end
+    if player:IsInPlacingMode() then return 'player-placing' end
+    if player:IsInteractionWheelOpen() then return 'interaction-wheel' end
+    if Game.valid(player.CarriedObject) then return 'carrying=' .. identity(player.CarriedObject) end
+    if controller:IsMultiplayerChatOpen() then return 'chat-open' end
 end
 
 function Game.session(api)
     local result
+    local reason = 'no-local-controller'
     for _, controller in ipairs(FindAllOf('NetPlayerController') or {}) do
+        if actor(controller) and controller:IsLocalController() then
+            reason = controller:HasAuthority() and 'host-pawn-unavailable' or 'client-not-host'
+        end
         if actor(controller) and controller:IsLocalController() and controller:HasAuthority() then
             local world = controller:GetWorld()
             local player = controller.Pawn
             if Game.valid(world) and actor(player, world) and player:IsA(api.player)
                 and same(player.Controller, controller) and player:HasAuthority() then
                 assert(result == nil, 'Multiple local host players; checkout is suspended')
+                local blocked = api.gameplay:IsGamePaused(controller) and 'game-paused'
+                    or player_blocked(controller, player)
                 result = {
                     controller = controller, player = player, world = world,
                     id = identity(world) .. '/' .. identity(player),
                     now = api.gameplay:GetTimeSeconds(controller),
-                    blocked = api.gameplay:IsGamePaused(controller) or player_blocked(controller, player),
+                    blocked = blocked ~= nil, block_reason = blocked,
                 }
             end
         end
     end
-    return result
+    return result, result and 'host' or reason
 end
 
 function Game.registers(session)
     local result = {}
-    for _, register in ipairs(FindAllOf('CashRegister') or {}) do
+    local found = FindAllOf('CashRegister') or {}
+    for _, register in ipairs(found) do
         if actor(register, session.world) and register:HasAuthority() then
             result[#result + 1] = register
         end
     end
-    return result
+    return result, #found
 end
 
 function Game.snapshot(api, session, register)
-    if not actor(register, session.world) or not register:HasAuthority() then return nil end
+    if not actor(register, session.world) or not register:HasAuthority() then
+        return nil, 'register-unavailable-or-not-authoritative'
+    end
     local data = register.RepPaymentData
     local count = data.Dishes:GetArrayNum()
     assert(type(count) == 'number' and count >= 0, 'Invalid checkout bill array')
@@ -108,43 +121,54 @@ function Game.snapshot(api, session, register)
     local payment = register.RegisteredPaymentMethod
     local payment_id
     if Game.valid(payment) then
-        if not actor(payment, session.world) or not payment:HasAuthority()
-            or not same(payment.CashRegister, register) then return nil end
+        if not actor(payment, session.world) or not payment:HasAuthority() then
+            return nil, 'payment-unavailable-or-not-authoritative'
+        end
+        if not same(payment.CashRegister, register) then
+            return nil, 'payment-register-mismatch payment=' .. identity(payment)
+        end
         if (method == 'cash' and payment:IsA(api.cash))
             or (method == 'card' and payment:IsA(api.card)) then
             payment_id = identity(payment)
         else
-            return nil
+            return nil, 'payment-type-mismatch raw_method=' .. tostring(data.PaymentMethod)
+                .. ' payment=' .. identity(payment)
         end
     end
     return {
         id = identity(register), payment_id = payment_id, method = method,
+        dish_count = count, raw_method = data.PaymentMethod,
         has_bill = count > 0 and method ~= nil,
         successful = boolean(data.bPaymentSuccessful, 'bPaymentSuccessful'),
         drawer_open = boolean(register.bIsDrawerOpen, 'bIsDrawerOpen'),
         moving = boolean(register.bIsMoving, 'bIsMoving'),
         being_handled = boolean(register.bBeingHandled, 'bBeingHandled'),
         card_in_machine = Game.valid(register.CreditCardInMachine),
-        blocked = session.blocked,
+        blocked = session.blocked, block_reason = session.block_reason,
     }
 end
 
-function Game.request(api, session, register, expected, action)
+function Game.request(api, session, register, expected, action, on_dispatch)
     if not actor(session.controller, session.world) or not session.controller:HasAuthority()
-        or not same(session.controller.Pawn, session.player)
-        or api.gameplay:IsGamePaused(session.controller)
-        or player_blocked(session.controller, session.player) then return end
-    local current = Game.snapshot(api, session, register)
-    if not current or current.id ~= expected.id or not current.has_bill
-        or current.moving or current.being_handled or current.card_in_machine then return end
+        or not same(session.controller.Pawn, session.player) then return false, 'host-changed' end
+    local blocked = api.gameplay:IsGamePaused(session.controller) and 'game-paused'
+        or player_blocked(session.controller, session.player)
+    if blocked then return false, blocked end
+    local current, reason = Game.snapshot(api, session, register)
+    if not current then return false, reason end
+    if current.id ~= expected.id then return false, 'register-changed' end
+    if not current.has_bill then return false, 'bill-unavailable' end
+    if current.moving then return false, 'drawer-moving' end
+    if current.being_handled then return false, 'register-being-handled' end
+    if current.card_in_machine then return false, 'card-processing' end
     local target
     if action == 'take' then
         if current.drawer_open or current.successful or not current.payment_id
-            or current.payment_id ~= expected.payment_id then return end
+            or current.payment_id ~= expected.payment_id then return false, 'payment-stage-changed' end
         target = register.RegisteredPaymentMethod
     elseif action == 'finish' then
         if not current.drawer_open or current.payment_id
-            or (current.method == 'card' and not current.successful) then return end
+            or (current.method == 'card' and not current.successful) then return false, 'drawer-stage-changed' end
         target = register
     else
         error('Unknown checkout action')
@@ -152,11 +176,14 @@ function Game.request(api, session, register, expected, action)
     -- This RPC rebuilds the interactor from the controller's possessed pawn.
     -- Only request the normal default action; never construct a Mass entity,
     -- call FinishPayment directly, or write the game's payment state.
+    if on_dispatch then on_dispatch(identity(target), api.action) end
     session.controller:Server_RequestInteraction(target, {
         bIsPlayer = true,
         Action = api.action,
         HitComponentName = FName('None'),
     })
+    -- A void RPC returning only confirms dispatch, not acceptance or payment.
+    return true
 end
 
 return Game

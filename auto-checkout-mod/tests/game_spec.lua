@@ -65,7 +65,13 @@ test('cash dispatch uses its associated payment object and the standard interact
     local f = fixture()
     local s = Game.session(f.api)
     local snap = Game.snapshot(f.api, s, f.register)
-    Game.request(f.api, s, f.register, snap, 'take')
+    local observed = false
+    local sent = Game.request(f.api, s, f.register, snap, 'take', function(target, action)
+        assert(#f.calls == 0, 'request diagnostics must precede the RPC')
+        assert(target == Game.identity(f.cash) and action == 57)
+        observed = true
+    end)
+    assert(sent == true and observed)
     assert(#f.calls == 1 and f.calls[1].target == f.cash)
     assert(f.calls[1].context.Action == 57 and f.calls[1].context.bIsPlayer)
     assert(f.calls[1].context.Interactor == nil and f.calls[1].context.Entity == nil)
@@ -174,6 +180,44 @@ test('unexpected reflected types fail before any action', function()
     f.register.bIsDrawerOpen = 1
     assert(not pcall(function() Game.snapshot(f.api, Game.session(f.api), f.register) end))
     assert(#f.calls == 0)
+end)
+
+test('waiting reasons distinguish guest, missing pawn, pause and carried objects', function()
+    local f = fixture()
+    f.controller.authority = false
+    local s, reason = Game.session(f.api)
+    assert(s == nil and reason == 'client-not-host')
+    f.controller.authority, f.controller.Pawn = true, nil
+    s, reason = Game.session(f.api)
+    assert(s == nil and reason == 'host-pawn-unavailable')
+    f.controller.Pawn, f.player.CarriedObject = f.player, f.cash
+    s = Game.session(f.api)
+    assert(s.block_reason == 'carrying=' .. Game.identity(f.cash))
+    f.api.gameplay.paused = true
+    assert(Game.session(f.api).block_reason == 'game-paused')
+end)
+
+test('invalid payment diagnostics include the raw method and target identity', function()
+    local f = fixture()
+    local s = Game.session(f.api)
+    f.register.RepPaymentData.PaymentMethod = 99
+    local snapshot, reason = Game.snapshot(f.api, s, f.register)
+    assert(snapshot == nil and reason:find('raw_method=99', 1, true))
+    assert(reason:find(Game.identity(f.cash), 1, true))
+    f.register.RegisteredPaymentMethod = nil
+    snapshot = Game.snapshot(f.api, s, f.register)
+    assert(snapshot.raw_method == 99 and snapshot.dish_count == 1 and not snapshot.has_bill)
+end)
+
+test('skipped actions report a reason and never invoke the dispatch observer', function()
+    local f = fixture()
+    local s = Game.session(f.api)
+    local snap = Game.snapshot(f.api, s, f.register)
+    f.register.bBeingHandled = true
+    local sent, reason = Game.request(f.api, s, f.register, snap, 'take', function()
+        error('must not report an unsent request')
+    end)
+    assert(sent == false and reason == 'register-being-handled' and #f.calls == 0)
 end)
 
 print(string.format('Game adapter: %d tests passed', count))

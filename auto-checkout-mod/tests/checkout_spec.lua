@@ -17,7 +17,7 @@ end
 local function harness()
     local c, calls, warnings = Checkout.new(), {}, {}
     local function step(s, time)
-        c:step(s, time or 0, function(action) calls[#calls + 1] = action end,
+        c:step(s, time or 0, function(action) calls[#calls + 1] = action; return true end,
             function(text) warnings[#warnings + 1] = text end)
     end
     return c, calls, warnings, step
@@ -131,6 +131,30 @@ test('an exception during dispatch still consumes the attempt', function()
     assert(not ok)
     c:step(bill(), 1, function() error('must not retry yet') end, function() end)
     assert(c.registers['register-a'].attempts.take.count == 1)
+end)
+
+test('skipped dispatches wait but do not consume the three-request budget', function()
+    local c, sent, warnings = Checkout.new(), 0, 0
+    local s = bill()
+    local function warn() warnings = warnings + 1 end
+    for t = 0, 9, 3 do c:step(s, t, function() return false end, warn) end
+    assert(c.registers[s.id].attempts.take.count == 0)
+    c:step(s, 10, function() error('skip must retain cooldown') end, warn)
+    for t = 12, 24, 3 do
+        c:step(s, t, function() sent = sent + 1; return true end, warn)
+    end
+    assert(sent == 3 and warnings == 1)
+end)
+
+test('diagnostic phases identify blocked, missing, and incomplete payment states', function()
+    assert(Checkout.phase(bill({ blocked = true, block_reason = 'player-widget' })) == 'wait-player-widget')
+    assert(Checkout.phase(bill({ has_bill = false })) == 'wait-bill')
+    assert(Checkout.phase(bill({ drawer_open = true })) == 'wait-payment-removal')
+    local s = bill({ drawer_open = true, method = 'card' })
+    s.payment_id = nil
+    assert(Checkout.phase(s) == 'wait-card-success')
+    s.drawer_open = false
+    assert(Checkout.phase(s) == 'wait-payment-or-drawer')
 end)
 
 print(string.format('Checkout: %d tests passed', count))

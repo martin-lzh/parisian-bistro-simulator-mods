@@ -16,6 +16,21 @@ function Checkout:prune(present)
     end
 end
 
+function Checkout.phase(s)
+    if s.blocked then return 'wait-' .. (s.block_reason or 'player') end
+    if not s.has_bill then return 'wait-bill' end
+    if s.moving then return 'wait-drawer-motion' end
+    if s.being_handled then return 'wait-register-handler' end
+    if s.card_in_machine then return 'wait-card-processing' end
+    if s.drawer_open then
+        if s.payment_id then return 'wait-payment-removal' end
+        if s.method == 'card' and not s.successful then return 'wait-card-success' end
+        return 'finish'
+    end
+    if s.payment_id and not s.successful then return 'take' end
+    return 'wait-payment-or-drawer'
+end
+
 function Checkout:step(s, now, request, warn)
     local state = self.registers[s.id]
     if not state then
@@ -36,18 +51,8 @@ function Checkout:step(s, now, request, warn)
         end
         return
     end
-    if s.blocked or s.moving or s.being_handled or s.card_in_machine then return end
-
-    local action
-    if s.drawer_open then
-        if s.payment_id then return end
-        if s.method == 'card' and not s.successful then return end
-        action = 'finish'
-    elseif s.payment_id and not s.successful then
-        action = 'take'
-    else
-        return
-    end
+    local action = Checkout.phase(s)
+    if action ~= 'take' and action ~= 'finish' then return end
 
     local attempt = state.attempts[action]
     if attempt and now < attempt.next_at then return end
@@ -63,7 +68,11 @@ function Checkout:step(s, now, request, warn)
         count = attempt and attempt.count + 1 or 1,
         next_at = now + 3,
     }
-    request(action)
+    if request(action, state.attempts[action].count) ~= true then
+        -- A changed precondition is not a request rejected by the game. Keep
+        -- the cooldown but do not consume the budget for an unsent action.
+        state.attempts[action].count = attempt and attempt.count or 0
+    end
 end
 
 return Checkout
