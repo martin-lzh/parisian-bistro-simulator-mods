@@ -14,7 +14,7 @@ local function start()
         failed, ready = true, false
         pickup:reset()
         pcall(function() hint:clear() end)
-        print('[FirstToServe] ERROR version=0.1.0-dev ' .. tostring(err) .. '\n')
+        print('[FirstToServe] ERROR version=0.1.1-dev ' .. tostring(err) .. '\n')
     end
 
     local function guarded(callback)
@@ -66,7 +66,7 @@ local function start()
             error(err, 0)
         end
         ready = true
-        print('[FirstToServe] START version=0.1.0-dev native-hold=true native-hint=true\n')
+        print('[FirstToServe] START version=0.1.1-dev native-hold=true native-hint=true\n')
         return true
     end
 

@@ -39,8 +39,6 @@ function Game.contract()
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish = required('/Script/BrasserieSimulator.Dish'),
         drink = required('/Script/BrasserieSimulator.Drink'),
-        area = required('/Script/BrasserieSimulator.DrinkOutputArea'),
-        spot = required('/Script/BrasserieSimulator.DishPickupSpot'),
         enhanced = required('/Script/EnhancedInput.EnhancedInputLocalPlayerSubsystem'),
         input = required('/Script/EnhancedInput.Default__EnhancedInputLibrary'),
         subsystems = required('/Script/Engine.Default__SubsystemBlueprintLibrary'),
@@ -96,49 +94,6 @@ local function members(source, kind, world)
     return result
 end
 
-function Game.scope(api, session)
-    local hit = session.player.CurrentHit
-    if hit.bBlockingHit ~= true then return nil end
-    local component = hit.Component:get()
-    if not Game.valid(component) then return nil end
-    local target = component:GetOwner()
-    if not actor(target, session.world) then return nil end
-    if target:IsA(api.area) then
-        return { id = identity(target), source = target, kind = 'drink' }
-    end
-    local kind, sources
-    if target:IsA(api.drink) then kind, sources = 'drink', FindAllOf('DrinkOutputArea')
-    elseif target:IsA(api.dish) then kind, sources = 'food', FindAllOf('KitchenManager')
-    elseif target:IsA(api.spot) then
-        -- A pass pickup spot can sit in front of either spawn shelf. Associate
-        -- only a nearby shelf in this world; ambiguity disables this gesture.
-        local found
-        for _, kitchen in ipairs(FindAllOf('KitchenManager') or {}) do
-            if actor(kitchen, session.world) then
-                for _, box in ipairs({ kitchen.DishSpawnSpoint, kitchen.DishSpawnPointTop }) do
-                    if Game.valid(box) then
-                        local point, center = hit.ImpactPoint, box:K2_GetComponentLocation()
-                        local dx, dy, dz = point.X - center.X, point.Y - center.Y, point.Z - center.Z
-                        if dx * dx + dy * dy + dz * dz <= 150 * 150 then
-                            if found and found.id ~= identity(kitchen) then return nil end
-                            found = { id = identity(kitchen), source = kitchen, kind = 'food' }
-                        end
-                    end
-                end
-            end
-        end
-        return found
-    else return nil end
-    local found
-    for _, source in ipairs(sources or {}) do
-        if actor(source, session.world) and members(source, kind, session.world)[identity(target)] then
-            if found then return nil end
-            found = { id = identity(source), source = source, kind = kind }
-        end
-    end
-    return found
-end
-
 local function tray_state(session, kind)
     local carried, space = {}, false
     session.tray.Slots:ForEach(function(_, value)
@@ -162,6 +117,30 @@ local function eligible(api, session, scope, dish, carried)
         or range < 0 or distance < 0 or not (distance <= range) then return false end
     -- A zero/uninitialized native timestamp is not evidence of an old product.
     return api.math:GetYear(dish.CreationTime) > 1
+end
+
+function Game.scope(api, session)
+    local hit = session.player.CurrentHit
+    if hit.bBlockingHit ~= true then return nil end
+    local component = hit.Component:get()
+    if not Game.valid(component) then return nil end
+    local target = component:GetOwner()
+    if not actor(target, session.world) then return nil end
+    -- The aimed ready item identifies the source. Furniture, empty output
+    -- slots and nearby pickup spots do not start or continue this gesture.
+    local kind, sources
+    if target:IsA(api.drink) then kind, sources = 'drink', FindAllOf('DrinkOutputArea')
+    elseif target:IsA(api.dish) then kind, sources = 'food', FindAllOf('KitchenManager')
+    else return nil end
+    local found
+    for _, source in ipairs(sources or {}) do
+        if actor(source, session.world) and members(source, kind, session.world)[identity(target)] then
+            if found then return nil end
+            found = { id = identity(source), source = source, kind = kind }
+        end
+    end
+    local carried = tray_state(session, kind)
+    if found and eligible(api, session, found, target, carried) then return found end
 end
 
 function Game.snapshot(api, session, scope)

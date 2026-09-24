@@ -28,7 +28,7 @@ function input:QueryKeysMappedToAction(action)
     assert(action == player.InteractionAction)
     return { Fakes.param('remapped-key') }
 end
-local api = { player = 'player', dish = 'food', drink = 'drink', area = 'area', spot = 'spot', enhanced = 'enhanced', action = 57,
+local api = { player = 'player', dish = 'food', drink = 'drink', enhanced = 'enhanced', action = 57,
     subsystems = { GetLocalPlayerSubSystemFromPlayerController = function(_, owner, class)
         assert(owner == controller and class == 'enhanced'); return input
     end },
@@ -83,19 +83,47 @@ local drink1, drink2, unfinished = dish('drink1', 'drink', 100), dish('drink2', 
 unfinished.full = false
 area.OutputSlots = { Items = array({ { Drink = drink2 }, { Drink = unfinished }, { Drink = drink1 } }) }
 aim(area)
+assert(Game.scope(api, session) == nil, 'The output surface is not a drink target')
+aim(obj('pickup-spot', 'spot', world))
+assert(Game.scope(api, session) == nil, 'Nearby pass spots are not dish targets')
+aim(unfinished)
+assert(Game.scope(api, session) == nil, 'An unfinished drink must not activate pickup')
+aim(drink2)
 scope = assert(Game.scope(api, session))
 assert(Game.snapshot(api, session, scope).oldest == 'drink1@drink1')
-aim(drink2)
-assert(Game.scope(api, session).id == scope.id)
+for _, entry in ipairs(exclusions) do
+    local key, value = entry[1], entry[2]
+    local old = drink2[key]; drink2[key] = value
+    assert(Game.scope(api, session) == nil, 'Reject ineligible aimed drink: ' .. key)
+    drink2[key] = old
+end
+tray.Slots.values[2].Dish = drink2
+assert(Game.scope(api, session) == nil, 'A carried target cannot identify an output area')
+tray.Slots.values[2].Dish = nil
+aim(dish('unlisted-drink', 'drink', 1))
+assert(Game.scope(api, session) == nil, 'Drinks outside output slots are not targets')
 aim(newer)
+for _, entry in ipairs(exclusions) do
+    local key, value = entry[1], entry[2]
+    local old = newer[key]; newer[key] = value
+    assert(Game.scope(api, session) == nil, 'Reject ineligible aimed dish: ' .. key)
+    newer[key] = old
+end
 assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'), 'Revalidate target area')
 aim(area)
+assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'), 'Looking at the surface cancels dispatch')
+aim(drink2)
 controller.down = false
 assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'))
 controller.down = true
 drink1.bBeingPicked = true
 assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'))
 drink1.bBeingPicked = false
+-- A newly targeted cup on the same output area keeps the same source scope.
+aim(drink1)
+assert(Game.scope(api, session).id == scope.id)
+area.OutputSlots.Items = array({ { Drink = drink2 } })
+assert(Game.scope(api, session) == nil, 'Stop when the aimed cup leaves its output area')
 for _, key in ipairs({ 'paused', 'chat', 'remote' }) do
     controller[key] = true; assert(Game.session(api) == nil, key); controller[key] = false
 end
