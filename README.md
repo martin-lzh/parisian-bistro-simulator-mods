@@ -9,6 +9,8 @@
 
 实机确认日期和范围见[验收记录](releases/validation.md)。CI 执行离线测试、打包及文件校验，产物从对应 [Actions 运行](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)下载。
 
+`main` 的 CI 通过后可自动发布带源码授权记录的新版本，发布页提供 ZIP 和校验文件。版本筛选与授权记录见[发布流程](releases/README.md)。
+
 目录组织参考 Old Market Simulator Mods：每个 Mod 在根目录拥有独立的 `<feature>-mod/` 文件夹，独立维护源码、构建入口、说明和变更记录。
 
 | 路径 | 用途 | Git |
