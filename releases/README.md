@@ -13,7 +13,7 @@
 
 The user confirmed the tested development packages and requested their conversion to stable versions. Auto Checkout 0.1.2 was confirmed with three cash and two card transactions, all completed on the first attempt, including checkout beyond the original interaction range. The [validation record](validation.md#english) defines the actual scope. The current development versions add localization and still require in-game verification; they do not replace those historical acceptance records.
 
-Stable version numbering and GitHub Release publication are separate steps. [CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) and local builds use the versions in the checked-out source, currently the development versions above. Obtain a historical stable package from its existing Release attachment or build its corresponding source revision; building current source does not reproduce a historical stable package.
+Stable version numbering and GitHub Release publication are separate steps. [CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) and local builds use the versions in the checked-out source, currently the development versions above. To obtain a historical stable package, build its corresponding source revision or use a published attachment for that version when available; building current source does not reproduce a historical stable package.
 
 Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english); the repository remains private. Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
 
@@ -59,7 +59,7 @@ This command reads the private repository using `GH_TOKEN` and requires a commit
 
 用户已确认相应开发包实机测试成功，并要求转为正式版。Auto Checkout 0.1.2 的反馈为三笔现金和两笔刷卡全部首次尝试完成，包含超过原交互范围的结账；实际确认范围见[验收记录](validation.md#中文)。当前开发版本新增多语言适配，仍待游戏内验证，不替代这些历史验收记录。
 
-正式版本号与 GitHub Release 发布是独立步骤。[CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) 和本地构建均使用所检出源码的版本，目前为上表中的开发版。获取历史正式包应使用该版本已有的 Release 附件，或检出对应源码修订后构建；构建当前源码不会生成历史正式包。
+正式版本号与 GitHub Release 发布是独立步骤。[CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) 和本地构建均使用所检出源码的版本，目前为上表中的开发版。获取历史正式包应检出对应源码修订后构建；若该版本已有 Release 附件，也可直接下载。构建当前源码不会生成历史正式包。
 
 每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)，仓库保持私密。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
 
