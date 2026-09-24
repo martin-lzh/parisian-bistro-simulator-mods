@@ -28,14 +28,14 @@ local function refresh()
     end
     if not Game.valid(owner) then return end
 
-    local entries, player_id, translate = Game.snapshot(owner)
-    local summary = Summary.collect(entries, player_id, translate)
+    local entries, player_id, translate, language, native_category = Game.snapshot(owner)
+    local summary = Summary.collect(entries, player_id, translate, language, native_category)
     if view and not Hud.valid(view) then
         Hud.destroy(view)
         view = nil
     end
     if not view and summary.total > 0 then view = Hud.create(owner) end
-    if view then Hud.update(view, summary.groups) end
+    if view then Hud.update(view, summary.groups, language) end
 end
 
 local function safe_refresh()

@@ -1,6 +1,7 @@
 -- Run with Lua 5.4: lua path/to/layout_spec.lua
 local source = debug.getinfo(1, "S").source:sub(2)
 local directory = source:match("^(.*[/\\])") or "./"
+package.path = directory .. '../Scripts/?.lua;' .. package.path
 local Layout = dofile(directory .. "../Scripts/layout.lua")
 local passed = 0
 local function equal(actual, expected)

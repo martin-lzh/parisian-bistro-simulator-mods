@@ -59,7 +59,7 @@ local function test_mode(modern)
     assert(logs[#logs]:find('Stopped after an error', 1, true))
     assert(logs[#logs]:find('stage=session', 1, true) and logs[#logs]:find('stack traceback', 1, true))
     local text = table.concat(logs, '\n')
-    assert(text:find('version=0.1.2 ', 1, true))
+    assert(text:find('version=0.1.3-dev ', 1, true))
     assert(text:find('blocked=game-paused', 1, true))
     assert(text:find('player_guard=transaction-only', 1, true))
     assert(text:find('REQUEST phase=take attempt=1 target=payment', 1, true))
@@ -121,7 +121,8 @@ local function diagnostic_paths()
     assert(requests == 1, 'transiently invalid snapshots must not erase the cooldown or retry history')
     for t = 6, 15 do session.now = t; callback() end
     assert(requests == 3)
-    assert(table.concat(logs, '\n'):find('WARN No progress after three take requests', 1, true))
+    assert(table.concat(logs, '\n'):find('WARN No progress after three requests', 1, true))
+    assert(table.concat(logs, '\n'):find('phase=take register=register', 1, true))
 
     session.id, session.now, mode = 'new-world', 0, 'rpc-error'
     callback()

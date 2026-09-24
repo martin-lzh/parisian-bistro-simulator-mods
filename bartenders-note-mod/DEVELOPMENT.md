@@ -1,22 +1,41 @@
-# 开发与验收
+# Development and validation / 开发与验收
 
-## 实现
+[English](#english) · [中文](#中文)
 
-- `Scripts/game.lua`：定位本地玩家 HUD，从所属世界读取饮料队列并转换成普通 Lua 数据；不执行订单操作。
-- `Scripts/summary.lua`：过滤认领者与制作状态，以订单 ID 去重、饮料类型分组，生成稳定顺序的清单。
-- `Scripts/layout.lua`：根据文字测量结果按完整饮料条目排列最多两行，为 `... + N more` 留出宽度；N 统计未显示种类。
-- `Scripts/hud.lua`：在名称条所属容器内创建 UMG 控件；复用运行时背景与字体，按名称条实际锚点、对齐、尺寸和变换计算位置。左右各预留 18% 栏宽、至少 56 布局单位，正文容器裁剪保证文字不会绘入两端渐隐区。
-- `Scripts/main.lua`：事件通知、750 毫秒核对、HUD 重建和异常清空。所有 Unreal 对象访问均在游戏线程执行。
+## English
 
-HUD 不截获输入，名称条和原始订单数据保持原样。每次从当前队列生成清单，因此无需在存档中维护另一份订单状态。完成制作的订单从待做清单移除，不等待送达。
+Player instructions: [README](README.md#english). **Current source: 0.1.1-dev; layout and localization acceptance is pending.** Version 0.1.0's earlier user confirmation is recorded below.
 
-使用附着在同一画布上的隐藏文字控件测量当前字体的实际宽度；隐藏控件参与布局，不绘制也不接收输入。可用宽度由全屏画布对应的视口大小与 DPI 缩放求得，每次刷新重新测量以响应字体、语言和窗口变化。测量缓存仅保留一次刷新，正文内容未变时不重写文字。行高根据最终多行文字的实际高度决定；缩为一行时面板同步缩回。销毁 HUD 时一并移除测量控件。
+### Implementation
 
-所有游戏参考、接口分析和第三方工具只放在根目录被忽略的 `work/`。可跟踪源码只包含原创实现；不能提交参考输出或从游戏提取的素材。
+| Module | Responsibility |
+| --- | --- |
+| `Scripts/game.lua` | Finds the local HUD and its world, reads the queue into plain Lua data, and resolves native drink names and current language |
+| `Scripts/summary.lua` | Filters owner and preparation state, deduplicates order IDs, groups by drink type and preserves a stable order |
+| `Scripts/layout.lua` | Fits complete drink entries into at most two measured lines and reserves room for a localized hidden-type count |
+| `Scripts/hud.lua` | Creates native UMG widgets, reuses the name bar's appearance and measures text in its current font |
+| `Scripts/localization.lua` | Resolves supported cultures and formats original overflow/final-fallback wording |
+| `Scripts/main.lua` | Handles events, 750 ms reconciliation, HUD rebuilds and clearing after failures |
 
-## 离线检查与构建
+All Unreal object access happens on the game thread. The Mod does not execute order actions. Each update builds from the current queue, so no additional save state is needed. Finished drinks leave the list immediately, without waiting for delivery. The HUD does not capture input or change the original name bar.
 
-以下命令在源码仓库根目录执行；安装包不包含测试与构建工具：
+The new widgets use the name bar's actual anchors, alignment, size and transform. Each side reserves 18% of the bar width, with a minimum of 56 HUD-scaled layout units; the body container clips text inside the faded ends. A hidden text widget on the same canvas measures the native font. It participates in layout without drawing or receiving input. Available width comes from viewport dimensions and DPI scaling, and measurements are recalculated on refresh to reflect language, font and window changes.
+
+Measurement caches last one refresh. Unchanged body text is not rewritten. Panel height follows the final measured multiline height and shrinks when the content returns to one line. Removing the HUD also removes its measurement widget.
+
+Layout retains the longest complete prefix of the stable drink order. If a single name is too wide, it and subsequent types are counted in the overflow indicator instead of truncating the name. The count is drink types, not quantities. If even the localized indicator cannot fit, the panel hides until sufficient width returns.
+
+### Localization
+
+The language is read through `KismetInternationalizationLibrary:GetCurrentLanguage()` during game-thread refreshes. Native names come from `LocaleGameInstanceSubsystem:GetDishTranslation`. If an individual name is missing, `GetUITranslation('Drinks')` supplies a native category label plus `#ID`; only if both fail does the original translated generic label apply. Missing localization services do not discard valid order counts.
+
+The 14 supported cultures are `en`, `fr`, `zh-Hans`, `it`, `es`, `de`, `ru`, `ja`, `ko`, `zh-Hant`, `tr`, `pl`, `pt` and `pt-BR`. Resolution tolerates case, underscores and regional variants; explicit Chinese scripts take precedence over region aliases, and Brazilian Portuguese stays distinct. Unsupported or unreadable languages fall back to English for Mod-owned wording. Language events and periodic reconciliation both reflow the current list.
+
+Only overflow and final-fallback text is authored by the Mod. The overflow indicator is measured in the current native font with the same width budget as drink entries. Technical loader/error diagnostics remain English. Do not commit extracted translation catalogs or native game text tables; all references and research notes stay under ignored `work/`.
+
+### Offline checks and packaging
+
+From the source repository root:
 
 ```powershell
 uv run --with lupa==2.6 python bartenders-note-mod/tests/run.py
@@ -25,24 +44,80 @@ python tools/check_repository.py
 git diff --check
 ```
 
-测试通过 Lua 5.4 执行，不需要游戏或 UE4SS。替代 Unreal 对象的测试用于验证逻辑与生命周期，不能证明真实引擎桥接、渲染或加载器兼容性。
+The tests execute Lua 5.4 without the game or UE4SS. They cover ownership/state filtering, deduplication, unavailable sources, HUD lifecycle, margins, measured wrapping, hidden-type counts, height recovery and reflow when the window/font changes. Localization coverage checks the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes while the order list stays the same.
 
-构建使用固定文件白名单，将原创 Lua、用户说明、变更记录和启用标记输出至 `outputs/bartenders-note/`，同时生成 SHA-256。包内没有加载器、依赖工具、测试代码和原游戏内容。不会向游戏目录写入任何文件。
+The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.1-dev.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering.
 
-## 游戏内验收
+### In-game validation
 
-2026-09-24 用户确认 0.1.0-dev 实机测试成功，转为 0.1.0 正式版，运行逻辑不变。本次反馈未逐项提供游戏及加载器完整版本、分辨率、联机角色或测试时长。
+On 2026-09-24, the user confirmed 0.1.0-dev worked in-game and requested the 0.1.0 release, retaining the same runtime logic. The feedback did not enumerate full game/loader versions, resolution, multiplayer role or test duration. It does not cover the 0.1.1-dev layout or localization changes.
 
-0.1.1-dev 修改了文字排版；上述 0.1.0 的验收结论不覆盖新布局。新增离线测试覆盖左右留白、实际宽度换行、隐藏种类计数、面板高度恢复，以及同一订单清单在窗口和字体变化后的重排。
+The following remains a regression checklist, not a list of completed tests:
 
-以下保留为后续回归检查清单，不代表本次逐项完成；离线测试不能替代这些游戏内检查：
+1. Enter a single-player restaurant. Confirm no list before claiming orders; claim ten of one drink and another type and check totals and one-line layout when space permits.
+2. Cancel a claim, cancel an order, start preparation and finish preparation. Preparing drinks still count; finished drinks disappear, and the panel hides after the final drink.
+3. Open/close the tablet, pause and fullscreen interfaces, and activities that hide the name bar. Check for stale floating widgets and unchanged input behavior.
+4. Return to the menu, load another save and rejoin. Confirm no duplicate widgets or stale player/order data.
+5. Switch through all 14 languages with orders present, including both Chinese scripts and both Portuguese cultures. Check native drink names, localized overflow and fallback, fonts and live reflow. Test long names at 1920×1080, 2560×1600 and 3440×1440; check faded margins, two lines, hidden-type count and recovery to one line without shrinking the font.
+6. Have host and client claim different orders. Each should see only their own list, with remote cancellation/completion and reconnects updating correctly.
+7. Check UE4SS logs and extended play for sustained errors or refresh stalls. Record actual game and full loader versions, language, resolution and results.
 
-1. 单人进入餐厅，未认领时不显示；认领同类 10 杯显示数量 10，添加另一类后在宽度足够时保持一行。
-2. 逐一取消认领、取消订单、开始制作、完成制作，确认数量与实际队列一致；开始制作仍计数，完成制作移除，最后一杯完成后整行隐藏。
-3. 开关平板、暂停与全屏界面、进入会隐藏名称条的操作，确认不存在悬浮残留，不影响原输入。
-4. 返回主菜单、载入其他存档、重新加入餐厅，确认无重复控件、旧订单或旧玩家数据。
-5. 中文和英文切换后检查名称与字体；在 1920×1080、2560×1600 和 3440×1440 下检查文字避开左右渐隐区。增加饮料种类，确认从一行变两行，再出现 `... + N more`；核对 N 为隐藏种类数，减少种类后面板能恢复一行，字号保持不变。
-6. 主机与客户端分别认领不同订单，确认各自仅显示自己的清单；远端取消与制作完成能同步，断线重连后恢复。
-7. 查看 UE4SS 日志；确认本 Mod 无持续错误，长时间游戏无明显刷新卡顿。记录实际游戏版本、加载器完整版本号与结果。
+## 中文
 
-布局保留稳定顺序中能完整显示的最长前缀。单个饮料名称超过可用宽度时，该种类与后续种类通过溢出计数提示，避免截断本地化名称。极窄窗口连溢出提示也无法容纳时暂时隐藏，窗口恢复后重新排版。
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.1-dev，布局及多语言改动仍待实机验收。** 0.1.0 的历史用户确认见下文。
+
+### 实现
+
+| 模块 | 职责 |
+| --- | --- |
+| `Scripts/game.lua` | 定位本地 HUD 与所属世界，将队列转换为普通 Lua 数据，读取原生饮料名和当前语言 |
+| `Scripts/summary.lua` | 按认领者和制作状态过滤，以订单 ID 去重、按饮料类型合并并保持稳定顺序 |
+| `Scripts/layout.lua` | 按测量宽度排列完整条目，最多两行，为本地化隐藏种类计数预留空间 |
+| `Scripts/hud.lua` | 创建原生 UMG 控件，复用名称条外观并以当前字体测量文字 |
+| `Scripts/localization.lua` | 解析支持语言，格式化原创溢出提示与最终后备文案 |
+| `Scripts/main.lua` | 事件通知、750 毫秒核对、HUD 重建及异常清空 |
+
+所有 Unreal 对象访问在游戏线程执行，不操作订单。每次从当前队列生成清单，无需维护额外存档状态；完成制作立即移出清单，不等待送达。HUD 不截获输入，不改变原名称条。
+
+新增控件依据名称条实际锚点、对齐、尺寸和变换定位。左右各预留 18% 栏宽、至少 56 个随 HUD 缩放的布局单位，正文裁剪在渐隐区内侧。同画布上的隐藏文字控件参与布局测量原生字体，但不绘制、不接收输入。可用宽度依据视口尺寸和 DPI 缩放计算，每次刷新重新测量，响应语言、字体和窗口变化。
+
+测量缓存只保留一次刷新，正文未变时不重写文字。面板高度根据最终多行文字的实测高度决定，恢复一行时同步缩回。销毁 HUD 时同时移除测量控件。
+
+布局保留稳定顺序中能完整显示的最长前缀。单个名称过宽时，将该种类及后续种类纳入溢出计数，不截断名称；计数代表饮料种类而非杯数。极窄窗口连本地化提示也容纳不下时隐藏面板，宽度恢复后重新显示。
+
+### 多语言适配
+
+游戏线程刷新时通过 `KismetInternationalizationLibrary:GetCurrentLanguage()` 读取语言。饮料名称来自 `LocaleGameInstanceSubsystem:GetDishTranslation`；某个名称缺失时，先用 `GetUITranslation('Drinks')` 的原生分类名称加 `#编号`，两者均失败才使用原创本地化通用标签。翻译服务不可用不会丢弃有效订单数量。
+
+覆盖 `en`、`fr`、`zh-Hans`、`it`、`es`、`de`、`ru`、`ja`、`ko`、`zh-Hant`、`tr`、`pl`、`pt` 和 `pt-BR`。解析兼容大小写、下划线和地区变体；显式中文书写系统优先于地区别名，巴西葡萄牙语独立处理。语言不支持或不可读时，自有文案回退英语。语言事件与定时核对都会重新排版当前清单。
+
+Mod 仅自行翻译溢出提示与最终后备文案。溢出提示使用当前原生字体测量，与饮料条目共用可用宽度。加载器及异常等技术诊断保留英文。不提交提取的游戏翻译目录或原生文案表，参考与研究笔记始终放在被忽略的 `work/`。
+
+### 离线检查与打包
+
+从源码仓库根目录执行：
+
+```powershell
+uv run --with lupa==2.6 python bartenders-note-mod/tests/run.py
+python bartenders-note-mod/build.py
+python tools/check_repository.py
+git diff --check
+```
+
+测试使用 Lua 5.4，无需游戏或 UE4SS。覆盖认领者与状态过滤、去重、数据源不可用、HUD 生命周期、留白、实测换行、隐藏种类计数、面板高度恢复及窗口和字体变化后的重排。多语言检查覆盖 14 种语言、地区别名、原生名称/分类/最终后备优先级、服务缺失和订单不变时切换语言。
+
+固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.1-dev.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
+
+### 游戏内验收
+
+2026-09-24 用户确认 0.1.0-dev 实机成功，并要求转为 0.1.0 正式版，运行逻辑不变。反馈未逐项提供完整游戏与加载器版本、分辨率、联机角色或测试时长；不覆盖 0.1.1-dev 的布局和多语言改动。
+
+以下仍是回归清单，不代表已逐项完成：
+
+1. 单人进入餐厅，未认领时不显示；认领同类 10 杯和另一种饮料，检查计数与宽度足够时的单行布局。
+2. 取消认领、取消订单、开始制作、完成制作，检查数量；制作中仍计入，做完后移除，最后一杯完成后隐藏。
+3. 开关平板、暂停和全屏界面，以及会隐藏名称条的操作，检查悬浮残留和输入行为。
+4. 返回菜单、加载另一存档并重新加入，检查重复控件、旧订单和旧玩家数据。
+5. 有订单时切换全部 14 种语言，包含简繁中文和两种葡萄牙语，检查原生名称、本地化提示与后备值、字体及即时重排。在 1920×1080、2560×1600 和 3440×1440 下测试长名称，检查渐隐留白、两行布局、隐藏种类计数及不缩小字体的单行恢复。
+6. 房主与客户端分别认领订单，确认各自只显示自己的清单，远端取消、制作完成及重连能正确更新。
+7. 检查 UE4SS 日志与长时间运行，确认无持续异常或刷新卡顿，记录实际游戏和加载器完整版本、语言、分辨率与结果。

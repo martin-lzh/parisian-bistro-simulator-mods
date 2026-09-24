@@ -122,7 +122,7 @@ end
 
 -- Empty state is collapsed. Visibility comes from the native restaurant banner;
 -- sharing its canvas also inherits HUD and fullscreen-switcher visibility.
-function Hud.update(view, groups)
+function Hud.update(view, groups, language)
     assert(Hud.valid(view), 'HUD was destroyed')
     if groups == nil or #groups == 0 then
         view.root:SetVisibility(COLLAPSED)
@@ -150,7 +150,7 @@ function Hud.update(view, groups)
         end
         return sizes[text].X
     end
-    local layout = Layout.format(groups, width, measure)
+    local layout = Layout.format(groups, width, measure, language)
     local text = layout.text
     if text == '' then
         view.root:SetVisibility(COLLAPSED)

@@ -3,6 +3,7 @@ local source = debug.getinfo(1, 'S').source:sub(2)
 local directory = source:match('^(.*[/\\])') or './'
 package.path = directory .. '../Scripts/?.lua;' .. package.path
 local Hud = dofile(directory .. '../Scripts/hud.lua')
+local Localization = require('localization')
 local passed, made, missing, metrics = 0, {}, nil, {}
 local Methods = {}
 local function equal(actual, expected)
@@ -185,6 +186,31 @@ test('same groups reflow after viewport and DPI changes', function()
     owner.viewport = 1200; Hud.update(view, groups); equal(bounded(view, owner), 2)
     owner.viewport, owner.dpi = 2400, 2; Hud.update(view, groups); equal(bounded(view, owner), 2)
     owner.dpi = 1; Hud.update(view, groups); equal(bounded(view, owner), 1)
+end)
+
+test('all game languages remeasure overflow in the current native font', function()
+    local owner = fixture(); local view = Hud.create(owner); local groups = {}
+    for index = 1, 8 do groups[index] = group(string.rep(string.char(64 + index), 32)) end
+    for _, language in ipairs({ 'en', 'fr', 'zh-Hans', 'it', 'es', 'de', 'ru',
+        'ja', 'ko', 'zh-Hant', 'tr', 'pl', 'pt', 'pt-BR' }) do
+        owner.BrasserieNameTextBlock.Font = { FontObject = 'synthetic ' .. language, Size = 18 }
+        Hud.update(view, groups, language)
+        bounded(view, owner)
+        equal(view.text.Font, owner.BrasserieNameTextBlock.Font)
+        equal(view.probe.Font, view.text.Font)
+        local shown = 0
+        for _, item in ipairs(groups) do
+            if view.text.Text:find(item.name .. ' x 1', 1, true) then shown = shown + 1 end
+        end
+        assert(shown < #groups)
+        assert(view.text.Text:find(Localization.more(#groups - shown, language), 1, true))
+    end
+    Hud.update(view, groups, 'en')
+    local writes = view.text.text_writes
+    Hud.update(view, groups, 'zh-Hans')
+    equal(view.text.text_writes, writes + 1)
+    Hud.update(view, groups, 'zh-Hans')
+    equal(view.text.text_writes, writes + 1)
 end)
 
 test('same groups respond to font widths and taller line spacing', function()

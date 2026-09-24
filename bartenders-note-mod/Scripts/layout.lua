@@ -1,8 +1,9 @@
 -- Pure layout of a sorted summary, measured in the renderer's font units.
 local Layout = {}
+local Localization = require('localization')
 local SEPARATOR = "  ·  "
 
-function Layout.format(groups, width, measure)
+function Layout.format(groups, width, measure, language)
     local total = #groups
     local empty = { lines = {}, text = "", hidden = total, shown = 0 }
     if total == 0 or type(width) ~= "number" or width <= 0
@@ -43,7 +44,7 @@ function Layout.format(groups, width, measure)
         for index = 1, shown do
             if not append(labels[index]) then return nil end
         end
-        if shown < total and not append("... + " .. (total - shown) .. " more") then
+        if shown < total and not append(Localization.more(total - shown, language)) then
             return nil
         end
         return lines

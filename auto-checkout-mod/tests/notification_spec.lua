@@ -129,7 +129,7 @@ test('notification and poll requests share the three-attempt budget', function()
         f.session.now = time
         f.emit(f.registers[1]); f.flush(); f.poll()
     end
-    assert(#f.calls == 3 and f.contains('WARN No progress after three take requests'))
+    assert(#f.calls == 3 and f.contains('WARN No progress after three requests'))
 end)
 
 test('notification callbacks never bypass host, world, or object lifetime filtering', function()

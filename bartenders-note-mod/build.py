@@ -15,6 +15,7 @@ FILES = (
     "Scripts/game.lua",
     "Scripts/hud.lua",
     "Scripts/layout.lua",
+    "Scripts/localization.lua",
     "Scripts/summary.lua",
     "README.md",
     "DEVELOPMENT.md",

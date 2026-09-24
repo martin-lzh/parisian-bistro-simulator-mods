@@ -1,6 +1,7 @@
 -- Run from any working directory with Lua 5.4: lua path/to/summary_spec.lua
 local source = debug.getinfo(1, "S").source:sub(2)
 local directory = source:match("^(.*[/\\])") or "./"
+package.path = directory .. '../Scripts/?.lua;' .. package.path
 local Summary = dofile(directory .. "../Scripts/summary.lua")
 local passed = 0
 
@@ -143,6 +144,18 @@ test("translation runs once per group and sanitizes label whitespace", function(
     equal(calls, 1)
     equal(result.groups[1].name, "Thé glacé")
     equal(result.groups[1].count, 2)
+end)
+
+test("prefer native names then native category then translated numbered fallback", function()
+    local entries = { order("a", 4, 0, true, 7) }
+    equal(Summary.collect(entries, 7, label, 'fr', 'Native category').groups[1].name, 'Localized 4')
+    equal(Summary.collect(entries, 7, nil, 'fr', '  Native\ncategory  ').groups[1].name,
+        'Native category #4')
+    local result = Summary.collect(entries, 7, function() error('unavailable') end, 'fr', '')
+    equal(result.groups[1].name, 'Boisson 4')
+    equal(result.groups[1].count, 1)
+    equal(Summary.collect(entries, 7, nil, 'zh-TW').groups[1].name, '飲料 4')
+    equal(Summary.collect(entries, 7, nil, 'unsupported').groups[1].name, 'Drink 4')
 end)
 
 test("collect does not mutate inputs and returns fresh results", function()

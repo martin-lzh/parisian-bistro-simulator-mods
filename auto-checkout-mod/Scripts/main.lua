@@ -8,6 +8,8 @@ local function start()
     local Game = require('game')
     local Checkout = require('checkout')
     local AI = require('ai')
+    local Localization = require('localization')
+    local locale = Localization.new()
     local diagnostics = Diagnostics.new(function(message) print(message .. '\n') end)
     local checkout = Checkout.new()
     local ai = AI.new(Game)
@@ -29,21 +31,22 @@ local function start()
             local function cleanup()
                 local ok, cleanup_error = pcall(restore_ai)
                 if not ok then
-                    diagnostics:log('WARN', 'AI task restoration failed; reload the world. ' .. tostring(cleanup_error))
+                    diagnostics:log('WARN', locale:text('ai_restore_failed') .. ' ' .. tostring(cleanup_error))
                 end
             end
             if on_game_thread then cleanup() else
                 local ok, scheduling_error = pcall(ExecuteInGameThread, cleanup)
                 if not ok then
-                    diagnostics:log('WARN', 'Cannot schedule AI task restoration; reload the world. ' .. tostring(scheduling_error))
+                    diagnostics:log('WARN', locale:text('ai_schedule_failed') .. ' ' .. tostring(scheduling_error))
                 end
             end
         end
-        diagnostics:log('ERROR', 'Stopped after an error; manual checkout remains available. stage='
+        diagnostics:log('ERROR', locale:text('stopped') .. ' stage='
             .. stage .. ' ' .. detail .. '\n' .. tostring(err))
     end
 
     local function tick(signals)
+        locale:refresh(Game.language)
         -- Notification bursts must not accelerate periodic diagnostic logging.
         if not signals then ticks = ticks + 1 end
         local source = signals and 'notification' or 'poll'
@@ -73,7 +76,7 @@ local function start()
             checkout:reset()
             diagnostics:prune({})
             session_id = session.id
-            diagnostics:log('HOST', 'Host checkout active. session=' .. session_id)
+            diagnostics:log('HOST', locale:text('host_active') .. ' session=' .. session_id)
         end
         stage, detail = 'ai-policy', ''
         diagnostics:observe('ai', ai:sync(Game.ai_contexts(session), api.billing_task), ticks)
@@ -119,8 +122,8 @@ local function start()
                             .. ' reason=' .. tostring(skipped))
                     end
                     return sent
-                end, function(message)
-                    diagnostics:log('WARN', message .. ' ' .. state_text)
+                end, function(action)
+                    diagnostics:log('WARN', locale:text('no_progress') .. ' phase=' .. action .. ' ' .. state_text)
                 end)
             else
                 if signals then
@@ -159,7 +162,7 @@ local function start()
     local function disable_notifications(err)
         notifications_enabled = false
         pending = {}
-        diagnostics:log('WARN', 'Billing notification listener unavailable; polling remains active. ' .. tostring(err))
+        diagnostics:log('WARN', locale:text('notification_unavailable') .. ' ' .. tostring(err))
     end
     local function queue_notifications()
         if notification_queued then return end

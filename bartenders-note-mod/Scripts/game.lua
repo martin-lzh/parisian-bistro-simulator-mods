@@ -1,5 +1,6 @@
 -- Original read-only adapter. Call on the game thread.
 local Game = {}
+local Localization = require('localization')
 local TEMPLATE_FLAGS = 0x10 | 0x20 -- Class default object, archetype object.
 
 function Game.valid(object)
@@ -47,6 +48,18 @@ local function subsystem(library, hud, name)
     return result
 end
 
+function Game.language()
+    -- Read the active text language on each game-thread refresh; no UObject or
+    -- startup language cache survives a settings change or HUD transition.
+    local ok, language = pcall(function()
+        local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
+        if not Game.valid(library) then return nil end
+        local value = library:GetCurrentLanguage()
+        return type(value) == 'string' and value or value:ToString()
+    end)
+    return Localization.resolve(ok and language or nil)
+end
+
 function Game.snapshot(hud)
     assert(Game.active(hud), 'Local HUD is no longer active')
     local owner = hud:GetOwningPlayer()
@@ -56,7 +69,9 @@ function Game.snapshot(hud)
     local library = StaticFindObject('/Script/Engine.Default__SubsystemBlueprintLibrary')
     assert(Game.valid(library), 'SubsystemBlueprintLibrary is unavailable')
     local world = subsystem(library, hud, 'WorldGameInstanceSubsystem')
-    local locale = subsystem(library, hud, 'LocaleGameInstanceSubsystem')
+    -- Losing localization must not discard otherwise valid order quantities.
+    local locale_ok, locale = pcall(subsystem, library, hud, 'LocaleGameInstanceSubsystem')
+    if not locale_ok then locale = nil end
     local manager = world:GetDrinkManager()
     assert(Game.valid(manager), 'Drink manager is not ready')
     assert(Game.same(manager:GetWorld(), hud:GetWorld()), 'Drink manager belongs to an inactive world')
@@ -98,7 +113,11 @@ function Game.snapshot(hud)
         assert(type(label) == 'string' and label ~= '', 'Game returned an empty drink translation')
         return label
     end
-    return entries, player_id, translate
+    local category_ok, native_category = pcall(function()
+        if not Game.valid(locale) then return nil end
+        return locale:GetUITranslation('Drinks'):ToString()
+    end)
+    return entries, player_id, translate, Game.language(), category_ok and native_category or nil
 end
 
 return Game

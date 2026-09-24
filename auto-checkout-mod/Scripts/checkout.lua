@@ -59,7 +59,7 @@ function Checkout:step(s, now, request, warn)
     if attempt and attempt.count >= 3 then
         if not attempt.warned then
             attempt.warned = true
-            warn('No progress after three ' .. action .. ' requests; leaving this stage to manual checkout.')
+            warn(action)
         end
         return
     end

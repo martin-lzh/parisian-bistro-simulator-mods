@@ -2,6 +2,19 @@
 local Game = {}
 local TEMPLATE_FLAGS = 0x10 | 0x20
 
+function Game.language()
+    -- GetCurrentLanguage returns FString and does not require a world. Call only
+    -- from the game-thread poll, without holding the library across callbacks.
+    local ok, value = pcall(function()
+        local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
+        if not Game.valid(library) then return nil end
+        local language = library:GetCurrentLanguage()
+        if type(language) == 'string' then return language end
+        if language ~= nil then return language:ToString() end
+    end)
+    return ok and value or nil
+end
+
 function Game.valid(object)
     return object ~= nil and object:IsValid()
 end

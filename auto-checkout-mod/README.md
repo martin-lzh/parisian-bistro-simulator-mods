@@ -1,61 +1,101 @@
 # Auto Checkout
 
-自动处理顾客在柜台的结账：接收顾客递出的现金或银行卡，等待收银机准备好，再执行收银机的结账交互。玩家无需逐个点击顾客和收银机。
+[English](#english) · [中文](#中文)
 
-使用游戏原本的交互请求，让游戏计算账单、小费、收入并处理顾客离店。Mod 不直接改写金额、付款标记或顾客状态，也不处理餐桌结账、现金申报、取钱或现金袋。
+## English
 
-## 状态与依赖
+Automatically accept cash or cards from customers at the counter, wait for the register to be ready, and complete its checkout interaction.
 
-**0.1.2 正式版，现金、刷卡及远距离结账已获实机确认。** 2026-09-24 用户反馈 3 笔现金和 2 笔刷卡均完成两步交互，全部首次尝试成功，无重试失败或新异常；关闭钱柜时距离超过原范围也能清空账单并关闭钱柜。正式版沿用已验收开发包的运行逻辑，修正原生玩家距离和摆放家具限制，保留交易检查、AI 收银任务抑制及提醒监听；实际验证范围见[开发说明](DEVELOPMENT.md)。
+**Current source: 0.1.3-dev.** This version adds language-aware log explanations and awaits in-game acceptance. The latest accepted version is 0.1.2: on 2026-09-24, the user confirmed three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. That result does not establish acceptance of the new localization.
 
-- 目标基线：Steam Build 25393699，ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。
-- 依赖支持 UE 5.4 的 [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)。本机核对源码版本为 `f58e8f84`；旧稳定版 3.0.1 不作为目标加载器。
-- 单人和联机房主运行；普通联机客户端自动保持空闲。只需在房主端启用，联机行为仍待实测。
-- 安装包只含原创 Lua、说明和启用标记，不含加载器、游戏文件、第三方工具或反编译内容。
+### How to use
 
-## 使用
+Enter the restaurant as the single-player host or multiplayer host. The Mod starts automatically, with no key binding, toggle or settings file. Ordinary multiplayer clients remain idle; only the host needs it enabled. Multiplayer synchronization still needs in-game testing.
 
-安装后，房主进入餐厅即自动运行，无需按键或设置开关。收到游戏的“顾客到柜台”提醒后，在游戏线程检查对应收银机；付款物件未就绪时继续等待。同时每秒检查一次当前世界中的所有收银机，包含其他楼层柜台，以处理已在等待的顾客或未捕获的提醒。运行信息写入 UE4SS 日志的 `[AutoCheckout]` 条目。
+The Mod uses the game's normal interaction requests, so the game calculates bills, tips and income and handles customers leaving. It does not directly rewrite money, payment flags or customer state, and does not handle table checkout, cash declarations, withdrawals or cash bags.
 
-提醒触发与定时检查共用付款状态、请求间隔和重试次数，重复提醒不会重置重试预算。监听不可用时记录原因并保留定时检查。原有提醒仍正常显示，普通客户端收到提醒也不会执行结账。
+It checks a register when the game's customer-at-counter notification arrives, and checks all current-world registers every second, including counters on other floors. A missing notification does not disable periodic checks. Actual acceptance across floors remains on the regression checklist.
 
-玩家手持物品、做其他工作或打开界面不再使自动结账等待。每一步请求前重新核对这笔交易：如果玩家抢先收款、关闭抽屉，或付款对象失效，就取消当前请求，之后按最新柜台状态继续判断。游戏实际暂停、刷卡进行中或抽屉运动时仍会等待。
+### During play
 
-自动请求不要求房主站在柜台附近。Mod 只在单次调用期间调整当前付款物件或钱柜的交互距离和摆放限制，随后立即恢复；不移动玩家，不改变玩家正在做的工作。这仍使用游戏原本的玩家交互入口，并非模拟员工任务。
+You can carry items, make drinks, open interfaces or move away from the register while it works. Immediately before each request, the Mod checks that the same transaction is still waiting. A manual payment, closed drawer or invalidated payment object cancels the outdated request. It waits while the game is actually paused, a card payment is processing, a drawer is moving, or an employee already owns that transaction.
 
-运行期间，房主端从 AI 的工作候选列表中移除柜台收银任务，保留饮料、上菜及其他任务，不改变员工配置或存档。已经领取的收银任务允许完成，期间 Mod 等待该柜台释放。切换世界、离开房主会话或自动流程异常停止时尝试恢复本次移除的任务；恢复失败会明确告警，需重新载入世界。更新和卸载请关闭游戏后进行，不使用脚本热重载。
+New AI counter-checkout jobs are suppressed on the host while the Mod runs; drink preparation, serving and other jobs are retained. Already claimed checkout jobs may finish. Employee configuration and saves are not edited. On leaving a host session, changing worlds or stopping after an error, the Mod attempts to restore the jobs it removed. A failed restoration is logged and requires reloading the world.
 
-同一阶段的请求间隔至少三秒，最多三次。请求未使游戏状态推进时，停止重试该阶段并记录日志，可手动完成这笔结账；后续顾客仍会自动处理。读取接口或执行请求发生异常时，本次加载的自动功能停止，需查看日志并修正原因后重新加载 Mod。
+The Mod temporarily adjusts only the current target's interaction distance and furniture-placement restriction for the immediate native call, then restores them. It does not move the player or change the player's current activity.
 
-## 排查没有自动结账
+Requests in the same stage are at least three seconds apart, with at most three attempts. If the game does not advance that stage, the Mod stops retrying it and logs a warning; finish that transaction manually. Later customers can still be processed. An interface or execution error can stop automation for the current load; inspect the log before reloading.
 
-诊断默认启用，无需开关。日志仍写入 UE4SS 的 `UE4SS.log`，诊断条目以 `[AutoCheckout]` 开头，异常堆栈可能占用后续多行。状态改变时记录；不变时每 30 次轮询再次记录，通常约 30 秒。
+### Languages
 
-| 日志标记 | 含义 |
-| --- | --- |
-| `START version=0.1.2` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
-| `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
-| `EVENT customer-at-billing` | 已处理提醒，附对应柜台在游戏线程检查时的状态和合并的提醒次数 |
-| `EVENT_IGNORED` | 当前不是房主，或提醒对应的柜台已失效、不属于当前世界 |
-| `API` / `HOST` | 接口枚举值与当前房主会话 |
-| `STATE session` | 游戏暂停状态、找到的柜台数量和累计发起请求次数 |
-| `STATE ai` / `AI` | AI 收银任务策略、发现与已处理的任务容器数量；`restored_containers` 为恢复数量。`suppressed=0` 不能证明 AI 收银已受抑制 |
-| `STATE` 的 `phase=wait-...` / `unavailable=...` | 具体等待或排除原因，附账单、付款物件、抽屉、刷卡、占用状态 |
-| `REQUEST` | 即将调用原生交互，附阶段、次数、目标和调用前状态；`source` 区分提醒与轮询。`context` 中 `distance` 是房主到目标的距离，`range_before` 是原交互范围，`range_for_call` 是本次临时范围，`scope=target-call` 表示仅作用于当前调用 |
-| `DISPATCH_RETURNED` / `AFTER` | 调用返回及即时状态；调用返回不代表游戏接受请求或结账成功，后续 `STATE` 可显示延迟变化 |
-| `SKIP` | 最后复查发现条件改变，未发送请求，不消耗重试次数 |
-| `WARN` / `ERROR` | 多次无进展，或异常导致停止；异常附执行阶段、最近状态及可用的 Lua 堆栈 |
+The game's own payment prompts, notifications and item names remain native. The Mod adds no payment interface. Its host explanations, retry warnings, stop messages, notification fallback and AI-restoration advice follow the game's 14 supported languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.2` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。若日志报告无法恢复交互限制，请重新载入世界。
+Technical event names, field keys, phase/reason identifiers and exception details stay unchanged. Startup messages before the first safe game-thread language read remain English; unsupported or unavailable languages also fall back to English. There is no separate Mod language setting.
 
-## 安装与卸载
+### Install, update or remove
 
-构建不自动安装。由玩家在游戏关闭时手动进行：
+The local reference baseline is Windows Parisian Bistro Simulator, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. Use **UE4SS experimental** with UE 5.4 support; the locally checked API is `v3.0.1-1140-gf58e8f84`, not old stable 3.0.1.
 
-1. 按 [UE4SS 官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装支持 UE 5.4 的实验版加载器。
-2. 将压缩包里的 `AutoCheckout` 放入加载器的 `Mods` 目录。当前常见位置是游戏目录内 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`，以实际加载器布局为准。
-3. 确认 `AutoCheckout/Scripts/main.lua` 和 `AutoCheckout/enabled.txt` 存在。无需替换整个 `mods.txt` 或添加重复启用项。
+1. Close the game and install the experimental loader following the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html).
+2. Place the ZIP's `AutoCheckout` folder in the loader's `Mods` directory. A common location is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`; use your actual loader layout.
+3. Check that `AutoCheckout/Scripts/main.lua` and `AutoCheckout/enabled.txt` exist. Do not replace the whole `mods.txt` or add a duplicate enable entry.
+4. Start the game and enter your restaurant as host.
 
-卸载时关闭游戏后移除 `AutoCheckout` 目录。Mod 不创建自定义存档数据；已经完成的交易会由游戏按正常流程保存，卸载不会撤销这些交易。
+Close the game before replacing or deleting the `AutoCheckout` folder. Script hot reload is not supported. The Mod creates no custom save data, but completed transactions are saved normally by the game and are not reversed by removal. Packages contain no loader, game files or research material; builds do not install anything.
 
-构建与游戏内验收步骤见 [DEVELOPMENT.md](DEVELOPMENT.md)。
+### If checkout does not start
+
+Diagnostics are always enabled in `UE4SS.log` under `[AutoCheckout]`. Check `START version=0.1.3-dev` after updating, followed by `HOST`, `STATE ai`, `REQUEST`, `SKIP` and `AFTER`. Keep the stack after any `ERROR` as well. A returned call does not by itself mean that the game accepted the request.
+
+State changes are logged immediately, with unchanged state repeated every 30 polls, usually about 30 seconds. `suppressed=0` does not prove AI checkout is suppressed. Current code should not emit `blocked=player-interacting`. If a warning reports that interaction restrictions or AI jobs could not be restored, reload the world. The development guide contains the [diagnostic reference](DEVELOPMENT.md#diagnostic-reference) and test checklist.
+
+[Changes](CHANGELOG.md) · [Build, implementation and validation](DEVELOPMENT.md#english)
+
+## 中文
+
+自动接收柜台顾客递出的现金或银行卡，等待收银机准备好，再完成收银机结账交互。
+
+**当前源码：0.1.3-dev。** 本版增加跟随游戏语言的日志说明，仍待实机验收。最近已验收版本为 0.1.2：2026-09-24 用户确认 3 笔现金、2 笔刷卡均首次尝试成功，包括超出原交互范围的结账。该结论不代表新增多语言功能已验收。
+
+### 怎么使用
+
+以单人玩家或联机房主身份进入餐厅即可自动运行，无需按键、开关或设置文件。普通联机客户端保持空闲，只需房主启用；联机同步仍待实机测试。
+
+Mod 使用游戏原有交互请求，由游戏计算账单、小费和收入并处理顾客离店，不直接改写金额、付款标记或顾客状态，也不处理餐桌结账、现金申报、取钱或现金袋。
+
+收到游戏的顾客到柜台提醒后检查对应收银机，同时每秒检查当前世界所有收银机，包括其他楼层柜台。提醒缺失时仍有定时检查；跨楼层实际验收继续保留在回归清单中。
+
+### 运行行为
+
+玩家手持物品、制作饮料、打开界面或远离柜台时仍可运行。每次请求前重新确认同一笔交易是否还在等待；玩家手动收款、关闭钱柜或付款对象失效时，取消过时请求。游戏实际暂停、刷卡进行中、钱柜运动中或员工已认领该笔交易时会等待。
+
+运行期间，房主端禁止 AI 新领取柜台收银任务，保留制作饮料、上菜及其他任务。已领取的收银任务允许完成，不修改员工配置或存档。离开房主会话、切换世界或异常停止时尝试恢复本次移除的任务；恢复失败会记录警告，需要重新载入世界。
+
+每次原生调用仅临时调整当前目标的交互距离和摆放家具限制，调用后恢复，不移动玩家，也不改变玩家正在做的工作。
+
+同一阶段的请求至少间隔三秒、最多三次。游戏状态未推进时，停止重试该阶段并记录警告，可手动完成这笔交易；后续顾客仍可自动处理。接口读取或执行异常可能停止本次加载的自动功能，请先检查日志再重新加载。
+
+### 语言
+
+付款提示、通知与物品名称保留游戏原生值，不新增付款界面。房主状态说明、重试警告、停止信息、提醒监听回退和 AI 恢复建议适配游戏中的 14 种语言：英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语与巴西葡萄牙语。
+
+技术事件名、字段名、阶段与原因标识、异常详情保持不变。首次安全的游戏线程语言读取之前，启动信息使用英语；语言不支持或不可用时也回退英语。无需独立的 Mod 语言设置。
+
+### 安装、更新与卸载
+
+本机参考基线为 Windows 版 Parisian Bistro Simulator，Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。需要支持 UE 5.4 的 **UE4SS experimental**；本机核对的 API 为 `v3.0.1-1140-gf58e8f84`，不是旧稳定版 3.0.1。
+
+1. 关闭游戏，按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装实验版加载器。
+2. 将 ZIP 内的 `AutoCheckout` 文件夹放入加载器 `Mods` 目录。常见位置为 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`，以实际布局为准。
+3. 确认存在 `AutoCheckout/Scripts/main.lua` 和 `AutoCheckout/enabled.txt`。不要替换整个 `mods.txt` 或添加重复启用项。
+4. 启动游戏，以房主身份进入餐厅。
+
+更新或删除 `AutoCheckout` 文件夹前关闭游戏，不支持脚本热重载。Mod 不创建自定义存档数据，但已完成交易会由游戏正常保存，卸载不会撤销。包内不含加载器、游戏文件或研究资料；构建不会自动安装。
+
+### 没有自动结账时
+
+诊断默认启用，在 `UE4SS.log` 中查看 `[AutoCheckout]` 条目。更新后检查 `START version=0.1.3-dev`，再查看 `HOST`、`STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`；保留 `ERROR` 后的堆栈。调用返回本身不代表游戏接受请求。
+
+状态变化时立即记录，不变时每 30 次轮询再次记录，通常约 30 秒。`suppressed=0` 不能证明 AI 收银已被抑制，当前代码不应产生 `blocked=player-interacting`。若日志报告交互限制或 AI 任务恢复失败，请重新载入世界。开发说明提供完整[诊断标记](DEVELOPMENT.md#诊断标记)及验收清单。
+
+[版本变化](CHANGELOG.md) · [构建、实现与验收](DEVELOPMENT.md#中文)
