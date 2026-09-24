@@ -1,0 +1,77 @@
+local Fakes = require('fakes')
+local native, blueprint, calls = {}, {}, {}
+local wheel_path = '/Game/Blueprints/Player/BP_PlayerCharacter.BP_PlayerCharacter_C:CanInteractionWheelBeOpened'
+local input_path = '/Script/BrasserieSimulator.PlayerCharacter:InteractionTriggered'
+local world_ready, held, valid_session, source = false, true, true, 'pass'
+local now, candidate, present, carried, hints = 0, 'first', { first = true, second = true }, {}, {}
+local player = {}
+local api = { input = { Conv_InputActionValueToBool = function(_, value) return value end } }
+local Game = {
+    valid = function(value) return value ~= nil end,
+    contract = function() return api end,
+    session = function(_, expected)
+        if valid_session and (not expected or expected == player) then return { id = 'session', now = now } end
+    end,
+    scope = function() return source and { id = source } end,
+    held = function() return held end,
+    snapshot = function(_, session, scope)
+        return { session = session.id, scope = scope.id, now = now, oldest = candidate, present = present, carried = carried }
+    end,
+    request = function(_, session, scope, id)
+        assert(session == 'session' and scope == 'pass')
+        calls[#calls + 1] = id; return true
+    end,
+}
+package.loaded.game = Game
+package.loaded.hint = { new = function() return {
+    clear = function() hints[#hints + 1] = false end,
+    update = function(_, session, show) hints[#hints + 1] = session ~= nil and show end,
+} end }
+StaticFindObject = function() return world_ready and {} or nil end
+RegisterHook = function(path, callback)
+    if path == wheel_path then blueprint[path] = callback else native[path] = callback end
+    return 1, 2
+end
+local loop
+LoopInGameThreadWithDelay = function(delay, callback) assert(delay == 100); loop = callback end
+print = function() end
+dofile(MOD_ROOT .. '/Scripts/main.lua')
+loop(); assert(not native[input_path], 'Wait for Blueprint load')
+world_ready = true; loop(); assert(native[input_path] and blueprint[wheel_path])
+assert(#calls == 0 and hints[#hints], 'Show hint before hold without dispatching')
+local context, pressed = Fakes.param(player), Fakes.param(true)
+native[input_path](Fakes.param({}), pressed); loop()
+assert(#calls == 0, 'Remote input ignored')
+native[input_path](context, pressed)
+assert(blueprint[wheel_path](context) == false, 'Suppress wheel for claimed hold')
+loop(); assert(#calls == 1 and calls[1] == 'first')
+now, candidate = 0.5, 'second'; loop(); assert(#calls == 1)
+carried.first = true; loop(); assert(#calls == 2 and calls[2] == 'second')
+held = false; loop()
+assert(blueprint[wheel_path](context) == nil)
+held, now = true, 1; loop(); assert(#calls == 2, 'Physical press alone cannot restart a canceled native hold')
+native[input_path](context, pressed)
+source = 'different'; loop(); assert(#calls == 2, 'Changing station cancels')
+assert(blueprint[wheel_path](context) == nil)
+source = 'pass'; native[input_path](context, pressed)
+native[input_path](context, Fakes.param(false)); loop(); assert(#calls == 2, 'Release event cancels')
+valid_session = false; loop(); assert(not hints[#hints])
+valid_session = true
+Game.request = function() error('Bridge unavailable') end
+native[input_path](context, pressed); loop()
+assert(not hints[#hints], 'Failure must remove the hint')
+assert(blueprint[wheel_path](context) == nil, 'Failure must restore native wheel eligibility')
+Game.request = function() error('Disabled runtime must not dispatch again') end
+loop()
+-- A partial hook installation is rolled back, and cannot leave input active.
+local registered, removed = 0, 0
+RegisterHook = function(path)
+    registered = registered + 1
+    if path == input_path then error('Cannot install input hook') end
+    return 11, 12
+end
+UnregisterHook = function(path, pre, post)
+    assert(path == wheel_path and pre == 11 and post == 12); removed = removed + 1
+end
+dofile(MOD_ROOT .. '/Scripts/main.lua'); loop(); loop()
+assert(registered == 2 and removed == 1)

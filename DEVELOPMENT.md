@@ -35,7 +35,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` runs both Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
+`tools/ci.py build` runs all registered Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
 
 These checks establish offline behavior and package integrity, not rendering, real engine bridging or in-game acceptance. The confirmed game baseline is recorded separately from reported player test environments in the [validation record](releases/validation.md#english).
 
@@ -55,7 +55,7 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 
 - **Script, data and workflow syntax:** repository boundaries, Python/JSON syntax, whitespace and actionlint. The actionlint download uses a pinned version and SHA-256.
 - **Lua tests and packages:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only release preflight.
-- The **mod-packages** artifact contains both current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
+- The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
 - A successful **main push** can run the release job for explicitly authorized new numbered versions. Only that job receives `contents: write`; development versions do not become releases automatically. See [release management](releases/README.md#english).
 
 `.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. Editing the JSON does not apply remote settings. Maintainers must explicitly apply and read back repository rules through the API; CI has no repository administration credentials. The repository remains private.
@@ -93,7 +93,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` 运行两个 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
+`tools/ci.py build` 运行所有已登记 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
 
 这些检查验证离线行为与包完整性，不代表渲染、真实引擎桥接或实机验收通过。[验收记录](releases/validation.md#中文)区分本机开发参考基线与用户实际反馈的测试环境。
 
@@ -113,7 +113,7 @@ git diff --check
 
 - **Script, data and workflow syntax：**检查仓库边界、Python/JSON 语法、空白和 actionlint。actionlint 下载固定版本并校验 SHA-256。
 - **Lua tests and packages：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后只读预检发布条件。
-- **mod-packages** artifact 包含当前两个 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
+- **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
 - **main 推送**通过检查后，可以为已明确授权的新编号版本运行发布任务。仅该任务拥有 `contents: write`；开发版不会自动转为正式版。详见[版本管理](releases/README.md#中文)。
 
 `.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改 JSON 不会自动应用到远端。维护者须通过 API 显式应用并回读核对；CI 不持有仓库管理凭据。仓库持续保持私密。

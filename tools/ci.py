@@ -13,7 +13,8 @@ from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODS = {"bartenders-note": "BartendersNote", "auto-checkout": "AutoCheckout"}
+MODS = {"bartenders-note": "BartendersNote", "auto-checkout": "AutoCheckout",
+        "oldest-first": "OldestFirst"}
 
 
 def run(*args: str) -> None:

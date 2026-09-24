@@ -4,7 +4,7 @@
 
 ## English
 
-Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose either feature or use both; each Mod has its own installation guide, source and version history.
+Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose the features you want; each Mod has its own installation guide, source and version history.
 
 ### Choose a Mod
 
@@ -12,12 +12,13 @@ Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose ei
 | --- | --- | --- | --- |
 | [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | 0.1.1-dev | 0.1.0 |
 | [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards at the counter and completes the register interaction | 0.1.3-dev | 0.1.2 |
+| [Oldest First](oldest-first-mod/README.md#english) | Hold at the kitchen pass or drink output area to take the oldest ready items, with native mapped-key hints | 0.1.0-dev | Pending |
 
 The current development packages add support for the game's 14 languages. Bartender's Note also has a new two-line layout. These changes still need in-game acceptance; earlier confirmations apply only to the versions recorded in the [validation record](releases/validation.md#english).
 
 ### Getting started
 
-The development baseline is **Parisian Bistro Simulator on Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4**. Both Mods require **UE4SS experimental**. The locally checked API is `v3.0.1-1140-gf58e8f84`; the old stable UE4SS 3.0.1 is not the target loader.
+The development baseline is **Parisian Bistro Simulator on Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4**. These Mods require **UE4SS experimental**. The locally checked API is `v3.0.1-1140-gf58e8f84`; the old stable UE4SS 3.0.1 is not the target loader.
 
 1. Open the Mod's guide above and check its requirements and multiplayer notes.
 2. Obtain the Mod ZIP and its checksum from the matching [CI run](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml), or build it from source. GitHub's **Source code** archive is not an installable Mod package.
@@ -28,7 +29,7 @@ Loaders and game files are not included. Builds only create packages; they do no
 
 ### Languages and help
 
-Both Mods follow the game's language without a separate language pack. The supported languages are English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+Localized Mod wording follows the game's language without a separate language pack. The supported languages are English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
 Existing game text stays native: drink names come from the game's translation lookup, and checkout keeps the game's payment prompts, notifications and transaction behavior. Only Mod-specific wording needs its own translations. Auto Checkout adds translated explanations to its log while preserving diagnostic identifiers. See the [language guide](docs/localization.md#english).
 
@@ -50,12 +51,13 @@ This project is not affiliated with the game's creators. Game assets and reverse
 | --- | --- | --- | --- |
 | [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.1-dev | 0.1.0 |
 | [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收柜台顾客的现金或银行卡，并完成收银机交互 | 0.1.3-dev | 0.1.2 |
+| [Oldest First](oldest-first-mod/README.md#中文) | 长按出餐口或饮料台，优先拿取最早制作的成品，附原生键位提示 | 0.1.0-dev | 待验收 |
 
 当前开发包新增游戏 14 种语言的适配；Bartender's Note 还包含新的两行布局。这些改动仍待实机验收，之前的确认仅适用于[验收记录](releases/validation.md#中文)中的对应版本。
 
 ### 开始使用
 
-开发参考基线为 **Windows 版 Parisian Bistro Simulator，Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4**。两个 Mod 均需要 **UE4SS experimental**。本机核对的 API 为 `v3.0.1-1140-gf58e8f84`；旧稳定版 UE4SS 3.0.1 不是目标加载器。
+开发参考基线为 **Windows 版 Parisian Bistro Simulator，Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4**。这些 Mod 均需要 **UE4SS experimental**。本机核对的 API 为 `v3.0.1-1140-gf58e8f84`；旧稳定版 UE4SS 3.0.1 不是目标加载器。
 
 1. 打开上方 Mod 说明，查看依赖和联机使用范围。
 2. 从对应的 [CI 运行](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)取得 Mod ZIP 和校验文件，或自行构建。GitHub 的 **Source code** 压缩包不是可安装 Mod。
@@ -66,7 +68,7 @@ This project is not affiliated with the game's creators. Game assets and reverse
 
 ### 语言与反馈
 
-两个 Mod 跟随游戏语言，无需额外语言包。适配英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+Mod 本地化文案跟随游戏语言，无需额外语言包。适配英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
 游戏已有文案优先沿用原生值：饮料名通过游戏翻译接口读取，自动结账保留原生付款提示、通知和交易行为；仅 Mod 新增文案自行翻译。Auto Checkout 在日志中增加本地化说明，并保留诊断标识。详见[语言说明](docs/localization.md#中文)。
 
