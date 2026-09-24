@@ -6,9 +6,11 @@ local Localization = require('localization')
 local CLASS = '/Game/UI/HUD/WBP_InteractionKey.WBP_InteractionKey_C'
 local KEY, CLICK = 'OpenInteractionWheel', 'Click'
 local CENTER, COLLAPSED, HIT_TEST_INVISIBLE = 2, 1, 3
+local RESTORE = 'FirstToServe.HiddenWheelRows'
 
 local function valid(object) return object ~= nil and object:IsValid() end
 local function same(a, b) return valid(a) and valid(b) and a:GetAddress() == b:GetAddress() end
+local function identity(widget) return widget:GetFullName() .. '@' .. tostring(widget:GetAddress()) end
 
 local function visible(widget)
     -- A row's own visibility can stay unchanged while its parent is hidden.
@@ -73,29 +75,85 @@ local function place_below(panel, anchor, wrapper)
     if not ok then error(err, 0) end
 end
 
-function Hint.new() return setmetatable({ hidden = {} }, Hint) end
+function Hint.new()
+    local restores = {}
+    -- Shared scalars survive loader reload; transient UObjects must not.
+    local saved = ModRef and ModRef:GetSharedVariable(RESTORE)
+    if type(saved) == 'string' then
+        for id, visibility in saved:gmatch('([^\t\n]+)\t([0-4])\n') do restores[id] = tonumber(visibility) end
+    end
+    return setmetatable({ hidden = {}, restores = restores }, Hint)
+end
+
+function Hint:save_restores()
+    if not ModRef then return end
+    local rows = {}
+    for id, visibility in pairs(self.restores) do rows[#rows + 1] = id .. '\t' .. visibility .. '\n' end
+    ModRef:SetSharedVariable(RESTORE, table.concat(rows))
+end
 
 function Hint:clear()
     if valid(self.wrapper) then self.wrapper:RemoveFromParent() end
     for _, entry in ipairs(self.hidden) do
         if valid(entry.widget) then entry.widget:SetVisibility(entry.visibility) end
+        self.restores[entry.id] = nil
     end
+    if #self.hidden > 0 then self:save_restores() end
     self.owner, self.wrapper, self.widget, self.text, self.hidden = nil, nil, nil, nil, {}
 end
 
-function Hint:update(session, show)
-    if not session or not show then self:clear(); return end
-    local owner
-    for _, hud in ipairs(FindAllOf('WBP_HUD_C') or {}) do
-        if valid(hud) and not hud:HasAnyFlags(0x10 | 0x20)
-            and same(hud:GetOwningPlayer(), session.controller) and hud:IsInViewport() then
-            if owner then self:clear(); return end
-            owner = hud
+local function owned_row(widget, key_class)
+    return valid(widget) and widget:IsA(key_class) and widget.KeyName:ToString() == KEY
+        and widget.Text ~= nil and Localization.is_hint(widget.Text:ToString())
+end
+
+function Hint:prune(owner, key_class)
+    local border_class = StaticFindObject('/Script/UMG.Border')
+    local restored = false
+    -- Reload destroys Lua state, but widgets can outlive it. Recognize only
+    -- our exact localized wording + key + widget type, including legacy
+    -- sidebar wrappers. Never remove unrelated native interaction rows.
+    for _, name in ipairs({ 'CenterInteractionsKeys', 'RightInteractionsKeys', 'LeftInteractionsKeys' }) do
+        local panel = owner[name]
+        if valid(panel) then
+            for index = panel:GetChildrenCount() - 1, 0, -1 do
+                local row = panel:GetChildAt(index)
+                if valid(row) and not same(row, self.wrapper) then
+                    local content = row
+                    if valid(border_class) and row:IsA(border_class) then content = row:GetContent() end
+                    if owned_row(content, key_class) then row:RemoveFromParent() end
+                    if row:IsA(key_class) and row.KeyName:ToString() == KEY then
+                        local id = identity(row)
+                        local own = false
+                        for _, entry in ipairs(self.hidden) do if entry.id == id then own = true end end
+                        if not own and self.restores[id] ~= nil then
+                            row:SetVisibility(self.restores[id])
+                            self.restores[id], restored = nil, true
+                        end
+                    end
+                end
+            end
         end
     end
-    if not valid(owner) then self:clear(); return end
+    if restored then self:save_restores() end
+end
+
+function Hint:update(session, show)
     local key_class = StaticFindObject(CLASS)
     if not valid(key_class) then self:clear(); return end
+    local owner
+    for _, hud in ipairs(FindAllOf('WBP_HUD_C') or {}) do
+        if valid(hud) and not hud:HasAnyFlags(0x10 | 0x20) then
+            local controller = hud:GetOwningPlayer()
+            if valid(controller) and controller:IsLocalController() then self:prune(hud, key_class) end
+            if session and same(controller, session.controller) and hud:IsInViewport() then
+                if owner then self:clear(); return end
+                owner = hud
+            end
+        end
+    end
+    if not session or not show then self:clear(); return end
+    if not valid(owner) then self:clear(); return end
     local anchor, panel = pickup_row(owner, key_class)
     if not valid(anchor) then self:clear(); return end
     if not same(owner, self.owner) or not valid(self.widget) or not valid(self.wrapper) then
@@ -130,7 +188,12 @@ function Hint:update(session, show)
         if valid(child) and child:IsA(key_class) and child.KeyName:ToString() == KEY then
             local known = false
             for _, entry in ipairs(self.hidden) do if same(entry.widget, child) then known = true end end
-            if not known then self.hidden[#self.hidden + 1] = { widget = child, visibility = child:GetVisibility() } end
+            if not known then
+                local id, visibility = identity(child), child:GetVisibility()
+                self.hidden[#self.hidden + 1] = { widget = child, visibility = visibility, id = id }
+                self.restores[id] = visibility
+                self:save_restores()
+            end
             child:SetVisibility(COLLAPSED)
         end
     end

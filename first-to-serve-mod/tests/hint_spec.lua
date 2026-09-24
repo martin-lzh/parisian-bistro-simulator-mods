@@ -1,9 +1,16 @@
 local Hint, Fakes, Localization = require('hint'), require('fakes'), require('localization')
+local shared = {}
+ModRef = {
+    SetSharedVariable = function(_, key, value) assert(type(value) == 'string'); shared[key] = value end,
+    GetSharedVariable = function(_, key) return shared[key] end,
+}
 local obj = Fakes.object
 FName = function(text) return { ToString = function() return text end } end
 FText = function(text) return text end
 local key_class = obj('key-class')
+local border_class = obj('border-class')
 local controller, owner = obj('controller'), obj('hud')
+function controller:IsLocalController() return not self.remote end
 local function parented(result)
     function result:GetParent() return self.parent end
     function result:GetVisibility() return self.visibility or 3 end
@@ -71,6 +78,7 @@ local function widget()
     local result = obj('hint-' .. creations, key_class)
     function result:SetAction(key, text, position)
         assert(key:ToString() == 'OpenInteractionWheel' and position == 2)
+        self.KeyName, self.Text = key, FName(text)
         actions[#actions + 1] = text
     end
     return result
@@ -86,15 +94,17 @@ StaticFindObject = function(path)
     if path:find('WBP_InteractionKey', 1, true) then return key_class end
     if path:find('WidgetBlueprintLibrary', 1, true) then return library end
     if path:find('KismetInternationalizationLibrary', 1, true) then return culture end
+    if path == '/Script/UMG.Border' then return border_class end
     return obj(path)
 end
 StaticConstructObject = function(_, tree)
     assert(tree == owner.WidgetTree)
-    local result = parented(obj('wrapper-' .. creations))
+    local result = parented(obj('wrapper-' .. creations, border_class))
     function result:SetBrushColor(color) assert(color.A == 0) end
     function result:SetPadding(padding) assert(padding.Bottom == 8) end
     function result:SetVisibility(v) assert(v == 3) end
     function result:SetContent(child) self.child = child end
+    function result:GetContent() return self.child end
     return result
 end
 FindAllOf = function() return { owner } end
@@ -167,6 +177,37 @@ hint:clear()
 assert(panel.children[1] == native and panel.children[2] == click and panel.children[3] == trailing)
 assert(trailing.Slot.Padding.Bottom == 4 and native.visibility == 3)
 assert(#right.children == 2 and right.additions == sidebar_additions, 'Sidebar remains untouched throughout')
+
+-- Widgets outlive Lua during hot reload. A new hint owner must remove the
+-- prior central row and legacy sidebar rows, even with no tray/target.
+hint:update(session, true)
+local stale_wrapper = hint.wrapper
+local legacy = parented(obj('legacy-sidebar', border_class))
+local legacy_key = obj('legacy-key', key_class)
+legacy_key.KeyName, legacy_key.Text = FName('OpenInteractionWheel'), FName(Localization.hint('zh-CN'))
+function legacy:GetContent() return legacy_key end
+right:AddChild(legacy)
+local next_hint = Hint.new()
+next_hint:update(nil, false)
+assert(not stale_wrapper:GetParent() and not legacy:GetParent(), 'Prune old hints without an eligible pickup session')
+assert(native.visibility == 3, 'Recover the original native wheel visibility after an off-thread reload')
+assert(#right.children == 2 and right.children[1] == sidebar_click and right.children[2] == sidebar_wheel,
+    'Preserve native sidebar rows')
+next_hint:update(session, true)
+local active_wrapper = next_hint.wrapper
+next_hint:update(session, true)
+local count = 0
+for _, child in ipairs(panel.children) do if child:IsA(border_class) then count = count + 1 end end
+assert(count == 1 and next_hint.wrapper == active_wrapper, 'Exactly one central row after reload and repeated updates')
+-- A remote HUD is outside this local mod's cleanup ownership.
+right:AddChild(legacy)
+controller.remote = true
+next_hint:update(nil, false)
+assert(legacy:GetParent() == right)
+controller.remote = false
+next_hint:update(nil, false)
+assert(not legacy:GetParent())
+
 local languages = { 'en', 'fr', 'zh-Hans', 'zh-Hant', 'it', 'es', 'de', 'ru', 'ja', 'ko', 'tr', 'pl', 'pt', 'pt-BR' }
 for _, code in ipairs(languages) do assert(#Localization.hint(code) > 0) end
 assert(Localization.hint('zh-Hans-TW') == Localization.hint('zh-CN'))

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Update to 0.1.3-dev: keep the selected source throughout a hold when the aimed item is being picked, moves to the tray or leaves an empty spot. Repeated input events preserve pending acknowledgement; turning/walking away, release and source/session changes still cancel.
+- Remove orphaned central and legacy sidebar Mod hints after hot reload, including when no pickup session is available. Preserve one central row, stop unloaded runtimes and restore saved native hint visibility on the game thread.
+- Add adapter/runtime regression coverage for three consecutive food and drink pickups and for reload cleanup. In-game acceptance remains pending.
+- 更新至 0.1.3-dev：长按期间保持所选来源，瞄准餐品正在拿取、进入托盘或留下空位时不再中断；重复输入事件保留待确认状态，转开视线、走开、松键及切换来源或会话仍会取消。
+- 热重载后清理中央及旧版侧边栏的 Mod 提示残留，包括未持托盘的情况；仅保留一份中央提示，停止已卸载逻辑，并在游戏线程恢复已记录的原生提示可见性。
+- 增加真实适配层与运行逻辑联动的菜品/饮料连续三份拿取回归测试，以及重载清理测试；实机验收仍待完成。
+
 - Keep the hold hint only below the native central pickup hint, with no sidebar fallback. Clear it when the pickup row, its parent containers or the HUD is hidden.
 - 长按提示仅保留在原生中央取餐提示下方，不再挂接侧边栏；拿取提示、父容器或 HUD 隐藏时同步清除。
 

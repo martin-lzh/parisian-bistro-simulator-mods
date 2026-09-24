@@ -9,6 +9,9 @@ player.bIsInWidgetMode = false
 function controller:IsLocalController() return not self.remote end
 function controller:IsMultiplayerChatOpen() return self.chat or false end
 function controller:IsInputKeyDown(key) assert(key == 'remapped-key'); return self.down ~= false end
+local rotation, position = { Pitch = 0, Yaw = 0 }, { X = 0, Y = 0, Z = 0 }
+function controller:GetControlRotation() return rotation end
+function player:K2_GetActorLocation() return position end
 local sent = {}
 function controller:Server_RequestInteraction(target, context)
     assert(context.Action == 57 and context.bIsPlayer and context.HitComponentName == 'None')
@@ -28,11 +31,13 @@ function input:QueryKeysMappedToAction(action)
     assert(action == player.InteractionAction)
     return { Fakes.param('remapped-key') }
 end
+local clock = 0
 local api = { player = 'player', dish = 'food', drink = 'drink', enhanced = 'enhanced', action = 57,
+    input = { Conv_InputActionValueToBool = function(_, value) return value end },
     subsystems = { GetLocalPlayerSubSystemFromPlayerController = function(_, owner, class)
         assert(owner == controller and class == 'enhanced'); return input
     end },
-    gameplay = { IsGamePaused = function() return controller.paused or false end, GetTimeSeconds = function() return 0 end },
+    gameplay = { IsGamePaused = function() return controller.paused or false end, GetTimeSeconds = function() return clock end },
     math = { GetYear = function(_, time) return time.year end,
         Less_DateTimeDateTime = function(_, a, b) return a.age < b.age end } }
 local function dish(name, kind, age)
@@ -134,3 +139,84 @@ player.carrying = false; assert(Game.session(api) == nil); player.carrying = tru
 assert(Game.session(api, obj('remote-pawn')) == nil)
 controller.Pawn = nil; assert(Game.session(api) == nil); controller.Pawn = player
 assert(#sent == 1, 'Rejected requests must never reach the RPC')
+
+-- Source continuity uses the real adapter, not a scope stub. The aimed cup
+-- becomes busy, leaves its source, and exposes the empty output surface.
+aim(drink2)
+local lock = Game.lock(session, assert(Game.scope(api, session)))
+drink2.bBeingPicked = true
+assert(Game.scope(api, session) == nil)
+assert(Game.scope(api, session, lock).id == lock.id, 'Busy target must not cancel the active source')
+drink2.bBeingPicked = false
+aim(area)
+assert(Game.scope(api, session, lock).id == lock.id, 'Allow the empty surface after pickup')
+rotation.Yaw = 11
+assert(Game.scope(api, session, lock) == nil, 'Looking away cancels the locked source')
+rotation.Yaw = 359
+assert(Game.scope(api, session, lock), 'Angle wraparound is a small movement')
+rotation.Yaw = 0
+position.X = 31
+assert(Game.scope(api, session, lock) == nil, 'Walking away cancels')
+position.X = 0
+aim(newer)
+assert(Game.scope(api, session, lock) == nil, 'A nearby different source cancels immediately')
+aim(area)
+area.destroyed = true
+assert(Game.scope(api, session, lock) == nil, 'Do not retain dead source objects')
+area.destroyed = false
+assert(Game.scope(api, { id = 'new-tray' }, lock) == nil, 'A lock cannot cross sessions')
+
+-- Run actual input -> adapter -> sequencer -> RPC flow for both food and
+-- drinks. Holding over the first item must collect all three in age order.
+local callbacks, loop, shown = {}, nil, false
+local input_path = '/Script/BrasserieSimulator.PlayerCharacter:InteractionTriggered'
+local wheel_path = '/Game/Blueprints/Player/BP_PlayerCharacter.BP_PlayerCharacter_C:CanInteractionWheelBeOpened'
+StaticFindObject = function() return obj('api') end
+Game.contract = function() return api end
+package.loaded.hint = { new = function() return {
+    clear = function() shown = false end,
+    update = function(_, _, show) shown = show end,
+} end }
+RegisterHook = function(path, callback) callbacks[path] = callback; return 1, 2 end
+LoopInGameThreadWithDelay = function(_, callback) loop = callback end
+print = function() end
+for _, kind in ipairs({ 'food', 'drink' }) do
+    local a, b, c = dish(kind .. '-a', kind, 1), dish(kind .. '-b', kind, 2), dish(kind .. '-c', kind, 3)
+    local source = kind == 'food' and kitchen or area
+    local function set_members(values)
+        if kind == 'food' then kitchen.DishesSpawnQueue = array(values)
+        else
+            local slots = {}
+            for _, value in ipairs(values) do slots[#slots + 1] = { Drink = value } end
+            area.OutputSlots.Items = array(slots)
+        end
+    end
+    set_members({ c, a, b })
+    tray.Slots = array({ { bReservedForDrinkOnly = false }, { bReservedForDrinkOnly = false },
+        { bReservedForDrinkOnly = false } })
+    sent, clock, controller.down = {}, 10, true
+    aim(a)
+    dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+    assert(shown and #sent == 0)
+    callbacks[input_path](Fakes.param(player), Fakes.param(true))
+    loop(); assert(#sent == 1 and sent[1] == a)
+    a.bBeingPicked, clock = true, 10.025
+    callbacks[input_path](Fakes.param(player), Fakes.param(true))
+    loop(); assert(#sent == 1, 'Repeated input during pickup must wait for acknowledgement')
+    assert(callbacks[wheel_path](Fakes.param(player)) == false, 'Keep the wheel suppressed during pickup')
+    aim(source)
+    tray.Slots.values[1].Dish, a.parent, clock = a, tray, 10.06
+    set_members({ c, b })
+    loop(); assert(#sent == 2 and sent[2] == b, kind .. ': continue after aimed item is removed')
+    assert(not shown, 'An empty surface must not acquire an independent hold hint')
+    tray.Slots.values[2].Dish, b.parent, clock = b, tray, 10.12
+    player.CurrentHit.bBlockingHit = false
+    loop(); assert(#sent == 3 and sent[3] == c, kind .. ': stale queue plus tray acknowledgement must continue')
+    tray.Slots.values[3].Dish, clock = c, 10.2
+    loop(); assert(#sent == 3, 'Full tray must stop')
+    controller.down = false; loop()
+    assert(callbacks[wheel_path](Fakes.param(player)) == nil)
+    controller.down = true
+    for _ = 1, 4 do loop() end
+    assert(#sent == 3, 'No restart from physical key state alone')
+end

@@ -16,6 +16,11 @@ local phrases = {
     ['pt-BR'] = 'Segure: pegue o mais antigo primeiro',
 }
 
+function Localization.is_hint(text)
+    for _, phrase in pairs(phrases) do if text == phrase then return true end end
+    return false
+end
+
 function Localization.hint(language)
     local code = type(language) == 'string' and language:lower():gsub('_', '-') or 'en'
     local base = code:match('^([a-z]+)')

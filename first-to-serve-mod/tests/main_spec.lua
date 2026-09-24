@@ -13,12 +13,14 @@ local Game = {
         if valid_session and (not expected or expected == player) then return { id = 'session', now = now } end
     end,
     scope = function() return source and { id = source } end,
+    lock = function(session, scope) return { session = session.id, id = scope.id } end,
     held = function() return held end,
     snapshot = function(_, session, scope)
         return { session = session.id, scope = scope.id, now = now, oldest = candidate, present = present, carried = carried }
     end,
-    request = function(_, session, scope, id)
+    request = function(_, session, scope, id, lock)
         assert(session == 'session' and scope == 'pass')
+        assert(lock and lock.session == session and lock.id == scope, 'Dispatch must retain the source lock')
         calls[#calls + 1] = id; return true
     end,
 }
@@ -33,6 +35,8 @@ RegisterHook = function(path, callback)
     return 1, 2
 end
 local loop
+ModRef = {}
+IsInGameThread = function() return true end
 LoopInGameThreadWithDelay = function(delay, callback) assert(delay == 25); loop = callback end
 print = function() end
 dofile(MOD_ROOT .. '/Scripts/main.lua')
@@ -88,3 +92,18 @@ UnregisterHook = function(path, pre, post)
 end
 dofile(MOD_ROOT .. '/Scripts/main.lua'); loop(); loop()
 assert(registered == 2 and removed == 1)
+
+-- The loader unload callback stops old closures and clears UI on the game
+-- thread. Off-thread unloading must leave UObject cleanup to the new state.
+RegisterHook = function() return 1, 2 end
+Game.request = function() calls[#calls + 1] = 'unexpected' end
+valid_session, source, held = true, 'pass', true
+dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+assert(hints[#hints])
+ModRef.OnUnload()
+assert(not hints[#hints] and loop() == true, 'Unload clears hint and terminates the game-thread loop')
+dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+hint_count = #hints
+IsInGameThread = function() return false end
+ModRef.OnUnload()
+assert(#hints == hint_count and loop() == true, 'Never access UI from an off-thread unload callback')

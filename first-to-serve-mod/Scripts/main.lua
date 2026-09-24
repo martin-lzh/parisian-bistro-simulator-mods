@@ -7,15 +7,22 @@ local function start()
     local pickup, hint = Pickup.new(), Hint.new()
     local api, ready, failed, queued = nil, false, false, false
     local idle_ticks = 0
+    local source_lock, triggered = nil, false
     local wheel_path = '/Game/Blueprints/Player/BP_PlayerCharacter.BP_PlayerCharacter_C:CanInteractionWheelBeOpened'
     local input_path = '/Script/BrasserieSimulator.PlayerCharacter:InteractionTriggered'
     local hooks = {}
 
+    local function reset(released)
+        source_lock = nil
+        pickup:reset()
+        if released then triggered = false end
+    end
+
     local function stop(err)
         failed, ready = true, false
-        pickup:reset()
+        reset()
         pcall(function() hint:clear() end)
-        print('[FirstToServe] ERROR version=0.1.2-dev ' .. tostring(err) .. '\n')
+        print('[FirstToServe] ERROR version=0.1.3-dev ' .. tostring(err) .. '\n')
     end
 
     local function guarded(callback)
@@ -44,7 +51,7 @@ local function start()
                 if not ready or not pickup.session then return end
                 local session = Game.session(api, context:get())
                 if session and session.id == pickup.session and Game.held(api, session) then
-                    local scope = Game.scope(api, session)
+                    local scope = Game.scope(api, session, source_lock)
                     if scope and scope.id == pickup.scope then return false end
                 end
             end))
@@ -52,13 +59,19 @@ local function start()
                 if not ready then return end
                 local session = Game.session(api, context:get())
                 if not session then return end
-                if not api.input:Conv_InputActionValueToBool(value:get()) then pickup:reset(); return end
+                if not api.input:Conv_InputActionValueToBool(value:get()) then reset(true); return end
+                if not Game.held(api, session) then reset(true); return end
+                -- Repeated trigger events must not replace or clear the
+                -- active source when the first item is already moving.
+                if triggered then return end
                 local scope = Game.scope(api, session)
-                if not scope or not Game.held(api, session) then pickup:reset(); return end
+                if not scope then return end
+                triggered = true
                 -- IA_Interaction is the game's hold action. Tap uses a separate
                 -- action and is untouched. Arm here; dispatch only in the loop.
                 if pickup.session ~= session.id or pickup.scope ~= scope.id then
                     pickup:begin(session.id, scope.id, session.now)
+                    source_lock = Game.lock(session, scope)
                 end
             end))
         end, traceback)
@@ -67,7 +80,7 @@ local function start()
             error(err, 0)
         end
         ready = true
-        print('[FirstToServe] START version=0.1.2-dev native-hold=true native-hint=true\n')
+        print('[FirstToServe] START version=0.1.3-dev native-hold=true native-hint=true\n')
         return true
     end
 
@@ -82,19 +95,39 @@ local function start()
             idle_ticks = 0
         end
         local session = Game.session(api)
-        local scope = session and Game.scope(api, session)
+        local aimed = session and Game.scope(api, session)
+        local scope = aimed
+        if session and pickup.session then scope = Game.scope(api, session, source_lock) end
         local snapshot = scope and Game.snapshot(api, session, scope)
-        hint:update(session, snapshot ~= nil and snapshot.oldest ~= nil)
-        if not snapshot or not Game.held(api, session) then pickup:reset(); return end
+        hint:update(session, aimed ~= nil and snapshot ~= nil and snapshot.oldest ~= nil)
+        if not session then reset(); return end
+        if not Game.held(api, session) then reset(true); return end
+        if not snapshot then reset(); return end
+        if source_lock and aimed and aimed.id == source_lock.id then
+            source_lock = Game.lock(session, aimed)
+        end
         local result = pickup:step(snapshot, function(candidate)
-            return Game.request(api, session.id, scope.id, candidate)
+            return Game.request(api, session.id, scope.id, candidate, source_lock)
         end)
         if result == 'timeout' then print('[FirstToServe] STOP reason=pickup-unconfirmed release-to-retry\n') end
     end
 
+    if ModRef then
+        ModRef.OnUnload = function()
+            failed, ready = true, false
+            reset()
+            -- Some loader unload paths run off the game thread. Do not queue
+            -- a callback into a Lua state about to die; startup also prunes
+            -- orphaned rows on the next game-thread tick.
+            if type(IsInGameThread) == 'function' and IsInGameThread() then
+                pcall(function() hint:clear() end)
+            end
+        end
+    end
+
     local run = guarded(tick)
     if type(LoopInGameThreadWithDelay) == 'function' then
-        LoopInGameThreadWithDelay(25, function() run(); return false end)
+        LoopInGameThreadWithDelay(25, function() run(); return failed end)
     else
         LoopAsync(25, function()
             if queued or failed then return false end

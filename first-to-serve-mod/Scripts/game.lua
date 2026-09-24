@@ -119,15 +119,15 @@ local function eligible(api, session, scope, dish, carried)
     return api.math:GetYear(dish.CreationTime) > 1
 end
 
-function Game.scope(api, session)
+local function aimed_scope(api, session)
     local hit = session.player.CurrentHit
     if hit.bBlockingHit ~= true then return nil end
     local component = hit.Component:get()
     if not Game.valid(component) then return nil end
     local target = component:GetOwner()
     if not actor(target, session.world) then return nil end
-    -- The aimed ready item identifies the source. Furniture, empty output
-    -- slots and nearby pickup spots do not start or continue this gesture.
+    -- A ready item is required to START the gesture. Its later pickup must
+    -- not discard the source that the player already chose.
     local kind, sources
     if target:IsA(api.drink) then kind, sources = 'drink', FindAllOf('DrinkOutputArea')
     elseif target:IsA(api.dish) then kind, sources = 'food', FindAllOf('KitchenManager')
@@ -141,6 +141,43 @@ function Game.scope(api, session)
     end
     local carried = tray_state(session, kind)
     if found and eligible(api, session, found, target, carried) then return found end
+end
+
+function Game.lock(session, scope)
+    local rotation = session.controller:GetControlRotation()
+    local position = session.player:K2_GetActorLocation()
+    -- Persist only scalar values; sources are resolved again every tick.
+    return { session = session.id, id = scope.id, kind = scope.kind,
+        pitch = rotation.Pitch, yaw = rotation.Yaw,
+        x = position.X, y = position.Y, z = position.Z }
+end
+
+local function angle(a, b) return math.abs((a - b + 180) % 360 - 180) end
+
+function Game.scope(api, session, lock)
+    if not lock then return aimed_scope(api, session) end
+    if lock.session ~= session.id then return nil end
+    local aimed = aimed_scope(api, session)
+    if aimed then
+        -- A different eligible station always cancels, even if very close.
+        if aimed.id ~= lock.id then return nil end
+        return aimed
+    end
+    -- Taking the aimed item can leave a busy/carried item, the countertop or
+    -- no hit under the crosshair. Allow that gap while the view stays near
+    -- the last aimed item, without extending reach or following the player.
+    local rotation = session.controller:GetControlRotation()
+    local position = session.player:K2_GetActorLocation()
+    if angle(rotation.Pitch, lock.pitch) > 10 or angle(rotation.Yaw, lock.yaw) > 10
+        or (position.X - lock.x)^2 + (position.Y - lock.y)^2 + (position.Z - lock.z)^2 > 30^2 then
+        return nil
+    end
+    local class = lock.kind == 'food' and 'KitchenManager' or 'DrinkOutputArea'
+    for _, source in ipairs(FindAllOf(class) or {}) do
+        if actor(source, session.world) and identity(source) == lock.id then
+            return { id = lock.id, kind = lock.kind, source = source }
+        end
+    end
 end
 
 function Game.snapshot(api, session, scope)
@@ -160,12 +197,12 @@ function Game.snapshot(api, session, scope)
         present = present, carried = carried, has_space = space, oldest = oldest and identity(oldest) }
 end
 
-function Game.request(api, expected, scope_id, candidate)
+function Game.request(api, expected, scope_id, candidate, lock)
     -- Re-read possession, input, aim, membership, capacity and age immediately
     -- before dispatch. No range edits, tray writes, queue writes or direct grab.
     local session = Game.session(api)
     if not session or session.id ~= expected or not Game.held(api, session) then return false end
-    local scope = Game.scope(api, session)
+    local scope = Game.scope(api, session, lock)
     if not scope or scope.id ~= scope_id then return false end
     local snapshot = Game.snapshot(api, session, scope)
     if snapshot.oldest ~= candidate then return false end
