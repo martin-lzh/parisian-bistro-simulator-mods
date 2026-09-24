@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include "dispatch.hpp"
+#include "pe_image.hpp"
 
 namespace {
 volatile long selected = -1;
@@ -54,18 +55,6 @@ std::vector<unsigned char> read_verified_image() {
     if (hex != expected_hash) throw std::runtime_error("Unsupported game build; no patch applied");
     return data;
 }
-const unsigned char* file_at(const std::vector<unsigned char>& data, std::size_t rva, std::size_t size) {
-    const auto* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(data.data());
-    const auto* nt = reinterpret_cast<const IMAGE_NT_HEADERS64*>(data.data() + dos->e_lfanew);
-    const auto* section = IMAGE_FIRST_SECTION(nt);
-    for (unsigned i = 0; i < nt->FileHeader.NumberOfSections; ++i) {
-        if (rva >= section[i].VirtualAddress && rva + size <= section[i].VirtualAddress + section[i].SizeOfRawData) {
-            const auto offset = section[i].PointerToRawData + rva - section[i].VirtualAddress;
-            if (offset + size <= data.size()) return data.data() + offset;
-        }
-    }
-    throw std::runtime_error("Invalid compatibility range");
-}
 void* allocate_near(const void* address) {
     SYSTEM_INFO info{}; GetSystemInfo(&info);
     auto base = reinterpret_cast<std::uintptr_t>(address);
@@ -90,10 +79,11 @@ void initialize() {
     if (active) { status("ready"); return; }
     const auto data = read_verified_image();
     auto* base = reinterpret_cast<unsigned char*>(GetModuleHandleW(nullptr));
-    // Cover the complete evaluator and its free-service coefficient, catching
-    // another mod's changes even when the on-disk executable still matches.
-    if (std::memcmp(base + 0x5060e30, file_at(data, 0x5060e30, 0x88f), 0x88f) != 0 ||
-        std::memcmp(base + free_fee_rva, file_at(data, free_fee_rva, 4), 4) != 0)
+    // The live free-service coefficient belongs to writable, zero-filled image
+    // data, not file-backed code. Validate its mapped location and retain its
+    // runtime value. Only the evaluator must match the verified file bytes.
+    delivery::pe::require_writable_data(data, free_fee_rva, sizeof(float));
+    if (std::memcmp(base + 0x5060e30, delivery::pe::file_at(data, 0x5060e30, 0x88f), 0x88f) != 0)
         throw std::runtime_error("Automatic order code was already modified");
     site = base + site_rva;
     std::memcpy(original.data(), site, original.size());

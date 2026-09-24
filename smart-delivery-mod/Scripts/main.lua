@@ -19,7 +19,7 @@ local function start()
         local restored, restore_error = pcall(bridge.calls.disable)
         for _, view in pairs(views) do pcall(UI.destroy, view) end
         for _, hook in ipairs(hooks) do pcall(UnregisterHook, table.unpack(hook)) end
-        print('[SmartDelivery] ERROR version=0.1.0-dev ' .. tostring(err)
+        print('[SmartDelivery] ERROR version=0.1.1-dev ' .. tostring(err)
             .. (restored and '' or '; restore=' .. tostring(restore_error)) .. '\n')
     end
     local function guard(fn)
@@ -32,7 +32,11 @@ local function start()
     local function id(owner) return owner:GetFullName() .. '@' .. tostring(owner:GetAddress()) end
     local function view_for(owner)
         local key = id(owner)
-        if not views[key] then views[key] = UI.create(owner); UI.update(views[key], saved, true) end
+        if not views[key] then
+            views[key] = UI.create(owner)
+            UI.update(views[key], saved, true)
+            print('[SmartDelivery] UI attached to automatic-order settings\n')
+        end
         return views[key]
     end
     local function initialize()
@@ -63,7 +67,7 @@ local function start()
         assert(type(pre) == 'number' and type(post) == 'number', 'Reset hook unavailable')
         hooks[#hooks + 1] = { reset, pre, post }
         ready = true
-        print('[SmartDelivery] START version=0.1.0-dev method=' .. saved .. '\n')
+        print('[SmartDelivery] START version=0.1.1-dev method=' .. saved .. '\n')
     end
     local run = guard(function()
         initialize()

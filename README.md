@@ -14,7 +14,7 @@ Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose th
 | [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards at the counter and completes the register interaction | 0.1.3-dev | 0.1.2 |
 | [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and requests replacements while the original customer still has enough patience | 0.1.0-dev | Pending |
 | [First to Serve](first-to-serve-mod/README.md#english) | Aim at a ready dish or drink and hold to take the oldest first, with a hold hint below the native pickup hint | 0.1.2-dev | Pending |
-| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.0-dev | Pending |
+| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.1-dev | Pending |
 
 The current development packages add support for the game's 14 languages. Bartender's Note also has a new two-line layout. These changes still need in-game acceptance; earlier confirmations apply only to the versions recorded in the [validation record](releases/validation.md#english).
 
@@ -55,7 +55,7 @@ This project is not affiliated with the game's creators. Game assets and reverse
 | [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收柜台顾客的现金或银行卡，并完成收银机交互 | 0.1.3-dev | 0.1.2 |
 | [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣菜品；原顾客仍在等待且耐心足够时，向厨房请求重做 | 0.1.0-dev | 待验收 |
 | [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 对准成品菜品或饮料长按，优先拿取最早制作的成品；提示位于原生拿取提示下方 | 0.1.2-dev | 待验收 |
-| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.0-dev | 待验收 |
+| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.1-dev | 待验收 |
 
 当前开发包新增游戏 14 种语言的适配；Bartender's Note 还包含新的两行布局。这些改动仍待实机验收，之前的确认仅适用于[验收记录](releases/validation.md#中文)中的对应版本。
 

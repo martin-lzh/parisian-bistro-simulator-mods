@@ -10,6 +10,8 @@ The automatic-order evaluator is called by native timers and delegates and overw
 
 The helper verifies the complete executable hash and compares the loaded evaluator against the verified file before installing a game-thread jump. It preserves the dispatch registers, reads the game's free-service coefficient and resumes the native budget/premium branches. Unknown builds and conflicting modifications fail closed. No extracted bytes, game assets, UE4SS binaries, SDK dumps or third-party hook libraries are bundled. Research and detailed compatibility evidence stay in ignored `work/`.
 
+The free-service coefficient is writable runtime data in the zero-filled tail of a PE section. Validate its mapped section bounds and permissions, preserving its live value; do not require file bytes or compare it with disk contents. The 0.1.0-dev file lookup incorrectly rejected this valid address during initialization. Synthetic PE regression tests cover this distinction, section boundaries, overflow and truncated files.
+
 Lua loads named C entry points through `package.loadlib`; they accept no arguments, return no Lua values and access no Lua ABI structures. Each operation writes a fresh status acknowledgment. Lua failures disable the preference and request restoration of the original instruction; a conflicting later patch is never overwritten. The helper is retained until process exit. Hot-unloading or live-replacing the Mod is unsupported; restart the game for updates or removal.
 
 ### Offline verification
@@ -44,6 +46,8 @@ Offline results do not establish engine bridging, layout, multiplayer or real tr
 自动订购通过原生定时器和委托执行，在余额检查前覆盖配送费；只拦截反射的 `OrderIngredients` 无法截获这些直接调用。原创 Windows 辅助模块仅改变该执行过程中的配送选择。采购清单、下限、可用性、余额检查、夜间费用、配送人数与实际下单继续走游戏原逻辑，包括保存设置时立即触发的订购；手动订单不经过该修改。
 
 辅助模块先核对游戏可执行文件完整哈希，再比较内存中的执行代码与已验证文件，随后在游戏线程安装跳转。分派代码保留寄存器，读取原生免费服务系数，并使用游戏经济型/高级配送分支。未知构建或冲突修改拒绝启用。安装包不含游戏字节、游戏资产、UE4SS 二进制、SDK 导出或第三方 Hook 库；研究和详细兼容性证据仅保存在被忽略的 `work/`。
+
+免费服务系数是 PE 节区零填充尾部的可写运行时数据，应核验映射后的范围与权限并保留实时值，不要求它具有文件字节，也不与磁盘内容比较。0.1.0-dev 错误地按文件范围查找，导致初始化拒绝合法地址。新增原创合成 PE 回归用例覆盖这一差异、节区边界、溢出及文件截断。
 
 Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua 返回值，也不访问 Lua ABI 内部结构，每次操作写入新的状态回执。Lua 出错时停用偏好并请求恢复原指令；若之后有其他补丁覆盖此处，则不强行覆盖它。辅助模块保留到进程结束，不支持热卸载或运行中替换；更新、卸载请重启游戏。
 

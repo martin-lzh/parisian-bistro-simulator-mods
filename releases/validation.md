@@ -4,7 +4,7 @@
 
 ## English
 
-Smart Delivery 0.1.0-dev is awaiting in-game acceptance. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
+Smart Delivery 0.1.1-dev is awaiting in-game retesting. On 2026-09-24, the user reported that 0.1.0-dev loaded but its native helper failed compatibility validation before UI injection. Version 0.1.1-dev corrects the treatment of zero-filled runtime data. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
 
 Fresh to Serve 0.1.0-dev is a new development Mod awaiting in-game acceptance. Offline tests and package verification do not establish real cleanup, kitchen ordering or waiter delivery.
 
@@ -40,7 +40,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Smart Delivery 0.1.0-dev 待实机验收。原生分派执行测试、Lua 行为测试和包校验不代表真实界面、引擎集成、配送扣款或联机行为通过；见其[验收清单](../smart-delivery-mod/DEVELOPMENT.md#中文)。
+Smart Delivery 0.1.1-dev 待实机复测。2026-09-24，用户反馈 0.1.0-dev 已加载，但原生辅助模块在界面注入前校验失败。0.1.1-dev 修正了零填充运行时数据的校验方式。原生分派执行测试、Lua 行为测试和包校验不代表真实界面、引擎集成、配送扣款或联机行为通过；见其[验收清单](../smart-delivery-mod/DEVELOPMENT.md#中文)。
 
 Fresh to Serve 0.1.0-dev 为新开发 Mod，仍待游戏内验收。离线测试与包校验不等同于真实清理、厨房补单和服务员上菜成功。
 
