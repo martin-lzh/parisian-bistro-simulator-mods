@@ -77,6 +77,27 @@ class PackageChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "SHA-256"):
             ci.verify_package(self.mod, self.archive)
 
+    def test_generated_binary_is_checked_without_text_normalization(self):
+        binary = b"MZ\x00\r\n\xfforiginal-helper"
+        helper = self.root / "delivery_bridge.dll"
+        helper.write_bytes(binary)
+        self.mod["generated"] = {"Scripts/delivery_bridge.dll": helper}
+        self.write_package(self.payload | {"Example/Scripts/delivery_bridge.dll": binary})
+        ci.verify_package(self.mod, self.archive)
+        evidence = {"Scripts/delivery_bridge.dll": sha256(binary).hexdigest()}
+        helper.unlink()
+        ci.verify_package(self.mod, self.archive, evidence)
+        with self.assertRaisesRegex(ValueError, "evidence"):
+            ci.verify_package(self.mod, self.archive, {})
+        self.write_package(self.payload | {"Example/Scripts/delivery_bridge.dll": binary + b"tampered"})
+        with self.assertRaisesRegex(ValueError, "Generated package content"):
+            ci.verify_package(self.mod, self.archive, evidence)
+
+    def test_unapproved_generated_binary_is_rejected(self):
+        self.mod["generated"] = {"Scripts/unrelated.dll": self.root / "unrelated.dll"}
+        with self.assertRaisesRegex(ValueError, "Disallowed generated"):
+            self.validate()
+
     def test_symbolic_link_entry_is_rejected(self):
         with ZipFile(self.archive, "w") as package:
             for name, data in self.payload.items():

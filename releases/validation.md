@@ -4,6 +4,8 @@
 
 ## English
 
+Smart Delivery 0.1.0-dev is awaiting in-game acceptance. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
+
 Fresh to Serve 0.1.0-dev is a new development Mod awaiting in-game acceptance. Offline tests and package verification do not establish real cleanup, kitchen ordering or waiter delivery.
 
 Current source versions Bartender's Note 0.1.1-dev and Auto Checkout 0.1.3-dev include localization changes that still require in-game verification. The accepted stable versions remain Bartender's Note 0.1.0 and Auto Checkout 0.1.2. Current CI packages follow current source versions and do not extend these historical acceptance results.
@@ -37,6 +39,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+Smart Delivery 0.1.0-dev 待实机验收。原生分派执行测试、Lua 行为测试和包校验不代表真实界面、引擎集成、配送扣款或联机行为通过；见其[验收清单](../smart-delivery-mod/DEVELOPMENT.md#中文)。
 
 Fresh to Serve 0.1.0-dev 为新开发 Mod，仍待游戏内验收。离线测试与包校验不等同于真实清理、厨房补单和服务员上菜成功。
 

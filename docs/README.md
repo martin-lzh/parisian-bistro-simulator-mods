@@ -13,6 +13,7 @@
 | Auto Checkout | [Player guide](../auto-checkout-mod/README.md#english) · [Development and validation](../auto-checkout-mod/DEVELOPMENT.md#english) · [Changes](../auto-checkout-mod/CHANGELOG.md) |
 | Fresh to Serve | [Player guide](../fresh-to-serve-mod/README.md#english) · [Development and validation](../fresh-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../fresh-to-serve-mod/CHANGELOG.md) |
 | First to Serve | [Player guide](../first-to-serve-mod/README.md#english) · [Development and validation](../first-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../first-to-serve-mod/CHANGELOG.md) |
+| Smart Delivery | [Player guide](../smart-delivery-mod/README.md#english) · [Development and validation](../smart-delivery-mod/DEVELOPMENT.md#english) · [Changes](../smart-delivery-mod/CHANGELOG.md) |
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
 | Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
 
@@ -29,6 +30,7 @@ These pages describe original Mod behavior, development decisions and validation
 | Auto Checkout | [玩家说明](../auto-checkout-mod/README.md#中文) · [开发与验收](../auto-checkout-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-checkout-mod/CHANGELOG.md) |
 | Fresh to Serve（焕新上桌） | [玩家说明](../fresh-to-serve-mod/README.md#中文) · [开发与验收](../fresh-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../fresh-to-serve-mod/CHANGELOG.md) |
 | First to Serve（先做好先端） | [玩家说明](../first-to-serve-mod/README.md#中文) · [开发与验收](../first-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../first-to-serve-mod/CHANGELOG.md) |
+| Smart Delivery（智选配送） | [玩家说明](../smart-delivery-mod/README.md#中文) · [开发与验收](../smart-delivery-mod/DEVELOPMENT.md#中文) · [版本变化](../smart-delivery-mod/CHANGELOG.md) |
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
 

@@ -25,6 +25,8 @@ All reverse-engineering material belongs in ignored `work/`, including game file
 
 The offline build uses Python and uv, with `lupa==2.6` providing Lua 5.4 for behavior tests. CI pins Python 3.12 and uv 0.10.7. It does not need the game, UE4SS or local references.
 
+Smart Delivery also builds an original Windows x64 helper with MSVC C++/MASM and the Windows SDK, and executes a native dispatch test harness. It uses an explicit generated-DLL allowlist; no binaries are tracked. CI records the compiled helper's hash in commit-bound build evidence for package and release verification.
+
 Run from the repository root:
 
 ```powershell
@@ -82,6 +84,8 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 ### 构建与检查
 
 离线构建使用 Python 和 uv，`lupa==2.6` 提供 Lua 5.4 行为测试环境。CI 固定 Python 3.12 和 uv 0.10.7，不需要游戏、UE4SS 或本机参考资料。
+
+Smart Delivery 还使用 MSVC C++/MASM 和 Windows SDK 构建原创 Windows x64 辅助模块，并执行原生分派测试。生成的 DLL 使用固定白名单，不跟踪二进制文件。CI 在绑定提交的构建证据中记录辅助模块哈希，用于安装包及发布校验。
 
 在仓库根目录执行：
 

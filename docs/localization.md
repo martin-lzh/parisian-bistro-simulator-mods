@@ -4,7 +4,7 @@
 
 ## English
 
-Both Mods select their language from the running game. The supported set matches the 14 cultures configured for the local game baseline; Portuguese and Brazilian Portuguese are separate choices. No language pack or Mod language setting is required.
+The Mods select their language from the running game. The supported set matches the 14 cultures configured for the local game baseline; Portuguese and Brazilian Portuguese are separate choices. No language pack or Mod language setting is required.
 
 | Culture | Language | 语言 |
 | --- | --- | --- |
@@ -27,6 +27,7 @@ Both Mods select their language from the running game. The supported set matches
 
 - **Bartender's Note:** drink names come from the game's current translation lookup, and the HUD uses the restaurant name bar's font and appearance. Different drinks with the same translated name remain separate types.
 - **Auto Checkout:** payment prompts, notifications, item names and transaction behavior remain the game's own. The Mod adds no replacement payment interface.
+- **Smart Delivery:** delivery names come from the existing game buttons; only the new field label has Mod-owned translations.
 
 Only text introduced by a Mod has original translations: Bartender's Note's hidden-type count and last-resort missing-name fallback, and Auto Checkout's readable log explanations. Game catalogs, assets and translated drink dictionaries are not bundled.
 
@@ -44,12 +45,13 @@ The development guides describe offline checks and the in-game test checklist. T
 
 ## 中文
 
-两个 Mod 根据正在运行的游戏选择语言，覆盖本机游戏基线配置的 14 种语言，完整列表及语言代码见上表。葡萄牙语与巴西葡萄牙语独立处理，无需额外语言包或 Mod 语言设置。
+Mod 根据正在运行的游戏选择语言，覆盖本机游戏基线配置的 14 种语言，完整列表及语言代码见上表。葡萄牙语与巴西葡萄牙语独立处理，无需额外语言包或 Mod 语言设置。
 
 ### 优先沿用原生值
 
 - **Bartender's Note：**饮料名称从游戏当前翻译接口读取，HUD 沿用餐厅名称条的字体和外观。不同饮料即使译名相同，仍分别统计种类。
 - **Auto Checkout：**保留游戏原有付款提示、通知、物品名称与交易行为，不替换付款界面。
+- **Smart Delivery：**配送名称读取游戏现有按钮，仅新增字段标题使用 Mod 自有翻译。
 
 仅对 Mod 新增文案提供原创翻译：Bartender's Note 的隐藏种类计数及最终名称后备标签，以及 Auto Checkout 的日志说明。不打包游戏翻译目录、资产或饮料译名字典。
 
