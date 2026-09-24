@@ -1,10 +1,10 @@
-# Fresh Service
+# Fresh to Serve / 焕新上桌
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Fresh Service removes poor-quality cooked meals from the kitchen pass and dish elevators, then asks the kitchen for a replacement when the original customer is still waiting and has enough patience. The game's waiters collect and serve the new meal normally.
+Fresh to Serve removes poor-quality cooked meals from the kitchen pass and dish elevators, then asks the kitchen for a replacement when the original customer is still waiting and has enough patience. The game's waiters collect and serve the new meal normally.
 
 Current version: **0.1.0-dev — awaiting in-game acceptance**.
 
@@ -24,19 +24,21 @@ Cleanup removes the entire spoiled dish actor and frees its pickup position. It 
 Baseline: Windows / Steam Build **25393699**, game **1.0.0.44eb**, Unreal **5.4**. Requires **UE4SS experimental**, with the locally checked API `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not supported.
 
 1. Close the game yourself and install the required loader if needed.
-2. Obtain `FreshService-0.1.0-dev.zip` and its `.sha256` from the matching CI artifact, or run `python fresh-service-mod/build.py` from the repository root.
-3. Extract `FreshService/` into the loader's `Mods/`. Confirm `enabled.txt` and `Scripts/main.lua` are present.
+2. Obtain `FreshToServe-0.1.0-dev.zip` and its `.sha256` from the matching CI artifact, or run `python fresh-to-serve-mod/build.py` from the repository root.
+3. Extract `FreshToServe/` into the loader's `Mods/`. Confirm `enabled.txt` and `Scripts/main.lua` are present.
 4. Start the game and host your restaurant. No hotkey or configuration is needed.
 
-To disable, close the game and remove `FreshService/enabled.txt` or the Mod folder. This does not undo discarded meals or accepted orders. Builds never install the Mod, change saves or start/close the game. No game files or loader are bundled.
+If you installed the earlier Fresh Service package, close the game and remove its `Mods/FreshService/` folder before enabling `FreshToServe/`. Running both copies would duplicate the automation.
 
-No player-facing text is added; names and order UI stay in the game's language. Technical logs use `[FreshService]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED`, `ERROR`. `REQUEUED` confirms a new kitchen queue entry, not delivery. Engine errors stop automation until reload to avoid repeating an uncertain request. Report relevant logs, game/loader versions and host/client role.
+To disable, close the game and remove `FreshToServe/enabled.txt` or the Mod folder. This does not undo discarded meals or accepted orders. Builds never install the Mod, change saves or start/close the game. No game files or loader are bundled.
+
+No player-facing text is added; names and order UI stay in the game's language. Technical logs use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED`, `ERROR`. `REQUEUED` confirms a new kitchen queue entry, not delivery. Engine errors stop automation until reload to avoid repeating an uncertain request. Report relevant logs, game/loader versions and host/client role.
 
 See [development and acceptance checklist](DEVELOPMENT.md#english) and [changes](CHANGELOG.md).
 
 ## 中文
 
-Fresh Service 自动清理厨房出餐台和菜品升降机上的低劣熟食；原顾客仍在等待且剩余耐心足够时，向厨房补下一份相同菜品，再由游戏原有服务员正常取餐、上菜。
+Fresh to Serve（焕新上桌）自动清理厨房出餐台和菜品升降机上的低劣熟食；原顾客仍在等待且剩余耐心足够时，向厨房补下一份相同菜品，再由游戏原有服务员正常取餐、上菜。
 
 当前版本：**0.1.0-dev，待游戏内验收**。
 
@@ -56,12 +58,14 @@ Fresh Service 自动清理厨房出餐台和菜品升降机上的低劣熟食；
 参考基线：Windows / Steam Build **25393699**、游戏 **1.0.0.44eb**、Unreal **5.4**；依赖 **UE4SS experimental**，本机核对 API 为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1。
 
 1. 自行关闭游戏，安装所需加载器。
-2. 从对应 CI artifact 取得 `FreshService-0.1.0-dev.zip` 及 `.sha256`，或在仓库根目录运行 `python fresh-service-mod/build.py`。
-3. 把包内 `FreshService/` 解压到加载器的 `Mods/`，确认有 `enabled.txt` 和 `Scripts/main.lua`。
+2. 从对应 CI artifact 取得 `FreshToServe-0.1.0-dev.zip` 及 `.sha256`，或在仓库根目录运行 `python fresh-to-serve-mod/build.py`。
+3. 把包内 `FreshToServe/` 解压到加载器的 `Mods/`，确认有 `enabled.txt` 和 `Scripts/main.lua`。
 4. 启动游戏，以房主身份进入餐厅即可；无需快捷键或配置。
 
-停用时关闭游戏，移除 `FreshService/enabled.txt` 或 Mod 文件夹。卸载不会撤销已丢弃食物和已接受订单。构建不安装、不改存档、不启停游戏，包内不含加载器或游戏内容。
+如果已安装此前的 Fresh Service 包，请关闭游戏，移除旧的 `Mods/FreshService/` 文件夹，再启用 `FreshToServe/`，避免同时运行两份自动化。
 
-本 Mod 不新增玩家界面文字，菜名及订单沿用游戏语言。技术日志前缀为 `[FreshService]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）、`ERROR`。`REQUEUED` 仅确认新增厨房订单，不代表送达。引擎异常时停止自动化，避免反复发送结果不明的请求。反馈请附相关日志、游戏及加载器版本、房主或客户端身份。
+停用时关闭游戏，移除 `FreshToServe/enabled.txt` 或 Mod 文件夹。卸载不会撤销已丢弃食物和已接受订单。构建不安装、不改存档、不启停游戏，包内不含加载器或游戏内容。
+
+本 Mod 不新增玩家界面文字，菜名及订单沿用游戏语言。技术日志前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）、`ERROR`。`REQUEUED` 仅确认新增厨房订单，不代表送达。引擎异常时停止自动化，避免反复发送结果不明的请求。反馈请附相关日志、游戏及加载器版本、房主或客户端身份。
 
 参见[开发及验收清单](DEVELOPMENT.md#中文)与[版本变化](CHANGELOG.md)。

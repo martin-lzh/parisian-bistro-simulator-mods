@@ -4,7 +4,7 @@
 
 ## English
 
-Fresh Service 0.1.0-dev is a new development Mod awaiting in-game acceptance. Offline tests and package verification do not establish real cleanup, kitchen ordering or waiter delivery.
+Fresh to Serve 0.1.0-dev is a new development Mod awaiting in-game acceptance. Offline tests and package verification do not establish real cleanup, kitchen ordering or waiter delivery.
 
 Current source versions Bartender's Note 0.1.1-dev and Auto Checkout 0.1.3-dev include localization changes that still require in-game verification. The accepted stable versions remain Bartender's Note 0.1.0 and Auto Checkout 0.1.2. Current CI packages follow current source versions and do not extend these historical acceptance results.
 
@@ -38,7 +38,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Fresh Service 0.1.0-dev 为新开发 Mod，仍待游戏内验收。离线测试与包校验不等同于真实清理、厨房补单和服务员上菜成功。
+Fresh to Serve 0.1.0-dev 为新开发 Mod，仍待游戏内验收。离线测试与包校验不等同于真实清理、厨房补单和服务员上菜成功。
 
 当前源码 Bartender's Note 0.1.1-dev 和 Auto Checkout 0.1.3-dev 包含多语言改动，仍待游戏内验证。已验收正式版仍为 Bartender's Note 0.1.0 和 Auto Checkout 0.1.2。当前 CI 按当前源码版本打包，不扩展以下历史验收结论。
 

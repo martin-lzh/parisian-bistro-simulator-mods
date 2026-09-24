@@ -38,7 +38,7 @@ end
 
 local function required(path)
     local object = StaticFindObject(path)
-    assert(Game.valid(object), 'Missing Fresh Service API: ' .. path)
+    assert(Game.valid(object), 'Missing Fresh to Serve API: ' .. path)
     return object
 end
 

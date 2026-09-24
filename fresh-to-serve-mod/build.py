@@ -1,4 +1,4 @@
-"""Build Fresh Service from its original sources without installing it."""
+"""Build Fresh to Serve from its original sources without installing it."""
 
 from hashlib import sha256
 from pathlib import Path
@@ -7,7 +7,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 VERSION = "0.1.0-dev"
 SOURCE = Path(__file__).resolve().parent
-OUTPUT = SOURCE.parent / "outputs" / "fresh-service"
+OUTPUT = SOURCE.parent / "outputs" / "fresh-to-serve"
 FILES = (
     "Scripts/main.lua", "Scripts/game.lua", "Scripts/remake.lua",
     "README.md", "DEVELOPMENT.md", "CHANGELOG.md",
@@ -20,10 +20,10 @@ def build() -> Path:
         source = SOURCE / name
         if source.is_symlink() or not source.is_file() or not source.resolve().is_relative_to(SOURCE):
             raise ValueError(f"Missing, linked or outside package input: {name}")
-        payload[f"FreshService/{name}"] = source.read_bytes().replace(b"\r\n", b"\n")
-    payload["FreshService/enabled.txt"] = b""
+        payload[f"FreshToServe/{name}"] = source.read_bytes().replace(b"\r\n", b"\n")
+    payload["FreshToServe/enabled.txt"] = b""
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    archive = OUTPUT / f"FreshService-{VERSION}.zip"
+    archive = OUTPUT / f"FreshToServe-{VERSION}.zip"
     with ZipFile(archive, "w", compression=ZIP_DEFLATED) as package:
         for name, data in sorted(payload.items()):
             info = ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))

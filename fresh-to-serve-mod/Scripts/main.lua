@@ -6,7 +6,7 @@ local function start()
     local Game = require('game')
     local Remake = require('remake')
     local function log(event, detail)
-        print('[FreshService] ' .. event .. ' ' .. detail .. '\n')
+        print('[FreshToServe] ' .. event .. ' ' .. detail .. '\n')
     end
     local remake = Remake.new(Game, log)
     local api, failed, queued = nil, false, false
@@ -42,4 +42,4 @@ local function start()
 end
 
 local ok, err = xpcall(start, traceback)
-if not ok then print('[FreshService] ERROR startup ' .. tostring(err) .. '\n') end
+if not ok then print('[FreshToServe] ERROR startup ' .. tostring(err) .. '\n') end

@@ -1,4 +1,4 @@
-# Fresh Service development / 开发说明
+# Fresh to Serve development / 开发说明
 
 [English](#english) · [中文](#中文)
 
@@ -19,8 +19,8 @@ Patience uses the native active-wait flag, wait duration and elapsed-wait functi
 Run from the repository root:
 
 ```powershell
-uv run --with lupa==2.6 python fresh-service-mod/tests/run.py
-python fresh-service-mod/build.py
+uv run --with lupa==2.6 python fresh-to-serve-mod/tests/run.py
+python fresh-to-serve-mod/build.py
 python tools/check_repository.py
 python tools/check_syntax.py
 python -m unittest discover -s tools/tests -v
