@@ -1,6 +1,44 @@
-# 实机验收记录
+# In-game validation / 实机验收记录
 
-## 2026-09-24
+[English](#english) · [中文](#中文)
+
+## English
+
+Current source versions Bartender's Note 0.1.1-dev and Auto Checkout 0.1.3-dev include localization changes that still require in-game verification. The accepted stable versions remain Bartender's Note 0.1.0 and Auto Checkout 0.1.2. Current CI packages follow current source versions and do not extend these historical acceptance results.
+
+### 2026-09-24
+
+The user confirmed successful in-game testing of both latest development packages and explicitly requested stable versions:
+
+| Mod | Tested development version | Stable version |
+| --- | --- | --- |
+| Bartender's Note | 0.1.0-dev | 0.1.0 |
+| Auto Checkout | 0.1.1-dev | 0.1.1 |
+
+The stable versions retain the tested runtime logic. Auto Checkout only changed its diagnostic version identifier; documentation, package names and CI were also updated. The tested functionality was based on commit `0ad7c11`.
+
+The local development reference baseline is Steam Build 25393699, ProjectVersion 1.0.0.44eb and Unreal Engine 5.4; the checked UE4SS experimental API is `v3.0.1-1140-gf58e8f84`. The user did not provide the test machine's game version, full loader version, resolution, multiplayer role or test duration individually. These reference versions therefore do not constitute a complete tested environment record, and the regression scenarios in each Mod's development guide are not all marked as passed.
+
+CI covers Lua offline behavior tests, source and version checks, ZIP allowlists and SHA-256 verification. Game or loader updates still require further in-game testing.
+
+### Auto Checkout 0.1.2: 2026-09-24
+
+The user confirmed that the 0.1.2-dev in-game test had no problems, then requested conversion to stable 0.1.2. The report covered results through 01:40:22:
+
+| Check | User-reported result |
+| --- | --- |
+| Cash | Three transactions completed; each performed payment collection and the cash-register interaction |
+| Card | Two transactions completed; each performed payment collection and the cash-register interaction |
+| Requests | Every request succeeded on its first attempt, without retry failures or new exceptions |
+| Beyond the original interaction range | Original range: 200. Distance when closing the drawer: about 1341 for cash and 796 for card; the bill then cleared and the drawer closed |
+
+This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
+
+## 中文
+
+当前源码 Bartender's Note 0.1.1-dev 和 Auto Checkout 0.1.3-dev 包含多语言改动，仍待游戏内验证。已验收正式版仍为 Bartender's Note 0.1.0 和 Auto Checkout 0.1.2。当前 CI 按当前源码版本打包，不扩展以下历史验收结论。
+
+### 2026-09-24
 
 用户确认两个最新开发包实机测试成功，并明确要求转为正式版：
 
@@ -15,7 +53,7 @@
 
 CI 负责 Lua 离线行为测试、源码与版本检查、ZIP 白名单和 SHA-256 校验；后续游戏或加载器更新仍需重新实测。
 
-## Auto Checkout 0.1.2：2026-09-24
+### Auto Checkout 0.1.2：2026-09-24
 
 用户确认 0.1.2-dev 实机测试没有问题，随后要求转为 0.1.2 正式版。报告截至 01:40:22：
 
