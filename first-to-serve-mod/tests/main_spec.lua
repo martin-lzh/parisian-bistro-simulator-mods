@@ -33,19 +33,30 @@ RegisterHook = function(path, callback)
     return 1, 2
 end
 local loop
-LoopInGameThreadWithDelay = function(delay, callback) assert(delay == 100); loop = callback end
+LoopInGameThreadWithDelay = function(delay, callback) assert(delay == 25); loop = callback end
 print = function() end
 dofile(MOD_ROOT .. '/Scripts/main.lua')
 loop(); assert(not native[input_path], 'Wait for Blueprint load')
 world_ready = true; loop(); assert(native[input_path] and blueprint[wheel_path])
 assert(#calls == 0 and hints[#hints], 'Show hint before hold without dispatching')
+local hint_count = #hints
+loop(); loop(); loop()
+assert(#hints == hint_count, 'Idle HUD/source scans must keep the 100 ms cadence')
+loop(); assert(#hints == hint_count + 1)
+source = nil
+for _ = 1, 4 do loop() end
+assert(not hints[#hints], 'Looking away removes the hint even without an active hold')
+source = 'pass'
+for _ = 1, 4 do loop() end
+assert(hints[#hints])
 local context, pressed = Fakes.param(player), Fakes.param(true)
 native[input_path](Fakes.param({}), pressed); loop()
 assert(#calls == 0, 'Remote input ignored')
 native[input_path](context, pressed)
 assert(blueprint[wheel_path](context) == false, 'Suppress wheel for claimed hold')
 loop(); assert(#calls == 1 and calls[1] == 'first')
-now, candidate = 0.5, 'second'; loop(); assert(#calls == 1)
+now, candidate = 0.025, 'second'; loop(); assert(#calls == 1)
+now = 0.05
 carried.first = true; loop(); assert(#calls == 2 and calls[2] == 'second')
 held = false; loop()
 assert(blueprint[wheel_path](context) == nil)
@@ -55,7 +66,9 @@ source = 'different'; loop(); assert(#calls == 2, 'Changing station cancels')
 assert(blueprint[wheel_path](context) == nil)
 source = 'pass'; native[input_path](context, pressed)
 native[input_path](context, Fakes.param(false)); loop(); assert(#calls == 2, 'Release event cancels')
-valid_session = false; loop(); assert(not hints[#hints])
+valid_session = false
+for _ = 1, 4 do loop() end
+assert(not hints[#hints])
 valid_session = true
 Game.request = function() error('Bridge unavailable') end
 native[input_path](context, pressed); loop()

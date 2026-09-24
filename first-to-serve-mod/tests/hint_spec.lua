@@ -6,6 +6,7 @@ local key_class = obj('key-class')
 local controller, owner = obj('controller'), obj('hud')
 local function parented(result)
     function result:GetParent() return self.parent end
+    function result:GetVisibility() return self.visibility or 3 end
     function result:RemoveFromParent()
         if self.parent then
             for i, child in ipairs(self.parent.children) do
@@ -17,7 +18,7 @@ local function parented(result)
     return result
 end
 local function new_panel(name)
-    local result = obj(name)
+    local result = parented(obj(name))
     result.children, result.additions = {}, 0
     function result:GetChildrenCount() return #self.children end
     function result:GetChildAt(index) return self.children[index + 1] end
@@ -43,8 +44,9 @@ local function new_panel(name)
     result.AddChildToVerticalBox = result.AddChild
     return result
 end
-local panel = new_panel('right-panel')
-owner.RightInteractionsKeys, owner.WidgetTree = panel, obj('tree')
+local panel, right = new_panel('center-panel'), new_panel('right-panel')
+parented(owner)
+owner.CenterInteractionsKeys, owner.RightInteractionsKeys, owner.WidgetTree = panel, right, obj('tree')
 function owner:GetOwningPlayer() return controller end
 function owner:IsInViewport() return not self.removed end
 local native = parented(obj('native-wheel', key_class))
@@ -65,11 +67,10 @@ trailing.Slot:SetSize({ Value = 2, SizeRule = 1 })
 trailing.Slot:SetHorizontalAlignment(2)
 trailing.Slot:SetVerticalAlignment(3)
 local creations, actions = 0, {}
-local expected_position = 1
 local function widget()
     local result = obj('hint-' .. creations, key_class)
     function result:SetAction(key, text, position)
-        assert(key:ToString() == 'OpenInteractionWheel' and position == expected_position)
+        assert(key:ToString() == 'OpenInteractionWheel' and position == 2)
         actions[#actions + 1] = text
     end
     return result
@@ -97,6 +98,16 @@ StaticConstructObject = function(_, tree)
     return result
 end
 FindAllOf = function() return { owner } end
+-- A permanent Click row in the sidebar must not anchor or duplicate the hint.
+local sidebar_click = parented(obj('sidebar-click', key_class))
+sidebar_click.KeyName = FName('Click')
+function sidebar_click:SetVisibility() error('Do not modify sidebar hints') end
+right:AddChild(sidebar_click)
+local sidebar_wheel = parented(obj('sidebar-wheel', key_class))
+sidebar_wheel.KeyName = FName('OpenInteractionWheel')
+function sidebar_wheel:SetVisibility() error('Do not modify sidebar hints') end
+right:AddChild(sidebar_wheel)
+local sidebar_additions = right.additions
 local hint, session = Hint.new(), { controller = controller }
 click.visibility = 1
 hint:update(session, true)
@@ -121,22 +132,28 @@ assert(#actions == 2 and actions[2] == Localization.hint('fr'))
 click:RemoveFromParent(); panel:AddChild(click)
 hint:update(session, true)
 assert(panel.children[3] == click and panel.children[4] == hint.wrapper and creations == 1)
--- Follow the native hint if its panel changes, including icon alignment.
-local left = new_panel('left-panel')
-owner.LeftInteractionsKeys = left
-click:RemoveFromParent(); left:AddChild(click)
-expected_position = 0
+-- A hidden native panel must clear the hint even when its Click row stays visible.
+panel.visibility = 1
 hint:update(session, true)
-assert(left.children[1] == click and left.children[2] == hint.wrapper and #panel.children == 2)
-assert(creations == 1 and #actions == 3)
+assert(not hint.wrapper and native.visibility == 3 and #panel.children == 3)
+panel.visibility = 3; hint:update(session, true)
+assert(creations == 2 and hint.wrapper:GetParent() == panel)
+local overlay = parented(obj('center-overlay'))
+panel.parent, overlay.visibility = overlay, 2
+hint:update(session, true)
+assert(not hint.wrapper, 'Hidden ancestors cannot leave a persistent hint')
+overlay.visibility = 3; hint:update(session, true)
+owner.visibility = 1; hint:update(session, true)
+assert(not hint.wrapper, 'Hiding the HUD clears the owned row')
+owner.visibility = 3; hint:update(session, true)
 hint:update(nil, false)
-assert(native.visibility == 3 and #panel.children == 2 and #left.children == 1,
+assert(native.visibility == 3 and #panel.children == 3,
     'Restore native wheel and remove only owned row')
 hint:update(session, true)
-assert(creations == 2)
 click:RemoveFromParent(); hint:update(session, true)
 assert(not hint.wrapper and native.visibility == 3, 'Remove hold hint when native pickup row disappears')
-panel:AddChild(click); expected_position = 1
+assert(#right.children == 2 and right.additions == sidebar_additions, 'Never fall back to the sidebar')
+panel:AddChild(click)
 hint:update(session, true)
 owner.removed = true; hint:update(session, true)
 assert(not hint.wrapper and native.visibility == 3)
@@ -149,6 +166,7 @@ assert(not pcall(function() hint:update(session, true) end))
 hint:clear()
 assert(panel.children[1] == native and panel.children[2] == click and panel.children[3] == trailing)
 assert(trailing.Slot.Padding.Bottom == 4 and native.visibility == 3)
+assert(#right.children == 2 and right.additions == sidebar_additions, 'Sidebar remains untouched throughout')
 local languages = { 'en', 'fr', 'zh-Hans', 'zh-Hant', 'it', 'es', 'de', 'ru', 'ja', 'ko', 'tr', 'pl', 'pt', 'pt-BR' }
 for _, code in ipairs(languages) do assert(#Localization.hint(code) > 0) end
 assert(Localization.hint('zh-Hans-TW') == Localization.hint('zh-CN'))

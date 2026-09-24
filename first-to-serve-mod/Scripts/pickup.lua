@@ -41,7 +41,7 @@ function Pickup:step(snapshot, send)
     if not candidate then return end
     -- Set pending before dispatch: a synchronous native call can invoke hooks.
     self.pending = { id = candidate, at = now }
-    self.next_at = now + 0.30
+    self.next_at = now + 0.05
     if not send(candidate) then
         self.pending = nil
         self.stopped = true

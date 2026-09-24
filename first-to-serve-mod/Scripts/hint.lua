@@ -5,30 +5,35 @@ Hint.__index = Hint
 local Localization = require('localization')
 local CLASS = '/Game/UI/HUD/WBP_InteractionKey.WBP_InteractionKey_C'
 local KEY, CLICK = 'OpenInteractionWheel', 'Click'
-local COLLAPSED, HIT_TEST_INVISIBLE = 1, 3
-local PANELS = { 'LeftInteractionsKeys', 'RightInteractionsKeys', 'CenterInteractionsKeys' }
+local CENTER, COLLAPSED, HIT_TEST_INVISIBLE = 2, 1, 3
 
 local function valid(object) return object ~= nil and object:IsValid() end
 local function same(a, b) return valid(a) and valid(b) and a:GetAddress() == b:GetAddress() end
 
+local function visible(widget)
+    -- A row's own visibility can stay unchanged while its parent is hidden.
+    while valid(widget) do
+        local visibility = widget:GetVisibility()
+        if visibility == 1 or visibility == 2 then return false end
+        widget = widget:GetParent()
+    end
+    return true
+end
+
 local function pickup_row(owner, key_class)
-    local found, panel, position
-    for index, name in ipairs(PANELS) do
-        local container = owner[name]
-        if valid(container) then
-            for child_index = 0, container:GetChildrenCount() - 1 do
-                local child = container:GetChildAt(child_index)
-                if valid(child) and child:IsA(key_class) and child.KeyName:ToString() == CLICK then
-                    local visibility = child:GetVisibility()
-                    if visibility == 0 or visibility == 3 or visibility == 4 then
-                        if found then return nil end
-                        found, panel, position = child, container, index - 1
-                    end
-                end
-            end
+    -- Only the native contextual pickup panel owns this hint. In particular,
+    -- persistent sidebar Click rows must never serve as a fallback anchor.
+    local panel = owner.CenterInteractionsKeys
+    if not valid(panel) or not visible(panel) or not visible(owner) then return nil end
+    local found
+    for index = 0, panel:GetChildrenCount() - 1 do
+        local child = panel:GetChildAt(index)
+        if valid(child) and child:IsA(key_class) and child.KeyName:ToString() == CLICK and visible(child) then
+            if found then return nil end
+            found = child
         end
     end
-    return found, panel, position
+    return found, panel
 end
 
 local function place_below(panel, anchor, wrapper)
@@ -75,7 +80,7 @@ function Hint:clear()
     for _, entry in ipairs(self.hidden) do
         if valid(entry.widget) then entry.widget:SetVisibility(entry.visibility) end
     end
-    self.owner, self.wrapper, self.widget, self.text, self.position, self.hidden = nil, nil, nil, nil, nil, {}
+    self.owner, self.wrapper, self.widget, self.text, self.hidden = nil, nil, nil, nil, {}
 end
 
 function Hint:update(session, show)
@@ -91,7 +96,7 @@ function Hint:update(session, show)
     if not valid(owner) then self:clear(); return end
     local key_class = StaticFindObject(CLASS)
     if not valid(key_class) then self:clear(); return end
-    local anchor, panel, position = pickup_row(owner, key_class)
+    local anchor, panel = pickup_row(owner, key_class)
     if not valid(anchor) then self:clear(); return end
     if not same(owner, self.owner) or not valid(self.widget) or not valid(self.wrapper) then
         self:clear()
@@ -114,23 +119,19 @@ function Hint:update(session, show)
     local language = valid(library) and library:GetCurrentLanguage() or 'en'
     if type(language) ~= 'string' then language = language:ToString() end
     local text = Localization.hint(language)
-    if self.text ~= text or self.position ~= position then
-        self.widget:SetAction(FName(KEY), FText(text), position)
-        self.text, self.position = text, position
+    if self.text ~= text then
+        self.widget:SetAction(FName(KEY), FText(text), CENTER)
+        self.text = text
     end
-    -- Preserve the click row; restore the wheel rows on leaving the item.
-    for _, name in ipairs(PANELS) do
-        local container = owner[name]
-        if valid(container) then
-            for index = 0, container:GetChildrenCount() - 1 do
-                local child = container:GetChildAt(index)
-                if valid(child) and child:IsA(key_class) and child.KeyName:ToString() == KEY then
-                    local known = false
-                    for _, entry in ipairs(self.hidden) do if same(entry.widget, child) then known = true end end
-                    if not known then self.hidden[#self.hidden + 1] = { widget = child, visibility = child:GetVisibility() } end
-                    child:SetVisibility(COLLAPSED)
-                end
-            end
+    -- Preserve the click row and sidebar; restore the contextual wheel row
+    -- on leaving the item.
+    for index = 0, panel:GetChildrenCount() - 1 do
+        local child = panel:GetChildAt(index)
+        if valid(child) and child:IsA(key_class) and child.KeyName:ToString() == KEY then
+            local known = false
+            for _, entry in ipairs(self.hidden) do if same(entry.widget, child) then known = true end end
+            if not known then self.hidden[#self.hidden + 1] = { widget = child, visibility = child:GetVisibility() } end
+            child:SetVisibility(COLLAPSED)
         end
     end
 end

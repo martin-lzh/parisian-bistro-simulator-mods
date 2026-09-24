@@ -6,6 +6,7 @@ local function start()
     local Game, Pickup, Hint = require('game'), require('pickup'), require('hint')
     local pickup, hint = Pickup.new(), Hint.new()
     local api, ready, failed, queued = nil, false, false, false
+    local idle_ticks = 0
     local wheel_path = '/Game/Blueprints/Player/BP_PlayerCharacter.BP_PlayerCharacter_C:CanInteractionWheelBeOpened'
     local input_path = '/Script/BrasserieSimulator.PlayerCharacter:InteractionTriggered'
     local hooks = {}
@@ -14,7 +15,7 @@ local function start()
         failed, ready = true, false
         pickup:reset()
         pcall(function() hint:clear() end)
-        print('[FirstToServe] ERROR version=0.1.1-dev ' .. tostring(err) .. '\n')
+        print('[FirstToServe] ERROR version=0.1.2-dev ' .. tostring(err) .. '\n')
     end
 
     local function guarded(callback)
@@ -66,12 +67,20 @@ local function start()
             error(err, 0)
         end
         ready = true
-        print('[FirstToServe] START version=0.1.1-dev native-hold=true native-hint=true\n')
+        print('[FirstToServe] START version=0.1.2-dev native-hold=true native-hint=true\n')
         return true
     end
 
     local function tick()
         if not install() then return end
+        -- Check active pickups every 25 ms, but keep idle/full/stopped scans
+        -- at 100 ms. A native hold bypasses the idle countdown immediately.
+        if not pickup.session or pickup.stopped then
+            if idle_ticks > 0 then idle_ticks = idle_ticks - 1; return end
+            idle_ticks = 3
+        else
+            idle_ticks = 0
+        end
         local session = Game.session(api)
         local scope = session and Game.scope(api, session)
         local snapshot = scope and Game.snapshot(api, session, scope)
@@ -85,9 +94,9 @@ local function start()
 
     local run = guarded(tick)
     if type(LoopInGameThreadWithDelay) == 'function' then
-        LoopInGameThreadWithDelay(100, function() run(); return false end)
+        LoopInGameThreadWithDelay(25, function() run(); return false end)
     else
-        LoopAsync(100, function()
+        LoopAsync(25, function()
             if queued or failed then return false end
             queued = true
             local ok, err = pcall(ExecuteInGameThread, function() run(); queued = false end)
