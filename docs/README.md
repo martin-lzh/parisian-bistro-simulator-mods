@@ -11,7 +11,7 @@
 | Supported languages and native text | [Localization](localization.md#english) |
 | Bartender's Note | [Player guide](../bartenders-note-mod/README.md#english) · [Development and validation](../bartenders-note-mod/DEVELOPMENT.md#english) · [Changes](../bartenders-note-mod/CHANGELOG.md) |
 | Auto Checkout | [Player guide](../auto-checkout-mod/README.md#english) · [Development and validation](../auto-checkout-mod/DEVELOPMENT.md#english) · [Changes](../auto-checkout-mod/CHANGELOG.md) |
-| Oldest First | [Player guide](../oldest-first-mod/README.md#english) · [Development and validation](../oldest-first-mod/DEVELOPMENT.md#english) · [Changes](../oldest-first-mod/CHANGELOG.md) |
+| First to Serve | [Player guide](../first-to-serve-mod/README.md#english) · [Development and validation](../first-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../first-to-serve-mod/CHANGELOG.md) |
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
 | Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
 
@@ -26,7 +26,7 @@ These pages describe original Mod behavior, development decisions and validation
 | 支持语言与原生文案 | [多语言适配](localization.md#中文) |
 | Bartender's Note | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |
 | Auto Checkout | [玩家说明](../auto-checkout-mod/README.md#中文) · [开发与验收](../auto-checkout-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-checkout-mod/CHANGELOG.md) |
-| Oldest First | [玩家说明](../oldest-first-mod/README.md#中文) · [开发与验收](../oldest-first-mod/DEVELOPMENT.md#中文) · [版本变化](../oldest-first-mod/CHANGELOG.md) |
+| First to Serve（先做好先端） | [玩家说明](../first-to-serve-mod/README.md#中文) · [开发与验收](../first-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../first-to-serve-mod/CHANGELOG.md) |
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
 

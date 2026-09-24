@@ -1,10 +1,10 @@
-# Oldest First development / 开发
+# First to Serve development / 开发
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Oldest First is an independent, original UE4SS Lua Mod. Read the [repository development rules](../DEVELOPMENT.md#english) and [player guide](README.md#english). Local interface evidence and analysis remain under ignored `work/`; no game files are build inputs.
+First to Serve is an independent, original UE4SS Lua Mod. Read the [repository development rules](../DEVELOPMENT.md#english) and [player guide](README.md#english). Local interface evidence and analysis remain under ignored `work/`; no game files are build inputs.
 
 The adapter reads the current local pawn, physical mapped-key state, camera hit, source membership, native creation times and tray slots on the game thread. It compares native date structs through the engine rather than converting opaque structs to Lua tables or imprecise numbers. A native hold event arms a session scoped to the player, world, tray and pickup area. A separate 100 ms loop revalidates state before issuing an ordinary interaction request. The pure sequencing module stores identities and timing only, waits for membership/tray acknowledgement and stops an unconfirmed gesture after two seconds. It never retries indefinitely or writes game queues, timestamps, capacity or distance settings.
 
@@ -13,8 +13,8 @@ The hint creates the game's own interaction-key widget at runtime in the native 
 Run from the repository root:
 
 ```powershell
-uv run --with lupa==2.6 python oldest-first-mod/tests/run.py
-python oldest-first-mod/build.py
+uv run --with lupa==2.6 python first-to-serve-mod/tests/run.py
+python first-to-serve-mod/build.py
 python tools/check_repository.py
 python tools/check_syntax.py
 python -m unittest discover -s tools/tests -v
@@ -37,7 +37,7 @@ Offline results are not in-game acceptance. No game process, installation files 
 
 ## 中文
 
-Oldest First 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](../DEVELOPMENT.md#中文)和[玩家说明](README.md#中文)。本机接口证据和分析仅位于忽略的 `work/`；游戏文件不是构建输入。
+First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](../DEVELOPMENT.md#中文)和[玩家说明](README.md#中文)。本机接口证据和分析仅位于忽略的 `work/`；游戏文件不是构建输入。
 
 适配层在游戏线程读取本地玩家、实际按键状态、瞄准命中、出餐区域成员、原生创建时间及托盘空位。通过引擎比较原生日期结构，不将不透明结构转换成 Lua 表或有精度损失的数字。原生长按事件启动一次限定于玩家、世界、托盘和出餐区域的操作；100 毫秒循环重新检查状态后发送普通交互请求。纯逻辑模块仅保存身份和计时，等待台面成员或托盘状态确认；两秒未确认则停止本次长按。不无限重试，也不改写队列、时间戳、容量或交互距离。
 

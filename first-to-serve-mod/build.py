@@ -7,7 +7,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 VERSION = "0.1.0-dev"
 SOURCE = Path(__file__).resolve().parent
-OUTPUT = SOURCE.parent / "outputs" / "oldest-first"
+OUTPUT = SOURCE.parent / "outputs" / "first-to-serve"
 FILES = (
     "Scripts/main.lua",
     "Scripts/game.lua",
@@ -28,10 +28,10 @@ def build() -> Path:
             raise ValueError(f"Missing or linked package input: {name}")
         if not source.resolve().is_relative_to(SOURCE):
             raise ValueError(f"Package input escapes mod directory: {name}")
-        payload[f"OldestFirst/{name}"] = source.read_bytes().replace(b"\r\n", b"\n")
-    payload["OldestFirst/enabled.txt"] = b""
+        payload[f"FirstToServe/{name}"] = source.read_bytes().replace(b"\r\n", b"\n")
+    payload["FirstToServe/enabled.txt"] = b""
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    archive = OUTPUT / f"OldestFirst-{VERSION}.zip"
+    archive = OUTPUT / f"FirstToServe-{VERSION}.zip"
     with ZipFile(archive, "w", compression=ZIP_DEFLATED) as package:
         for name, data in sorted(payload.items()):
             info = ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))

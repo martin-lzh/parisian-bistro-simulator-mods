@@ -14,7 +14,7 @@ local function start()
         failed, ready = true, false
         pickup:reset()
         pcall(function() hint:clear() end)
-        print('[OldestFirst] ERROR version=0.1.0-dev ' .. tostring(err) .. '\n')
+        print('[FirstToServe] ERROR version=0.1.0-dev ' .. tostring(err) .. '\n')
     end
 
     local function guarded(callback)
@@ -66,7 +66,7 @@ local function start()
             error(err, 0)
         end
         ready = true
-        print('[OldestFirst] START version=0.1.0-dev native-hold=true native-hint=true\n')
+        print('[FirstToServe] START version=0.1.0-dev native-hold=true native-hint=true\n')
         return true
     end
 
@@ -80,7 +80,7 @@ local function start()
         local result = pickup:step(snapshot, function(candidate)
             return Game.request(api, session.id, scope.id, candidate)
         end)
-        if result == 'timeout' then print('[OldestFirst] STOP reason=pickup-unconfirmed release-to-retry\n') end
+        if result == 'timeout' then print('[FirstToServe] STOP reason=pickup-unconfirmed release-to-retry\n') end
     end
 
     local run = guarded(tick)
@@ -98,4 +98,4 @@ local function start()
 end
 
 local ok, err = xpcall(start, traceback)
-if not ok then print('[OldestFirst] ERROR startup ' .. tostring(err) .. '\n') end
+if not ok then print('[FirstToServe] ERROR startup ' .. tostring(err) .. '\n') end
