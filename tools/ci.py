@@ -14,7 +14,7 @@ from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODS = {"bartenders-note": "BartendersNote", "auto-checkout": "AutoCheckout",
-        "first-to-serve": "FirstToServe"}
+        "fresh-service": "FreshService", "first-to-serve": "FirstToServe"}
 
 
 def run(*args: str) -> None:
