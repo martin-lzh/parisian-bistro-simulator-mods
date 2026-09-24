@@ -35,7 +35,7 @@ local function refresh()
         view = nil
     end
     if not view and summary.total > 0 then view = Hud.create(owner) end
-    if view then Hud.update(view, summary.text) end
+    if view then Hud.update(view, summary.groups) end
 end
 
 local function safe_refresh()
@@ -45,7 +45,7 @@ local function safe_refresh()
         last_error = nil
     else
         -- Never leave an old quantity visible after losing the data source.
-        if view then pcall(Hud.update, view, '') end
+        if view then pcall(Hud.update, view, {}) end
         problem = tostring(problem)
         if problem ~= last_error then log('HUD unavailable: ' .. problem) end
         last_error = problem

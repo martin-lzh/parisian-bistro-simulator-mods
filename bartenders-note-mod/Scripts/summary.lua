@@ -24,7 +24,7 @@ local function label_for(drink, translate)
 end
 
 function Summary.collect(entries, playerId, translate)
-    local result = { groups = {}, total = 0, text = "" }
+    local result = { groups = {}, total = 0 }
     if type(entries) ~= "table" or not nonnegative_integer(playerId) then
         return result
     end
@@ -53,12 +53,9 @@ function Summary.collect(entries, playerId, translate)
         return a.id < b.id
     end)
 
-    local parts = {}
     for _, group in ipairs(result.groups) do
         group.name = label_for(group.id, translate)
-        parts[#parts + 1] = group.name .. " x " .. group.count
     end
-    result.text = table.concat(parts, "  ·  ")
     return result
 end
 

@@ -32,7 +32,15 @@ local function fixture(supported)
         view.valid = false
         f.removed = f.removed + 1
     end
-    function hud.update(view, text) view.text = text end
+    function hud.update(view, groups)
+        assert(type(groups) == 'table', 'Renderer needs groups for measured line layout')
+        view.groups = groups
+        local parts = {}
+        for _, group in ipairs(groups) do
+            parts[#parts + 1] = group.name .. ' x ' .. group.count
+        end
+        view.text = table.concat(parts, '  ·  ')
+    end
     package.loaded.game = game
     package.loaded.hud = hud
     package.loaded.summary = dofile(directory .. '../Scripts/summary.lua')

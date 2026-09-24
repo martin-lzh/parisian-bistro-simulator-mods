@@ -4,7 +4,7 @@
 
 | Mod | 功能 | 状态 |
 | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md) | 在餐厅名称下方汇总本地玩家认领的待做饮料 | 0.1.0 正式版 |
+| [Bartender's Note](bartenders-note-mod/README.md) | 在餐厅名称下方汇总本地玩家认领的待做饮料 | 0.1.0 正式版；0.1.1-dev 布局更新待实测 |
 | [Auto Checkout](auto-checkout-mod/README.md) | 自动处理顾客柜台付款和收银机结账交互 | 0.1.2 正式版 |
 
 实机确认日期和范围见[验收记录](releases/validation.md)。CI 执行离线测试、打包及文件校验，产物从对应 [Actions 运行](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)下载。
