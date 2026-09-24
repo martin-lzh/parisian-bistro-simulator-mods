@@ -38,7 +38,7 @@ local function start()
             return false
         end)
     end
-    log('START', 'version=0.1.0-dev host-only=true interval=1s')
+    log('START', 'version=0.1.1-dev host-only=true interval=1s')
 end
 
 local ok, err = xpcall(start, traceback)
