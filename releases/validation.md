@@ -4,6 +4,8 @@
 
 ## English
 
+Scan to Order **0.1.0-dev** adds host/single-player automatic food and drink ordering with restock recovery. Local references were checked against Steam Build **25532071** / **1.0.1.44eb**. Offline stock-contention, customer-state, authority, native acceptance and reload tests pass; real engine calls, replenishment, staffing and multiplayer replication remain pending in-game acceptance.
+
 First to Serve **0.1.7-dev** adds direct drink-output-surface holds with tray/trolley support. Offline area isolation, eligible full-drink filtering, three-cup sequencing, panning and cancellation tests pass. Drink-area targeting, hints and native short-click deposit still need in-game acceptance.
 
 First to Serve **0.1.6-dev** adds held food-trolley support with ordinary/stack-slot acknowledgement, drink-only and top-slot capacity checks, and carrier-change cancellation. Offline tray/trolley regressions pass; trolley rendering, native pickup and host/guest behavior still need in-game acceptance.
@@ -51,6 +53,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+Scan to Order（扫码点餐）**0.1.0-dev** 新增仅房主／单人自动提交食物和饮料订单、补货后续单。本机参考核对基于 Steam Build **25532071** / **1.0.1.44eb**。库存争用、顾客状态、权限、原生受理结果及热重载离线测试通过；真实引擎调用、补货、人员条件和联机同步仍待实机验收。
 
 First to Serve **0.1.7-dev** 新增直接对准饮料出品台面长按，支持托盘和餐车。区域隔离、成品饮料过滤、连续三杯、移动准星及取消离线测试通过；饮料台实机瞄准、提示及原生短按放回饮料仍待验收。
 
