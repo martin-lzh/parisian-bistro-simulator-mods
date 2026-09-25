@@ -1,25 +1,36 @@
 local Game, Fakes = require('game'), require('fakes')
 local obj, array = Fakes.object, Fakes.array
 -- Resolve actions by name across the game update; the new area is optional.
-local area_available, default_action = true, 58
+local area_available, default_action, tower_burger = true, 58, 71
 StaticFindObject = function(path)
     if path == '/Script/BrasserieSimulator.DishOutputArea' and not area_available then return nil end
     local object = obj(path)
     function object:ForEachName(callback)
+        if path == '/Script/BrasserieSimulator.EDishes' then
+            callback({ ToString = function() return 'EDishes::EDH_TowerBurger' end }, tower_burger)
+            return
+        end
         callback({ ToString = function() return 'EInteractionActions::EIA_PutDrinks' end }, 57)
         callback({ ToString = function() return 'EInteractionActions::EIA_DefaultAction' end }, default_action)
     end
     return object
 end
 local contract = Game.contract()
-assert(contract.action == 58 and Game.valid(contract.dish_output))
-area_available, default_action = false, 57
+assert(contract.action == 58 and contract.tower_burger == 71 and Game.valid(contract.dish_output))
+area_available, default_action, tower_burger = false, 57, 70
 contract = Game.contract()
 assert(contract.action == 57 and not Game.valid(contract.dish_output), 'Old builds retain direct item targeting')
+assert(contract.tower_burger == 70, 'Resolve dish enums by name, not a fixed ordinal')
 FName = function(value) return value end
 local world, other_world = obj('world'), obj('foreign')
 local controller, player, tray = obj('controller', 'controller', world), obj('player', 'player', world), obj('tray', 'tray', world)
 controller.Pawn, player.Controller, player.Tray = player, controller, tray
+local trolley = obj('trolley', 'food-trolley', world)
+local null = obj('null'); null.invalid = true
+local function trolley_slot(dish, stack, reserved, top)
+    return { Dish = dish, Dishes = array({ null, null }), bCanStackPlates = stack or false,
+        bReservedForDrinkOnly = reserved or false, bTopSlot = top or false }
+end
 player.InteractionAction = obj('hold-action')
 player.bIsInWidgetMode = false
 function controller:IsLocalController() return not self.remote end
@@ -37,7 +48,9 @@ function player:IsPlayerFrozen() return self.frozen or false end
 function player:IsPlayerLocallyFrozen() return self.local_frozen or false end
 function player:IsInPlacingMode() return self.placing or false end
 function player:IsInteractionWheelOpen() return self.wheel or false end
-function player:IsCarryingTray() return self.carrying ~= false end
+function player:IsCarryingTray() return self.carrying ~= false and not self.trolley end
+function player:IsCarryingFoodTrolley() return self.trolley == true end
+function player:GetFoodTrolley() return self.CarriedObject end
 function player:GetCurrentFloor() return 0 end
 local kitchen, area = obj('kitchen', 'kitchen', world), obj('bar', 'area', world)
 local output_class = obj('dish-output-class')
@@ -56,6 +69,7 @@ function input:QueryKeysMappedToAction(action)
 end
 local clock = 0
 local api = { player = 'player', dish = 'food', drink = 'drink', enhanced = 'enhanced', action = 58,
+    food_trolley = 'food-trolley', tower_burger = 71,
     dish_output = output_class, kitchen = 'kitchen', world_subsystem = 'world-subsystem',
     input = { Conv_InputActionValueToBool = function(_, value) return value end },
     subsystems = { GetLocalPlayerSubSystemFromPlayerController = function(_, owner, class)
@@ -69,6 +83,7 @@ local api = { player = 'player', dish = 'food', drink = 'drink', enhanced = 'enh
 local function dish(name, kind, age)
     local d = obj(name, kind, world)
     d.CreationTime = { age = age, year = 2026 }
+    d.Dish = 1
     d.bIsDirty, d.bIsBeingConsumed, d.bBeingPicked, d.DistanceToInteract = false, false, false, 150
     function d:GetDistanceTo(target) assert(target == player); return self.distance or 100 end
     function d:GetAssignedFloor() return self.floor or 0 end
@@ -255,6 +270,62 @@ assert(Game.scope(api, session, lock) == nil, 'Do not retain dead source objects
 area.destroyed = false
 assert(Game.scope(api, { id = 'new-tray' }, lock) == nil, 'A lock cannot cross sessions')
 
+-- Only the currently held food trolley owns the gesture, including when the
+-- player's hidden tray is invalid. Storage carts and parked carts do not qualify.
+player.trolley, player.CarriedObject, tray.invalid = true, trolley, true
+trolley.Slots = { Items = array({ trolley_slot(), trolley_slot(nil, true) }) }
+local trolley_session = assert(Game.session(api))
+assert(trolley_session.carrier == trolley and trolley_session.carrier_kind == 'trolley')
+assert(trolley_session.id ~= session.id and Game.scope(api, trolley_session, lock) == nil)
+for _, key in ipairs({ 'invalid', 'destroyed', 'template' }) do
+    trolley[key] = true; assert(Game.session(api) == nil, key); trolley[key] = nil
+end
+trolley.world = other_world; assert(Game.session(api) == nil); trolley.world = world
+player.CarriedObject = obj('storage-cart', 'storage-trolley', world)
+assert(Game.session(api) == nil, 'A storage trolley is not a food trolley')
+player.CarriedObject = nil; assert(Game.session(api) == nil)
+player.CarriedObject = trolley
+aim(pass, pass.PickupInteractionBox)
+scope = assert(Game.scope(api, trolley_session))
+lock = Game.lock(trolley_session, scope)
+assert(not Game.request(api, session.id, scope.id, 'oldest@oldest'), 'Old tray session cannot dispatch to the trolley')
+assert(Game.snapshot(api, trolley_session, scope).oldest == 'oldest@oldest')
+local slots = trolley.Slots.Items.values
+slots[1].Dish = newer
+local dirty = dish('dirty', 'food', 0); dirty.bIsDirty = true
+slots[2].Dishes.values[2] = dirty
+snap = Game.snapshot(api, trolley_session, scope)
+assert(not snap.has_space and snap.carried['newer@newer'] and snap.carried['dirty@dirty'])
+assert(Game.scope(api, trolley_session) == nil, 'A dirty plate stack with free gaps cannot accept ready dishes')
+slots[2].Dishes.values[2] = null
+assert(Game.snapshot(api, trolley_session, scope).oldest == 'oldest@oldest', 'An empty stack slot can accept a ready dish')
+slots[2].Dishes.values[1] = oldest
+snap = Game.snapshot(api, trolley_session, scope)
+assert(snap.carried['oldest@oldest'] and not snap.has_space, 'Stacked carrier acknowledgement blocks duplicates')
+slots[2] = trolley_slot(nil, true, true)
+assert(not Game.snapshot(api, trolley_session, scope).has_space, 'Food cannot use a reserved drink stack slot')
+aim(drink2)
+local drink_scope = assert(Game.scope(api, trolley_session))
+assert(Game.snapshot(api, trolley_session, drink_scope).oldest == 'drink2@drink2')
+slots[2].Dishes.values[1] = drink2
+assert(Game.scope(api, trolley_session) == nil, 'Carried drinks in stacked slots cannot identify a source')
+slots[2] = trolley_slot()
+oldest.Dish = api.tower_burger
+aim(pass, pass.PickupInteractionBox)
+assert(Game.snapshot(api, trolley_session, scope).oldest == 'middle@middle', 'Skip a tower burger when only lower slots fit')
+slots[2].bTopSlot = true
+assert(Game.snapshot(api, trolley_session, scope).oldest == 'oldest@oldest')
+slots[2].Dish = middle
+assert(not Game.request(api, trolley_session.id, scope.id, 'oldest@oldest', lock), 'Capacity is rechecked before dispatch')
+slots[2].Dish = nil
+local replacement = obj('replacement', 'food-trolley', world)
+player.CarriedObject = replacement
+assert(Game.session(api).id ~= trolley_session.id)
+assert(not Game.request(api, trolley_session.id, scope.id, 'oldest@oldest', lock), 'Switching trolleys invalidates a pending request')
+player.trolley, player.carrying, player.CarriedObject = false, false, nil
+assert(Game.session(api) == nil, 'Releasing the trolley cannot fall back to the hidden tray')
+player.carrying, tray.invalid, oldest.Dish = true, false, 1
+
 -- Run actual input -> adapter -> sequencer -> RPC flow for direct food,
 -- drinks and the native pass. Each hold collects all three in age order.
 local callbacks, loop, shown = {}, nil, false
@@ -269,6 +340,7 @@ package.loaded.hint = { new = function() return {
 RegisterHook = function(path, callback) callbacks[path] = callback; return 1, 2 end
 LoopInGameThreadWithDelay = function(_, callback) loop = callback end
 print = function() end
+for _, carrier_kind in ipairs({ 'tray', 'trolley' }) do
 for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
     local kind = mode == 'pass' and 'food' or mode
     local a, b, c = dish(kind .. '-a', kind, 1), dish(kind .. '-b', kind, 2), dish(kind .. '-c', kind, 3)
@@ -282,8 +354,16 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
         end
     end
     set_members({ c, a, b })
-    tray.Slots = array({ { bReservedForDrinkOnly = false }, { bReservedForDrinkOnly = false },
-        { bReservedForDrinkOnly = false } })
+    local carrier = carrier_kind == 'trolley' and trolley or tray
+    player.trolley, player.CarriedObject = carrier_kind == 'trolley', carrier
+    rotation.Yaw = 0
+    local carrier_slots = array({ trolley_slot(), trolley_slot(nil, true), trolley_slot() })
+    carrier.Slots = carrier_kind == 'trolley' and { Items = carrier_slots } or carrier_slots
+    local function put(index, item)
+        local slot = carrier_slots.values[index]
+        if carrier_kind == 'trolley' and slot.bCanStackPlates then slot.Dishes.values[1] = item or null
+        else slot.Dish = item end
+    end
     sent, clock, controller.down = {}, 10, true
     if mode == 'pass' then aim(pass, pass.PickupInteractionBox) else aim(a) end
     dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
@@ -298,15 +378,15 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
         -- The player can pan across the pass without targeting any one plate.
         rotation.Yaw = 45
     else aim(source) end
-    tray.Slots.values[1].Dish, a.parent, clock = a, tray, 10.06
+    put(1, a); a.parent, clock = carrier, 10.06
     set_members({ c, b })
     loop(); assert(#sent == 2 and sent[2] == b, kind .. ': continue after aimed item is removed')
     assert(shown == (mode == 'pass'), 'The native pass retains its hint while dishes remain')
-    tray.Slots.values[2].Dish, b.parent, clock = b, tray, 10.12
+    put(2, b); b.parent, clock = carrier, 10.12
     player.CurrentHit.bBlockingHit = false
-    loop(); assert(#sent == 3 and sent[3] == c, kind .. ': stale queue plus tray acknowledgement must continue')
-    tray.Slots.values[3].Dish, clock = c, 10.2
-    loop(); assert(#sent == 3, 'Full tray must stop')
+    loop(); assert(#sent == 3 and sent[3] == c, kind .. ': stale queue plus carrier acknowledgement must continue')
+    put(3, c); clock = 10.2
+    loop(); assert(#sent == 3, 'Full carrier must stop')
     controller.down = false; loop()
     assert(callbacks[wheel_path](Fakes.param(player)) == nil)
     controller.down = true
@@ -314,7 +394,7 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
     assert(#sent == 3, 'No restart from physical key state alone')
     if mode == 'pass' then
         -- Turning away still cancels an area-started hold before dispatch.
-        tray.Slots.values[1].Dish, a.parent, a.bBeingPicked = nil, nil, false
+        put(1, nil); a.parent, a.bBeingPicked = nil, false
         set_members({ a }); aim(pass, pass.PickupInteractionBox)
         callbacks[input_path](Fakes.param(player), Fakes.param(true))
         player.CurrentHit.bBlockingHit, rotation.Yaw = false, 90
@@ -326,4 +406,32 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
         assert(#sent == 3, 'Returning to the pass cannot restart a canceled hold before release')
         controller.down = false; loop()
     end
+end
+end
+
+for _, change in ipairs({ 'drop', 'switch' }) do
+    local pending = dish('pending-' .. change, 'food', 1)
+    kitchen.DishesSpawnQueue = array({ pending })
+    trolley.Slots.Items = array({ trolley_slot() })
+    replacement.Slots = { Items = array({ trolley_slot() }) }
+    player.trolley, player.CarriedObject, controller.down = true, trolley, true
+    sent, clock = {}, 20
+    aim(pass, pass.PickupInteractionBox)
+    dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+    callbacks[input_path](Fakes.param(player), Fakes.param(true))
+    loop(); assert(#sent == 1 and sent[1] == pending)
+    if change == 'drop' then
+        player.trolley, player.carrying, player.CarriedObject = false, false, nil
+    else player.CarriedObject = replacement end
+    clock = 20.1; loop()
+    assert(callbacks[wheel_path](Fakes.param(player)) == nil, 'Changing carrier ends wheel suppression')
+    player.trolley, player.CarriedObject = true, trolley
+    pending.bBeingPicked = false
+    callbacks[input_path](Fakes.param(player), Fakes.param(true))
+    for _ = 1, 4 do loop() end
+    assert(#sent == 1, 'Returning to a dropped/switched trolley cannot restart a pending hold')
+    controller.down = false; for _ = 1, 4 do loop() end
+    controller.down = true
+    callbacks[input_path](Fakes.param(player), Fakes.param(true))
+    loop(); assert(#sent == 2, 'A fresh hold can restart after carrier cancellation')
 end

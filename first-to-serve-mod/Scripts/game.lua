@@ -32,15 +32,22 @@ function Game.contract()
     required('/Script/Engine.KismetMathLibrary:Less_DateTimeDateTime')
     required('/Script/Engine.SubsystemBlueprintLibrary:GetWorldSubsystem')
     required('/Script/BrasserieSimulator.WorldGameInstanceSubsystem:GetKitchenManager')
-    local action
+    required('/Script/BrasserieSimulator.PlayerCharacter:IsCarryingFoodTrolley')
+    required('/Script/BrasserieSimulator.PlayerCharacter:GetFoodTrolley')
+    local action, tower_burger
     required('/Script/BrasserieSimulator.EInteractionActions'):ForEachName(function(name, value)
         if name:ToString():match('EIA_DefaultAction$') then action = value end
     end)
     assert(type(action) == 'number', 'Missing default interaction action')
+    required('/Script/BrasserieSimulator.EDishes'):ForEachName(function(name, value)
+        if name:ToString():match('EDH_TowerBurger$') then tower_burger = value end
+    end)
+    assert(type(tower_burger) == 'number', 'Missing top-slot dish type')
     return {
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish = required('/Script/BrasserieSimulator.Dish'),
         drink = required('/Script/BrasserieSimulator.Drink'),
+        food_trolley = required('/Script/BrasserieSimulator.FoodTrolley'),
         -- Older builds have no area actor; direct item targeting still works.
         dish_output = StaticFindObject('/Script/BrasserieSimulator.DishOutputArea'),
         kitchen = required('/Script/BrasserieSimulator.KitchenManager'),
@@ -51,7 +58,18 @@ function Game.contract()
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
         math = required('/Script/Engine.Default__KismetMathLibrary'),
         action = action,
+        tower_burger = tower_burger,
     }
+end
+
+local function carried_container(api, player, world)
+    if player:IsCarryingFoodTrolley() then
+        local trolley = player:GetFoodTrolley()
+        if actor(trolley, world) and trolley:IsA(api.food_trolley)
+            and same(trolley, player.CarriedObject) then return trolley, 'trolley' end
+    elseif player:IsCarryingTray() and actor(player.Tray, world) then
+        return player.Tray, 'tray'
+    end
 end
 
 function Game.session(api, expected_player)
@@ -66,10 +84,12 @@ function Game.session(api, expected_player)
                 if api.gameplay:IsGamePaused(controller) or player.bIsInWidgetMode
                     or player:IsPlayerFrozen() or player:IsPlayerLocallyFrozen()
                     or player:IsInPlacingMode() or player:IsInteractionWheelOpen()
-                    or not player:IsCarryingTray() or not actor(player.Tray, world)
                     or controller:IsMultiplayerChatOpen() then return nil end
-                result = { controller = controller, player = player, world = world, tray = player.Tray,
-                    id = identity(world) .. '/' .. identity(player) .. '/' .. identity(player.Tray),
+                local carrier, carrier_kind = carried_container(api, player, world)
+                if not carrier then return nil end
+                result = { controller = controller, player = player, world = world,
+                    carrier = carrier, carrier_kind = carrier_kind,
+                    id = identity(world) .. '/' .. identity(player) .. '/' .. carrier_kind .. '/' .. identity(carrier),
                     now = api.gameplay:GetTimeSeconds(controller) }
             end
         end
@@ -100,14 +120,34 @@ local function members(source, kind, world)
     return result
 end
 
-local function tray_state(session, kind)
-    local carried, space = {}, false
-    session.tray.Slots:ForEach(function(_, value)
+local function carrier_state(session, kind)
+    local carried, capacity = {}, { any = false, top = false }
+    local trolley = session.carrier_kind == 'trolley'
+    local slots = trolley and session.carrier.Slots.Items or session.carrier.Slots
+    local function remember(dish)
+        if not Game.valid(dish) then return false end
+        carried[identity(dish)] = true
+        return true
+    end
+    slots:ForEach(function(_, value)
         local slot = value:get()
-        if Game.valid(slot.Dish) then carried[identity(slot.Dish)] = true
-        elseif kind == 'drink' or slot.bReservedForDrinkOnly == false then space = true end
+        local occupied = remember(slot.Dish)
+        if trolley then
+            local stack_occupied, stack_available = false, false
+            slot.Dishes:ForEach(function(_, item)
+                stack_available = true
+                if remember(item:get()) then stack_occupied = true end
+            end)
+            -- Ready food/drinks need an entirely empty stack slot. Free gaps
+            -- beside dirty plates are for more dirty plates, not ready food.
+            if slot.bCanStackPlates then occupied = stack_occupied or not stack_available end
+        end
+        if not occupied and (kind == 'drink' or slot.bReservedForDrinkOnly == false) then
+            capacity.any = true
+            if not trolley or slot.bTopSlot == true then capacity.top = true end
+        end
     end)
-    return carried, space
+    return carried, capacity
 end
 
 local function eligible(api, session, scope, dish, carried)
@@ -158,7 +198,7 @@ local function aimed_scope(api, session)
             found = { id = identity(source), source = source, kind = kind }
         end
     end
-    local carried = tray_state(session, kind)
+    local carried = carrier_state(session, kind)
     if found and eligible(api, session, found, target, carried) then return found end
 end
 
@@ -201,11 +241,13 @@ end
 
 function Game.snapshot(api, session, scope)
     local present = members(scope.source, scope.kind, session.world)
-    local carried, space = tray_state(session, scope.kind)
+    local carried, capacity = carrier_state(session, scope.kind)
     local oldest
-    if space then
+    if capacity.any then
         for _, dish in pairs(present) do
-            if eligible(api, session, scope, dish, carried) then
+            local fits = session.carrier_kind ~= 'trolley'
+                or dish.Dish ~= api.tower_burger or capacity.top
+            if fits and eligible(api, session, scope, dish, carried) then
                 if oldest == nil or api.math:Less_DateTimeDateTime(dish.CreationTime, oldest.CreationTime)
                     or (not api.math:Less_DateTimeDateTime(oldest.CreationTime, dish.CreationTime)
                         and identity(dish) < identity(oldest)) then oldest = dish end
@@ -213,12 +255,12 @@ function Game.snapshot(api, session, scope)
         end
     end
     return { session = session.id, scope = scope.id, now = session.now,
-        present = present, carried = carried, has_space = space, oldest = oldest and identity(oldest) }
+        present = present, carried = carried, has_space = capacity.any, oldest = oldest and identity(oldest) }
 end
 
 function Game.request(api, expected, scope_id, candidate, lock)
     -- Re-read possession, input, aim, membership, capacity and age immediately
-    -- before dispatch. No range edits, tray writes, queue writes or direct grab.
+    -- before dispatch. No range edits, carrier writes, queue writes or direct grab.
     local session = Game.session(api)
     if not session or session.id ~= expected or not Game.held(api, session) then return false end
     local scope = Game.scope(api, session, lock)

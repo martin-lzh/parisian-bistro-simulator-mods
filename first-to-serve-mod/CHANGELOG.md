@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Update to 0.1.6-dev: use a held food trolley for the same oldest-first hold at the kitchen pass, ready dishes and drinks. Track ordinary and stack slots, drink-only and tower-burger top-slot rules, and stop when the trolley is released or replaced. Keep ordinary server interactions and manual Lua hot reload.
+- 更新至 0.1.6-dev：握持餐车时可在出餐口、成品菜品及饮料处使用相同的最早优先长按取餐；识别普通位和堆叠位、饮料专用位及高层汉堡顶层限制，放开或更换餐车即取消。保留原生服务器交互及手动 Lua 热重载。
+
 - Update to 0.1.5-dev: support manual Ctrl+R script reload, keep an in-progress hold canceled until the key is released in the new runtime, and terminate the unloaded fallback loop. Add cross-runtime hold and queued-callback regression tests.
 - 更新至 0.1.5-dev：支持 Ctrl+R 手动重载脚本，重载中断的长按在新运行状态中松键前不会重新启动；停止已卸载的备用循环，增加跨重载长按及排队回调回归测试。
 
