@@ -40,7 +40,10 @@ function UI.create(owner)
         view.title:SetAutoWrapText(true)
         view.combo = create('ComboBoxString', owner)
         view.combo.Font = owner.MinimumAutomaticSmartOrderAmountInput.Font
-        view.combo.ForegroundColor = owner.MinimumAutomaticSmartOrderAmountInput.ForegroundColor
+        -- Use an explicit color for the selected value and generated options.
+        view.combo.ForegroundColor = {
+            SpecifiedColor = { R = 1, G = 1, B = 1, A = 1 }, ColorUseRule = 0,
+        }
         view.row:AddChildToVerticalBox(view.title):SetPadding({ Left = 0, Top = 0, Right = 0, Bottom = 6 })
         view.row:AddChildToVerticalBox(view.combo)
         -- Preserve the native footer's layout and keep Save/Cancel last.

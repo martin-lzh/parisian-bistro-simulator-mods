@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Update to 0.1.3-dev: use white text for the delivery dropdown's selected value and options instead of inheriting the amount input's foreground color.
+- 更新至 0.1.3-dev：配送下拉框当前选项和展开列表使用白色文字，不再继承金额输入框的前景色。
+
+## 0.1.2-dev
+
 - Remove mandatory game-version, executable-size and SHA-256 allowlists. Discover the automatic delivery branch and fee data through native registration names and instruction operands instead of fixed addresses.
 - Check native discovery against Steam Build 25532071. Preserve code-conflict checks and the original quantity threshold when disabled. Add relocated-image, ambiguous-target, changed-structure and conflict regression tests. Package version: 0.1.2-dev; in-game testing is pending.
 

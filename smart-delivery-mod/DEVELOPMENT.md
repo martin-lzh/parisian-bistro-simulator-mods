@@ -4,7 +4,7 @@
 
 ## English
 
-Smart Delivery adds one UMG selector to the existing automatic smart-order dialog. It reads the three native delivery labels at runtime, uses the dialog font, preserves the Save/Cancel footer and resets unsaved changes whenever the native settings are repopulated. Only a local authoritative owner can change the preference. The preference is installation-wide and lives outside game saves.
+Smart Delivery adds one UMG selector to the existing automatic smart-order dialog. It reads the three native delivery labels at runtime, uses the dialog font and explicit white dropdown text, preserves the Save/Cancel footer and resets unsaved changes whenever the native settings are repopulated. Only a local authoritative owner can change the preference. The preference is installation-wide and lives outside game saves.
 
 The automatic-order evaluator is called by native timers and delegates and overwrites the shipping fee before checking affordability. A reflected `OrderIngredients` hook alone cannot intercept those direct calls. The original Windows helper changes only delivery selection within that evaluator. Native list generation, thresholds, availability, money checks, night fees, staff assignment and the eventual order remain intact, including calls made immediately when settings are saved. Manual order paths are outside the hook.
 
@@ -41,7 +41,7 @@ Offline results do not establish engine bridging, layout, multiplayer or real tr
 
 ## 中文
 
-在原有自动智能订购窗口中增加一个 UMG 配送选择框，运行时读取原生配送名称并沿用窗口字体，保留底部保存/取消按钮；每次重新填充原生设置时恢复已保存选择。仅本地房主能修改偏好；偏好由同一安装下的餐厅共用，保存在游戏存档之外。
+在原有自动智能订购窗口中增加一个 UMG 配送选择框，运行时读取原生配送名称并沿用窗口字体，下拉框使用明确的白色文字，保留底部保存/取消按钮；每次重新填充原生设置时恢复已保存选择。仅本地房主能修改偏好；偏好由同一安装下的餐厅共用，保存在游戏存档之外。
 
 自动订购通过原生定时器和委托执行，在余额检查前覆盖配送费；只拦截反射的 `OrderIngredients` 无法截获这些直接调用。原创 Windows 辅助模块仅改变该执行过程中的配送选择。采购清单、下限、可用性、余额检查、夜间费用、配送人数与实际下单继续走游戏原逻辑，包括保存设置时立即触发的订购；手动订单不经过该修改。
 

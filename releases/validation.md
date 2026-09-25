@@ -4,6 +4,8 @@
 
 ## English
 
+Smart Delivery **0.1.3-dev** changes the delivery dropdown text to white following a visibility report. Visual verification of the revised text remains pending.
+
 On 2026-09-25, the user reported testing aiming and continuous holds at the updated game's kitchen pass and requested starting the hold on the pass itself. First to Serve **0.1.4-dev** adds that area-targeting behavior; its offline regression tests pass, while this new behavior still awaits in-game acceptance. The report does not establish a complete loader, multiplayer or display test matrix.
 
 Smart Delivery **0.1.2-dev** is available for testing the updated game. On 2026-09-25, native code discovery was checked read-only against installed Steam Build **25532071**. This version removes mandatory game-version, executable-size and hash allowlists, retaining target-structure and code-conflict checks. Synthetic native discovery tests and dispatch execution tests passed; real game startup, UI, fees and delivery staffing remain unverified.
@@ -43,6 +45,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+Smart Delivery **0.1.3-dev** 根据文字可读性反馈，将配送下拉框文字改为白色；修改后的显示效果仍待实机确认。
 
 2026-09-25，用户反馈已实测新版出餐口的瞄准与连续长按，并要求直接对准出餐口启动长按。First to Serve **0.1.4-dev** 新增该区域触发方式；离线回归测试通过，新增行为仍待实机验收。此次反馈不代表加载器、联机及显示场景已完成全部验证。
 
