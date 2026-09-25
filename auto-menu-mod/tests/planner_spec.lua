@@ -1,43 +1,69 @@
 local Planner = require('planner')
-local function dish(id, kind, tags)
-    local set = {}; for _, tag in ipairs(tags) do set[tag] = true end
-    return { id = id, kind = kind, tags = set, stock = true, enabled = true }
-end
 local function snapshot()
-    return { period = 1, temperature = 1, current = { bIsActive = true },
-        profiles = { { id = 0, probability = 1 } }, intents = { { id = 0, probability = 1 } },
-        options = { Starter = {}, Dessert = {}, Aperitif = {}, EndDrink = {},
-            MainDish = { dish(12, 4, { 3, 6 }), dish(21, 4, { 1, 13, 17 }) } } }
+    local value = { period = 1, ceiling = 1, current = { Period = 1, bIsActive = false }, options = {} }
+    for index, course in ipairs(Planner.courses) do
+        value.current[course.field] = 0
+        value.options[course.field] = {
+            { id = index * 10, kind = course.kind, enabled = true, stock = true },
+            { id = index * 10 + 1, kind = course.kind, enabled = true, stock = false },
+        }
+    end
+    return value
 end
-local s = snapshot()
-assert(Planner.plan(s).MainDish == 12, 'Business/quick forecast must favor a quick dish')
-s.profiles, s.intents = { { id = 1, probability = 1 } }, { { id = 5, probability = 1 } }
-assert(Planner.plan(s).MainDish == 21, 'Event-driven family forecast must change the selection')
-s.profiles, s.intents = { { id = 6, probability = 1 } }, { { id = 8, probability = 1 } }
-s.options.MainDish = { dish(12, 4, { 11, 17, 5 }), dish(21, 4, { 4, 12 }) }
-s.temperature = 0; assert(Planner.plan(s).MainDish == 12)
-s.temperature = 3; assert(Planner.plan(s).MainDish == 21)
-s.temperature = 1; s.current.MainDish = 21
-assert(Planner.plan(s).MainDish == 21, 'Ties keep the existing choice')
-s.options.MainDish[2].stock = false
-assert(Planner.plan(s).MainDish == 12, 'Stock wins ties')
-s.options.MainDish[1].stock = false; s.current.MainDish = nil
-assert(Planner.plan(s).MainDish == 12, 'Ties have stable identifiers')
+local function solve(s, oracle)
+    local job = assert(Planner.new(s))
+    while not job:step(oracle, 7) do end
+    return job
+end
+local s, seen = snapshot(), {}
+local winner = { Starter = 11, MainDish = 21, Dessert = 0, Aperitif = 40, EndDrink = 0 }
+local function objective(menu)
+    assert(menu.Period == 1 and menu.bIsActive == false)
+    local key, match = '', true
+    for _, course in ipairs(Planner.courses) do
+        key = key .. ':' .. menu[course.field]
+        match = match and menu[course.field] == winner[course.field]
+    end
+    assert(not seen[key], 'Each combination is visited once')
+    seen[key] = true
+    -- Joint improvements defeat independent-course scores, with optional empty courses.
+    return match and 0.73100001 or 0.731
+end
+local job = solve(s, objective)
+assert(job.total == 242 and job.checked == 242 and job.evaluations == 242)
+assert(job.best.MainDish == 21 and job.best.Starter == 11 and job.best.Dessert == 0 and job.best.EndDrink == 0)
+assert(job.rate == 0.73100001, 'Do not round the native objective or prefer stock over a higher rate')
+local saved = job.best.MainDish
+job:step(function() error('Finished job queried the oracle') end, 10)
+assert(job.best.MainDish == saved)
+
+s = snapshot(); s.current.MainDish = 21
+job = solve(s, function() return 0.4 end)
+assert(job.best.MainDish == 21 and job.best.Starter == 0, 'A tied existing menu is retained')
+s = snapshot(); s.ceiling = 0.8
+job = solve(s, function() return 0.8 end)
+assert(job.evaluations == 1 and job.done, 'Only the native upper bound permits early completion')
+s = snapshot(); job = assert(Planner.new(s))
+assert(not job:step(function() return 0.5 end, 128, function() return true end))
+assert(job.evaluations == 1 and job.checked == 1, 'Time budget must yield without losing the cursor')
+while not job:step(function() return 0.5 end, 100) do end
+assert(job.checked == 242)
+
+s = snapshot(); s.period = 2; s.current.Period = 2
 s.options.MainDish[1].enabled = false
-assert(Planner.plan(s).MainDish == 21, 'Disabled dishes are never selected')
-s.options.MainDish = {}
-local menu, reason = Planner.plan(s); assert(not menu and reason == 'no_options')
-s.options.Dessert = { dish(32, 5, { 13 }) }
-menu = Planner.plan(s)
-assert(menu.MainDish == 0 and menu.Dessert == 32 and menu.bIsActive, 'Partial native menus remain valid')
-s.period = 2; assert(Planner.plan(s).Period == 2)
-s.intents = {}; assert(not pcall(Planner.plan, s), 'Unavailable forecasts must fail closed')
-s = snapshot(); s.profiles[1].probability = 0/0; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.profiles[1].probability = -1; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.intents[2] = s.intents[1]; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.options.MainDish[1].kind = 5; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.options.MainDish[2].id = 12; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.temperature = 8; assert(not pcall(Planner.plan, s))
-s = snapshot(); s.profiles[1].probability = 100; s.intents[1].probability = 100
-assert(Planner.plan(s).MainDish == 12, 'Forecast weights are normalized')
-print('Planner: service preferences, event forecast, weather, ties, eligibility and invalid data passed')
+job = solve(s, function(menu) assert(menu.MainDish ~= 20 and menu.Period == 2); return 0 end)
+assert(job.total == 161)
+s = snapshot()
+for _, course in ipairs(Planner.courses) do s.options[course.field] = {} end
+local empty, reason = Planner.new(s); assert(not empty and reason == 'no_options')
+s.options.Dessert = { { id = 30, kind = 5, enabled = true, stock = true } }
+job = solve(s, function(menu) assert(menu.MainDish == 0 and menu.Dessert == 30); return 0.2 end)
+assert(job.total == 1)
+for _, rate in ipairs({ -1, 1.01, math.huge }) do
+    assert(not pcall(solve, snapshot(), function() return rate end))
+end
+assert(not pcall(solve, snapshot(), function() return 0/0 end))
+s = snapshot(); s.options.MainDish[1].kind = 5; assert(not pcall(Planner.new, s))
+s = snapshot(); s.options.MainDish[1].id = 10; assert(not pcall(Planner.new, s))
+s = snapshot(); s.ceiling = 0/0; assert(not pcall(Planner.new, s))
+print('Planner: exhaustive native-objective search, joint optimum, optional courses, unrounded rates, ties and budgets passed')

@@ -4,17 +4,18 @@
 
 ## English
 
-**0.1.0-dev; in-game acceptance pending.** Auto Menu is a self-contained Lua Mod with no native helper or cross-Mod dependency.
+**0.2.0-dev; in-game acceptance pending.** Auto Menu is an independent Lua Mod without a native helper or another Mod dependency.
 
 ### Implementation
 
-- `game.lua` refreshes the native page, copies its persistent forecast list items and dish-selector options to plain Lua data, and reads the day's temperature/event and saved menu from the bound manager. It uses the displayed main-service forecast, rather than the unfiltered customer distribution. Reflected struct-array return wrappers are not retained.
-- `planner.lua` scores each course independently. The expected share of matching profile tags contributes 60%, intention tags 40%; each distribution is normalized. Relevant weather tags add 0.15 each; hot/filling tags subtract 0.15 each in very hot weather. Mild and warm weather add no direct adjustment. The best dish per course maximizes this additive recommendation score. Stock, existing selection and ID break ties. These are original recommendation weights, not extracted engine constants or an adoption percentage.
-- `ui.lua` constructs the native button at runtime beside Print menu. Its slot fills the remaining width and its text wraps. Text and tooltip follow the live language.
-- `main.lua` polls UI lifecycle every 500 ms and filters native click dispatch by the injected button's exact identity. A click builds a complete plan before one native save. Refreshing, changing tabs, days or language never saves. Authority, world, selected service, day context and current menu are checked before applying. Reading back the saved fields detects native refusal; there are no partial per-course saves or automatic retries.
-- `reload.lua` shares only widget identity strings across reloads. Unload stops callbacks without touching engine objects; the next state removes matching buttons on the game thread before adding one. Failed cleanup is retried.
+- `game.lua` gets eligible candidates from the native page's persistent selectors. Its objective is exclusively `GetDailyMenuProjection(period).EstimatedAdoptionRate`, the unrounded value behind the game's estimated selection rate. No adoption formula or preference weights are reproduced.
+- The native projection accepts a service period. For each query, the adapter temporarily assigns the candidate definition to that service's manager property, checks the native menu binding, reads the pure projection, and restores the original seven fields in protected cleanup. This synchronous transaction stays on the game thread and never saves, broadcasts, sends an RPC or yields. Projection errors and partial assignment errors run the same restoration path. Only the scalar rate is retained; no temporary struct-array wrappers survive the call.
+- `planner.lua` enumerates the Cartesian product of enabled native options plus an empty choice per course, excluding the wholly empty menu. This compares complete combinations, including interactions between courses. It finishes after visiting every combination or reaching `GetDailyMenuMaximumPromotedAdoptionChance()`, the native projection's upper bound. Rates are compared without rounding or an epsilon. An eligible existing menu is evaluated first and retained on a tie; subsequent order prefers stocked options and then stable identifiers. There is no search-size truncation or local-optimum completion.
+- `main.lua` runs search slices on the game thread every 16 ms, at most 128 evaluations or a 4 ms clock budget per view per slice. A native call cannot be preempted; this is a scheduling budget, not a frame-time guarantee. UI discovery and progress refresh run every 500 ms. The button remains clickable to cancel, with reentrant callbacks blocked during a slice/save.
+- Before each slice and before applying, guards compare authority, world/manager identity, service, original menu, daily forecast/context, native influence/ceiling/bonus, tier/difficulty/satisfaction, dish eligibility arrays, selector candidates, prices and ingredient availability. Changes cancel without saving. Continuous native influence decay or stock changes can invalidate a long search; no stale or partly searched plan is presented as a completed optimum. The final winner is projected again before one normal native save, followed by a readback check and page refresh.
+- `ui.lua` creates the native button at runtime beside Print menu. Text wraps and follows all 14 game languages, including progress, cancellation and changed-condition states. `reload.lua` transfers only widget identity strings; unload stops callbacks without engine access, and the next state removes old buttons on the game thread. Pending searches are discarded.
 
-Native saving preserves the active flag. Auto Menu does not enable, disable, print, price or purchase. Empty categories remain empty; the native model supports a nonempty partial menu. Eligibility comes from native selectors. Missing/malformed forecasts fail before saving. Diagnostics use `[AutoMenu]`; player-facing text supports all 14 game cultures.
+The active flag and the other service are preserved. There is no automatic run on opening, changing days or reloading. No pricing, purchasing or printing is performed. Native calls and Lua property conversion were checked against the local game/loader references. All local analysis stays in ignored `work/`; the package contains original Mod code only.
 
 ### Offline validation
 
@@ -29,42 +30,45 @@ python -m unittest discover -s tools/tests -v
 git diff --check
 ```
 
-Tests cover forecast and event-driven changes, hot/cool weather, normalization, disabled dishes, missing categories, ties, malformed inputs, independent menu periods, one-save behavior, native refusal, changed worlds/authority, unrelated and reentrant clicks, languages and reload cleanup. Fixtures use invented dishes and synthetic engine objects. This verifies original logic, not actual UE4SS bridging, rendering or game acceptance.
+Tests use invented dishes and synthetic native predictions. They cover exhaustive combination coverage, a joint optimum with empty courses, improvements smaller than display precision, native upper-bound termination, time/evaluation budgets, ties, disabled dishes, non-finite results, restoration after failed queries/partial writes, changed inputs, native refusal, one-save completion, cancellation, other/reentrant buttons, service isolation, languages and reload cleanup. These tests do not validate real UE4SS bridging, native performance, rendering or multiplayer behavior.
 
-`build.py` writes `outputs/auto-menu/AutoMenu-0.1.0-dev.zip` and SHA-256. The fixed allowlist includes six Lua modules, README, DEVELOPMENT, CHANGELOG and the activation marker. Tests, references, tools, game content and loader files are excluded. The Mod is registered in common CI package checks; this development version has no release authorization.
+`build.py` writes `outputs/auto-menu/AutoMenu-0.2.0-dev.zip` and its SHA-256. The fixed allowlist includes six Lua modules, README, DEVELOPMENT, CHANGELOG and the activation marker. Tests, references, tools, game content and loader files are excluded. Common CI checks verify source bytes and archive contents. This development version has no release authorization.
 
 ### In-game checklist
 
-1. Check one button beside Print menu at 1920×1080, 2560×1600 and ultrawide, all 14 languages, tooltips and native input behavior.
-2. Compose lunch and dinner separately. Check available courses, unchanged enabled state and other service, manual edits and printing.
-3. Compare different forecasts, weather and events. Inspect native compatibility and stock; the heuristic need not maximize native adoption.
-4. Test missing ingredients, no unlocked dishes, optional courses, rebuilt UI, different saves and host/guest replication.
-5. Reload repeatedly with the page open: one working button, no composition on reload, no old callbacks or sustained errors. Mouse click dispatch is implemented; actual keyboard/controller focus and activation remain to be verified.
+1. Check one button beside Print menu across screen sizes and all 14 languages. Verify mouse, keyboard/controller focus and activation, progress and cancellation.
+2. For a small unlocked menu, manually compare all combinations using the native displayed prediction. Verify the winning selection rate, optional courses, unchanged active state and other service. The UI rounds its percentage; logs record a more precise rate.
+3. Confirm that trials leave the saved menu unchanged between ticks and on cancellation/errors. Verify one final native save and host/guest replication, without intermediate notifications or saves.
+4. Test different forecasts, weather/events, prices, missing ingredients and promotion influence. Change conditions during a search, switch service, close/rebuild the page and lose host authority: no stale result should apply.
+5. Measure actual search cost with many unlocked dishes and a rate below the native ceiling. Confirm responsive cancellation and clear changed-condition handling when native influence decays during a long search.
+6. Reload repeatedly with a search in progress: one working button, no old search completion, no automatic composition and no sustained errors.
 
 ## 中文
 
-**0.1.0-dev，待游戏内验收。** Auto Menu 为独立 Lua Mod，无原生辅助 DLL 或其他 Mod 依赖。
+**0.2.0-dev，待游戏内验收。** Auto Menu 是独立 Lua Mod，无原生辅助 DLL 或其他 Mod 依赖。
 
 ### 实现
 
-- `game.lua` 刷新原生页面，将其持有的预测列表项、选择器候选转为普通 Lua 数据，读取绑定管理器中的温度、活动及菜单。使用页面显示的正餐预测，不使用未过滤的全部顾客分布；不保留反射调用返回的临时结构数组包装。
-- `planner.lua` 分类别评分：顾客类型标签的预期匹配比例占 60%，用餐意向占 40%，两组概率分别归一化。天气对应标签各加 0.15，酷热时热食、饱腹标签各减 0.15；温和及温暖天气不直接调分。逐类别选最高分即可最大化这一可加评分；同分按食材、现有选择、编号排序。这些是原创推荐权重，不是提取的引擎常数，也不是采用率百分比。
-- `ui.lua` 在运行时创建原生按钮，放在打印按钮旁，填充剩余宽度并允许换行；标题和提示随语言更新。
-- `main.lua` 每 500 毫秒核对界面生命周期，按新增按钮完整身份过滤点击。先生成完整方案，再调用一次原生保存。刷新、切换餐段、日期或语言不会自行保存。保存前复核权限、世界、餐段、当天条件及菜单；保存后读回字段发现原生拒绝，不逐道菜分批保存，也不自动重试。
-- `reload.lua` 跨重载仅传递按钮身份字符串。旧状态卸载时停止回调、不访问引擎对象；新状态在游戏线程先移除对应按钮再创建，清理失败则重试。
+- `game.lua` 从原生页面持有的选择器读取候选，唯一优化目标是 `GetDailyMenuProjection(period).EstimatedAdoptionRate`，即页面预计选择率背后的未取整数值。不复刻采用率公式或顾客偏好权重。
+- 原生预测接口只接受餐段。每次试算暂时将候选写入管理器对应餐段字段，验证原生菜单绑定，读取纯预测接口，然后在受保护的清理路径中恢复原来的七个字段。全过程在游戏线程同步完成，不保存、不广播、不发送 RPC，也不中途让出执行。预测异常和部分写入异常同样恢复；仅保留选择率标量，不保留临时结构数组包装。
+- `planner.lua` 枚举各类别启用候选与留空选项的笛卡尔积，排除全空菜单，因此比较的是完整组合及类别间相互影响。遍历全部组合，或达到原生 `GetDailyMenuMaximumPromotedAdoptionChance()` 上限后结束。比较不取整、不设误差容限。优先试算符合条件的当前菜单，同值保留；其余候选按食材齐全、固定编号排序。不截断组合数量，不把局部最优视为搜索完成。
+- `main.lua` 每 16 毫秒在游戏线程运行一个搜索批次，每个界面每批最多 128 次试算或 4 毫秒时钟预算。无法抢占单次原生调用，因此这是调度预算，不是帧耗时保证。每 500 毫秒扫描界面并刷新进度，搜索时按钮仍可点击取消；试算和保存期间阻止重入。
+- 每批及最终保存前比较权限、世界与管理器身份、餐段、原菜单、当天预测与条件、原生影响力与上限及加成、餐厅等级与难度及满意度、菜品资格数组、候选、价格和食材可用性。变化时取消且不保存。原生影响力持续衰减或库存变化可能使长时间搜索失效，不将过期结果或未搜索完的结果当作完成的最优方案。最终方案再次原生试算一致后，仅保存一次，读回核对并刷新页面。
+- `ui.lua` 在打印按钮旁运行时创建原生按钮，文字换行并支持游戏 14 种语言，包括搜索进度、取消和条件变化。`reload.lua` 跨状态只传递按钮身份字符串；卸载时停止回调且不访问引擎，新状态在游戏线程清除旧按钮，未完成搜索直接丢弃。
 
-原生保存保留启用标记；Mod 不代为启停、打印、定价或采购。缺少候选的类别留空，支持原生允许的非空部分菜单。菜品资格来自原生选择器；预测缺失或异常时在保存前停止。日志前缀为 `[AutoMenu]`，按钮及状态文案覆盖游戏 14 种语言。
+保留启用状态及另一餐段；打开页面、切换日期、重载不自动配餐。不改价、不采购、不打印。原生调用与 Lua 属性转换已根据本机游戏及加载器参考核对；分析资料全部留在忽略的 `work/`，安装包只包含原创 Mod 代码。
 
 ### 离线验证
 
-在仓库根目录运行英文部分所列命令。测试覆盖顾客及用餐意向、活动引起的预测变化、冷暖天气、归一化、禁用菜品、空类别、稳定排序、异常数据、餐段独立、单次保存、原生拒绝、权限及世界变化、其他按钮、重入点击、语言及热重载清理。
+在仓库根目录执行英文部分命令。虚构菜品和原生预测替身覆盖完整组合、包含留空类别的联合最优、低于显示精度的提升、原生上限提前结束、分批预算、同值处理、禁用菜、非有限数值、试算和部分写入失败后的恢复、输入变化、原生拒绝、单次保存、取消、其他按钮及重入、餐段隔离、语言和热重载。
 
-测试使用虚构菜品及引擎替身，只验证原创逻辑，不代表真实 UE4SS 桥接、渲染或实机验收。构建生成 `outputs/auto-menu/AutoMenu-0.1.0-dev.zip` 及 SHA-256。固定白名单含六个 Lua 模块、README、DEVELOPMENT、CHANGELOG 和启用标记，不含测试、参考、工具、游戏内容及加载器。已登记统一 CI 包校验；此开发版没有发布授权。
+这些测试不等于真实 UE4SS 桥接、性能、渲染或联机验证。构建输出 `outputs/auto-menu/AutoMenu-0.2.0-dev.zip` 及 SHA-256；白名单包含六个 Lua 模块、README、DEVELOPMENT、CHANGELOG 和启用标记，不包含测试、参考、工具、游戏内容或加载器。统一 CI 校验源码字节及包内容；此开发版没有发布授权。
 
 ### 实机待验收
 
-1. 在 1920×1080、2560×1600 和超宽屏检查打印按钮旁只有一个新按钮，验证 14 种语言、提示和原有操作。
-2. 分别组合午餐和晚餐，检查菜品、启用状态、另一餐段、手动换菜和打印。
-3. 比较不同预测、天气和活动下的结果及原生匹配和库存；原创规则不保证最大化原生采用率。
-4. 检查缺料、无解锁菜、可选类别、界面重建、不同存档及联机同步。
-5. 页面打开时反复重载，确认只有一个可用按钮、重载不配餐、无旧回调或持续错误。已接入鼠标点击分派；键盘和手柄焦点、激活仍需实机确认。
+1. 检查不同分辨率、14 种语言下只有一个按钮，验证鼠标及键盘/手柄焦点、进度、取消。
+2. 用少量解锁菜品手动对比各组合的原生预计选择率，检查最终结果、可选类别、启用状态和另一餐段。页面百分比会取整，日志记录更精确的值。
+3. 验证试算之间及取消、异常后原菜单恢复；只有最终方案保存并同步给访客，不产生中间通知或保存。
+4. 检查不同客流、天气、活动、价格、缺料和推广影响力；搜索中改变条件、切换餐段、关闭或重建页面、失去房主权限，均不得应用过期方案。
+5. 大量解锁菜品且未达原生上限时实测耗时、取消响应，以及影响力衰减导致的条件变化提示。
+6. 搜索中反复热重载，确认只有一个可用按钮，旧搜索不会完成，不自动配餐，无持续错误。

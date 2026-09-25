@@ -12,7 +12,8 @@ function F.array(entries)
 end
 
 function F.setup()
-    local state = { objects = {}, hooks = {}, ticks = {}, shared = {}, saves = 0, language = 'en' }
+    local state = { objects = {}, hooks = {}, ticks = {}, loops = {}, shared = {}, saves = 0,
+        projections = 0, prices = {}, language = 'en' }
     local function object(kind)
         local value = { address = #state.objects + 1, kind = kind, valid = true }
         state.objects[#state.objects + 1] = value
@@ -32,11 +33,21 @@ function F.setup()
     local manager = object('BrasserieManager')
     manager.HasAuthority = function() return state.client ~= true end
     manager.IsActorBeingDestroyed = function() return state.destroying == true end
+    manager.GetDailyMenuMaximumPromotedAdoptionChance = function() return state.ceiling or 1 end
+    manager.GetDailyMenuInfluence = function() return state.influence or 0 end
+    manager.GetTier = function() return state.tier or 0 end
+    manager.GetDifficulty = function() return 0 end
+    manager.GetSatisfaction = function() return state.satisfaction or 1 end
+    manager.GetDishPrice = function(_, id) return state.prices[id] or 10 end
+    manager.DailyMenuMaxAdoptionChanceBonus = 0.2
+    for _, name in ipairs({ 'AvailableDishes', 'UnlockedDailyDishes', 'DisabledDishes', 'EmployeeRequirementDisabledDishes' }) do
+        manager[name] = F.array({})
+    end
     local function forecast(period, profile, intent)
         return { Period = period, ProfileProbabilities = F.array({ { Profile = profile, Probability = 1 } }),
             IntentProbabilities = F.array({ { Intent = intent, Probability = 1 } }) }
     end
-    manager.DailyCustomerContext = { DayNumber = 7, LocalEvent = 0, TemperatureBand = 1,
+    manager.DailyCustomerContext = { DayNumber = 7, WeekDay = 0, TemperatureCelsius = 20, LocalEvent = 0, TemperatureBand = 1,
         LunchForecast = forecast(1, 0, 0), DinnerForecast = forecast(2, 1, 5) }
     for period, name in ipairs({ 'LunchDailyMenu', 'DinnerDailyMenu' }) do
         manager[name] = { Period = period, bIsActive = true }
@@ -51,24 +62,22 @@ function F.setup()
     owner.IsVisible = function() return state.hidden ~= true end
     owner.IsShowingDailyMenuCategory = function() return state.other_page ~= true end
     owner.IsDishMissingIngredients = function(_, id) return id == state.missing end
-    local function list(kind, field, entries)
-        local value = object('ListView')
-        value.items = {}
-        for _, entry in ipairs(entries) do
-            local item = object(kind); item[field] = entry
-            value.items[#value.items + 1] = item
-        end
-        function value:GetNumItems() return #self.items end
-        function value:GetItemAt(index) return self.items[index + 1] end
-        return value
+    function owner:GetDailyMenu(period)
+        return manager[period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu']
+    end
+    function owner:GetDailyMenuProjection(period)
+        state.projections = state.projections + 1
+        local menu = self:GetDailyMenu(period)
+        local copied = {}; for key, value in pairs(menu) do copied[key] = value end
+        if state.projection_error then error('Synthetic projection failure') end
+        if state.oracle then return { Period = period, bConfigured = true, EstimatedAdoptionRate = state.oracle(copied) } end
+        -- Invented non-additive objective, deliberately unrelated to dish tags.
+        local target = period == 1 and 21 or 20
+        local rate = menu.MainDish == target and menu.Starter == 11 and 0.8 or 0.1
+        return { Period = period, bConfigured = true, EstimatedAdoptionRate = rate }
     end
     owner.RefreshDailyMenus = function()
         state.refreshes = (state.refreshes or 0) + 1
-        local data = manager.DailyCustomerContext
-        local forecast_data = state.displayed_forecast or (owner.SelectedDailyMenuPeriod == 1
-            and data.LunchForecast or data.DinnerForecast)
-        owner.ForecastProfileListView = list('BP_ProfileForecastItemData_C', 'CustomerProfile', forecast_data.ProfileProbabilities.entries)
-        owner.ForecastIntentListView = list('BP_IntentForecastItemData_C', 'CustomerIntent', forecast_data.IntentProbabilities.entries)
     end
     function owner:SaveDailyMenu(menu)
         state.saves = state.saves + 1
@@ -82,8 +91,8 @@ function F.setup()
         local row = object('DailyMenu')
         local selector = object('DishSelector')
         selector.DishOptions = F.array({
-            { Key = index * 10, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({ 3, 6 }) },
-            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({ 1, 13, 17 }) },
+            { Key = index * 10, DishType = course.kind, bEnabled = true },
+            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true },
         })
         row.WBP_DailyMenu_DishSelector = selector
         owner['WBP_DailyMenu_' .. course.field] = row
@@ -137,7 +146,17 @@ function F.setup()
         state.hooks[#state.hooks + 1] = post
         return #state.hooks, #state.hooks
     end
-    LoopInGameThreadWithDelay = function(ms, fn) assert(ms == 500); state.ticks[#state.ticks + 1] = fn end
+    LoopInGameThreadWithDelay = function(ms, fn)
+        assert(ms == 500 or ms == 16)
+        state.ticks[#state.ticks + 1] = fn; state.loops[ms] = fn
+    end
+    function state:complete()
+        for _ = 1, 1000 do
+            self.loops[16]()
+            if self.footer.children[2] and not self.footer.children[2].text:find('%d+%%') then return end
+        end
+        error('Search did not complete')
+    end
     function state:click(value, index)
         self.hooks[index or #self.hooks]({ get = function() return value end })
     end

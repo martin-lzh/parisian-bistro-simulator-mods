@@ -2,11 +2,11 @@
 
 ## Unreleased
 
-- Add independent Auto Menu 0.1.0-dev with a composition button for the selected lunch or dinner service.
-- Match eligible dishes to the displayed customer/intent forecast and temperature; local events enter through the forecast.
-- Preserve activation and the other service, save once through the game, support 14 languages and remove old buttons on Lua reload.
-- Add offline recommendation, adapter, click/lifecycle, localization and package checks. In-game acceptance remains pending.
-- 新增独立 Auto Menu 0.1.0-dev，为当前午餐或晚餐提供每日菜单自动组合按钮。
-- 按页面显示的顾客与用餐意向预测、气温匹配原生候选菜品，活动影响沿用预测。
-- 保留启用状态及另一餐段，使用原生流程保存一次，支持 14 种语言和 Lua 重载清理。
-- 新增推荐、适配、按钮与生命周期、本地化和打包离线检查，游戏内验收待完成。
+- Auto Menu 0.2.0-dev replaces tag scoring with the game's native estimated selection rate as the sole optimization objective.
+- Search complete combinations, including optional empty courses; compare unrounded rates and stop only after exhaustive coverage or reaching the native ceiling.
+- Add batched search, progress and cancellation. Restore every trial before returning; save the final winner once, preserving the active state and other service.
+- Cancel when native prediction inputs or the UI context change. Add objective, rollback, changed-input and asynchronous lifecycle tests; update all 14 languages. In-game acceptance remains pending.
+- Auto Menu 0.2.0-dev 移除标签评分，以游戏原生预计选择率作为唯一优化目标。
+- 比较完整组合及可选类别留空，使用未取整数值，遍历完成或达到原生上限才结束。
+- 新增分批搜索、进度和取消；每次试算恢复原菜单，最终方案只保存一次，保留启用状态与另一餐段。
+- 原生预测输入或界面条件变化时取消，新增目标、恢复、条件变化及异步生命周期测试，并更新 14 种语言。实机验收待完成。

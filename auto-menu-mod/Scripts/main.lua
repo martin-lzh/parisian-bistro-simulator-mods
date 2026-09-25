@@ -14,26 +14,30 @@ local function start()
         if message ~= last_error then print('[AutoMenu] ERROR ' .. message .. '\n'); last_error = message end
     end
 
+    local function finish(view, status)
+        view.job, view.snapshot, view.busy = nil, nil, false
+        UI.result(view, status)
+    end
+
     local function clicked(context)
         if lifetime.stopped then return end
         local button = context:get()
         if not Game.valid(button) then return end
         local view = views[Game.identity(button)]
-        if not view or view.busy or not Game.available(view.owner)
+        if not view or view.handling or not Game.available(view.owner)
             or not button:IsInteractionEnabled() then return end
-        view.busy = true
+        if view.busy then finish(view, 'cancelled'); return end
+        view.handling = true
         local ok, status = xpcall(function()
             local snapshot = Game.snapshot(view.owner)
-            local menu, reason = Planner.plan(snapshot)
-            if not menu then return reason end
-            Game.apply(view.owner, snapshot, menu)
-            print(string.format('[AutoMenu] COMPOSED version=0.1.0-dev day=%s period=%s event=%s temperature=%s\n',
-                snapshot.day, snapshot.period, snapshot.event, snapshot.temperature))
-            return 'done'
+            local job, reason = Planner.new(snapshot)
+            if not job then return reason end
+            view.job, view.snapshot, view.busy = job, snapshot, true
+            UI.update(view)
         end, traceback)
-        view.busy = false
+        view.handling = false
         if not ok then report(status); status = 'error' end
-        UI.result(view, status)
+        if status then finish(view, status) end
     end
 
     -- Native UMG click dispatch runs on the game thread. Filter by the new
@@ -43,6 +47,37 @@ local function start()
         if not ok then report(err) end
     end)
     assert(type(pre) == 'number' and type(post) == 'number', 'Menu button hook unavailable')
+
+    LoopInGameThreadWithDelay(16, function()
+        if lifetime.stopped then return true end
+        for _, view in pairs(views) do
+            if view.job then
+                view.handling = true
+                local ok, status = xpcall(function()
+                    local snapshot, job = view.snapshot, view.job
+                    if not Game.valid(view.button) or not Game.unchanged(view.owner, snapshot) then return 'changed' end
+                    local deadline = os.clock() + 0.004
+                    local done = job:step(function(menu) return Game.evaluate(view.owner, snapshot, menu) end,
+                        128, function() return os.clock() >= deadline end)
+                    if not done then return end
+                    Game.apply(view.owner, snapshot, job.best, job.rate)
+                    print(string.format('[AutoMenu] COMPOSED version=0.2.0-dev day=%s period=%s rate=%.9f evaluations=%d\n',
+                        snapshot.day, snapshot.period, job.rate, job.evaluations))
+                    return 'done'
+                end, traceback)
+                view.handling = false
+                if not ok then report(status); status = 'error' end
+                if status then
+                    view.job, view.snapshot, view.busy = nil, nil, false
+                    if Game.valid(view.button) then
+                        local shown, err = pcall(UI.result, view, status)
+                        if not shown then report(err) end
+                    end
+                end
+            end
+        end
+        return false
+    end)
 
     LoopInGameThreadWithDelay(500, function()
         if lifetime.stopped then return true end
@@ -72,7 +107,7 @@ local function start()
         else last_error = nil end
         return false
     end)
-    print('[AutoMenu] START version=0.1.0-dev\n')
+    print('[AutoMenu] START version=0.2.0-dev\n')
 end
 
 local ok, err = xpcall(start, traceback)
