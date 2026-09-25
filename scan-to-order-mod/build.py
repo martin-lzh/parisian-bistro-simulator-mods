@@ -3,7 +3,7 @@ from hashlib import sha256
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
-VERSION = "0.1.0-dev"
+VERSION = "0.1.1-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "scan-to-order"
 FILES = ("Scripts/main.lua", "Scripts/game.lua", "README.md", "DEVELOPMENT.md", "CHANGELOG.md")

@@ -10,6 +10,8 @@ Candidates contain scalar table/customer identities, group, item and route. Each
 
 Stock is checked silently immediately before each request; availability is not cached for the next customer. Food and drinks use the existing native AI order route with no player argument, preserving native requirements, stock consumption, queue and notification assignment. A request counts as accepted only when a new matching queue GUID is bound to the expected customer. A normal refusal can be retried on a later poll. An inconsistent result or exception stops automation for that world.
 
+Catalog rows are read as references, with their schema, validity, mapping and unique item key checked on each request. Only item keys and ingredient quantities are accessed in Lua. The stock check takes independent scalar records; the native order takes the complete original struct reference. Whole-struct returns and dish asset fields are never materialized through Lua. Missing catalog data waits; malformed data stops the world. No row references survive the synchronous request.
+
 Only a scalar stop marker is shared across reload. It is persisted before dispatch and cleared after success, preventing an interrupted or uncertain request from replaying after Ctrl+R. Unload cancels the timer when supported and makes old callbacks inert without accessing game objects. Temporary loss of possession does not clear a stop; a different world does. There is no persistent save modification or native DLL.
 
 Local API and native AI routing checks used Steam Build 25532071 / 1.0.1.44eb and the locally available UE4SS experimental source. All analysis and reference material remains under ignored `work/`. That evidence and the offline tests do not establish real engine bridging or gameplay acceptance.
@@ -28,7 +30,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-Behavior tests cover partial stock, replenishment, multiple customers sharing the last unit, repeated polls, later courses, normal native refusal, stale tickets, clients, world mismatch, pause, departed/served customers, native queue/notification disagreement, reload stops and queued callbacks. The package has a fixed source allowlist and deterministic ZIP metadata; CI verifies source bytes and checksums. Builds never install or control the game.
+Behavior tests reject full dish conversion, unrelated asset access and reconstructed order payloads; check catalog schema, invalid/unmapped/duplicate rows and scalar ingredient copies; and cover partial stock, replenishment, multiple customers sharing the last unit, repeated polls, later courses, normal native refusal, stale tickets, clients, world mismatch, pause, departed/served customers, native queue/notification disagreement, reload stops and queued callbacks. The package has a fixed source allowlist and deterministic ZIP metadata; CI verifies source bytes and checksums. Builds never install or control the game.
 
 ### In-game acceptance checklist
 
@@ -51,13 +53,15 @@ Keep the game installation read-only during development. Gameplay acceptance mus
 
 每个请求前静默检查库存，不把上一位顾客的可用结果用于下一位。食物和饮料通过不传玩家的原生 AI 下单路径处理，保留制作要求、库存扣除、队列及订单提醒绑定。只有新增的匹配队列 GUID 绑定到预期顾客，才记录成功。原生正常拒绝可在后续轮询重试；状态矛盾或异常会停止当前世界的自动化。
 
+每次请求重新读取菜品表记录引用，核对结构类型、有效性、数据映射及餐品编号唯一性。Lua 仅访问餐品编号及食材数量，库存检查传独立标量记录，下单传完整原始结构引用。不在 Lua 中展开完整菜品返回值或资源字段。菜品表暂不可用时等待，数据异常时停止当前世界；记录引用不跨同步请求保存。
+
 热重载仅交接标量停止标记：请求前持久化、成功后清除，避免中断或结果不明的订单被 Ctrl+R 重放。卸载时按加载器能力取消计时器，使旧回调失效，不访问游戏对象。暂时失去玩家控制不会解除停止，进入不同世界才重置。不写入存档额外数据，不需要原生 DLL。
 
 本地 API 和原生 AI 路径核对基于 Steam Build 25532071 / 1.0.1.44eb，以及本机 UE4SS experimental 源码。所有分析和参考资料保留在被忽略的 `work/` 中。源码核对和离线测试不等同于真实引擎桥接及实机验收。
 
 ### 离线验证
 
-命令见上方英文段。行为测试覆盖部分缺货、补货、多人争用最后一份库存、重复轮询、后续菜序、原生正常拒绝、过期候选、客机、跨世界、暂停、离席／已上餐顾客、队列与提醒不一致、热重载停止和排队回调。包使用固定白名单和确定性 ZIP 元数据，CI 校验源码内容及哈希；构建不安装或控制游戏。
+命令见上方英文段。行为测试禁止完整菜品转换、无关资源访问和重新拼装下单数据，核对菜品表类型、无效／未映射／重复记录及独立食材记录，并覆盖部分缺货、补货、多人争用最后一份库存、重复轮询、后续菜序、原生正常拒绝、过期候选、客机、跨世界、暂停、离席／已上餐顾客、队列与提醒不一致、热重载停止和排队回调。包使用固定白名单和确定性 ZIP 元数据，CI 校验源码内容及哈希；构建不安装或控制游戏。
 
 ### 实机验收清单
 

@@ -52,7 +52,7 @@ end
 function Game.contract()
     for _, name in ipairs({ 'KitchenManager:TryOrderDish', 'DrinkManager:TryOrderDrink',
         'StorageManager:HasEnoughIngredients', 'BrasserieManager:AreDishRequirementsMet',
-        'DishGameInstanceSubsystem:GetDish', 'CustomerActor:GetCustomerBehaviorComponent',
+        'CustomerActor:GetCustomerBehaviorComponent',
         'WorldGameInstanceSubsystem:GetBrasserieManager', 'WorldGameInstanceSubsystem:GetStorageManager',
         'table:IsTableOccupied', 'table:IsCustomerOrderWaitActive',
         'table:GetCustomerWaitElapsedTime', 'table:GetCustomerWaitTime',
@@ -60,6 +60,7 @@ function Game.contract()
         required('/Script/BrasserieSimulator.' .. name)
     end
     return { player = required('/Script/BrasserieSimulator.PlayerCharacter'),
+        dish_data = required('/Script/BrasserieSimulator.DishData'),
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
         none = enum('EDishes', 'EDH_Unknown'), silent = enum('EMissingNotifyPolicy', 'None') }
 end
@@ -143,6 +144,38 @@ local function first_pending(linked, route, key)
     end
 end
 
+local function dish_data(api, catalog, key)
+    local source = catalog.DishesTable
+    if not Game.valid(source) then return end
+    assert(same(source:GetRowStruct(), api.dish_data), 'Unsupported dish data schema')
+    local result
+    -- GetRowMap returns references. Read only the needed fields: converting a
+    -- whole GetDish return value also copies unrelated soft asset references.
+    for _, row in pairs(source:GetRowMap()) do
+        assert(Game.valid(row) and row:IsMappedToObject(), 'Invalid dish data row')
+        if number(row.Key) == key then
+            assert(not result, 'Ambiguous dish data row')
+            result = row
+        end
+    end
+    return result
+end
+
+local function ingredients(data)
+    local result, source = {}, data.Ingredients
+    -- Pass scalar Lua records, not TArray/parameter userdata, into the stock
+    -- check. Keep the complete original row for native order dispatch below.
+    for index = 1, source:GetArrayNum() do
+        local entry = source[index]
+        local key, amount = number(entry.Ingredient), number(entry.Amount)
+        assert(key % 1 == 0 and key >= 0 and key <= 255
+            and amount % 1 == 0 and amount >= 0 and amount <= 2147483647,
+            'Unsupported ingredient requirement')
+        result[index] = { Ingredient = key, Amount = amount }
+    end
+    return result
+end
+
 function Game.request(api, previous, ticket)
     local session = Game.session(api)
     if not session or session.id ~= previous.id or session.paused then return false, 'session-changed' end
@@ -176,12 +209,12 @@ function Game.request(api, previous, ticket)
         return false, 'no-chef'
     end
     if not boolean(restaurant:AreDishRequirementsMet(ticket.dish)) then return false, 'requirements-unmet' end
-    local data = catalog:GetDish(ticket.dish)
-    assert(number(data.Key) == ticket.dish, 'Dish lookup mismatch')
+    local data = dish_data(api, catalog, ticket.dish)
+    if not data then return false, 'dish-data-unavailable' end
     -- A silent check avoids missing-stock notification spam. The native request
     -- checks again and consumes ingredients, so subsequent customers see the
     -- remaining stock instead of a cached availability decision.
-    if not boolean(storage:HasEnoughIngredients(data.Ingredients, api.silent)) then
+    if not boolean(storage:HasEnoughIngredients(ingredients(data), api.silent)) then
         return false, 'out-of-stock'
     end
     local before = {}
@@ -190,6 +223,8 @@ function Game.request(api, previous, ticket)
     end
     -- Null Player is the game's AI ordering route. It retains native staffing,
     -- preparation, notification assignment, queue updates and replication.
+    -- Pass the original struct reference so the engine copies its fields;
+    -- do not expand asset references or reconstruct a partial dish in Lua.
     if ticket.kind == 'food' then producer:TryOrderDish(data, linked, nil)
     else producer:TryOrderDrink(data, linked, nil) end
     local accepted

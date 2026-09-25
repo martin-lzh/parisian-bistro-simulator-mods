@@ -4,7 +4,7 @@
 
 ## English
 
-**Version: 0.1.0-dev — in-game acceptance pending.**
+**Version: 0.1.1-dev — in-game acceptance pending.**
 
 Automatically places seated customers' food and drink orders in single player or on the multiplayer host. No waiter or player needs to take the order. Customers keep the choices made by the game's AI; the Mod does not select substitutes or change the menu.
 
@@ -17,7 +17,7 @@ Tables marked as handled by a player and tables currently being ordered by a wai
 Requires **UE4SS experimental**. The checked API is `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not the target. Local game references were checked against Steam Build **25532071**, ProjectVersion **1.0.1.44eb**, Unreal Engine **5.4**. This is a development reference, not a gameplay test result.
 
 1. Close the game and install the loader if needed.
-2. Extract `ScanToOrder-0.1.0-dev.zip` so `Mods/ScanToOrder/Scripts/main.lua` and `Mods/ScanToOrder/enabled.txt` exist under the loader directory.
+2. Extract `ScanToOrder-0.1.1-dev.zip` so `Mods/ScanToOrder/Scripts/main.lua` and `Mods/ScanToOrder/enabled.txt` exist under the loader directory.
 3. Start the game and enter your restaurant as the host or in single player. Ordering starts automatically.
 
 The package contains original Mod scripts and documentation only. It does not include UE4SS or game files. The game retains its own translated order text; this Mod adds no in-game wording. Technical logs use `[ScanToOrder]`, including `START`, confirmed `ORDER` events and `ERROR` messages.
@@ -28,7 +28,7 @@ Build with `python scan-to-order-mod/build.py` from the repository root. Package
 
 ## 中文
 
-**版本：0.1.0-dev，待实机验收。**
+**版本：0.1.1-dev，待实机验收。**
 
 在单人游戏或联机房主端，自动为已入座顾客提交食物和饮料订单，无需服务员或玩家操作点餐。沿用游戏 AI 已选好的餐品，不替顾客换菜、不修改菜单。
 
@@ -41,7 +41,7 @@ Build with `python scan-to-order-mod/build.py` from the repository root. Package
 需要 **UE4SS experimental**，已核对 API 为 `v3.0.1-1140-gf58e8f84`，不以旧稳定版 UE4SS 3.0.1 为目标。本机参考核对基线为 Steam Build **25532071**、ProjectVersion **1.0.1.44eb**、Unreal Engine **5.4**；这不是游戏内测试通过的结论。
 
 1. 关闭游戏，按需先安装加载器。
-2. 解压 `ScanToOrder-0.1.0-dev.zip`，确保加载器目录下存在 `Mods/ScanToOrder/Scripts/main.lua` 和 `Mods/ScanToOrder/enabled.txt`。
+2. 解压 `ScanToOrder-0.1.1-dev.zip`，确保加载器目录下存在 `Mods/ScanToOrder/Scripts/main.lua` 和 `Mods/ScanToOrder/enabled.txt`。
 3. 启动游戏，以房主或单人身份进入餐厅，自动点餐即可运行。
 
 安装包仅含原创脚本和说明，不含 UE4SS 或游戏文件。订单文案沿用游戏当前语言，Mod 不新增游戏内文字。技术日志前缀为 `[ScanToOrder]`，包含 `START`、确认成功后的 `ORDER` 和 `ERROR`。

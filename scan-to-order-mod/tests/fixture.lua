@@ -22,7 +22,8 @@ return function()
     local function guid(value) return { A = value or 0, B = 0, C = 0, D = 0 } end
     f.object, f.array, f.guid = object, array, guid
     f.world, f.player, f.controller = object('world'), object('player'), object('controller')
-    f.api = { player = object('player-class'), gameplay = object('gameplay'), none = 0, silent = 0 }
+    f.api = { player = object('player-class'), dish_data = object('dish-data-type'),
+        gameplay = object('gameplay'), none = 0, silent = 0 }
     f.player.class, f.player.Controller, f.controller.Pawn = f.api.player, f.controller, f.player
     function f.controller:IsLocalController() return not self.remote end
     function f.api.gameplay:IsGamePaused() return f.paused end
@@ -39,9 +40,32 @@ return function()
     function f.restaurant:AreDishRequirementsMet(key) return key ~= f.unavailable end
     function f.storage:HasEnoughIngredients(ingredients, policy)
         assert(policy == f.api.silent)
-        return f.stock[ingredients.key] > 0
+        assert(getmetatable(ingredients) == nil and ingredients.GetArrayNum == nil,
+            'Stock check must receive independent Lua records')
+        f.checked_ingredients = ingredients
+        for _, entry in ipairs(ingredients) do
+            assert(getmetatable(entry) == nil and type(entry.Ingredient) == 'number'
+                and type(entry.Amount) == 'number', 'No reflected parameter wrappers')
+            if (f.stock[entry.Ingredient] or 0) < entry.Amount then return false end
+        end
+        return true
     end
-    function f.catalog:GetDish(key) return { Key = key, Ingredients = { key = key } } end
+    function f.catalog:GetDish() error('Full dish return conversion must never run') end
+    f.recipes, f.data_rows = {}, {}
+    for _, key in ipairs({ 12, 34 }) do
+        f.recipes[key] = array({ { Ingredient = key, Amount = 1 } })
+        local row = object('dish-' .. key)
+        function row:IsMappedToObject() return not rawget(self, 'unmapped') end
+        setmetatable(row, { __index = function(_, field)
+            if field == 'Key' then return key end
+            if field == 'Ingredients' then return f.recipes[key] end
+            error('Unnecessary dish field conversion: ' .. field)
+        end, __pairs = function() error('Do not expand the whole dish') end })
+        f.data_rows[key] = row
+    end
+    f.catalog.DishesTable = object('dish-table')
+    function f.catalog.DishesTable:GetRowStruct() return f.api.dish_data end
+    function f.catalog.DishesTable:GetRowMap() return f.data_rows end
     function f.subsystem:GetBrasserieManager() return f.restaurant end
     function f.subsystem:GetStorageManager() return f.storage end
     f.kitchen, f.drinks = object('kitchen'), object('drinks')
@@ -64,10 +88,13 @@ return function()
     f.row, f.behavior = f.add_customer()
     local function order(producer, item, data, linked, player)
         assert(player == nil and linked == f.table, 'Must use the native AI route')
+        assert(data == f.data_rows[data.Key], 'Must pass the complete original dish reference')
         f.calls[#f.calls + 1] = { item = item, key = data.Key }
         if f.reject then return end
-        assert(f.stock[data.Key] > 0, 'No order may overdraw stock')
-        f.stock[data.Key] = f.stock[data.Key] - 1
+        for _, entry in ipairs(f.recipes[data.Key]) do
+            assert((f.stock[entry.Ingredient] or 0) >= entry.Amount, 'No order may overdraw stock')
+            f.stock[entry.Ingredient] = f.stock[entry.Ingredient] - entry.Amount
+        end
         local id = guid(#f.calls)
         local queue = item == 'Dish' and producer.DishesPrepareQueue or producer.DrinksPrepareQueue
         queue.Items[#queue.Items + 1] = { [item] = data.Key, [item .. 'Id'] = id, LinkedTable = linked }
