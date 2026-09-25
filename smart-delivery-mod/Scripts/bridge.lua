@@ -3,7 +3,7 @@ Bridge.__index = Bridge
 
 function Bridge.new(directory)
     local self = setmetatable({ directory = directory, calls = {} }, Bridge)
-    for _, name in ipairs({ 'initialize', 'free', 'budget', 'premium', 'disable' }) do
+    for _, name in ipairs({ 'initialize', 'free', 'budget', 'premium', 'disable', 'suspend' }) do
         local callback, err = package.loadlib(directory .. '/delivery_bridge.dll', 'delivery_' .. name)
         assert(callback, 'Native helper unavailable: ' .. tostring(err))
         self.calls[name] = callback
@@ -12,6 +12,7 @@ function Bridge.new(directory)
 end
 
 function Bridge:call(name)
+    assert(name ~= 'suspend', 'Use the thread-safe suspend operation without a status file')
     assert(self.calls[name], 'Invalid bridge command')
     local path = self.directory .. '/bridge-status.txt'
     local old = io.open(path, 'r')
@@ -20,6 +21,10 @@ function Bridge:call(name)
     local file = assert(io.open(path, 'r'), 'Native helper did not acknowledge command')
     local result = file:read('*l'); file:close()
     assert(result == (name == 'disable' and 'disabled' or 'ready'), tostring(result))
+end
+
+function Bridge:suspend()
+    self.calls.suspend()
 end
 
 return Bridge

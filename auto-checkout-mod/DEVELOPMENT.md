@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.3-dev.** New log localization awaits in-game acceptance. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
+Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** Hot reload and log localization await in-game acceptance. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
 
 ### Implementation
 
@@ -16,6 +16,7 @@ Player instructions: [README](README.md#english). **Current source: 0.1.3-dev.**
 | `Scripts/diagnostics.lua` | Records state changes and repeats unchanged state every 30 polls without retaining engine objects |
 | `Scripts/ai.lua` | Suppresses new AI counter-checkout jobs in the host world and restores its changes on exit/error |
 | `Scripts/localization.lua` | Resolves the game language and translates original explanatory log messages |
+| `Scripts/reload.lua` | Validates and saves primitive AI recovery and retry records across Lua reloads |
 
 Accepting payment and closing the drawer each wait for game-state confirmation. Card processing and existing employee ownership block dispatch. The scheduler retains strings and counters, not Unreal objects across polls. Immediately before dispatch, it rereads the transaction to reject invalidated or manually changed targets. A returned RPC call is not evidence that the payment succeeded.
 
@@ -29,7 +30,17 @@ This remains a normal player interaction, not an employee task. Local references
 
 AI suppression uses the current world's `JobSubsystem.EvaluatorsByJob` containers and removes only `BillingStartTaskEvaluator`, preserving table checkout, other task order and employee configuration. It verifies the original reference remains in `AllEvaluators` before rebuilding the array with UE4SS on the game thread. Only identity strings and original positions persist across callbacks. Unchanged arrays are not rewritten; newly appearing containers are processed too.
 
-Already claimed tasks and register ownership flags remain intact. Restoration reinserts only tasks removed by this Mod that have not already returned, retaining other runtime changes. Write failures attempt rollback. Scheduler/restoration failures are logged. This policy writes no save state and does not support hot reload. All-floor coverage and error recovery remain on the in-game checklist.
+Already claimed tasks and register ownership flags remain intact. Restoration reinserts only tasks removed by this Mod that have not already returned, retaining other runtime changes. Write failures attempt rollback. Scheduler/restoration failures are logged. This policy writes no save state. Lua reload uses the handoff described below. All-floor coverage and error recovery remain on the in-game checklist.
+
+### Lua reload lifecycle
+
+`ModRef` keeps one namespaced, versioned string for this game process. It contains only session/payment/register identity strings, attempt counts and times, warning flags, and the AI evaluator identities/positions needed for restoration. The bounded length-prefixed parser validates the schema without `load`, JSON dependencies or shared UObject wrappers. Invalid or unsupported state stops startup without overwriting the record.
+
+Before each AI array mutation, the script saves its recovery plan. It also saves the incremented attempt and cooldown before sending a native request. A failed shared-state write therefore prevents that mutation or request. Completed scans and `ModRef.OnUnload` save the latest plain state. Unload only disables the old callbacks and serializes Lua values; it never reads an engine object, calls gameplay functions, or queues work into a closing Lua state. The checked experimental loader unregisters the old hooks and removes its scheduled actions during teardown; guards also make retired callbacks inert.
+
+The new instance first restores inherited AI records on the game thread, then resumes its normal suppression policy. When a controller is temporarily unavailable, recovery waits with its records intact. A different live session allows destroyed old-world records to be discarded; missing containers in the same session and restoration failures preserve the records and stop automation so a later reload can retry. Retry history survives both notification-driven and periodic first callbacks, including a temporarily missing controller, and resets when a different real session is observed. Three failed requests stay exhausted across reloads. Old versions lacking a handoff cannot supply their lost AI records, so upgrade from 0.1.3-dev or earlier with the game closed. Permanent removal also requires closing the game; unloading without a replacement cannot restore engine arrays from the unload callback. Shared state is process-local and is not a crash-recovery file or save extension.
+
+The original 68 offline tests and 12 reload tests pass. Reload coverage includes both schedulers, retired callbacks, AI recovery/reapplication, failed or missing recovery, retry budgets for both stages, world/controller changes, pre-dispatch persistence, storage failure and malformed payloads. Loader teardown and actual engine behavior still require in-game testing.
 
 ### Notification handling
 
@@ -51,7 +62,8 @@ Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged 
 
 | Marker | Meaning |
 | --- | --- |
-| `START version=0.1.3-dev` | Loaded version, scheduler and `player_guard=transaction-only` |
+| `START version=0.1.4-dev` | Loaded version, scheduler and `player_guard=transaction-only` |
+| `RELOAD` | Inherited AI recovery completed before resuming retained retry history |
 | `HOOK installed event=customer-at-billing` | Notification listener registered |
 | `EVENT customer-at-billing` | Deferred game-thread register state and number of coalesced notifications |
 | `EVENT_IGNORED` | Not host, or the notified register is invalid/outside the current world |
@@ -81,7 +93,7 @@ Lua 5.4 tests cover cash/card stages, animation waits, deduplication, bounded re
 
 The distance tests cover both payment stages, movement between stages, preserving original restrictions, request/diagnostic errors, partial preparation, independent restoration after a failed field, destroyed payments and invalid distances. Localization tests check all cultures and messages, aliases, failed language reads, live switches, missing-language fallback and stable diagnostic fields. Substitute objects cannot establish real engine bridging, actual hook delivery or gameplay results.
 
-The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.3-dev.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.3-dev` with `player_guard=transaction-only`.
+The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4-dev` with `player_guard=transaction-only`.
 
 ### Earlier investigation and acceptance
 
@@ -93,9 +105,11 @@ Later hot-reload logs showed one cash transaction advancing immediately and othe
 
 The user confirmed 0.1.1-dev in-game and requested 0.1.1 on 2026-09-24, retaining runtime logic and changing the diagnostic version. Full environment versions, multiplayer role and duration were not enumerated.
 
-Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The new 0.1.3-dev localization has no in-game acceptance yet.
+Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The 0.1.4-dev hot-reload behavior and localization have no in-game acceptance yet.
 
 ### In-game regression checklist
+
+Reload repeatedly while waiting for cash, card processing, an open drawer, and an exhausted retry budget. Check one live notification listener/poller, unchanged cooldowns and attempt counts, restored/reapplied AI jobs, then world travel and recovery failure. These reload scenarios have not yet been accepted in-game.
 
 These are pending scenarios, not completed test claims. Record actual game/loader versions, language, role and any manual intervention; compare `REQUEST context` with `AFTER`, bill and income.
 
@@ -116,7 +130,7 @@ Repeat the appropriate checks after game or loader interface changes. A passing 
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.3-dev，多语言日志仍待实机验收。** 0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev，热重载与多语言日志仍待实机验收。** 0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
 
 ### 多语言适配
 
@@ -132,7 +146,8 @@ Repeat the appropriate checks after game or loader interface changes. A passing 
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.3-dev` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `START version=0.1.4-dev` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `RELOAD` | 已恢复旧实例的 AI 变更，并按当前会话核对交易历史 |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 延后在游戏线程检查时的柜台状态和合并提醒次数 |
 | `EVENT_IGNORED` | 当前不是房主，或柜台已失效、不属于当前世界 |
@@ -165,13 +180,23 @@ Repeat the appropriate checks after game or loader interface changes. A passing 
 
 AI 策略只在已确认的房主会话中应用，通过当前世界 `JobSubsystem.EvaluatorsByJob` 定位任务容器，排除 `BillingStartTaskEvaluator`，不排除餐桌结账任务，也不写入员工任务排除配置。原任务对象仍由 `AllEvaluators` 持有；移除前核对该引用，随后通过 UE4SS 的数组接口在游戏线程重建并校验顺序。只保存容器、任务及所属子系统的身份字符串和原位置，不跨回调保存 UObject。重复扫描不重写未变的数组；后续新建容器也会处理。
 
-AI 已领取的任务和收银机占用标记不被修改，避免中断已有交易。恢复时只插回本 Mod 移除且尚未恢复的任务，保留其他运行时改动。数组写入失败尝试回滚；自动流程异常时尝试恢复 AI 收银，恢复或游戏线程调度失败会告警。此策略不写存档，关闭游戏后卸载不需要恢复存档；不支持脚本热重载。所有楼层及异常恢复仍保留在后续回归清单中。
+AI 已领取的任务和收银机占用标记不被修改，避免中断已有交易。恢复时只插回本 Mod 移除且尚未恢复的任务，保留其他运行时改动。数组写入失败尝试回滚；自动流程异常时尝试恢复 AI 收银，恢复或游戏线程调度失败会告警。此策略不写存档，关闭游戏后卸载不需要恢复存档；Lua 热重载使用下述状态交接。所有楼层及异常恢复仍保留在后续回归清单中。
 
 提醒监听采用 `CashRegister:Multicast_DisplayCustomerAtBillingNotification` 的后置 Hook，不修改参数或返回值。回调只复制接收对象的身份字符串，不跨回调保留 UObject 或 Context；现代调度接口延迟 50 毫秒后在游戏线程检查，旧接口使用游戏线程队列。重复提醒按柜台合并，派发过程中产生的新提醒排到后续检查。执行时重新确认房主及当前世界，仅处理本批提醒对应的柜台；定时轮询负责所有柜台，共用同一状态机，不因提醒清空冷却和重试历史。
 
 监听在定时任务注册成功后安装。监听注册、回调身份读取或事件排队失败只禁用监听并记录警告，定时检查继续；实际结账流程的异常仍按原有规则停止自动操作。提醒回调未必能覆盖全部原生调用，因此定时检查始终保留。`EVENT` 记录的是延后检查时的状态，不声称是通知发出的瞬间快照。
 
 所有游戏接口研究、原生代码分析、类型导出、工具与研究脚本均在根目录被忽略的 `work/`。可跟踪代码不包含内存偏移、原生函数地址或游戏代码副本。
+
+### Lua 热重载生命周期
+
+`ModRef` 在当前游戏进程中保留一个带独立名称与格式版本的字符串，只含会话、付款对象与柜台身份、尝试次数与时间、告警标志，以及恢复 AI 所需的任务身份和位置。解析器使用有界长度前缀并校验结构，不使用 `load`、外部 JSON 依赖或共享 UObject。记录损坏或格式不受支持时停止加载，并保留原记录。
+
+每次改写 AI 数组前先保存恢复方案，每次原生请求前先保存已增加的次数与冷却时间；共享状态写入失败时，不继续该次数组修改或请求。完成扫描及 `ModRef.OnUnload` 时保存最新普通值。卸载只停用旧回调并序列化 Lua 数据，不访问引擎对象、不调用游戏函数、不向即将关闭的 Lua 状态排队。已核对的实验版加载器在卸载时注销旧 Hook 并移除计划动作；脚本也让残留旧回调直接返回。
+
+新实例在第一次游戏线程回调中先恢复继承的 AI 记录，再重新应用正常任务策略。控制器暂时不可用时保留记录等待；确认进入不同会话后，可丢弃已销毁旧世界的记录。同会话容器不可用或恢复失败时保留记录并停止自动流程，下次热重载可重试。通知先到或轮询先到均保留原交易次数与冷却；控制器暂时不可用时继续保留，确认进入不同会话后才重置。已耗尽的三次尝试不会因重载重新获得预算。0.1.3-dev 及更早版本无法提供交接记录，首次升级必须关闭游戏；永久卸载也需关闭游戏。只卸载而不加载新实例时，卸载回调无法恢复引擎数组，应重新载入世界。交接仅存在当前进程，不是崩溃恢复文件或新增存档数据。
+
+原有 68 项离线测试与 12 项重载测试通过。新增覆盖两个调度器、旧回调失效、AI 恢复后重新应用、恢复失败与容器缺失、两个付款阶段的次数保留、世界与控制器变化、请求前保存、共享写入失败及异常载荷。加载器实际卸载和引擎行为仍需实机测试。
 
 ### 离线检查与打包
 
@@ -188,9 +213,9 @@ git diff --check
 
 0.1.2 新增远距离现金和刷卡两阶段执行、两步之间玩家距离变化、已有交互设置保留、请求与诊断异常、部分准备失败、单项恢复失败后继续恢复其他项、付款对象销毁以及无效距离输入的验证。
 
-打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.3-dev.zip` 和 SHA-256 文件。包不包含测试、开发工具、加载器或游戏资料。构建不会写入游戏目录、操作存档或启动/关闭游戏。
+打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` 和 SHA-256 文件。包不包含测试、开发工具、加载器或游戏资料。构建不会写入游戏目录、操作存档或启动/关闭游戏。
 
-本版的加载日志为 `START version=0.1.3-dev`，同时保留 `player_guard=transaction-only`；包的 SHA-256 用于核对完整内容。
+本版的加载日志为 `START version=0.1.4-dev`，同时保留 `player_guard=transaction-only`；包的 SHA-256 用于核对完整内容。
 
 ### 远端测试反馈
 
@@ -219,5 +244,6 @@ git diff --check
 9. 故意让某次请求不被游戏接受，确认重试有上限、日志不刷屏，仍能手动完成结账。
 10. 顾客到柜台提醒出现时检查 `EVENT` 日志，确认对应正确柜台；与 `source=notification` 请求及后续状态对照。没有收到提醒、提醒早于付款就绪、监听注册失败时，确认定时检查仍可推进；旧世界通知和普通客户端通知不得触发交易。
 11. 让 AI 在吧台工作，确认 `STATE ai` 中发现任务容器且 `suppressed` 大于零，AI 不再领取新的柜台收银任务，仍正常制作饮料和做其他工作。已领取的收银应能完成，各楼层及新雇员工同样检查。切换存档和自动流程异常后检查任务恢复，员工配置应不变。
+12. 在等待现金、刷卡处理中、钱柜打开及重试已耗尽时连续热重载，检查只有一组有效监听/轮询、冷却与次数不重置、员工任务先恢复再应用，并测试切换世界及恢复失败；这些重载场景尚未实机验收。
 
 接口或加载器升级后，应重新核对本机参考并重复上述验收。构建成功、离线测试通过不代表完成游戏内验收。

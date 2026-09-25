@@ -1,9 +1,17 @@
-local F = { serial = 0, language = 'en' }
+local F = { serial = 0, language = 'en', objects = {}, shared = {} }
+ModRef = {
+    GetSharedVariable = function(_, key) return F.shared[key] end,
+    SetSharedVariable = function(_, key, value)
+        assert(type(value) == 'string', 'Only primitive identities may survive a reload')
+        F.shared[key] = value
+    end,
+}
 function F.text(value) return { ToString = function() return value end } end
 function F.object(class)
     F.serial = F.serial + 1
     local o = { class = class, address = F.serial, children = {}, options = {}, selected = -1,
         visible = true, authority = true, local_controller = true, enabled = true }
+    F.objects[#F.objects + 1] = o
     function o:IsValid() return not self.destroyed end
     function o:GetAddress() return self.address end
     function o:GetFullName() return self.class .. self.address end

@@ -49,6 +49,14 @@ local function fixture(supported)
     package.loaded.game = game
     package.loaded.hud = hud
     package.loaded.summary = dofile(directory .. '../Scripts/summary.lua')
+    local shared = {}
+    ModRef = {
+        GetSharedVariable = function(_, key) return shared[key] end,
+        SetSharedVariable = function(_, key, value)
+            assert(type(value) == 'string')
+            shared[key] = value
+        end,
+    }
     print = function(message) f.logs[#f.logs + 1] = message end
     RegisterHook = function(path, pre, post) f.hooks[path] = post end
     NotifyOnNewObject = function(_, callback) f.notify = callback end
@@ -187,6 +195,20 @@ test('inactive HUD still in viewport does not block a visible replacement', func
     f.tick()
     assert(f.removed == 1 and not old_view.valid)
     assert(f.created == 2 and f.view.owner == replacement)
+end)
+
+test('unload stops queued refreshes, hooks, notifications and the old timer', function()
+    local f = fixture(true)
+    f.candidate = f.owner
+    f.claim()
+    local unload = ModRef.OnUnload
+    unload()
+    assert(f.removed == 0 and f.created == 0) -- no UObject work on the unload thread
+    f.flush()
+    assert(f.tick() == true and f.created == 0)
+    for _, callback in pairs(f.hooks) do callback() end
+    f.notify()
+    assert(#f.pending == 0)
 end)
 
 original_print('Runtime lifecycle: ' .. passed .. ' tests passed')

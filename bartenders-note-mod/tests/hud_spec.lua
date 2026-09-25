@@ -270,6 +270,19 @@ test('destroy removes root and probe once and prevents reuse', function()
     equal(pcall(Hud.update, view, { group('Coffee') }), false)
 end)
 
+test('reload records both owned canvas widgets and forgets them after destruction', function()
+    local owner = fixture()
+    local recorded, forgotten = {}, {}
+    local lifetime = {
+        remember = function(_, kind, widget) recorded[kind] = widget; return kind end,
+        forget = function(_, token) forgotten[token] = true end,
+    }
+    local view = Hud.create(owner, lifetime)
+    equal(recorded.Border, view.root); equal(recorded.TextBlock, view.probe)
+    Hud.destroy(view)
+    equal(forgotten.Border, true); equal(forgotten.TextBlock, true)
+end)
+
 test('stale source, slot or measurement widget rejects further use', function()
     local owner = fixture(); local view = Hud.create(owner)
     for _, widget in ipairs({ owner.BrasserieNameTextBlock, view.slot, view.probe }) do

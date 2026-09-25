@@ -5,11 +5,11 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.1.1-dev"
+VERSION = "0.1.2-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "fresh-to-serve"
 FILES = (
-    "Scripts/main.lua", "Scripts/game.lua", "Scripts/drinks.lua", "Scripts/remake.lua",
+    "Scripts/main.lua", "Scripts/game.lua", "Scripts/drinks.lua", "Scripts/remake.lua", "Scripts/reload.lua",
     "README.md", "DEVELOPMENT.md", "CHANGELOG.md",
 )
 

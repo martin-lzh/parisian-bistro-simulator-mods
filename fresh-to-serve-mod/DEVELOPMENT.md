@@ -10,7 +10,11 @@ The adapter uses locally checked reflected game/engine APIs. No executable patch
 
 `drinks.lua` scans drink output areas and dedicated elevator drink slots. Full, finished drinks/cocktails share quality and authority guards; glasses at dispensers and active fills/pours are excluded. Destruction uses the drink's native lifecycle to remove its exact prepared order and notify the queue. Output areas natively reuse destroyed glasses' slots; the adapter checks available space and clears an elevator's matching reference. Neither drink FastArray is edited directly. Cleanup also removes the glass. Unexpected destruction or queue cleanup stops automation before any remake.
 
-`remake.lua` keeps replacement tickets containing only strings/numbers: food/drink kind, producer, table, customer, group, original order GUID and item key. Creation time rejects leftovers older than the current order round. Drink tickets also require an exact match between the physical drink and notification GUID. No session actor wrappers are stored between ticks. Pending records are cleared on session changes and are not persisted. Separate customer orders and food/drink families remain separate even when their keys or GUIDs match.
+`remake.lua` keeps replacement tickets containing only strings/numbers: food/drink kind, producer, table, customer, group, original order GUID and item key. Creation time rejects leftovers older than the current order round. Drink tickets also require an exact match between the physical drink and notification GUID. No session actor wrappers are stored between ticks. Pending records survive script reload within the same session and clear when a different session is observed. A temporarily unavailable local pawn does not erase pending work. Separate customer orders and food/drink families remain separate even when their keys or GUIDs match.
+
+`reload.lua` uses one fixed UE4SS shared-variable key containing a versioned, length-prefixed string. Its fixed ticket schema retains session identity, pending records, creation/retry times, attempt counts and the safety-stop flag. Parsing validates types, counts, lengths and complete framing; it never evaluates Lua source. No UObject, closure or table is stored in the loader's shared variables. The string is bounded to 4 MiB and 4,096 tickets, with no per-world or per-ticket shared keys. This is process memory only, not save persistence.
+
+Before each active tick, `main.lua` checkpoints a stop marker; after successful completion it checkpoints the resulting state without that marker. An exception or failed final write therefore cannot silently enable uncertain work after reload. A stopped runtime only resolves the live session on the game thread; a different session clears the old stop and tickets. Malformed state fails closed, binding its stop to the first observed session. `OnUnload` invalidates old closures, optionally cancels the owned delayed-action handle, and serializes scalars without accessing game objects or scheduling new callbacks. Queued callbacks recheck the unloaded flag. Both the modern timer and the async fallback are covered by synthetic tests. The first upgrade from pre-0.1.2 code requires a closed-game installation because that code cannot save its pending work.
 
 Before each request the adapter reacquires the unserved customer and original notification, checks table membership, compares demand with queued/physical items, and rechecks session and timing. Prepared drink queue rows do not independently count as supply; physical drinks and unfinished orders are deduplicated by GUID. Only a new queue GUID confirms acceptance. It is rebound to the original customer's already-ordered notification; any incidental native assignment to another customer's previously unplaced same-item order is restored first. A void call returning is insufficient evidence of acceptance; an engine exception stops automation rather than retrying an uncertain mutation.
 
@@ -32,7 +36,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-CI validates the independent package allowlist, source bytes and SHA-256. Synthetic tests cover customer departure/table reuse, patience boundaries and unavailable timing, backlog, identical dishes/drinks, existing replacements, equipment and bartender availability, manual claims, partial glasses/cocktail pours, prepared-order cleanup, food/drink coexistence, authority, pickup, elevators, rejected/ambiguous requests, bounded retries, pause, world changes and scheduling. They cannot verify real Unreal bridging, replication or AI delivery.
+CI validates the independent package allowlist, source bytes and SHA-256. Synthetic tests cover customer departure/table reuse, patience boundaries and unavailable timing, backlog, identical dishes/drinks, existing replacements, equipment and bartender availability, manual claims, partial glasses/cocktail pours, prepared-order cleanup, food/drink coexistence, authority, pickup, elevators, rejected/ambiguous requests, bounded retries, pause, world changes and scheduling. Reload tests exercise the real adapters and remake logic, preserving destroyed-item tickets, food/drink identities, retry limits, expiration and live patience checks; they also verify persistent safety stops, failed checkpoint writes, off-thread unload and stale queued callbacks. They cannot verify real Unreal bridging, replication or AI delivery.
 
 ### In-game acceptance — pending
 
@@ -42,6 +46,7 @@ CI validates the independent package allowlist, source bytes and SHA-256. Synthe
 4. Test departures, eviction, table reuse, course changes, backlog, disabled patience and patience at/above/below the budget. The timer must never reset.
 5. Test missing ingredients/devices, absent chefs/bartenders, staff on another floor or with preparation excluded, manual claims/pickup, active filling/pouring, carried trolleys, consumed items, player-service tables, pause and world/menu transitions.
 6. Verify host cleanup/queue replication on a client, client-only installation doing nothing, and coexistence with Bartender's Note, First to Serve and other Mods that inspect production queues.
+7. After installing 0.1.2-dev with the game closed, reload with Ctrl+R after a spoiled item is discarded but its remake is waiting, after a rejected order, and after acceptance. Confirm one eventual replacement, unchanged cooldown/attempt/expiration limits, live patience checks and no duplicate loop. Reload during pause or temporarily missing possession. Verify an uncertain-operation stop persists across reload, and a different session clears old records before resuming.
 
 Builds never install, change saves or start/stop the game. A numbered release requires explicit authorization. Offline checks are not in-game acceptance.
 
@@ -53,7 +58,11 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 `drinks.lua` 扫描饮料出品区与升降机专用饮料位，满杯成品及鸡尾酒沿用质量和权限保护；设备上的杯子及正在灌装/倒入配料的饮料不处理。销毁通过饮料原生生命周期移除对应已制作订单并通知队列；出品区原生复用已销毁杯子的空位，适配器检查空间已释放，并清除升降机对应引用。不直接改两个饮料 FastArray。杯子随饮料一起移除；销毁或队列清理异常时，在补单前停止自动化。
 
-`remake.lua` 的凭据只含字符串和数字：食物/饮料类别、制作管理器、桌子、顾客、顾客组、原订单 GUID 和品类编号；制作时间检查排除上一轮点餐遗留成品。饮料还必须将实体订单 GUID 与原通知精确匹配。不跨检查轮次持有会话中的角色对象，凭据随会话变化清空、不持久化。同款不同顾客、食物与饮料的凭据分别处理，即使编号或 GUID 相同也不混淆。
+`remake.lua` 的凭据只含字符串和数字：食物/饮料类别、制作管理器、桌子、顾客、顾客组、原订单 GUID 和品类编号；制作时间检查排除上一轮点餐遗留成品。饮料还必须将实体订单 GUID 与原通知精确匹配。不跨检查轮次持有会话中的角色对象。待补单记录在同一会话内跨脚本重载保留，观察到不同会话时才清空；本地玩家暂时不可用不会抹掉待处理工作。同款不同顾客、食物与饮料的凭据分别处理，即使编号或 GUID 相同也不混淆。
+
+`reload.lua` 只使用一个固定 UE4SS 共享变量键，内容为带版本和字段长度前缀的字符串。固定凭据结构保存会话身份、待补单、生成/重试时间、尝试次数和安全停止标志。解析核对类型、数量、长度和完整字段边界，不执行 Lua 字符串。共享变量不保存 UObject、函数闭包或表；限制为 4 MiB 和 4,096 个凭据，不随世界或订单创建新的共享键。内容只在进程内存中存在，不写入存档。
+
+`main.lua` 在每次实际处理前先写停止标记，成功完成后再保存新状态并解除标记。因此，即使引擎异常或最终状态写入失败，重载也不会默默重复结果不明的操作。停止后只在游戏线程重新识别当前会话，不同会话才清除旧停止状态及凭据。损坏的共享记录会保持停止，并绑定到第一个观察到的会话。`OnUnload` 使旧闭包失效、可选取消所拥有的延时句柄并保存标量；不访问游戏对象、不排入新回调。已排队回调会再次检查卸载标志。现代定时器和异步回退路径均有合成验证。从 0.1.2 之前的代码首次升级须关闭游戏安装，因为旧代码无法保存自己的待补单。
 
 每次请求重新定位未送达顾客与原通知，核对桌子成员、已有实体成品/制作队列，并复查会话与耗时。已制作饮料队列记录不单独计入库存；实体饮料与未完成订单按 GUID 去重。只有新增队列 GUID 才确认接受，并将其绑定回原顾客已下单通知；若原生流程误分配给另一位尚未下单的同款顾客，先恢复那条通知。void 调用返回不算接受。引擎异常会停止自动化，不重试结果不明的写操作。
 
@@ -63,7 +72,7 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 ### 离线检查
 
-仓库根目录执行上方命令。CI 核对独立包白名单、源码字节与 SHA-256。合成测试覆盖离开/换客、耐心边界及不可读计时、积压、同款多人、已有替代成品、设备与调酒师可用性、手动认领、未满杯/倒入配料、已制作订单清理、食物饮料共存、权限、拿取、升降机、拒绝/不明结果、有限重试、暂停、换世界和调度；无法替代真实 Unreal 桥接、同步及 AI 送达验收。
+仓库根目录执行上方命令。CI 核对独立包白名单、源码字节与 SHA-256。合成测试覆盖离开/换客、耐心边界及不可读计时、积压、同款多人、已有替代成品、设备与调酒师可用性、手动认领、未满杯/倒入配料、已制作订单清理、食物饮料共存、权限、拿取、升降机、拒绝/不明结果、有限重试、暂停、换世界和调度。重载测试联动真实适配层与补单逻辑，验证已销毁餐品的凭据、食物饮料身份、尝试限制、到期时间及实时耐心检查的保留，并覆盖跨重载安全停止、状态写入失败、非游戏线程卸载和旧排队回调；无法替代真实 Unreal 桥接、同步及 AI 送达验收。
 
 ### 游戏内验收——待完成
 
@@ -73,5 +82,6 @@ Builds never install, change saves or start/stop the game. A numbered release re
 4. 离开、驱逐、换客、换菜序、积压、关闭耐心，以及耐心等于/高于/低于预算；计时器不得被重置。
 5. 缺原料/设备、无厨师/调酒师、员工楼层不符或排除制作任务、手动认领/拿取、正在灌装/倒入配料、搬运中的餐车、食用中、玩家服务桌、暂停及换世界/菜单。
 6. 联机房主清理与订单同步、仅客户端安装无操作，并检查与 Bartender's Note、First to Serve 及其他读取制作队列的 Mod 共存。
+7. 关闭游戏安装 0.1.2-dev 后，在低劣成品已清理但补单仍等待、请求被拒绝以及补单已接受时分别 Ctrl+R 重载；确认最终恰好一份替代品，冷却/次数/到期限制保持、耐心读取当前值且没有重复循环。覆盖暂停和暂时无本地玩家；结果不明后的停止应跨重载保留，不同会话清除旧记录后恢复。
 
 构建不安装、不改存档、不启停游戏。编号发布须明确授权，离线通过不等于实机验收。

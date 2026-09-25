@@ -6,7 +6,8 @@ Settings.load = function() return current end
 Settings.save = function(_, value) current = value; writes = writes + 1 end
 local fail = false
 package.loaded.bridge = { new = function()
-    return { calls = { disable = function() calls[#calls + 1] = 'disable' end }, call = function(_, name)
+    return { calls = { disable = function() calls[#calls + 1] = 'disable' end },
+        suspend = function() calls[#calls + 1] = 'suspend' end, call = function(_, name)
         calls[#calls + 1] = name
         if fail then error('Bridge failure') end
     end }
@@ -14,7 +15,14 @@ end }
 RegisterHook = function(path, pre, post) hooks[path] = { pre = pre, post = post }; return 1, 2 end
 UnregisterHook = function(path) hooks[path] = nil end
 LoopInGameThreadWithDelay = function(_, fn) timer = fn end
-FindAllOf = function() return { owner } end
+FindAllOf = function(kind)
+    if kind == 'WBP_MenuApp_C' then return { owner } end
+    local found = {}
+    for _, object in ipairs(F.objects) do
+        if object.class == '/Script/UMG.' .. kind then found[#found + 1] = object end
+    end
+    return found
+end
 dofile(MOD_ROOT .. '/Scripts/main.lua')
 assert(timer() == false and table.concat(calls, ',') == 'initialize,premium')
 local combo = owner.panel.children[2].children[2]
@@ -34,3 +42,28 @@ assert(current == 'budget')
 owner.locked = false; fail = true; save(context)
 assert(current == 'budget' and calls[#calls] == 'disable' and #owner.panel.children == 2)
 assert(timer() == true and next(hooks) == nil) -- failure stops future callbacks
+
+-- Reload from an active selector while it contains an unsaved change.
+fail = false
+dofile(MOD_ROOT .. '/Scripts/main.lua')
+timer()
+combo = owner.panel.children[2].children[2]
+combo:SetSelectedIndex(0)
+local old_row = owner.panel.children[2]
+local old_timer = timer
+local old_save = hooks['/Script/BrasserieSimulator.MenuAppWidget:SaveAutomaticSmartOrderSettings'].pre
+local old_reset = hooks['/Script/BrasserieSimulator.MenuAppWidget:ResetAutomaticSmartOrderSettings'].post
+local before_unload = #calls
+ModRef.OnUnload()
+assert(#owner.panel.children == 3, 'Unload must leave widget operations to the game thread')
+assert(calls[#calls] == 'suspend' and #calls == before_unload + 1)
+assert(old_timer() == true)
+old_save(context); old_reset(context)
+assert(current == 'budget' and #calls == before_unload + 1)
+dofile(MOD_ROOT .. '/Scripts/main.lua')
+timer()
+assert(#owner.panel.children == 3, 'Reload must replace rather than duplicate the selector')
+assert(old_row:GetParent() == nil)
+combo = owner.panel.children[2].children[2]
+assert(combo:GetSelectedIndex() == 1 and calls[#calls] == 'budget')
+assert(owner.panel.children[3] == owner.footer)

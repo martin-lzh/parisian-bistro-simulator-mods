@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.1-dev; layout and localization acceptance is pending.** Version 0.1.0's earlier user confirmation is recorded below.
+Player instructions: [README](README.md#english). **Current source: 0.1.2-dev; layout, localization and hot reload acceptance is pending.** Version 0.1.0's earlier user confirmation is recorded below.
 
 ### Implementation
 
@@ -16,8 +16,11 @@ Player instructions: [README](README.md#english). **Current source: 0.1.1-dev; l
 | `Scripts/hud.lua` | Creates native UMG widgets, reuses the name bar's appearance and measures text in its current font |
 | `Scripts/localization.lua` | Resolves supported cultures and formats original overflow/final-fallback wording |
 | `Scripts/main.lua` | Handles events, 750 ms reconciliation, HUD rebuilds and clearing after failures |
+| `Scripts/reload.lua` | Stops old callbacks and hands off widget identities as shared strings for cleanup on the next game-thread refresh |
 
 All Unreal object access happens on the game thread. The Mod does not execute order actions. Each update builds from the current queue, so no additional save state is needed. Finished drinks leave the list immediately, without waiting for delivery. The HUD does not capture input or change the original name bar.
+
+`ModRef.OnUnload` may run outside the game thread. It only marks the old lifetime stopped: it does not touch UObjects or schedule callbacks into the state being destroyed. UE4SS removes that state's hooks, timers and object notifications. Shared variables contain only full-name/address identity strings for the banner and measurement widget. The next state resolves those identities on the game thread and removes matching widgets before creating new ones. Failed cleanup is retried; normal destruction removes its records. No transient UObject or callback is shared between states.
 
 The new widgets use the name bar's actual anchors, alignment, size and transform. Each side reserves 18% of the bar width, with a minimum of 56 HUD-scaled layout units; the body container clips text inside the faded ends. A hidden text widget on the same canvas measures the native font. It participates in layout without drawing or receiving input. Available width comes from viewport dimensions and DPI scaling, and measurements are recalculated on refresh to reflect language, font and window changes.
 
@@ -46,7 +49,7 @@ git diff --check
 
 The tests execute Lua 5.4 without the game or UE4SS. They cover ownership/state filtering, deduplication, unavailable sources, HUD lifecycle, margins, measured wrapping, hidden-type counts, height recovery and reflow when the window/font changes. Localization coverage checks the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes while the order list stays the same.
 
-The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.1-dev.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering.
+The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering. Reload tests cover stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
 
 ### In-game validation
 
@@ -61,10 +64,11 @@ The following remains a regression checklist, not a list of completed tests:
 5. Switch through all 14 languages with orders present, including both Chinese scripts and both Portuguese cultures. Check native drink names, localized overflow and fallback, fonts and live reflow. Test long names at 1920×1080, 2560×1600 and 3440×1440; check faded margins, two lines, hidden-type count and recovery to one line without shrinking the font.
 6. Have host and client claim different orders. Each should see only their own list, with remote cancellation/completion and reconnects updating correctly.
 7. Check UE4SS logs and extended play for sustained errors or refresh stalls. Record actual game and full loader versions, language, resolution and results.
+8. Reload repeatedly with claimed drinks visible and with a delayed refresh pending. Confirm one banner and one measurement widget, fresh counts, no duplicate hooks or timers, and correct recovery after traveling or changing language.
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码为 0.1.1-dev，布局及多语言改动仍待实机验收。** 0.1.0 的历史用户确认见下文。
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2-dev，布局、多语言及热重载改动仍待实机验收。** 0.1.0 的历史用户确认见下文。
 
 ### 实现
 
@@ -76,8 +80,11 @@ The following remains a regression checklist, not a list of completed tests:
 | `Scripts/hud.lua` | 创建原生 UMG 控件，复用名称条外观并以当前字体测量文字 |
 | `Scripts/localization.lua` | 解析支持语言，格式化原创溢出提示与最终后备文案 |
 | `Scripts/main.lua` | 事件通知、750 毫秒核对、HUD 重建及异常清空 |
+| `Scripts/reload.lua` | 停止旧回调，以共享字符串传递控件身份，由新状态在游戏线程清理 |
 
 所有 Unreal 对象访问在游戏线程执行，不操作订单。每次从当前队列生成清单，无需维护额外存档状态；完成制作立即移出清单，不等待送达。HUD 不截获输入，不改变原名称条。
+
+`ModRef.OnUnload` 可能不在游戏线程，仅标记旧生命周期停止，不访问 UObject，也不向将销毁的状态安排回调。UE4SS 清理该状态的 Hook、定时器及对象通知。跨重载仅保存显示栏和测量控件的完整名称/地址字符串；新状态在游戏线程重新解析并移除对应控件后才创建新控件，失败时重试。正常销毁时删除身份记录，不共享临时 UObject 或回调。离线测试覆盖旧回调停止、身份匹配、重复清理及错误恢复；实机仍需连续重载、切换餐厅和语言验证。
 
 新增控件依据名称条实际锚点、对齐、尺寸和变换定位。左右各预留 18% 栏宽、至少 56 个随 HUD 缩放的布局单位，正文裁剪在渐隐区内侧。同画布上的隐藏文字控件参与布局测量原生字体，但不绘制、不接收输入。可用宽度依据视口尺寸和 DPI 缩放计算，每次刷新重新测量，响应语言、字体和窗口变化。
 
@@ -106,7 +113,7 @@ git diff --check
 
 测试使用 Lua 5.4，无需游戏或 UE4SS。覆盖认领者与状态过滤、去重、数据源不可用、HUD 生命周期、留白、实测换行、隐藏种类计数、面板高度恢复及窗口和字体变化后的重排。多语言检查覆盖 14 种语言、地区别名、原生名称/分类/最终后备优先级、服务缺失和订单不变时切换语言。
 
-固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.1-dev.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
+固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
 
 ### 游戏内验收
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add Lua reload support in 0.1.4-dev: stop old callbacks, remove old selector rows on the next game-thread startup, and restore the saved preference. The native helper atomically suspends custom delivery during unload and reuses its pinned patch after checking for conflicts. A DLL update still requires a game restart. In-game acceptance is pending.
+- 0.1.4-dev 新增 Lua 热重载：停止旧回调，新状态在游戏线程清理旧选择框并恢复保存偏好；原生辅助模块在卸载回调中原子暂停自定义配送，重新初始化时检查冲突并复用驻留补丁。更新 DLL 仍需重启游戏，热重载待实机验收。
+
+## 0.1.3-dev
+
 - Update to 0.1.3-dev: use white text for the delivery dropdown's selected value and options instead of inheriting the amount input's foreground color.
 - 更新至 0.1.3-dev：配送下拉框当前选项和展开列表使用白色文字，不再继承金额输入框的前景色。
 

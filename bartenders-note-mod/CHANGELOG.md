@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add safe Lua reload lifecycle handling in 0.1.2-dev. Stop old callbacks and let the new state remove its previous banner and measurement widget on the game thread, using shared identity strings only. Reload behavior is pending in-game acceptance.
+- 0.1.2-dev 新增 Lua 重载生命周期：停止旧回调，新状态在游戏线程清理旧显示栏和测量控件；跨状态仅传递身份字符串。热重载仍待实机验收。
+
+## 0.1.1-dev
+
 ### English
 
 - Follow all 14 game languages. Prefer native drink names and the native drinks category; translate only the overflow marker and final numbered fallback. Language changes reflow the HUD, and unavailable translations preserve quantities.

@@ -63,7 +63,11 @@ void write_patch(const std::array<unsigned char, 5>& bytes) {
     if (!restored || !flushed) throw std::runtime_error("Cannot finalize code patch");
 }
 void initialize() {
-    if (active) { status("ready"); return; }
+    if (active) {
+        if (std::memcmp(site, installed.data(), installed.size()) != 0)
+            throw std::runtime_error("Another patch replaced Smart Delivery; cannot resume it");
+        status("ready"); return;
+    }
     const auto data = read_image();
     const auto contract = delivery::ContractImage(data).discover();
     auto* base = reinterpret_cast<unsigned char*>(GetModuleHandleW(nullptr));
@@ -124,13 +128,16 @@ void select(long value) {
 
 // Lua C callbacks intentionally take no arguments and return no Lua values.
 // They use no Lua ABI internals or second Lua runtime. The caller reads a fresh
-// status acknowledgment and invokes every entry point on the game thread.
+// status acknowledgment and invokes patch-changing entry points on the game
+// thread. Suspend is the exception: it only resets one aligned atomic value,
+// leaves the pinned trampoline intact, and writes no status file or game code.
 extern "C" {
 __declspec(dllexport) int delivery_initialize(void*) { return invoke(initialize); }
 __declspec(dllexport) int delivery_free(void*) { return invoke([] { select(0); }); }
 __declspec(dllexport) int delivery_budget(void*) { return invoke([] { select(1); }); }
 __declspec(dllexport) int delivery_premium(void*) { return invoke([] { select(2); }); }
 __declspec(dllexport) int delivery_disable(void*) { return invoke(disable); }
+__declspec(dllexport) int delivery_suspend(void*) { InterlockedExchange(&selected, -1); return 0; }
 }
 BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID) {
     if (reason == DLL_PROCESS_ATTACH) { self_module = module; DisableThreadLibraryCalls(module); }

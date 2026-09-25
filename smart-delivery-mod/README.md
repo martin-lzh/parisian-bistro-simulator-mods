@@ -4,7 +4,7 @@
 
 ## English
 
-**Version: 0.1.3-dev — in-game acceptance pending.** Choose Free service, Budget delivery or Premium delivery for automatic smart orders from the restaurant computer's existing automatic-order settings dialog. Click the game's Save button to apply the choice; Cancel discards it.
+**Version: 0.1.4-dev — in-game acceptance pending.** Choose Free service, Budget delivery or Premium delivery for automatic smart orders from the restaurant computer's existing automatic-order settings dialog. Click the game's Save button to apply the choice; Cancel discards it.
 
 The purchase minimum, stockout override, shopping list, money checks, night surcharge and delivery processing remain controlled by the game. Manual ingredient and furniture orders keep their own delivery choices. Delivery names use the game's current translations; the new field label supports all 14 game languages.
 
@@ -16,7 +16,9 @@ The purchase minimum, stockout override, shopping list, money checks, night surc
 
 Close the game before installing. Extract the package so `ue4ss/Mods/SmartDelivery/Scripts/main.lua` and `Scripts/delivery_bridge.dll` exist, with `SmartDelivery/enabled.txt`. Do not place the helper in UE4SS's `dlls` directory. The Lua Mod loads it itself. The ZIP includes only original Mod code and documentation; obtain UE4SS separately.
 
-**Updating from an earlier development version:** 0.1.3-dev uses white dropdown text and retains the native code discovery introduced in 0.1.2-dev. Close the game, replace the package files and restart; Lua hot reload cannot replace the loaded native helper. After entering the restaurant, look for `[SmartDelivery] START version=0.1.3-dev` and `UI attached to automatic-order settings` in `UE4SS.log`. If startup fails, the original error is in that log; `bridge-status.txt` may subsequently say `disabled` after cleanup.
+**Updating from an earlier development version:** 0.1.4-dev adds Lua reload support while retaining the white dropdown text and native code discovery. Close the game, replace the package files and restart once: this version includes a new native helper. After entering the restaurant, look for `[SmartDelivery] START version=0.1.4-dev` and `UI attached to automatic-order settings` in `UE4SS.log`. If startup fails, the original error is in that log; `bridge-status.txt` may subsequently say `disabled` after cleanup.
+
+Once this version is running, **Lua-only updates support UE4SS Ctrl+R** with `EnableHotReloadSystem=1`. Reload discards unsaved selector changes, removes the old selector on the new state's game-thread refresh, and reapplies the saved preference. Automatic orders use the game's quantity-based delivery choice during the brief reload gap. Replacing `delivery_bridge.dll`, updating the loader or removing the Mod still requires closing and restarting the game; a loaded DLL cannot be replaced by Lua reload. Repeated reload behavior is pending in-game acceptance.
 
 Open the restaurant computer → automatic smart-order settings → Delivery method → select an option → Save. **Premium delivery is the initial Mod preference.** The choice is stored in `SmartDelivery/Scripts/delivery-preference.txt`, shared across this installation's restaurants and retained after restarting the game. This is a Mod preference, not a new field in the game save. Keep that file when updating the Mod. The folder must be writable.
 
@@ -26,13 +28,13 @@ To uninstall, close the game and remove `SmartDelivery`. Native automatic orderi
 
 ### Build
 
-From the repository root, run `python smart-delivery-mod/build.py`. Windows x64, Visual Studio 2022 C++ Build Tools (or a compatible current installation) and the Windows SDK are required. Output: `outputs/smart-delivery/SmartDelivery-0.1.3-dev.zip` and `.zip.sha256`. Builds never install, launch or close the game, or edit saves.
+From the repository root, run `python smart-delivery-mod/build.py`. Windows x64, Visual Studio 2022 C++ Build Tools (or a compatible current installation) and the Windows SDK are required. Output: `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` and `.zip.sha256`. Builds never install, launch or close the game, or edit saves.
 
 See [development and validation](DEVELOPMENT.md#english) for the test scope.
 
 ## 中文
 
-**版本：0.1.3-dev，待实机验收。** 在餐厅电脑原有的“自动智能订购”设置窗口中，新增免费服务、经济型配送、高级配送三种选择。点击游戏原有的“保存”后生效；“取消”放弃本次修改。
+**版本：0.1.4-dev，待实机验收。** 在餐厅电脑原有的“自动智能订购”设置窗口中，新增免费服务、经济型配送、高级配送三种选择。点击游戏原有的“保存”后生效；“取消”放弃本次修改。
 
 采购金额下限、缺货优先、采购清单、余额检查、夜间附加费及配送处理继续由游戏负责。手动购买食材或家具仍使用各自的配送选择。配送名称读取游戏当前译文，新字段标题覆盖游戏的 14 种语言。
 
@@ -44,7 +46,9 @@ See [development and validation](DEVELOPMENT.md#english) for the test scope.
 
 关闭游戏后安装，解压后应有 `ue4ss/Mods/SmartDelivery/Scripts/main.lua`、`Scripts/delivery_bridge.dll` 和 `SmartDelivery/enabled.txt`。辅助 DLL 由 Lua Mod 自行加载，不要放进 UE4SS 的 `dlls` 目录。安装包仅包含原创 Mod 代码和文档，UE4SS 需另行安装。
 
-**从旧开发版更新：** 0.1.3-dev 将配送下拉框文字改为白色，并保留 0.1.2-dev 引入的原生代码定位。请关闭游戏、覆盖安装包文件后重启；Lua 热重载无法替换已加载的原生辅助模块。进入餐厅后，在 `UE4SS.log` 中查看 `[SmartDelivery] START version=0.1.3-dev` 和 `UI attached to automatic-order settings`。启动失败的原始错误保存在该日志中；清理后 `bridge-status.txt` 可能显示 `disabled`。
+**从旧开发版更新：** 0.1.4-dev 新增 Lua 重载支持，保留白色下拉框文字和原生代码定位。本版本包含新版原生辅助模块，请关闭游戏、覆盖安装包文件后重启一次。进入餐厅后，在 `UE4SS.log` 中查看 `[SmartDelivery] START version=0.1.4-dev` 和 `UI attached to automatic-order settings`。启动失败的原始错误保存在该日志中；清理后 `bridge-status.txt` 可能显示 `disabled`。
+
+本版本开始运行后，**仅更新 Lua 文件可使用 UE4SS Ctrl+R 热重载**，需启用 `EnableHotReloadSystem=1`。重载放弃未保存的选项，新状态在游戏线程刷新时清理旧选择框并恢复已保存偏好；短暂重载期间，自动订购沿用游戏按数量选择配送的行为。替换 `delivery_bridge.dll`、更新加载器或删除 Mod 仍需关闭并重启游戏，Lua 重载无法替换已加载的 DLL。连续重载仍待实机验收。
 
 打开餐厅电脑 → 自动智能订购设置 → 配送方式 → 选择 → 保存。**Mod 初始偏好为高级配送。** 选择保存在 `SmartDelivery/Scripts/delivery-preference.txt`，重启游戏后保留，同一安装下的各餐厅共用。它是 Mod 偏好，不向游戏存档新增字段；升级 Mod 时保留这个文件，安装目录需可写。
 
@@ -54,6 +58,6 @@ See [development and validation](DEVELOPMENT.md#english) for the test scope.
 
 ### 构建
 
-在仓库根目录运行 `python smart-delivery-mod/build.py`。需要 Windows x64、Visual Studio 2022 C++ Build Tools（或兼容安装）和 Windows SDK。生成 `outputs/smart-delivery/SmartDelivery-0.1.3-dev.zip` 及 `.zip.sha256`。构建不会安装 Mod、启动或关闭游戏，也不修改存档。
+在仓库根目录运行 `python smart-delivery-mod/build.py`。需要 Windows x64、Visual Studio 2022 C++ Build Tools（或兼容安装）和 Windows SDK。生成 `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` 及 `.zip.sha256`。构建不会安装 Mod、启动或关闭游戏，也不修改存档。
 
 验证范围见[开发与验收](DEVELOPMENT.md#中文)。

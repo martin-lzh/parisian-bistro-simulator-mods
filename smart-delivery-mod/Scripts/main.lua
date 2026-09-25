@@ -4,12 +4,14 @@ end
 
 local function start()
     local UI, Settings, Bridge = require('ui'), require('settings'), require('bridge')
+    local Reload = require('reload')
     local source = debug.getinfo(1, 'S').source
     assert(source:sub(1, 1) == '@', 'Cannot locate Smart Delivery scripts')
     local directory = assert(source:sub(2):match('^(.*)[/\\]'), 'Cannot locate Mod directory')
     local path = directory .. '/delivery-preference.txt'
     local saved = Settings.load(path)
     local bridge = Bridge.new(directory)
+    local lifetime = Reload.new('SmartDelivery.widgets.v1', function() bridge:suspend() end)
     local views, hooks, ready, failed, queued = {}, {}, false, false, false
 
     local function stop(err)
@@ -19,12 +21,12 @@ local function start()
         local restored, restore_error = pcall(bridge.calls.disable)
         for _, view in pairs(views) do pcall(UI.destroy, view) end
         for _, hook in ipairs(hooks) do pcall(UnregisterHook, table.unpack(hook)) end
-        print('[SmartDelivery] ERROR version=0.1.3-dev ' .. tostring(err)
+        print('[SmartDelivery] ERROR version=0.1.4-dev ' .. tostring(err)
             .. (restored and '' or '; restore=' .. tostring(restore_error)) .. '\n')
     end
     local function guard(fn)
         return function(...)
-            if failed then return end
+            if failed or lifetime.stopped then return end
             local ok, err = xpcall(fn, traceback, ...)
             if not ok then stop(err) end
         end
@@ -33,7 +35,7 @@ local function start()
     local function view_for(owner)
         local key = id(owner)
         if not views[key] then
-            views[key] = UI.create(owner)
+            views[key] = UI.create(owner, lifetime)
             UI.update(views[key], saved, true)
             print('[SmartDelivery] UI attached to automatic-order settings\n')
         end
@@ -41,6 +43,7 @@ local function start()
     end
     local function initialize()
         if ready then return end
+        lifetime:cleanup()
         bridge:call('initialize')
         bridge:call(saved)
         local hook = '/Script/BrasserieSimulator.MenuAppWidget:SaveAutomaticSmartOrderSettings'
@@ -67,7 +70,7 @@ local function start()
         assert(type(pre) == 'number' and type(post) == 'number', 'Reset hook unavailable')
         hooks[#hooks + 1] = { reset, pre, post }
         ready = true
-        print('[SmartDelivery] START version=0.1.3-dev method=' .. saved .. '\n')
+        print('[SmartDelivery] START version=0.1.4-dev method=' .. saved .. '\n')
     end
     local run = guard(function()
         initialize()
@@ -79,10 +82,10 @@ local function start()
         end
     end)
     if type(LoopInGameThreadWithDelay) == 'function' then
-        LoopInGameThreadWithDelay(100, function() run(); return failed end)
+        LoopInGameThreadWithDelay(100, function() run(); return failed or lifetime.stopped end)
     else
         LoopAsync(100, function()
-            if failed then return true end
+            if failed or lifetime.stopped then return true end
             if not queued then
                 queued = true
                 local ok, err = pcall(ExecuteInGameThread, function() run(); queued = false end)

@@ -107,3 +107,45 @@ hint_count = #hints
 IsInGameThread = function() return false end
 ModRef.OnUnload()
 assert(#hints == hint_count and loop() == true, 'Never access UI from an off-thread unload callback')
+
+-- A held button spans two distinct Lua runtimes. The new runtime must see a
+-- release before accepting repeated Triggered events as a fresh gesture.
+local shared, reload_calls = {}, 0
+ModRef = {
+    GetSharedVariable = function(_, key) return shared[key] end,
+    SetSharedVariable = function(_, key, value)
+        assert(type(value) == 'boolean'); shared[key] = value
+    end,
+}
+RegisterHook = function(path, callback)
+    if path == wheel_path then blueprint[path] = callback else native[path] = callback end
+    return 1, 2
+end
+Game.request = function() reload_calls = reload_calls + 1; return true end
+held, candidate, carried = true, 'first', {}
+dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+native[input_path](context, pressed); loop()
+assert(reload_calls == 1)
+local old_loop, old_input = loop, native[input_path]
+ModRef.OnUnload()
+dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
+native[input_path](context, pressed)
+for _ = 1, 4 do loop() end
+assert(reload_calls == 1 and blueprint[wheel_path](context) == nil,
+    'Reload cancels the old hold and leaves the native wheel untouched')
+old_input(context, pressed); assert(old_loop() == true and reload_calls == 1)
+held = false
+for _ = 1, 4 do loop() end
+held, now = true, now + 1
+native[input_path](context, pressed); loop()
+assert(reload_calls == 2, 'Release and a fresh native hold can start after reload')
+
+-- A queued fallback callback from an unloaded state must also be inert.
+LoopInGameThreadWithDelay = nil
+local pending
+LoopAsync = function(_, callback) loop = callback end
+ExecuteInGameThread = function(callback) pending = callback end
+dofile(MOD_ROOT .. '/Scripts/main.lua')
+loop(); assert(pending)
+ModRef.OnUnload(); pending()
+assert(loop() == true and reload_calls == 2)

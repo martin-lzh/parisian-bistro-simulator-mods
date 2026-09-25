@@ -10,11 +10,11 @@ Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose th
 
 | Mod | What it does | Current source | Last accepted version |
 | --- | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | 0.1.1-dev | 0.1.0 |
-| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards at the counter and completes the register interaction | 0.1.3-dev | 0.1.2 |
-| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks, requesting replacements while the original customer still has enough patience | 0.1.1-dev | Pending |
-| [First to Serve](first-to-serve-mod/README.md#english) | Hold at the kitchen pickup area or aim at a ready dish or drink to take the oldest first | 0.1.4-dev | Pending |
-| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.3-dev | Pending |
+| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | 0.1.2-dev | 0.1.0 |
+| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards at the counter and completes the register interaction | 0.1.4-dev | 0.1.2 |
+| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks, requesting replacements while the original customer still has enough patience | 0.1.2-dev | Pending |
+| [First to Serve](first-to-serve-mod/README.md#english) | Hold at the kitchen pickup area or aim at a ready dish or drink to take the oldest first | 0.1.5-dev | Pending |
+| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.4-dev | Pending |
 
 Smart Delivery 0.1.2-dev adds native code discovery checked against Steam Build 25532071, without a mandatory executable version or hash allowlist. Version 0.1.3-dev adds white dropdown text. In-game acceptance remains pending.
 
@@ -30,6 +30,8 @@ The development baseline is **Parisian Bistro Simulator on Windows, Steam Build 
 4. Start the game and enter your restaurant. Bartender's Note appears after you claim drink orders; Auto Checkout runs automatically in a host session.
 
 Loaders and game files are not included. Builds only create packages; they do not install Mods, change saves, or start or close the game. This repository remains private. Numbered versions and GitHub Release publication are separate; see [release management](releases/README.md#english) for publication conditions.
+
+The five current development versions support **Ctrl+R** Lua hot reload after an initial closed-game upgrade and loader configuration. See the [hot reload guide](docs/hot-reload.md#english); DLL updates still require restarting the game.
 
 ### Languages and help
 
@@ -53,11 +55,11 @@ This project is not affiliated with the game's creators. Game assets and reverse
 
 | Mod | 功能 | 当前源码 | 最近已验收版本 |
 | --- | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.1-dev | 0.1.0 |
-| [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收柜台顾客的现金或银行卡，并完成收银机交互 | 0.1.3-dev | 0.1.2 |
-| [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；原顾客仍在等待且耐心足够时，请求重做并重新上桌 | 0.1.1-dev | 待验收 |
-| [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 对准厨房出餐口或成品菜品、饮料长按，优先拿取最早制作的成品 | 0.1.4-dev | 待验收 |
-| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.3-dev | 待验收 |
+| [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.2-dev | 0.1.0 |
+| [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收柜台顾客的现金或银行卡，并完成收银机交互 | 0.1.4-dev | 0.1.2 |
+| [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；原顾客仍在等待且耐心足够时，请求重做并重新上桌 | 0.1.2-dev | 待验收 |
+| [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 对准厨房出餐口或成品菜品、饮料长按，优先拿取最早制作的成品 | 0.1.5-dev | 待验收 |
+| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev | 待验收 |
 
 Smart Delivery 0.1.2-dev 已在 Steam Build 25532071 上核对原生代码定位结果，不再使用强制版本或 EXE 哈希白名单；0.1.3-dev 将下拉框文字改为白色，仍待实机验收。
 
@@ -73,6 +75,8 @@ Smart Delivery 0.1.2-dev 已在 Steam Build 25532071 上核对原生代码定位
 4. 启动游戏并进入餐厅。认领饮料订单后可看到 Bartender's Note；Auto Checkout 在房主会话自动运行。
 
 安装包不含加载器或游戏文件。构建只生成安装包，不自动安装、不修改存档，也不启动或关闭游戏。仓库保持私密。编号版本与 GitHub Release 发布是不同步骤，发布条件见[版本管理](releases/README.md#中文)。
+
+当前五个开发版支持 **Ctrl+R** 热重载 Lua；首次需关闭游戏升级 Mod 并配置加载器。操作见[热重载说明](docs/hot-reload.md#中文)，DLL 更新仍须重启游戏。
 
 ### 语言与反馈
 

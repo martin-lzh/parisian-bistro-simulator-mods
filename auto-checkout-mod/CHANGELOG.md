@@ -4,12 +4,18 @@
 
 ### English
 
+- 0.1.4-dev: support experimental UE4SS Lua hot reload. Persist primitive AI recovery records and per-transaction cooldowns/retry budgets across instances, and restore inherited AI changes on the game thread before continuing.
+- Save recovery plans before engine-array writes and attempts before dispatch. Retire old callbacks without touching UObjects or scheduling work during unload; preserve failed recovery records for another reload and reject malformed handoff data without executing it.
+- Add 12 offline reload checks covering both schedulers, AI recovery failures, notifications, retry limits, temporary controller loss and storage errors. Upgrade from earlier versions and permanently remove the Mod with the game closed; real loader and in-game reload acceptance is pending.
 - 0.1.3-dev: explanatory status and warning logs follow the game's current language across all 14 supported languages. Language is checked on the game thread; unavailable or unsupported languages fall back to English without stopping checkout.
 - Keep game notifications and interaction text native, without copying game translation assets. Structured diagnostic tags, fields and exception details remain unchanged.
 - Add offline coverage for language changes, regional/script variants and safe fallback without a world or a working language reader. In-game localization verification is still pending.
 
 ### 中文
 
+- 0.1.4-dev：支持 UE4SS 实验版 Lua 热重载；跨实例保留普通值形式的 AI 恢复记录、每笔交易冷却时间及重试预算，新实例先在游戏线程恢复旧 AI 改动，再继续运行。
+- 改写引擎数组和发送请求前先保存恢复方案与尝试次数；卸载时停用旧回调，不访问 UObject、不排队，并保留失败恢复记录供下次重载重试；异常交接内容被校验拒绝，不作为代码执行。
+- 新增 12 项离线重载检查，覆盖两个调度器、AI 恢复失败、通知、重试上限、控制器暂失及存储错误。从旧版首次升级或永久卸载需关闭游戏；加载器与游戏内热重载仍待实机验收。
 - 0.1.3-dev：说明性状态与警告日志跟随游戏当前语言，覆盖游戏支持的 14 种语言；每次游戏线程检查时重新读取语言，读取失败或不支持的语言回退英语，不影响结账。
 - 保留原生游戏通知与交互文本，不复制游戏翻译资源；结构化日志标记、字段和异常详情保持原样。
 - 新增语言切换、地区与文字变体、无世界及读取失败回退的离线验证；本次多语言改动尚未经过游戏内验收。

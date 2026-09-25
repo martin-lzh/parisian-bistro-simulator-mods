@@ -4,6 +4,8 @@
 
 ## English
 
+The 2026-09-25 hot reload update (Bartender's Note 0.1.2-dev, Auto Checkout 0.1.4-dev, Fresh to Serve 0.1.2-dev, First to Serve 0.1.5-dev and Smart Delivery 0.1.4-dev) adds reload lifecycle and state handoff handling. Manual Ctrl+R reload, live UI cleanup, AI recovery and pending orders still need in-game acceptance; DLL updates require a process restart.
+
 Smart Delivery **0.1.3-dev** changes the delivery dropdown text to white following a visibility report. Visual verification of the revised text remains pending.
 
 On 2026-09-25, the user reported testing aiming and continuous holds at the updated game's kitchen pass and requested starting the hold on the pass itself. First to Serve **0.1.4-dev** adds that area-targeting behavior; its offline regression tests pass, while this new behavior still awaits in-game acceptance. The report does not establish a complete loader, multiplayer or display test matrix.
@@ -45,6 +47,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+2026-09-25 热重载更新（Bartender's Note 0.1.2-dev、Auto Checkout 0.1.4-dev、Fresh to Serve 0.1.2-dev、First to Serve 0.1.5-dev、Smart Delivery 0.1.4-dev）新增卸载处理及状态交接。Ctrl+R 手动重载、实机 UI 清理、AI 恢复和待补单仍待实机验收；DLL 更新需要重启游戏进程。
 
 Smart Delivery **0.1.3-dev** 根据文字可读性反馈，将配送下拉框文字改为白色；修改后的显示效果仍待实机确认。
 

@@ -9,6 +9,7 @@
 | Features and installation | [Project overview](../README.md#english) |
 | Build, repository boundaries and CI | [Development](../DEVELOPMENT.md#english) |
 | Supported languages and native text | [Localization](localization.md#english) |
+| Reload Lua scripts with Ctrl+R | [Hot reload](hot-reload.md#english) |
 | Bartender's Note | [Player guide](../bartenders-note-mod/README.md#english) · [Development and validation](../bartenders-note-mod/DEVELOPMENT.md#english) · [Changes](../bartenders-note-mod/CHANGELOG.md) |
 | Auto Checkout | [Player guide](../auto-checkout-mod/README.md#english) · [Development and validation](../auto-checkout-mod/DEVELOPMENT.md#english) · [Changes](../auto-checkout-mod/CHANGELOG.md) |
 | Fresh to Serve | [Player guide](../fresh-to-serve-mod/README.md#english) · [Development and validation](../fresh-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../fresh-to-serve-mod/CHANGELOG.md) |
@@ -26,6 +27,7 @@ These pages describe original Mod behavior, development decisions and validation
 | 功能与安装 | [项目介绍](../README.md#中文) |
 | 构建、仓库边界与 CI | [开发说明](../DEVELOPMENT.md#中文) |
 | 支持语言与原生文案 | [多语言适配](localization.md#中文) |
+| Ctrl+R 重载 Lua 脚本 | [热重载](hot-reload.md#中文) |
 | Bartender's Note | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |
 | Auto Checkout | [玩家说明](../auto-checkout-mod/README.md#中文) · [开发与验收](../auto-checkout-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-checkout-mod/CHANGELOG.md) |
 | Fresh to Serve（焕新上桌） | [玩家说明](../fresh-to-serve-mod/README.md#中文) · [开发与验收](../fresh-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../fresh-to-serve-mod/CHANGELOG.md) |

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Update to 0.1.5-dev: support manual Ctrl+R script reload, keep an in-progress hold canceled until the key is released in the new runtime, and terminate the unloaded fallback loop. Add cross-runtime hold and queued-callback regression tests.
+- 更新至 0.1.5-dev：支持 Ctrl+R 手动重载脚本，重载中断的长按在新运行状态中松键前不会重新启动；停止已卸载的备用循环，增加跨重载长按及排队回调回归测试。
+
 - Update to 0.1.4-dev: start oldest-first pickup by holding over the kitchen pass's native pickup area, without aiming at a particular dish. Resolve its kitchen through the current world and keep per-dish server requests, readiness, reach, floor, tray capacity and acknowledgement checks.
 - Keep direct dish/drink targeting and native short clicks. Empty passes do not start pickup; the hold hint remains below the native pickup hint while eligible dishes remain. Add area-started three-item pickup, camera panning, rejection and cancellation regression coverage. New area targeting awaits in-game acceptance.
 - 更新至 0.1.4-dev：可直接对准厨房出餐口的原生拿取区域长按，无需瞄准某一盘菜品；通过当前世界定位厨房，保留按时间排序的逐盘服务器请求、成品状态、距离、楼层、托盘容量及拿取确认检查。

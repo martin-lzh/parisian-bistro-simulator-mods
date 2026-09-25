@@ -12,7 +12,9 @@ The helper resolves the evaluator and three fee getters through native registrat
 
 The free-service coefficient is writable runtime data in the zero-filled tail of a PE section. Validate its mapped section bounds and permissions, preserving its live value; do not require file bytes or compare it with disk contents. The 0.1.0-dev file lookup incorrectly rejected this valid address during initialization. Synthetic PE regression tests cover this distinction, section boundaries, overflow and truncated files.
 
-Lua loads named C entry points through `package.loadlib`; they accept no arguments, return no Lua values and access no Lua ABI structures. Each operation writes a fresh status acknowledgment. Lua failures disable the preference and request restoration of the original instruction; a conflicting later patch is never overwritten. The helper is retained until process exit. Hot-unloading or live-replacing the Mod is unsupported; restart the game for updates or removal.
+Lua loads named C entry points through `package.loadlib`; they accept no arguments, return no Lua values and access no Lua ABI structures. Game-thread operations write a fresh status acknowledgment. Lua failures on the game thread disable the preference and request restoration of the original instruction; a conflicting later patch is never overwritten. The helper is pinned until process exit.
+
+Lua reload is supported from 0.1.4-dev. `ModRef.OnUnload` stops the old closures and calls `delivery_suspend`, whose only effect is `InterlockedExchange(selected, -1)`. It performs no UObject access, code patch, file operation or deferred callback. The resident dispatch then uses its verified native quantity threshold. The new state's game-thread startup resolves shared widget identity strings, removes old selector rows, verifies that the installed jump still belongs to this helper, and reapplies the saved preference. The installed trampoline is reused without allocating another one. Shared variables never contain transient UObjects or callbacks. A changed native DLL, loader replacement or Mod removal requires restarting the game.
 
 ### Offline verification
 
@@ -36,6 +38,7 @@ The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler
 4. Verify manual ingredient and furniture delivery options remain independent; switch restaurants, return to the menu and reconnect as host/client.
 5. Check all 14 languages, keyboard/gamepad navigation, narrow resolutions and large UI scale. Verify the new row and dropdown do not cover Save/Cancel.
 6. Check missing or changed target code, another Mod changing the same routine, invalid preferences and an unwritable Mod directory. Review diagnostics and ensure automatic orders do not silently use the displayed preference after an error.
+7. Reload repeatedly with the dialog open and with an unsaved selection. Confirm one selector, no duplicate hooks/timers, restored saved preference and continued native orders. Test reload during travel, on host/client, and while an automatic order becomes eligible. Offline tests exercise worker-thread suspension, patch reuse/conflict refusal, old callback guards, primitive-only widget cleanup and Save/Cancel recovery; they do not establish real engine timing.
 
 Offline results do not establish engine bridging, layout, multiplayer or real transaction correctness. No in-game acceptance is claimed.
 
@@ -49,7 +52,9 @@ Offline results do not establish engine bridging, layout, multiplayer or real tr
 
 免费服务系数是 PE 节区零填充尾部的可写运行时数据，应核验映射后的范围与权限并保留实时值，不要求它具有文件字节，也不与磁盘内容比较。0.1.0-dev 错误地按文件范围查找，导致初始化拒绝合法地址。新增原创合成 PE 回归用例覆盖这一差异、节区边界、溢出及文件截断。
 
-Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua 返回值，也不访问 Lua ABI 内部结构，每次操作写入新的状态回执。Lua 出错时停用偏好并请求恢复原指令；若之后有其他补丁覆盖此处，则不强行覆盖它。辅助模块保留到进程结束，不支持热卸载或运行中替换；更新、卸载请重启游戏。
+Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua 返回值，也不访问 Lua ABI 内部结构，游戏线程操作写入新的状态回执。游戏线程上的 Lua 出错时停用偏好并请求恢复原指令；若之后有其他补丁覆盖此处，则不强行覆盖它。辅助模块固定保留到进程结束。
+
+0.1.4-dev 支持 Lua 热重载。`ModRef.OnUnload` 仅停止旧闭包并调用 `delivery_suspend`；该入口只执行 `InterlockedExchange(selected, -1)`，不访问 UObject、不修改代码、不写文件，也不安排延迟回调。驻留分派随即采用已核验的原生数量阈值。新状态在游戏线程按共享身份字符串重新查找并清理旧选择框，检查跳转仍属于本模块，再恢复已保存偏好，复用原跳板而不重复分配。共享变量不包含临时 UObject 或回调。更换 DLL、加载器或卸载 Mod 仍需重启游戏。
 
 ### 离线验证
 
@@ -58,5 +63,7 @@ Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua �
 ### 待实机验收
 
 逐项检查三种配送的保存、重新打开、重启保留及取消恢复；小额/大额、不同难度和夜间订单的费用与 0/1/4 名卸货员；缺货优先、采购下限、余额不足、配送进行中、关闭自动订购及保存时立即触发的行为，确认不重复下单。确认手动食材/家具采购独立，切换餐厅、返回菜单及房主/客户端重连正常。检查 14 种语言、键盘/手柄、窄分辨率和大 UI 缩放。检查目标代码缺失或变化、冲突 Mod、无效配置及不可写目录的诊断与停用行为。
+
+新增离线测试覆盖工作线程原子暂停、跳板复用和冲突拒绝、旧回调停止、字符串控件身份清理和保存偏好恢复。实机需在窗口打开、选项未保存、切换餐厅、联机和自动订单即将触发时连续重载，确认单一选择框且无重复 Hook/定时器。
 
 离线检查不代表引擎桥接、界面布局、联机或真实扣款验收通过；当前没有实机验收结论。

@@ -8,6 +8,18 @@ root = Path(__file__).resolve().parents[1]
 lua = LuaRuntime(unpack_returned_tuples=True)
 lua.globals().MOD_ROOT = root.as_posix()
 lua.execute("package.path = MOD_ROOT .. '/Scripts/?.lua;' .. package.path")
+lua.execute("""
+function NewTestModRef(shared)
+    shared = shared or {}
+    return {
+        GetSharedVariable = function(_, key) return shared[key] end,
+        SetSharedVariable = function(_, key, value)
+            assert(type(value) == 'string', 'handoff must be a primitive string')
+            shared[key] = value
+        end,
+    }
+end
+""")
 for name in ("checkout_spec.lua", "game_spec.lua", "ai_spec.lua", "diagnostics_spec.lua", "main_spec.lua",
-             "notification_spec.lua", "runtime_ai_spec.lua", "localization_spec.lua"):
+             "notification_spec.lua", "runtime_ai_spec.lua", "localization_spec.lua", "reload_spec.lua"):
     lua.execute((root / "tests" / name).read_text(encoding="utf-8"))

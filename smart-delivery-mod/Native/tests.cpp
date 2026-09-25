@@ -5,9 +5,34 @@
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
+#include <thread>
 #include "dispatch.hpp"
 #include "pe_image.hpp"
 #include "contract.hpp"
+// Exercise the production entry points against an owned in-memory patch site.
+// This executable never loads or patches a game process.
+#include "bridge.cpp"
+
+void check_reload_lifecycle() {
+    std::array<unsigned char, 5> fake_site{0xe9, 1, 2, 3, 4};
+    installed = fake_site;
+    site = fake_site.data();
+    active = true;
+    InterlockedExchange(&selected, 2);
+    std::thread unload([] { delivery_suspend(nullptr); });
+    unload.join();
+    if (selected != -1 || !active || fake_site != installed)
+        throw std::runtime_error("Unload modified code or failed to suspend the preference");
+    initialize(); // Reuse the installed patch without allocating a new trampoline.
+    if (fake_site != installed || selected != -1)
+        throw std::runtime_error("Reload changed the patch or resumed a stale preference");
+    fake_site[1] ^= 1;
+    bool rejected = false;
+    try { initialize(); } catch (const std::runtime_error&) { rejected = true; }
+    if (!rejected) throw std::runtime_error("Reload accepted a replacement patch");
+    active = false; site = nullptr;
+    std::cout << "PASS native reload: worker-thread suspension, patch reuse and conflict rejection\n";
+}
 
 template<class T> void put(std::vector<unsigned char>& data, std::size_t offset, const T& value) {
     std::memcpy(data.data() + offset, &value, sizeof(value));
@@ -216,6 +241,7 @@ void* multiplier(const float* factor) {
     return executable(code);
 }
 int main() {
+    check_reload_lifecycle();
     check_image_ranges();
     check_contracts();
     volatile long mode = -1;
@@ -223,7 +249,7 @@ int main() {
     auto budget = multiplier(&budget_fee), premium = multiplier(&premium_fee), resume = executable({0xc3});
     int checks = 0;
     for (unsigned char threshold : std::array<unsigned char, 2>{4, 7}) {
-        auto stub = executable(delivery::dispatch(&mode, &free_fee, budget, premium, resume, threshold));
+        auto dispatch_stub = executable(delivery::dispatch(&mode, &free_fee, budget, premium, resume, threshold));
         auto compare = executable({0x83, 0xfe, threshold, 0xc3});
         for (float free_value : {0.f, 7.f}) {
             free_fee = free_value;
@@ -233,18 +259,18 @@ int main() {
                     for (float difficulty : {0.5f, 1.f, 1.25f, 2.f}) {
                         const float expected = difficulty * (choice == 0 ? free_fee : choice == 1 ? budget_fee :
                             choice == 2 ? premium_fee : quantity < threshold ? budget_fee : premium_fee);
-                        std::uint64_t state[2]{}, original[2]{};
-                        probe_dispatch(compare, difficulty, quantity, original);
-                        const float actual = probe_dispatch(stub, difficulty, quantity, state);
+                        std::uint64_t state[2]{}, comparison_state[2]{};
+                        probe_dispatch(compare, difficulty, quantity, comparison_state);
+                        const float actual = probe_dispatch(dispatch_stub, difficulty, quantity, state);
                         if (actual != expected || state[0] != 0x1122334455667788ULL ||
-                            (state[1] & 0x8d5) != (original[1] & 0x8d5))
+                            (state[1] & 0x8d5) != (comparison_state[1] & 0x8d5))
                             throw std::runtime_error("Dispatch fee, register or comparison flags changed");
                         ++checks;
                     }
                 }
             }
         }
-        VirtualFree(stub, 0, MEM_RELEASE); VirtualFree(compare, 0, MEM_RELEASE);
+        VirtualFree(dispatch_stub, 0, MEM_RELEASE); VirtualFree(compare, 0, MEM_RELEASE);
     }
     for (auto block : {budget, premium, resume}) VirtualFree(block, 0, MEM_RELEASE);
     std::cout << "PASS native dispatch: " << checks << " executable cases\n";

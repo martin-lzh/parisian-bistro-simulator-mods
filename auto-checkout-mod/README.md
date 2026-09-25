@@ -6,7 +6,7 @@
 
 Automatically accept cash or cards from customers at the counter, wait for the register to be ready, and complete its checkout interaction.
 
-**Current source: 0.1.3-dev.** This version adds language-aware log explanations and awaits in-game acceptance. The latest accepted version is 0.1.2: on 2026-09-24, the user confirmed three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. That result does not establish acceptance of the new localization.
+**Current source: 0.1.4-dev.** This version supports UE4SS Lua hot reload, retaining AI recovery records and checkout retry history. Hot reload and language-aware logs await in-game acceptance. The latest accepted version is 0.1.2: on 2026-09-24, the user confirmed three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. That result does not establish acceptance of hot reload or the new localization.
 
 ### How to use
 
@@ -41,11 +41,13 @@ The local reference baseline is Windows Parisian Bistro Simulator, Steam Build 2
 3. Check that `AutoCheckout/Scripts/main.lua` and `AutoCheckout/enabled.txt` exist. Do not replace the whole `mods.txt` or add a duplicate enable entry.
 4. Start the game and enter your restaurant as host.
 
-Close the game before replacing or deleting the `AutoCheckout` folder. Script hot reload is not supported. The Mod creates no custom save data, but completed transactions are saved normally by the game and are not reversed by removal. Packages contain no loader, game files or research material; builds do not install anything.
+Close the game for first installation, removal, loader updates, or the first upgrade from 0.1.3-dev and earlier. Once 0.1.4-dev is running, you can replace the complete Lua package and use the loader’s Reload Mods action. Pending requests retain their cooldown and attempt limit. The next game-thread callback restores the previous instance’s AI changes before resuming automation. Check the new `START` version and any `RELOAD` or `ERROR` messages. If recovery fails, automation stops and keeps its recovery records for another reload.
+
+Hot reload requires the experimental loader’s `ModRef` shared-variable and unload support. Disabling or deleting the Mod without loading a replacement leaves AI restoration until the world is reloaded; close the game before permanent removal. Shared history lasts only for the current game process. Restart the game if the handoff is damaged or from an unsupported future format. The Mod creates no custom save data, but completed transactions are saved normally by the game and are not reversed by removal. Packages contain no loader, game files or research material; builds do not install anything.
 
 ### If checkout does not start
 
-Diagnostics are always enabled in `UE4SS.log` under `[AutoCheckout]`. Check `START version=0.1.3-dev` after updating, followed by `HOST`, `STATE ai`, `REQUEST`, `SKIP` and `AFTER`. Keep the stack after any `ERROR` as well. A returned call does not by itself mean that the game accepted the request.
+Diagnostics are always enabled in `UE4SS.log` under `[AutoCheckout]`. Check `START version=0.1.4-dev` after updating, followed by `HOST`, `STATE ai`, `REQUEST`, `SKIP` and `AFTER`. Keep the stack after any `ERROR` as well. A returned call does not by itself mean that the game accepted the request.
 
 State changes are logged immediately, with unchanged state repeated every 30 polls, usually about 30 seconds. `suppressed=0` does not prove AI checkout is suppressed. Current code should not emit `blocked=player-interacting`. If a warning reports that interaction restrictions or AI jobs could not be restored, reload the world. The development guide contains the [diagnostic reference](DEVELOPMENT.md#diagnostic-reference) and test checklist.
 
@@ -55,7 +57,7 @@ State changes are logged immediately, with unchanged state repeated every 30 pol
 
 自动接收柜台顾客递出的现金或银行卡，等待收银机准备好，再完成收银机结账交互。
 
-**当前源码：0.1.3-dev。** 本版增加跟随游戏语言的日志说明，仍待实机验收。最近已验收版本为 0.1.2：2026-09-24 用户确认 3 笔现金、2 笔刷卡均首次尝试成功，包括超出原交互范围的结账。该结论不代表新增多语言功能已验收。
+**当前源码：0.1.4-dev。** 本版支持 UE4SS Lua 热重载，保留员工任务恢复记录和结账重试历史；热重载及多语言日志仍待实机验收。最近已验收版本为 0.1.2：2026-09-24 用户确认 3 笔现金、2 笔刷卡均首次尝试成功，包括超出原交互范围的结账。该结论不代表热重载或新增多语言功能已验收。
 
 ### 怎么使用
 
@@ -90,11 +92,13 @@ Mod 使用游戏原有交互请求，由游戏计算账单、小费和收入并�
 3. 确认存在 `AutoCheckout/Scripts/main.lua` 和 `AutoCheckout/enabled.txt`。不要替换整个 `mods.txt` 或添加重复启用项。
 4. 启动游戏，以房主身份进入餐厅。
 
-更新或删除 `AutoCheckout` 文件夹前关闭游戏，不支持脚本热重载。Mod 不创建自定义存档数据，但已完成交易会由游戏正常保存，卸载不会撤销。包内不含加载器、游戏文件或研究资料；构建不会自动安装。
+首次安装、永久卸载、更新加载器，或首次从 0.1.3-dev 及更早版本升级时，请关闭游戏。已经运行 0.1.4-dev 后，可完整替换 Lua 安装包，再使用加载器的 Reload Mods 操作。尚未推进的交易会保留冷却时间和尝试次数；新脚本在下一次游戏线程回调中先恢复旧实例对员工任务的改动，再继续自动结账。更新后检查新的 `START` 版本以及 `RELOAD`、`ERROR` 消息。恢复失败时停止自动流程，并保留记录供下一次重载重试。
+
+热重载要求实验版加载器提供 `ModRef` 共享变量与卸载回调。只停用或删除 Mod、没有加载新实例时，需重新载入世界才能恢复被排除的员工任务；永久卸载前请关闭游戏。交接历史仅存在于本次游戏进程；记录损坏或来自不支持的未来格式时，请重新启动游戏。Mod 不创建自定义存档数据，但已完成交易会由游戏正常保存，卸载不会撤销。包内不含加载器、游戏文件或研究资料；构建不会自动安装。
 
 ### 没有自动结账时
 
-诊断默认启用，在 `UE4SS.log` 中查看 `[AutoCheckout]` 条目。更新后检查 `START version=0.1.3-dev`，再查看 `HOST`、`STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`；保留 `ERROR` 后的堆栈。调用返回本身不代表游戏接受请求。
+诊断默认启用，在 `UE4SS.log` 中查看 `[AutoCheckout]` 条目。更新后检查 `START version=0.1.4-dev`，再查看 `HOST`、`STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`；保留 `ERROR` 后的堆栈。调用返回本身不代表游戏接受请求。
 
 状态变化时立即记录，不变时每 30 次轮询再次记录，通常约 30 秒。`suppressed=0` 不能证明 AI 收银已被抑制，当前代码不应产生 `blocked=player-interacting`。若日志报告交互限制或 AI 任务恢复失败，请重新载入世界。开发说明提供完整[诊断标记](DEVELOPMENT.md#诊断标记)及验收清单。
 

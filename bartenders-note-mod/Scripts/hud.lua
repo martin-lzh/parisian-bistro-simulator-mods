@@ -28,6 +28,9 @@ function Hud.destroy(view)
     if view and not view.destroyed then
         if alive(view.root) then view.root:RemoveFromParent() end
         if alive(view.probe) then view.probe:RemoveFromParent() end
+        if view.lifetime then
+            for _, token in ipairs(view.tokens) do view.lifetime:forget(token) end
+        end
         view.destroyed = true
     end
 end
@@ -78,15 +81,20 @@ local function available_width(view, width_fraction)
     return math.max(0, width - 2 * padding)
 end
 
-function Hud.create(owner)
+function Hud.create(owner, lifetime)
     assert(alive(owner), 'HUD is unavailable')
     local title, source_text, tree = owner.BrasserieNameBorder, owner.BrasserieNameTextBlock, owner.WidgetTree
     assert(alive(title) and alive(source_text) and alive(tree), 'Restaurant title is unavailable')
     local parent = title:GetParent()
     assert(alive(parent) and parent:IsA('/Script/UMG.CanvasPanel'), 'Restaurant title parent changed')
-    local view = { owner = owner, title = title, source_text = source_text }
+    local view = { owner = owner, title = title, source_text = source_text,
+        lifetime = lifetime, tokens = {} }
+    local function remember(kind, widget)
+        if lifetime then view.tokens[#view.tokens + 1] = lifetime:remember(kind, widget) end
+    end
     local ok, err = pcall(function()
         view.root = construct('Border', tree)
+        remember('Border', view.root)
         view.root:SetVisibility(COLLAPSED)
         view.root:SetBrush(title.Background)
         view.root:SetBrushColor(title.BrushColor)
@@ -109,6 +117,7 @@ function Hud.create(owner)
         -- Keep the measuring widget outside the collapsible banner so an empty
         -- list cannot prevent measuring the next list's localized text.
         view.probe = construct('TextBlock', tree)
+        remember('TextBlock', view.probe)
         view.probe:SetVisibility(HIDDEN)
         view.probe:SetAutoWrapText(false)
         local probe_slot = parent:AddChildToCanvas(view.probe)

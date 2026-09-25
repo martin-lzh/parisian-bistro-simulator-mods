@@ -24,16 +24,21 @@ end
 
 function UI.destroy(view)
     if view and UI.valid(view.row) then view.row:RemoveFromParent() end
+    if view and view.lifetime and view.token then
+        view.lifetime:forget(view.token)
+        view.token = nil
+    end
 end
 
-function UI.create(owner)
+function UI.create(owner, lifetime)
     local footer = owner.SaveAutomaticOrderButton:GetParent()
     local parent = footer:GetParent()
     assert(parent:IsA('/Script/UMG.VerticalBox') and same(parent:GetChildAt(parent:GetChildrenCount() - 1), footer),
         'Automatic order dialog layout changed')
-    local view = { owner = owner, visible = false }
+    local view = { owner = owner, visible = false, lifetime = lifetime }
     local ok, err = pcall(function()
         view.row = create('VerticalBox', owner)
+        if lifetime then view.token = lifetime:remember('VerticalBox', view.row) end
         view.title = create('TextBlock', owner)
         view.title:SetFont(owner.MinimumAutomaticSmartOrderAmountInput.Font)
         view.title:SetColorAndOpacity(owner.MinimumAutomaticSmartOrderAmountInput.ForegroundColor)

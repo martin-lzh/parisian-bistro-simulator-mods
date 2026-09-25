@@ -8,6 +8,12 @@ local function start()
     local api, ready, failed, queued = nil, false, false, false
     local idle_ticks = 0
     local source_lock, triggered = nil, false
+    -- A repeated native Triggered event from a held button must not arm a
+    -- second pickup after reload. Only a release in the new state re-arms it.
+    local reload_key = 'FirstToServe.Reloaded'
+    if ModRef and type(ModRef.GetSharedVariable) == 'function' then
+        triggered = ModRef:GetSharedVariable(reload_key) == true
+    end
     local wheel_path = '/Game/Blueprints/Player/BP_PlayerCharacter.BP_PlayerCharacter_C:CanInteractionWheelBeOpened'
     local input_path = '/Script/BrasserieSimulator.PlayerCharacter:InteractionTriggered'
     local hooks = {}
@@ -22,7 +28,7 @@ local function start()
         failed, ready = true, false
         reset()
         pcall(function() hint:clear() end)
-        print('[FirstToServe] ERROR version=0.1.4-dev ' .. tostring(err) .. '\n')
+        print('[FirstToServe] ERROR version=0.1.5-dev ' .. tostring(err) .. '\n')
     end
 
     local function guarded(callback)
@@ -80,7 +86,7 @@ local function start()
             error(err, 0)
         end
         ready = true
-        print('[FirstToServe] START version=0.1.4-dev native-hold=true native-hint=true\n')
+        print('[FirstToServe] START version=0.1.5-dev native-hold=true native-hint=true\n')
         return true
     end
 
@@ -116,6 +122,9 @@ local function start()
         ModRef.OnUnload = function()
             failed, ready = true, false
             reset()
+            if type(ModRef.SetSharedVariable) == 'function' then
+                ModRef:SetSharedVariable(reload_key, true)
+            end
             -- Some loader unload paths run off the game thread. Do not queue
             -- a callback into a Lua state about to die; startup also prunes
             -- orphaned rows on the next game-thread tick.
@@ -130,7 +139,8 @@ local function start()
         LoopInGameThreadWithDelay(25, function() run(); return failed end)
     else
         LoopAsync(25, function()
-            if queued or failed then return false end
+            if failed then return true end
+            if queued then return false end
             queued = true
             local ok, err = pcall(ExecuteInGameThread, function() run(); queued = false end)
             if not ok then queued = false; stop(err) end

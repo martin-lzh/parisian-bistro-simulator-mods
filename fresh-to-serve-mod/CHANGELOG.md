@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Fresh to Serve 0.1.2-dev retains pending food/drink remakes across manual UE4SS script reload, preserving original ticket age, retry counts and cooldowns. Re-resolve customers and queues on the game thread; old callbacks stop on unload.
+- Preserve safety stops after uncertain operations across reload. Checkpoint a stop marker before mutations, validate the fixed scalar-only shared-state format, and clear old tickets/stops only after a different session is observed. Initial upgrades from older code require a closed-game installation.
+- Add real-adapter reload tests for waiting/rejected/accepted orders, food/drink coexistence, retry and expiration bounds, live patience, failed checkpoint writes and off-thread unload. In-game acceptance remains pending.
+- Fresh to Serve 0.1.2-dev 支持手动 UE4SS 脚本重载，保留食物/饮料待补单的原始时间、尝试次数及冷却，在游戏线程重新查找顾客与队列，并停用旧回调。结果不明后的安全停止跨重载保留；不同会话才清除旧凭据和停止状态。增加真实适配层联动重载验证；从旧代码首次升级须关闭游戏安装，仍待实机验收。
+
 - Fresh to Serve 0.1.1-dev extends cleanup and remake requests to finished drinks, including cocktails, on drink output areas and elevator serving slots.
 - Match drink order GUIDs to the original customer; clean up through the native drink lifecycle, deduplicate prepared/queued drinks, and preserve other customers' unplaced orders.
 - Estimate drink preparation from live equipment fill/interaction durations and handling allowance. Check assigned working bartenders, defer during manual claims, and recheck customer presence and patience before every request.

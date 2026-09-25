@@ -112,6 +112,7 @@ test('runtime language switching preserves checkout, diagnostic fields and excep
     LoopInGameThreadWithDelay = function(_, fn) callback = fn end
     RegisterHook = function() return 1, 2 end
     print = function(text) logs[#logs + 1] = text end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     assert(language_reads == 0, 'startup must not invoke reflection outside the game-thread callback')
     callback()

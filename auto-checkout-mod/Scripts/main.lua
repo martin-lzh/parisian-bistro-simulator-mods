@@ -8,27 +8,49 @@ local function start()
     local Game = require('game')
     local Checkout = require('checkout')
     local AI = require('ai')
+    local Reload = require('reload')
     local Localization = require('localization')
     local locale = Localization.new()
     local diagnostics = Diagnostics.new(function(message) print(message .. '\n') end)
-    local checkout = Checkout.new()
-    local ai = AI.new(Game)
-    local api, session_id
+    local handoff = Reload.new(ModRef)
+    local checkout, ai, api
+    local session_id = handoff.state.session
+    local awaiting_session = session_id ~= nil
+    local active, recovering = true, next(handoff.state.removed) ~= nil
+    local function checkpoint()
+        handoff:save({ session = session_id, registers = checkout.registers, removed = ai.removed })
+    end
+    checkout = Checkout.new(checkpoint)
+    ai = AI.new(Game, checkpoint)
+    checkout.registers, ai.removed = handoff.state.registers, handoff.state.removed
+    -- UE4SS calls this after stopping async work, possibly off the game thread.
+    -- Only copy plain state here. The next Lua instance performs engine recovery.
+    ModRef.OnUnload = function()
+        active = false
+        local ok, err = pcall(checkpoint)
+        if not ok then
+            diagnostics:log('WARN', 'Reload handoff failed; previous recovery state retained. ' .. tostring(err))
+        end
+    end
+    checkpoint()
     local failed, queued = false, false
     local ticks, dispatched = 0, 0
     local stage, detail = 'startup', ''
 
-    local function restore_ai()
+    local function restore_ai(discard_missing)
         if ai:active() then
-            local restored = ai:restore(Game.ai_contexts())
+            local restored = ai:restore(Game.ai_contexts(), recovering and not discard_missing)
             diagnostics:log('AI', 'restored_containers=' .. restored)
         end
+        recovering = false
+        checkpoint()
     end
 
     local function stop(err, on_game_thread)
         failed = true
         if ai:active() then
             local function cleanup()
+                if not active then return end
                 local ok, cleanup_error = pcall(restore_ai)
                 if not ok then
                     diagnostics:log('WARN', locale:text('ai_restore_failed') .. ' ' .. tostring(cleanup_error))
@@ -58,10 +80,23 @@ local function start()
         end
         stage = 'session'
         local session, reason = Game.session(api)
+        if recovering then
+            -- During travel the old containers may already be gone. Only a
+            -- different live session proves their absence is safe to forget.
+            -- No controller yet is inconclusive: preserve the handoff and wait.
+            if not session then
+                diagnostics:observe('session', 'waiting=' .. tostring(reason) .. ' reload-recovery=pending', ticks)
+                return
+            end
+            stage, detail = 'reload-recovery', ''
+            restore_ai(session.id ~= session_id)
+            diagnostics:log('RELOAD', 'AI recovery completed; transaction history checked against current session')
+        end
         if not session then
             restore_ai()
-            checkout:reset()
-            session_id = nil
+            -- A controller can be temporarily unavailable just after reload.
+            -- Keep inherited attempts until a real session proves its identity.
+            if not awaiting_session then checkout:reset(); session_id = nil end
             diagnostics:prune({ session = true })
             diagnostics:observe('session', 'waiting=' .. tostring(reason) .. ' dispatched=' .. dispatched, ticks)
             if signals then
@@ -71,6 +106,7 @@ local function start()
             end
             return
         end
+        awaiting_session = false
         if session.id ~= session_id then
             restore_ai()
             checkout:reset()
@@ -147,8 +183,9 @@ local function start()
     end
 
     local function run(signals)
+        if not active then return true end
         if not failed then
-            local ok, err = xpcall(function() tick(signals) end, traceback)
+            local ok, err = xpcall(function() tick(signals); checkpoint() end, traceback)
             if not ok then stop(err, true) end
         end
         return false
@@ -168,6 +205,7 @@ local function start()
         if notification_queued then return end
         notification_queued = true
         local function drain()
+            if not active then return end
             local signals = pending
             pending = {}
             -- Keep the flag set through dispatch to avoid nested requests
@@ -186,7 +224,7 @@ local function start()
         end
     end
     local function on_notification(context)
-        if failed or not notifications_enabled then return end
+        if not active or failed or not notifications_enabled then return end
         local ok, err = xpcall(function()
             local register = context:get()
             if not Game.valid(register) then return end
@@ -203,6 +241,7 @@ local function start()
         diagnostics:log('START', 'version=' .. Diagnostics.VERSION .. ' scheduler=game-thread-loop host-only=true player_guard=transaction-only')
     else
         LoopAsync(1000, function()
+            if not active then return true end
             if queued or failed then return false end
             queued = true
             local ok, err = xpcall(function()

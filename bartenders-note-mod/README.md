@@ -6,7 +6,7 @@
 
 See the drinks you have claimed and still need to make, directly below the restaurant name. Repeated orders are grouped by drink type, for example `Espresso x 10 · Lemonade x 3`.
 
-**Current source: 0.1.1-dev.** The two-line layout and expanded localization await in-game acceptance. Version 0.1.0 was confirmed in-game on 2026-09-24; that confirmation does not cover these new changes.
+**Current source: 0.1.2-dev.** The two-line layout, expanded localization and Lua reload lifecycle await in-game acceptance. Version 0.1.0 was confirmed in-game on 2026-09-24; that confirmation does not cover these new changes.
 
 ### How it works
 
@@ -31,7 +31,9 @@ For Windows Parisian Bistro Simulator with **UE4SS experimental**. The local ref
 3. Check that `BartendersNote/Scripts/main.lua` and `BartendersNote/enabled.txt` exist. Do not replace the whole `mods.txt` or add a duplicate enable entry.
 4. Start the game, enter the restaurant and claim drink orders on the tablet.
 
-The package includes neither UE4SS nor game assets. Building from source does not install anything. Restart the game after installing or updating.
+The package includes neither UE4SS nor game assets. Building from source does not install anything. Restart once when first installing this version, so earlier versions' widgets are cleared.
+
+With this version running, Lua-only updates can be applied using UE4SS's **Ctrl+R** reload when `EnableHotReloadSystem=1` is enabled. Reload stops the previous callbacks and removes its banner and measurement widget on the new state's next game-thread refresh before rebuilding the display. Claimed orders remain in the game. Reload support still needs in-game acceptance.
 
 ### If the list is missing
 
@@ -41,7 +43,7 @@ The Mod refreshes after relevant events and checks the queue every 750 ms. It cl
 
 ### Update or remove
 
-Close the game before replacing or removing the `BartendersNote` folder. No custom save data needs cleanup. Host/client isolation and live language changes remain part of the pending regression checklist.
+For Lua-only updates after the initial restart, replace the Lua files and reload as described above. Close the game before removing the `BartendersNote` folder or changing the loader. No custom save data needs cleanup. Host/client isolation and live language changes remain part of the pending regression checklist.
 
 [Changes](CHANGELOG.md) · [Build, implementation and validation](DEVELOPMENT.md#english)
 
@@ -49,7 +51,7 @@ Close the game before replacing or removing the `BartendersNote` folder. No cust
 
 在餐厅名称下方显示自己认领且尚未制作完成的饮料，同类订单合并计数，例如：`浓缩咖啡 x 10 · 柠檬水 x 3`。
 
-**当前源码：0.1.1-dev。** 两行布局与多语言扩展仍待实机验收。0.1.0 已于 2026-09-24 获得实机确认，该结论不覆盖这些新改动。
+**当前源码：0.1.2-dev。** 两行布局、多语言扩展与 Lua 重载生命周期仍待实机验收。0.1.0 已于 2026-09-24 获得实机确认，该结论不覆盖这些新改动。
 
 ### 怎么使用
 
@@ -74,7 +76,9 @@ Close the game before replacing or removing the `BartendersNote` folder. No cust
 3. 确认存在 `BartendersNote/Scripts/main.lua` 和 `BartendersNote/enabled.txt`。无需替换整个 `mods.txt`，也不要添加重复启用项。
 4. 启动游戏、进入餐厅，在平板中认领饮料订单。
 
-包内不含 UE4SS 或游戏资产。从源码构建不会自动安装；安装或更新后须重新启动游戏。
+包内不含 UE4SS 或游戏资产。从源码构建不会自动安装；首次安装本版本后需重启一次，清除旧版本遗留的控件。
+
+本版本开始运行后，仅更新 Lua 文件时可使用 UE4SS 的 **Ctrl+R** 重载，需启用 `EnableHotReloadSystem=1`。重载会停止旧回调；新状态在下一次游戏线程刷新时移除旧显示栏和测量控件，再重建清单。游戏中的认领订单保持原状，热重载仍待实机验收。
 
 ### 清单没有出现时
 
@@ -84,6 +88,6 @@ Mod 在相关事件后刷新，并每 750 毫秒核对队列。数据源不可�
 
 ### 更新与卸载
 
-关闭游戏后替换或删除 `BartendersNote` 文件夹，无需清理自定义存档数据。房主与客户端各自显示、运行中语言切换仍列在后续回归清单中。
+首次重启后，仅更新 Lua 文件可按上文覆盖并重载；删除 `BartendersNote` 文件夹或更新加载器前请关闭游戏，无需清理自定义存档数据。房主与客户端各自显示、运行中语言切换仍列在后续回归清单中。
 
 [版本变化](CHANGELOG.md) · [构建、实现与验收](DEVELOPMENT.md#中文)

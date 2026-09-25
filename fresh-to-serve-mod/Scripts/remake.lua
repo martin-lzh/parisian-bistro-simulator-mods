@@ -36,11 +36,12 @@ function Remake.new(game, log)
     return setmetatable({ game = game, log = log, pending = {}, session = nil }, Remake)
 end
 
-function Remake:tick(api)
+function Remake:tick(api, current_session)
     local game = self.game
-    local session = game.session(api)
+    local session = current_session or game.session(api)
     if not session then
-        self.pending, self.session = {}, nil
+        -- A reload can briefly precede possession/HUD initialization. Keep
+        -- scalar tickets until an actual session proves travel occurred.
         return
     end
     if session.id ~= self.session then

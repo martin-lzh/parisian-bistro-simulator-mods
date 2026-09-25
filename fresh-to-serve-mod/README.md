@@ -6,7 +6,7 @@
 
 Fresh to Serve removes poor-quality cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. When the original customer is still waiting and has enough patience, it requests a replacement from the kitchen or bar. The game's waiters collect and serve it normally. Finished cocktails are included.
 
-Current version: **0.1.1-dev — awaiting in-game acceptance**.
+Current version: **0.1.2-dev — awaiting in-game acceptance**.
 
 ### Behavior
 
@@ -25,7 +25,7 @@ Cleanup removes the entire spoiled item and frees its pickup position. It does n
 Baseline: Windows / Steam Build **25393699**, game **1.0.0.44eb**, Unreal **5.4**. Requires **UE4SS experimental**, with the locally checked API `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not supported.
 
 1. Close the game yourself and install the required loader if needed.
-2. Obtain `FreshToServe-0.1.1-dev.zip` and its `.sha256` from the matching CI artifact, or run `python fresh-to-serve-mod/build.py` from the repository root.
+2. Obtain `FreshToServe-0.1.2-dev.zip` and its `.sha256` from the matching CI artifact, or run `python fresh-to-serve-mod/build.py` from the repository root.
 3. Extract `FreshToServe/` into the loader's `Mods/`. Confirm `enabled.txt` and `Scripts/main.lua` are present.
 4. Start the game and host your restaurant. No hotkey or configuration is needed.
 
@@ -33,7 +33,13 @@ If you installed the earlier Fresh Service package, close the game and remove it
 
 To disable, close the game and remove `FreshToServe/enabled.txt` or the Mod folder. This does not undo discarded items or accepted orders. Builds never install the Mod, change saves or start/close the game. No game files or loader are bundled.
 
-No player-facing text is added; names and order UI stay in the game's language. Technical logs use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED`, `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not delivery. Engine errors stop automation until reload to avoid repeating an uncertain request. Report relevant logs, game/loader versions and host/client role.
+### Reloading scripts
+
+Install 0.1.2-dev with the game closed when upgrading from an earlier version: older code cannot hand over its pending replacement records. Once this version is running, use UE4SS's manual **Ctrl+R** reload after copying every updated script. In `UE4SS-settings.ini`, use `[General]` settings `EnableHotReloadSystem = 1`, `HotReloadKey = R`, and `EnableAutoReloadingLuaMods = 0`. Ctrl+R reloads all enabled Lua Mods, so their reload support matters too. See the [shared reload guide](../docs/hot-reload.md#english).
+
+Pending food/drink replacements survive script reload in the same session, including their original age, retry count and next retry time. Reload does not grant more attempts or extra patience. Each request still checks the live customer and queues. A safety stop after an uncertain engine operation also survives reload; a different game session clears that stopped state and the old tickets. Records are held only in the running loader's memory, not written to saves or retained after exiting the game.
+
+No player-facing text is added; names and order UI stay in the game's language. Technical logs use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED`, `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not delivery. Engine errors stop automation for the current session, including across script reloads, to avoid repeating an uncertain request. Report relevant logs, game/loader versions and host/client role.
 
 See [development and acceptance checklist](DEVELOPMENT.md#english) and [changes](CHANGELOG.md).
 
@@ -41,7 +47,7 @@ See [development and acceptance checklist](DEVELOPMENT.md#english) and [changes]
 
 Fresh to Serve（焕新上桌）自动清理厨房出餐台、饮料出品区和升降机出餐位上的低劣熟食及成品饮料，包含鸡尾酒；原顾客仍在等待且剩余耐心足够时，向厨房或吧台补单，再由游戏原有服务员正常取餐、送达。
 
-当前版本：**0.1.1-dev，待游戏内验收**。
+当前版本：**0.1.2-dev，待游戏内验收**。
 
 ### 工作流程
 
@@ -60,7 +66,7 @@ Fresh to Serve（焕新上桌）自动清理厨房出餐台、饮料出品区和
 参考基线：Windows / Steam Build **25393699**、游戏 **1.0.0.44eb**、Unreal **5.4**；依赖 **UE4SS experimental**，本机核对 API 为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1。
 
 1. 自行关闭游戏，安装所需加载器。
-2. 从对应 CI artifact 取得 `FreshToServe-0.1.1-dev.zip` 及 `.sha256`，或在仓库根目录运行 `python fresh-to-serve-mod/build.py`。
+2. 从对应 CI artifact 取得 `FreshToServe-0.1.2-dev.zip` 及 `.sha256`，或在仓库根目录运行 `python fresh-to-serve-mod/build.py`。
 3. 把包内 `FreshToServe/` 解压到加载器的 `Mods/`，确认有 `enabled.txt` 和 `Scripts/main.lua`。
 4. 启动游戏，以房主身份进入餐厅即可；无需快捷键或配置。
 
@@ -68,6 +74,12 @@ Fresh to Serve（焕新上桌）自动清理厨房出餐台、饮料出品区和
 
 停用时关闭游戏，移除 `FreshToServe/enabled.txt` 或 Mod 文件夹。卸载不会撤销已丢弃成品和已接受订单。构建不安装、不改存档、不启停游戏，包内不含加载器或游戏内容。
 
-本 Mod 不新增玩家界面文字，菜名及订单沿用游戏语言。技术日志前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）、`ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达。引擎异常时停止自动化，避免反复发送结果不明的请求。反馈请附相关日志、游戏及加载器版本、房主或客户端身份。
+### 脚本热重载
+
+从旧版首次升级到 0.1.2-dev 时，请关闭游戏后安装；旧代码无法移交已有的待补单记录。本版已运行后，完整复制本次更新的所有脚本，再使用 UE4SS 的手动 **Ctrl+R** 重载。`UE4SS-settings.ini` 的 `[General]` 使用 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`。Ctrl+R 会重载所有已启用的 Lua Mod，其他 Mod 也需要支持重载。另见[统一热重载说明](../docs/hot-reload.md#中文)。
+
+同一会话中的待补食物/饮料订单会跨脚本重载保留，连同最初生成时间、已尝试次数和下一次重试时间；重载不增加尝试机会或顾客耐心。每次补单仍重新检查当前顾客和队列。结果不明的引擎操作触发的安全停止也会跨重载保留；进入不同游戏会话后，才清除旧凭据及停止状态。记录仅保存在运行中的加载器内存里，不写入存档，也不在退出游戏后保留。
+
+本 Mod 不新增玩家界面文字，菜名及订单沿用游戏语言。技术日志前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）、`ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达。引擎异常后，本会话中持续停止自动化，脚本重载也不会解除，以避免反复发送结果不明的请求。反馈请附相关日志、游戏及加载器版本、房主或客户端身份。
 
 参见[开发及验收清单](DEVELOPMENT.md#中文)与[版本变化](CHANGELOG.md)。

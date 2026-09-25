@@ -68,6 +68,7 @@ local function fixture(modern, failure)
     end or nil
     LoopAsync = function(_, fn) f.timer = fn end
     print = function(message) f.logs[#f.logs + 1] = message end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     function f.emit(register)
         local expired = false
