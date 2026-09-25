@@ -5,7 +5,7 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.1.3-dev"
+VERSION = "0.1.4-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "first-to-serve"
 FILES = (

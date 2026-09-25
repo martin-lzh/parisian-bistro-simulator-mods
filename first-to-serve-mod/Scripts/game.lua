@@ -30,6 +30,8 @@ function Game.contract()
     required('/Script/BrasserieSimulator.NetPlayerController:Server_RequestInteraction')
     required('/Script/EnhancedInput.EnhancedInputSubsystemInterface:QueryKeysMappedToAction')
     required('/Script/Engine.KismetMathLibrary:Less_DateTimeDateTime')
+    required('/Script/Engine.SubsystemBlueprintLibrary:GetWorldSubsystem')
+    required('/Script/BrasserieSimulator.WorldGameInstanceSubsystem:GetKitchenManager')
     local action
     required('/Script/BrasserieSimulator.EInteractionActions'):ForEachName(function(name, value)
         if name:ToString():match('EIA_DefaultAction$') then action = value end
@@ -39,6 +41,10 @@ function Game.contract()
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish = required('/Script/BrasserieSimulator.Dish'),
         drink = required('/Script/BrasserieSimulator.Drink'),
+        -- Older builds have no area actor; direct item targeting still works.
+        dish_output = StaticFindObject('/Script/BrasserieSimulator.DishOutputArea'),
+        kitchen = required('/Script/BrasserieSimulator.KitchenManager'),
+        world_subsystem = required('/Script/BrasserieSimulator.WorldGameInstanceSubsystem'),
         enhanced = required('/Script/EnhancedInput.EnhancedInputLocalPlayerSubsystem'),
         input = required('/Script/EnhancedInput.Default__EnhancedInputLibrary'),
         subsystems = required('/Script/Engine.Default__SubsystemBlueprintLibrary'),
@@ -126,8 +132,21 @@ local function aimed_scope(api, session)
     if not Game.valid(component) then return nil end
     local target = component:GetOwner()
     if not actor(target, session.world) then return nil end
-    -- A ready item is required to START the gesture. Its later pickup must
-    -- not discard the source that the player already chose.
+    if Game.valid(api.dish_output) and target:IsA(api.dish_output) then
+        -- Only the native pickup box identifies the kitchen pass. Other mesh
+        -- hits and nearby furniture must not start the gesture.
+        if not same(component, target.PickupInteractionBox) then return nil end
+        local subsystem = api.subsystems:GetWorldSubsystem(target, api.world_subsystem)
+        if not Game.valid(subsystem) then return nil end
+        local source = subsystem:GetKitchenManager()
+        if not actor(source, session.world) or not source:IsA(api.kitchen) then return nil end
+        local scope = { id = identity(source), source = source, kind = 'food' }
+        -- Use the same per-item readiness, reach, floor and capacity checks as
+        -- direct aiming. Never send the area-level batch pickup interaction.
+        if Game.snapshot(api, session, scope).oldest then return scope end
+        return nil
+    end
+    -- Direct item targeting also identifies its source, including drink areas.
     local kind, sources
     if target:IsA(api.drink) then kind, sources = 'drink', FindAllOf('DrinkOutputArea')
     elseif target:IsA(api.dish) then kind, sources = 'food', FindAllOf('KitchenManager')

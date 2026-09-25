@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Update to 0.1.4-dev: start oldest-first pickup by holding over the kitchen pass's native pickup area, without aiming at a particular dish. Resolve its kitchen through the current world and keep per-dish server requests, readiness, reach, floor, tray capacity and acknowledgement checks.
+- Keep direct dish/drink targeting and native short clicks. Empty passes do not start pickup; the hold hint remains below the native pickup hint while eligible dishes remain. Add area-started three-item pickup, camera panning, rejection and cancellation regression coverage. New area targeting awaits in-game acceptance.
+- 更新至 0.1.4-dev：可直接对准厨房出餐口的原生拿取区域长按，无需瞄准某一盘菜品；通过当前世界定位厨房，保留按时间排序的逐盘服务器请求、成品状态、距离、楼层、托盘容量及拿取确认检查。
+- 保留直接瞄准菜品或饮料的用法及原生短按；空出餐口不启动取餐，有可取菜品时在原生拿取提示下显示长按提示。增加从出餐口连续取三盘、移动准星、拒绝条件及取消操作的回归测试；新增区域触发仍待实机验收。
+
 - Update to 0.1.3-dev: keep the selected source throughout a hold when the aimed item is being picked, moves to the tray or leaves an empty spot. Repeated input events preserve pending acknowledgement; turning/walking away, release and source/session changes still cancel.
 - Remove orphaned central and legacy sidebar Mod hints after hot reload, including when no pickup session is available. Preserve one central row, stop unloaded runtimes and restore saved native hint visibility on the game thread.
 - Add adapter/runtime regression coverage for three consecutive food and drink pickups and for reload cleanup. In-game acceptance remains pending.

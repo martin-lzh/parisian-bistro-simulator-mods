@@ -4,6 +4,8 @@
 
 ## English
 
+On 2026-09-25, the user reported testing aiming and continuous holds at the updated game's kitchen pass and requested starting the hold on the pass itself. First to Serve **0.1.4-dev** adds that area-targeting behavior; its offline regression tests pass, while this new behavior still awaits in-game acceptance. The report does not establish a complete loader, multiplayer or display test matrix.
+
 Smart Delivery **0.1.2-dev** is available for testing the updated game. On 2026-09-25, native code discovery was checked read-only against installed Steam Build **25532071**. This version removes mandatory game-version, executable-size and hash allowlists, retaining target-structure and code-conflict checks. Synthetic native discovery tests and dispatch execution tests passed; real game startup, UI, fees and delivery staffing remain unverified.
 
 Earlier Smart Delivery startup history: On 2026-09-24, the user reported that 0.1.0-dev loaded but its native helper failed compatibility validation before UI injection. Version 0.1.1-dev corrects the treatment of zero-filled runtime data. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
@@ -41,6 +43,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+2026-09-25，用户反馈已实测新版出餐口的瞄准与连续长按，并要求直接对准出餐口启动长按。First to Serve **0.1.4-dev** 新增该区域触发方式；离线回归测试通过，新增行为仍待实机验收。此次反馈不代表加载器、联机及显示场景已完成全部验证。
 
 Smart Delivery **0.1.2-dev** 用于测试更新后的游戏。2026-09-25，已对本机 Steam Build **25532071** 只读核对原生代码定位结果。本版取消游戏版本、EXE 固定大小与哈希白名单，保留目标结构及代码冲突检查。原生定位合成测试与分派执行测试通过；实际游戏启动、界面、费用及配送人数仍待验证。
 

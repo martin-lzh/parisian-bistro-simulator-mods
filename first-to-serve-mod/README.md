@@ -4,9 +4,9 @@
 
 ## English
 
-Version: **0.1.3-dev**. Aim directly at a ready dish at the kitchen pass or a finished drink on its output area, then hold the interaction key. The aimed item identifies the pickup area: First to Serve takes the earliest-created ready item from that area first, even if you are aiming at a newer one. Keep holding toward the same area to continue collecting in time order. The gesture remembers the source, so taking the aimed item does not interrupt pickup or require aiming at each next item. Empty surfaces and nearby pickup spots do not activate the Mod.
+Version: **0.1.4-dev**. Aim at the kitchen pass's native pickup area and hold the interaction key to collect the earliest-created ready dishes in order. You do not need to aim at a particular plate; moving the crosshair across the same pickup area keeps the hold active. You can also start by aiming at a ready dish, or at a finished drink on a drink output area. The gesture remembers the source after each item is taken. Empty passes and unrelated surfaces do not start pickup.
 
-Equip your tray first. A native hold-key hint appears directly below the normal click-to-pick-up hint when the aimed item is eligible and a suitable tray slot is available. It appears only in the native central pickup panel, with no extra sidebar hint, and disappears when the pickup hint or its panel is hidden. Hot reload removes leftover Mod hints, including old sidebar hints, before showing a single central row. Its icon follows the game's keyboard/controller mappings and its wording follows the game's language. The default mouse binding is the left button; gamepad uses the game's hold-interaction binding. Tap keeps the normal single-item behavior. While carrying a tray and aiming at a supported ready item, holding is used for pickup instead of the interaction wheel. Furniture keeps its normal interaction.
+Equip your tray first. A native hold-key hint appears directly below the normal click-to-pick-up hint when the targeted pass or item has an eligible candidate and a suitable tray slot is available. It appears only in the native central pickup panel, with no extra sidebar hint, and disappears when the pickup hint or its panel is hidden. Hot reload removes leftover Mod hints, including old sidebar hints, before showing a single central row. Its icon follows the game's keyboard/controller mappings and its wording follows the game's language. The default mouse binding is the left button; gamepad uses the game's hold-interaction binding. Tap keeps the game's normal behavior, including its native pass pickup. While carrying a tray and aiming at the kitchen pickup area or a supported ready item, holding is used for oldest-first pickup instead of the interaction wheel. Other furniture keeps its normal interaction.
 
 Items are ordered by their native creation timestamps, not order placement time, recipe duration or when the Mod first saw them. Only ready, clean, unconsumed items in the current source are considered. Dirty plates, unfinished drinks, carried items, other floors and items outside pickup reach are excluded. No items are spawned, teleported or removed directly.
 
@@ -14,11 +14,11 @@ Release the key, turn away, walk away, switch areas/tools, or open a menu to sto
 
 ### Installation
 
-Requires Windows Parisian Bistro Simulator and **UE4SS experimental**. Development references: Steam Build **25393699**, ProjectVersion **1.0.0.44eb**, UE **5.4**, UE4SS API **v3.0.1-1140-gf58e8f84**. Older stable UE4SS 3.0.1 is not the target.
+Requires Windows Parisian Bistro Simulator and **UE4SS experimental**. Current pickup-area reference: Steam Build **25532071**, ProjectVersion **1.0.1.44eb**, UE **5.4**, UE4SS API **v3.0.1-1140-gf58e8f84**. Older stable UE4SS 3.0.1 is not the target.
 
 1. With the game closed, install the required loader separately.
-2. Extract `FirstToServe-0.1.3-dev.zip` into the loader's `Mods` directory. It should contain `Mods/FirstToServe/Scripts/main.lua` and `Mods/FirstToServe/enabled.txt`.
-3. Start the game yourself, enter the restaurant, equip the tray and aim directly at a ready dish or a finished drink. Check for the hold hint, then hold the mapped key.
+2. Extract `FirstToServe-0.1.4-dev.zip` into the loader's `Mods` directory. It should contain `Mods/FirstToServe/Scripts/main.lua` and `Mods/FirstToServe/enabled.txt`.
+3. Start the game yourself, enter the restaurant, equip the tray and aim at the kitchen pickup area, a ready dish or a finished drink. Check for the hold hint, then hold the mapped key.
 
 Previously named **Oldest First**. If you installed that development package, disable its `Mods/OldestFirst/enabled.txt` before enabling `FirstToServe` so only one copy runs.
 
@@ -32,9 +32,9 @@ The hint supports English, French, Simplified Chinese, Traditional Chinese, Ital
 
 **First to Serve（先做好先端）**：先制作好的餐品，优先拿取出餐。
 
-版本：**0.1.3-dev**。对准出餐口某一盘可拿取的菜品，或饮料台上某一杯已完成的饮料，长按交互键。瞄准的餐品用于识别所属出餐区域；即使对准较新的那份，也会优先拿取同一区域制作时间最早的成品。保持朝向该区域并持续按住，会继续按时间顺序拿取。长按会记住所选区域，瞄准的第一份被拿走后仍会继续，无需逐份重新瞄准。空台面和附近拿取点不触发本功能。
+版本：**0.1.4-dev**。对准厨房出餐口的原生拿取区域，长按交互键，即可按制作时间先后连续拿取成品。无需固定瞄准某一盘菜品，准星在同一拿取区域内移动时仍会继续。也可以沿用直接瞄准一盘成品菜品，或饮料台上一杯成品饮料的方式启动；每份拿走后会记住所选来源。空出餐口和无关台面不启动取餐。
 
-使用前先装备托盘。瞄准的成品可拿取且托盘有对应空位时，在原生“点击拿取”提示正下方显示长按键位提示；仅显示在原生中央取餐提示区，不在右侧栏额外显示；原生拿取提示或其容器隐藏时，长按提示也随之清除。热重载后会清理遗留的 Mod 提示，包括旧版侧边栏提示，仅保留一份中央提示。按键图标跟随游戏的键鼠/手柄映射和改键，说明文字跟随游戏语言。鼠标默认是左键；手柄使用游戏的长按交互键。短按保留原来的单件交互。持托盘瞄准支持的成品时，长按用于拿取；家具保留原本的交互。
+使用前先装备托盘。对准的出餐口或餐品有可取成品，且托盘有对应空位时，在原生“点击拿取”提示正下方显示长按键位提示；仅显示在原生中央取餐提示区，不在右侧栏额外显示；原生拿取提示或其容器隐藏时，长按提示也随之清除。热重载后会清理遗留的 Mod 提示，包括旧版侧边栏提示，仅保留一份中央提示。按键图标跟随游戏的键鼠/手柄映射和改键，说明文字跟随游戏语言。鼠标默认是左键；手柄使用游戏的长按交互键。短按保留游戏原本的交互，包括出餐口的原生拿取。持托盘对准厨房拿取区域或支持的成品时，长按用于按制作时间取餐；其他家具保留原本的交互。
 
 排序使用餐品原生创建时间，不按顾客下单时间、配方制作耗时或 Mod 首次看到餐品的时间排序。只考虑当前出餐区域中已完成、干净且尚未食用的成品；排除脏盘、未灌满的饮料、已被拿走的餐品、其他楼层及拿取范围外的物品。不直接生成、传送或删除餐品。
 
@@ -42,11 +42,11 @@ The hint supports English, French, Simplified Chinese, Traditional Chinese, Ital
 
 ### 安装
 
-需要 Windows 版 Parisian Bistro Simulator 和 **UE4SS experimental**。开发参考基线：Steam Build **25393699**、ProjectVersion **1.0.0.44eb**、UE **5.4**，UE4SS API **v3.0.1-1140-gf58e8f84**。旧稳定版 UE4SS 3.0.1 不是目标加载器。
+需要 Windows 版 Parisian Bistro Simulator 和 **UE4SS experimental**。当前出餐口参考：Steam Build **25532071**、ProjectVersion **1.0.1.44eb**、UE **5.4**，UE4SS API **v3.0.1-1140-gf58e8f84**。旧稳定版 UE4SS 3.0.1 不是目标加载器。
 
 1. 关闭游戏后，单独安装所需加载器。
-2. 将 `FirstToServe-0.1.3-dev.zip` 解压到加载器的 `Mods` 目录。应出现 `Mods/FirstToServe/Scripts/main.lua` 和 `Mods/FirstToServe/enabled.txt`。
-3. 自行启动游戏进入餐厅，装备托盘，对准某一盘可拿取菜品或某一杯成品饮料；看到长按提示后，按住对应键位。
+2. 将 `FirstToServe-0.1.4-dev.zip` 解压到加载器的 `Mods` 目录。应出现 `Mods/FirstToServe/Scripts/main.lua` 和 `Mods/FirstToServe/enabled.txt`。
+3. 自行启动游戏进入餐厅，装备托盘，对准厨房出餐口的拿取区域、某一盘可取菜品或某一杯成品饮料；看到长按提示后，按住对应键位。
 
 本 Mod 原名 **Oldest First**。若已安装旧开发包，请先禁用旧目录中的 `Mods/OldestFirst/enabled.txt`，再启用 `FirstToServe`，避免两个副本同时运行。
 
