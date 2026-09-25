@@ -34,10 +34,15 @@ function F.setup()
     manager.HasAuthority = function() return state.client ~= true end
     manager.IsActorBeingDestroyed = function() return state.destroying == true end
     manager.GetDailyMenuMaximumPromotedAdoptionChance = function() return state.ceiling or 1 end
-    manager.GetDailyMenuInfluence = function() return state.influence or 0 end
+    manager.DailyMenuInfluence, manager.DailyMenuInfluenceHalfLifeGameHours, manager.Satisfaction = 0, 12, 1
+    manager.GetDailyMenuInfluence = function(self)
+        -- Synthetic clock drift, not an implementation of the game's formula.
+        return self.DailyMenuInfluenceHalfLifeGameHours == 0 and self.DailyMenuInfluence
+            or math.max(0, self.DailyMenuInfluence - (state.decay or 0))
+    end
     manager.GetTier = function() return state.tier or 0 end
     manager.GetDifficulty = function() return 0 end
-    manager.GetSatisfaction = function() return state.satisfaction or 1 end
+    manager.GetSatisfaction = function(self) return self.Satisfaction end
     manager.GetDishPrice = function(_, id) return state.prices[id] or 10 end
     manager.DailyMenuMaxAdoptionChanceBonus = 0.2
     for _, name in ipairs({ 'AvailableDishes', 'UnlockedDailyDishes', 'DisabledDishes', 'EmployeeRequirementDisabledDishes' }) do
@@ -70,6 +75,9 @@ function F.setup()
         local menu = self:GetDailyMenu(period)
         local copied = {}; for key, value in pairs(menu) do copied[key] = value end
         if state.projection_error then error('Synthetic projection failure') end
+        local configured = false
+        for _, course in ipairs(Planner.courses) do configured = configured or menu[course.field] ~= 0 end
+        if not configured then return { Period = period, bConfigured = false, EstimatedAdoptionRate = 0 } end
         if state.oracle then return { Period = period, bConfigured = true, EstimatedAdoptionRate = state.oracle(copied) } end
         -- Invented non-additive objective, deliberately unrelated to dish tags.
         local target = period == 1 and 21 or 20

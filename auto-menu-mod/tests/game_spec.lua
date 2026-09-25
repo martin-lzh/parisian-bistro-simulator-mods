@@ -35,9 +35,7 @@ rejected(function(s) s.manager.LunchDailyMenu.MainDish = 99 end)
 rejected(function(s) s.manager.GetWorld = function() return s.object('World') end end)
 rejected(function(s) s.prices[20] = 15 end)
 rejected(function(s) s.missing = 20 end)
-rejected(function(s) s.influence = 0.2 end)
 rejected(function(s) s.tier = 1 end)
-rejected(function(s) s.satisfaction = 0.5 end)
 rejected(function(s) s.manager.DisabledDishes = F.array({20}) end)
 rejected(function(s) s.oracle = function() return 0.7 end end)
 
@@ -84,4 +82,74 @@ assert(Game.evaluate(state.owner, snapshot, candidate) == 0.1)
 assert(Game.unchanged(state.owner, snapshot) and state.saves == 0, 'Field restoration fallback must restore every field')
 state = F.setup(); state.manager.DailyCustomerContext.LunchForecast.ProfileProbabilities = F.array({})
 assert(not pcall(Game.snapshot, state.owner))
+
+-- Time and satisfaction move between slices, but all candidates use the same native sample.
+state = F.setup()
+state.manager.DailyMenuInfluence = 0.8
+state.decay = 0.1
+snapshot = Game.snapshot(state.owner)
+state.decay = 0.4
+state.manager.Satisfaction = 0.4
+state.oracle = function(menu)
+    return (menu.MainDish == 21 and 0.1 or 0) + state.manager:GetDailyMenuInfluence() * 0.5
+        + state.manager:GetSatisfaction() * 0.1
+end
+assert(Game.unchanged(state.owner, snapshot), 'Ordinary simulation drift must not cancel the search')
+local expected = 0.1 + snapshot.sample.influence * 0.5 + snapshot.sample.satisfaction * 0.1
+candidate.MainDish = 21
+assert(Game.evaluate(state.owner, snapshot, candidate) == expected)
+assert(state.manager.DailyMenuInfluence == 0.8 and state.manager.DailyMenuInfluenceHalfLifeGameHours == 12
+    and state.manager.Satisfaction == 0.4, 'Trial must restore the latest live values, not the click-time values')
+local live, saved = Game.apply(state.owner, snapshot, candidate, expected)
+assert(saved and live == 0.1 + 0.4 * 0.5 + 0.4 * 0.1 and state.saves == 1)
+
+-- If native live rankings reverse, retain the better existing menu without saving.
+state = F.setup(); state.manager.LunchDailyMenu.MainDish = 20
+state.manager.DailyMenuInfluence = 0.8
+snapshot = Game.snapshot(state.owner); candidate.MainDish = 21
+state.oracle = function(menu)
+    local influence = state.manager:GetDailyMenuInfluence()
+    return menu.MainDish == 21 and influence or 1 - influence
+end
+expected = Game.evaluate(state.owner, snapshot, candidate)
+state.decay = 0.6
+live, saved = Game.apply(state.owner, snapshot, candidate, expected)
+assert(not saved and state.saves == 0 and state.manager.LunchDailyMenu.MainDish == 20 and live > 0.7)
+
+-- Native array reorder alone is not a semantic change.
+state = F.setup(); state.manager.AvailableDishes = F.array({ 20, 10 })
+local probabilities = state.manager.DailyCustomerContext.LunchForecast.ProfileProbabilities.entries
+probabilities[1].Probability = 0.5; probabilities[2] = { Profile = 1, Probability = 0.5 }
+snapshot = Game.snapshot(state.owner)
+state.manager.AvailableDishes = F.array({ 10, 20 })
+probabilities[1], probabilities[2] = probabilities[2], probabilities[1]
+local options = state.owner.WBP_DailyMenu_MainDish.WBP_DailyMenu_DishSelector.DishOptions.entries
+options[1], options[2] = options[2], options[1]
+assert(Game.unchanged(state.owner, snapshot), 'Array ordering must not cancel semantically identical inputs')
+state.prices[20] = 15
+local unchanged, reason = Game.unchanged(state.owner, snapshot)
+assert(not unchanged and reason:find('price', 1, true), 'Real changes need a specific diagnostic path')
+
+-- Failed projection restores all sampled properties even when their live values drifted.
+state = F.setup(); state.manager.DailyMenuInfluence = 0.9
+snapshot = Game.snapshot(state.owner)
+state.decay = 0.3; state.manager.Satisfaction = 0.25; state.projection_error = true
+assert(not pcall(Game.evaluate, state.owner, snapshot, candidate))
+assert(state.manager.DailyMenuInfluence == 0.9 and state.manager.DailyMenuInfluenceHalfLifeGameHours == 12
+    and state.manager.Satisfaction == 0.25 and state.manager.LunchDailyMenu.MainDish == 0)
+state.projection_error = nil
+local live_satisfaction = state.manager.Satisfaction
+state.manager.Satisfaction = nil
+setmetatable(state.manager, {
+    __index = function(_, key) if key == 'Satisfaction' then return live_satisfaction end end,
+    __newindex = function(self, key, value)
+        if key ~= 'Satisfaction' then rawset(self, key, value); return end
+        live_satisfaction = value
+        if value == snapshot.sample.satisfaction then error('Synthetic sampled-property write failure') end
+    end,
+})
+assert(not pcall(Game.evaluate, state.owner, snapshot, candidate))
+assert(state.manager.DailyMenuInfluence == 0.9 and state.manager.DailyMenuInfluenceHalfLifeGameHours == 12
+    and state.manager.Satisfaction == 0.25 and state.manager.LunchDailyMenu.MainDish == 0,
+    'A partially failed sample write must restore every live property')
 print('Adapter: native rates, transactional rollback, one save, changed inputs, service isolation and native refusal passed')

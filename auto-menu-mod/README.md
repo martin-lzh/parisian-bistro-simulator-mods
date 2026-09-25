@@ -6,7 +6,7 @@
 
 Adds an **Auto-compose** button beside **Print menu** in the computer's daily-menu page. This is an independent Mod; no other Mod is required.
 
-**Current source: 0.2.0-dev. In-game acceptance is pending.** The local interface reference is Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4. Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`.
+**Current source: 0.2.1-dev. In-game acceptance is pending.** The local interface reference is Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4. Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`.
 
 ### Use
 
@@ -14,11 +14,11 @@ Adds an **Auto-compose** button beside **Print menu** in the computer's daily-me
 2. Click **Auto-compose**. The Mod searches complete menu combinations to maximize the game's native **estimated selection rate** for that service. The button shows progress; click it again to cancel.
 3. Review the result and its native forecast. You can edit individual dishes, enable/disable the menu or print it with the normal controls.
 
-Every candidate is evaluated by the same native prediction used on the daily-menu page. Customer preferences, weather, events, prices and other factors follow the game's calculation. The Mod compares the unrounded rate, without its own tag weights or a profit objective. It searches every eligible combination, including optional empty courses, unless a candidate reaches the native rate ceiling first. A wholly empty menu is excluded; the result can be a partial menu.
+Every candidate is evaluated by the same native prediction used on the daily-menu page. A search uses the influence and satisfaction sampled when you click, so ordinary time passage or customer feedback does not cancel it. Before saving, both the winner and your existing menu are evaluated with current native values; if the existing menu is better, it is retained. Customer preferences, weather, events, prices and other factors follow the game's calculation. The Mod compares the unrounded rate, without its own tag weights or a profit objective. It searches every eligible combination, including optional empty courses, unless a candidate reaches the native rate ceiling first. A wholly empty menu is excluded; the result can be a partial menu.
 
 Only a completed search saves the selected service, once. The other service and the enabled state are preserved. Trial menus are restored immediately after each native prediction and are never saved. A tied existing menu is retained; otherwise ties follow a stable search order, with stocked options first. Stock does not override a higher native rate. This Mod does not order stock, change prices or print automatically.
 
-Many unlocked dishes can produce a large search. Work is split across game-thread ticks, with a progress display and cancellation. Closing the page, switching services, editing the menu, or changes to forecast, prices, ingredient availability, promotion influence or eligibility cancel the search without applying it. Continuously changing conditions during service can prevent completion; compose again when conditions are stable. Missing forecasts or no eligible dishes leave the menu unchanged.
+Many unlocked dishes can produce a large search. Work is split across game-thread ticks, with a progress display and cancellation. Closing the page, switching services, editing the menu, or actual changes to forecast, prices, ingredient availability or eligibility cancel the search without applying it. Reordering identical native lists does not cancel it. Cancellation logs name the changed input. Missing forecasts or no eligible dishes leave the menu unchanged.
 
 The button follows the game's 14 languages and is available only to the local host. There is no automatic daily run or separate Mod save file. Changes use the game's normal daily-menu save behavior.
 
@@ -38,7 +38,7 @@ If composition fails, check the `[AutoMenu]` log and provide the game/loader ver
 
 在电脑的每日菜单页面、“打印菜单”旁新增 **自动组合** 按钮。这是独立 Mod，不依赖本仓库其他 Mod。
 
-**当前源码：0.2.0-dev，待游戏内验收。** 本机接口参考为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。
+**当前源码：0.2.1-dev，待游戏内验收。** 本机接口参考为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。
 
 ### 使用
 
@@ -46,11 +46,11 @@ If composition fails, check the `[AutoMenu]` log and provide the game/loader ver
 2. 点击 **自动组合**，搜索让当前餐段原生 **预计选择率最大化** 的菜单组合。按钮显示搜索进度，再次点击可取消。
 3. 查看结果及游戏原生预测；可以继续逐项换菜，使用原有按钮启用、停用或打印菜单。
 
-每个候选都调用每日菜单页面使用的原生预测。顾客喜好、天气、活动、价格及其他因素完全沿用游戏计算，直接比较未取整的选择率，不再使用自定义标签权重，也不以利润为目标。搜索所有可选组合，包括原生允许的类别留空；达到原生选择率上限时提前结束。排除全空菜单，最终结果可能是部分菜单。
+每个候选都调用每日菜单页面使用的原生预测。一轮搜索统一采用点击时的推广影响力和满意度，正常时间流逝或顾客反馈不会取消搜索。保存前用当前原生数值复核候选与现有菜单；如果现有菜单更好，就保留现有菜单。顾客喜好、天气、活动、价格及其他因素完全沿用游戏计算，直接比较未取整的选择率，不再使用自定义标签权重，也不以利润为目标。搜索所有可选组合，包括原生允许的类别留空；达到原生选择率上限时提前结束。排除全空菜单，最终结果可能是部分菜单。
 
 只有搜索完成才保存当前餐段一次，保留另一餐段和原有启用状态。试算后立即恢复原菜单，候选菜单不进入保存流程。同选择率时保留符合条件的现有菜单；其他并列结果按固定搜索顺序选择，食材齐全的候选优先搜索。库存不会压过更高的原生选择率；本 Mod 不自动下单、不调价、不自动打印。
 
-解锁菜品较多时组合数量可能很大，搜索分批运行，可查看进度或取消。关闭页面、切换餐段、手动改菜单，或预测、价格、食材可用性、推广影响力、菜品资格变化时，会取消搜索且不应用结果。营业中条件持续变化可能导致无法完成，请在条件稳定后重新组合。预测缺失或无可选菜品时保留原菜单。
+解锁菜品较多时组合数量可能很大，搜索分批运行，可查看进度或取消。关闭页面、切换餐段、手动改菜单，或预测、价格、食材可用性、菜品资格真实变化时，会取消搜索且不应用结果。原生列表仅改变排列顺序不会取消；取消日志会指出具体变化项。预测缺失或无可选菜品时保留原菜单。
 
 按钮跟随游戏的 14 种语言，仅本地房主可用。不在每天开始时自行执行，也不创建独立 Mod 存档；点击后的菜单通过游戏原有流程保存。
 

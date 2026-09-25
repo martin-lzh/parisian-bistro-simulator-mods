@@ -55,14 +55,20 @@ local function start()
                 view.handling = true
                 local ok, status = xpcall(function()
                     local snapshot, job = view.snapshot, view.job
-                    if not Game.valid(view.button) or not Game.unchanged(view.owner, snapshot) then return 'changed' end
+                    if not Game.valid(view.button) then return 'changed' end
+                    local unchanged, reason = Game.unchanged(view.owner, snapshot)
+                    if not unchanged then
+                        print(string.format('[AutoMenu] CANCELLED reason=%s evaluated=%d total=%d\n',
+                            reason, job.evaluations, job.total))
+                        return 'changed'
+                    end
                     local deadline = os.clock() + 0.004
                     local done = job:step(function(menu) return Game.evaluate(view.owner, snapshot, menu) end,
                         128, function() return os.clock() >= deadline end)
                     if not done then return end
-                    Game.apply(view.owner, snapshot, job.best, job.rate)
-                    print(string.format('[AutoMenu] COMPOSED version=0.2.0-dev day=%s period=%s rate=%.9f evaluations=%d\n',
-                        snapshot.day, snapshot.period, job.rate, job.evaluations))
+                    local live_rate, saved = Game.apply(view.owner, snapshot, job.best, job.rate)
+                    print(string.format('[AutoMenu] COMPOSED version=0.2.1-dev day=%s period=%s rate=%.9f sampled_rate=%.9f saved=%s evaluations=%d\n',
+                        snapshot.day, snapshot.period, live_rate, job.rate, tostring(saved), job.evaluations))
                     return 'done'
                 end, traceback)
                 view.handling = false
@@ -107,7 +113,7 @@ local function start()
         else last_error = nil end
         return false
     end)
-    print('[AutoMenu] START version=0.2.0-dev\n')
+    print('[AutoMenu] START version=0.2.1-dev\n')
 end
 
 local ok, err = xpcall(start, traceback)

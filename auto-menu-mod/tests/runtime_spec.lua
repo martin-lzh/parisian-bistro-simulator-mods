@@ -13,7 +13,14 @@ assert(state.saves == 0 and state.manager.LunchDailyMenu.MainDish == 0, 'No inte
 state:click(button)
 assert(button.text == 'Composition cancelled' and state.saves == 0)
 state.loops[16](); assert(state.saves == 0)
-state:click(button); state:complete()
+state.manager.DailyMenuInfluence = 0.8
+state:click(button)
+for index = 1, 1000 do
+    state.decay = index * 0.0001
+    state.manager.Satisfaction = 1 - index * 0.0001
+    state.loops[16]()
+    if not button.text:find('%d+%%') then break end
+end
 assert(state.saves == 1 and button.text == 'Menu composed' and state.manager.LunchDailyMenu.MainDish == 21)
 state.owner.SelectedDailyMenuPeriod = 2; state.loops[500]()
 assert(button.text == 'Auto-compose')

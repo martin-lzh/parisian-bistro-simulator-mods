@@ -35,13 +35,16 @@ local function array(values, copy)
     return result
 end
 
-local function equal(a, b)
-    if type(a) ~= type(b) then return false end
-    if type(a) ~= 'table' then return a == b end
-    for key, value in pairs(a) do if not equal(value, b[key]) then return false end end
-    for key in pairs(b) do if a[key] == nil then return false end end
-    return true
+local function difference(a, b, path)
+    if type(a) ~= type(b) then return path end
+    if type(a) ~= 'table' then return a ~= b and path or nil end
+    for key, value in pairs(a) do
+        local changed = difference(value, b[key], path .. '.' .. tostring(key))
+        if changed then return changed end
+    end
+    for key in pairs(b) do if a[key] == nil then return path .. '.' .. tostring(key) end end
 end
+local function equal(a, b) return difference(a, b, 'inputs') == nil end
 
 local function menu_copy(menu)
     local result = { Period = menu.Period, bIsActive = menu.bIsActive }
@@ -64,6 +67,7 @@ local function distribution(values, field)
         return { id = id, probability = probability }
     end)
     assert(Planner.finite(total) and total > 0, 'Native forecast unavailable')
+    table.sort(result, function(a, b) return a.id < b.id end)
     return result
 end
 
@@ -80,12 +84,15 @@ local function capture(owner)
         weekday = data.WeekDay, celsius = data.TemperatureCelsius,
         profiles = distribution(forecast.ProfileProbabilities, 'Profile'),
         intents = distribution(forecast.IntentProbabilities, 'Intent'),
-        influence = manager:GetDailyMenuInfluence(), bonus = manager.DailyMenuMaxAdoptionChanceBonus,
-        tier = manager:GetTier(), difficulty = manager:GetDifficulty(), satisfaction = manager:GetSatisfaction() }
-    assert(Planner.finite(result.inputs.influence) and Planner.finite(result.inputs.bonus),
+        bonus = manager.DailyMenuMaxAdoptionChanceBonus,
+        tier = manager:GetTier(), difficulty = manager:GetDifficulty() }
+    result.sample = { influence = manager:GetDailyMenuInfluence(), satisfaction = manager:GetSatisfaction() }
+    assert(Planner.finite(result.sample.influence) and result.sample.influence >= 0 and result.sample.influence <= 1
+        and Planner.finite(result.sample.satisfaction) and Planner.finite(result.inputs.bonus),
         'Native adoption inputs unavailable')
     for _, name in ipairs({ 'AvailableDishes', 'UnlockedDailyDishes', 'DisabledDishes', 'EmployeeRequirementDisabledDishes' }) do
         result.inputs[name] = array(manager[name], function(value) return value end)
+        table.sort(result.inputs[name])
     end
     for _, course in ipairs(Planner.courses) do
         local row = owner['WBP_DailyMenu_' .. course.field]
@@ -98,6 +105,7 @@ local function capture(owner)
             option.price = manager:GetDishPrice(option.id)
             assert(Planner.finite(option.price), 'Dish price unavailable')
         end
+        table.sort(options, function(a, b) return a.id < b.id end)
         result.options[course.field] = options
     end
     return result
@@ -110,35 +118,72 @@ function Game.snapshot(owner)
 end
 
 function Game.unchanged(owner, snapshot)
-    return Game.available(owner) and owner.SelectedDailyMenuPeriod == snapshot.period
-        and equal(snapshot, capture(owner))
+    if not Game.available(owner) then return false, 'view_or_authority' end
+    if owner.SelectedDailyMenuPeriod ~= snapshot.period then return false, 'period' end
+    local now = capture(owner)
+    -- Influence decay and satisfaction updates are normal simulation progress.
+    -- Every trial uses the same sampled values; live values are checked at apply.
+    now.sample = snapshot.sample
+    local reason = difference(snapshot, now, 'inputs')
+    return reason == nil, reason
 end
 
-function Game.evaluate(owner, snapshot, menu)
+local function nonempty(menu)
+    for _, course in ipairs(Planner.courses) do if menu[course.field] ~= 0 then return true end end
+    return false
+end
+
+function Game.evaluate(owner, snapshot, menu, live)
     local manager, name = owner.BoundDailyMenuBrasserieManager, property(snapshot.period)
     local original = current(owner, snapshot.period)
     assert(equal(original, snapshot.current), 'Menu changed before projection')
     assert(menu.Period == snapshot.period and menu.bIsActive == original.bIsActive, 'Invalid candidate menu')
+    local restore = { { name = name, value = original, menu = true } }
+    if not live then
+        for _, field in ipairs({ 'DailyMenuInfluence', 'DailyMenuInfluenceHalfLifeGameHours', 'Satisfaction' }) do
+            local value = manager[field]
+            assert(Planner.finite(value), 'Native sampled property unavailable: ' .. field)
+            restore[#restore + 1] = { name = field, value = value }
+        end
+    end
     -- The native pure projection accepts a period, not a candidate. Substitute
     -- the seven-field definition only for this synchronous call, without events,
     -- RPCs, saves or yields. Restore even if assignment or projection throws.
     local ok, rate = pcall(function()
         manager[name] = menu
+        if not live then
+            manager.DailyMenuInfluence = snapshot.sample.influence
+            -- The native getter accepts zero half-life as no decay. Use the
+            -- already-native sampled influence without changing game time.
+            manager.DailyMenuInfluenceHalfLifeGameHours = 0
+            manager.Satisfaction = snapshot.sample.satisfaction
+            assert(manager:GetDailyMenuInfluence() == snapshot.sample.influence
+                and manager:GetSatisfaction() == snapshot.sample.satisfaction, 'Native sampled context mismatch')
+        end
         assert(equal(menu, menu_copy(owner:GetDailyMenu(snapshot.period))), 'Native menu binding changed')
         local projection = owner:GetDailyMenuProjection(snapshot.period)
-        assert(projection.Period == snapshot.period and projection.bConfigured, 'Native projection unavailable')
+        assert(projection.Period == snapshot.period and projection.bConfigured == nonempty(menu),
+            'Native projection unavailable')
         return projection.EstimatedAdoptionRate
     end)
-    local restored, restore_error = pcall(function() manager[name] = original end)
-    if not restored then
-        -- An individual-field fallback also repairs a partially failed table assignment.
-        restored, restore_error = pcall(function()
-            local storage = manager[name]
-            for key, value in pairs(original) do storage[key] = value end
+    local restore_error
+    -- Each property gets its own cleanup attempt: one setter failure must not
+    -- skip restoring the remaining live state, including the original menu.
+    for _, entry in ipairs(restore) do
+        local restored, err = pcall(function() manager[entry.name] = entry.value end)
+        if not restored and entry.menu then
+            restored, err = pcall(function()
+                local storage = manager[entry.name]
+                for key, value in pairs(entry.value) do storage[key] = value end
+            end)
+        end
+        local verified, matches = pcall(function()
+            local value = entry.menu and menu_copy(manager[entry.name]) or manager[entry.name]
+            return equal(entry.value, value)
         end)
+        if not restored or not verified or not matches then restore_error = entry.name .. ': ' .. tostring(err) end
     end
-    assert(restored and equal(original, current(owner, snapshot.period)),
-        'Failed to restore menu after projection: ' .. tostring(restore_error))
+    assert(not restore_error, 'Failed to restore projection state: ' .. tostring(restore_error))
     if not ok then error(rate) end
     assert(Planner.finite(rate) and rate >= 0 and rate <= snapshot.ceiling, 'Invalid native adoption rate')
     return rate
@@ -147,10 +192,20 @@ end
 function Game.apply(owner, snapshot, menu, expected_rate)
     assert(Game.unchanged(owner, snapshot), 'Projection inputs changed before apply')
     assert(Game.evaluate(owner, snapshot, menu) == expected_rate, 'Native prediction changed before apply')
+    local rate = Game.evaluate(owner, snapshot, menu, true)
+    local existing = menu_copy(snapshot.current)
+    existing.Period = snapshot.period
+    local existing_rate = Game.evaluate(owner, snapshot, existing, true)
+    if rate < existing_rate then
+        -- A changed live ranking must not replace a better existing menu.
+        owner:RefreshDailyMenus()
+        return existing_rate, false
+    end
     -- Only the winning menu enters normal native validation and replication.
     owner:SaveDailyMenu(menu)
     assert(equal(menu, current(owner, snapshot.period)), 'Native menu save did not accept the selection')
     owner:RefreshDailyMenus()
+    return rate, true
 end
 
 function Game.language()
