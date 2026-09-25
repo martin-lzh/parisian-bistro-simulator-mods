@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Update to 0.1.7-dev: start oldest-first pickup on the drink output surface without aiming at a cup. Keep the same source while panning, pick only eligible full drinks into the held tray or food trolley, and preserve native short-click deposit. Add area isolation, rejection, three-cup sequencing and cancellation regressions; in-game acceptance remains pending.
+- 更新至 0.1.7-dev：可直接对准饮料出品台面启动最早优先长按，无需瞄准某一杯；准星在同一台面内移动时继续，只将合适的成品饮料拿到当前托盘或餐车，保留原生短按放回饮料。增加区域隔离、拒绝条件、连续三杯及取消回归测试；实机验收仍待完成。
+
 - Update to 0.1.6-dev: use a held food trolley for the same oldest-first hold at the kitchen pass, ready dishes and drinks. Track ordinary and stack slots, drink-only and tower-burger top-slot rules, and stop when the trolley is released or replaced. Keep ordinary server interactions and manual Lua hot reload.
 - 更新至 0.1.6-dev：握持餐车时可在出餐口、成品菜品及饮料处使用相同的最早优先长按取餐；识别普通位和堆叠位、饮料专用位及高层汉堡顶层限制，放开或更换餐车即取消。保留原生服务器交互及手动 Lua 热重载。
 

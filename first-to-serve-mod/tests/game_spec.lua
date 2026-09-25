@@ -17,6 +17,7 @@ StaticFindObject = function(path)
 end
 local contract = Game.contract()
 assert(contract.action == 58 and contract.tower_burger == 71 and Game.valid(contract.dish_output))
+assert(Game.valid(contract.drink_output))
 area_available, default_action, tower_burger = false, 57, 70
 contract = Game.contract()
 assert(contract.action == 57 and not Game.valid(contract.dish_output), 'Old builds retain direct item targeting')
@@ -53,6 +54,8 @@ function player:IsCarryingFoodTrolley() return self.trolley == true end
 function player:GetFoodTrolley() return self.CarriedObject end
 function player:GetCurrentFloor() return 0 end
 local kitchen, area = obj('kitchen', 'kitchen', world), obj('bar', 'area', world)
+area.StaticMesh = obj('bar-mesh')
+function area.StaticMesh:GetOwner() return area end
 local output_class = obj('dish-output-class')
 local pass = obj('pass', output_class, world)
 pass.PickupInteractionBox = obj('pickup-box')
@@ -70,7 +73,7 @@ end
 local clock = 0
 local api = { player = 'player', dish = 'food', drink = 'drink', enhanced = 'enhanced', action = 58,
     food_trolley = 'food-trolley', tower_burger = 71,
-    dish_output = output_class, kitchen = 'kitchen', world_subsystem = 'world-subsystem',
+    dish_output = output_class, drink_output = 'area', kitchen = 'kitchen', world_subsystem = 'world-subsystem',
     input = { Conv_InputActionValueToBool = function(_, value) return value end },
     subsystems = { GetLocalPlayerSubSystemFromPlayerController = function(_, owner, class)
         assert(owner == controller and class == 'enhanced'); return input
@@ -130,7 +133,7 @@ local drink1, drink2, unfinished = dish('drink1', 'drink', 100), dish('drink2', 
 unfinished.full = false
 area.OutputSlots = { Items = array({ { Drink = drink2 }, { Drink = unfinished }, { Drink = drink1 } }) }
 aim(area)
-assert(Game.scope(api, session) == nil, 'The output surface is not a drink target')
+assert(Game.scope(api, session) == nil, 'Only the output mesh identifies the drink area')
 aim(obj('pickup-spot', 'spot', world))
 assert(Game.scope(api, session) == nil, 'Nearby pass spots are not dish targets')
 aim(unfinished)
@@ -158,7 +161,7 @@ for _, entry in ipairs(exclusions) do
 end
 assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'), 'Revalidate target area')
 aim(area)
-assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'), 'Looking at the surface cancels dispatch')
+assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'), 'An unrelated area component cannot start dispatch')
 aim(drink2)
 controller.down = false
 assert(not Game.request(api, session.id, scope.id, 'drink1@drink1'))
@@ -243,6 +246,62 @@ kitchen.DishesSpawnQueue = array({})
 assert(Game.scope(api, session) == nil, 'Empty pass must not start or show a hold hint')
 kitchen.DishesSpawnQueue = array({ newer, oldest, middle })
 assert(#sent == 2, 'Rejected area targets never send interactions')
+
+-- A drink-area mesh starts from that area's eligible cups without aiming at
+-- a cup. Keep native per-cup default actions; never invoke PutDrinks on it.
+area.OutputSlots.Items = array({ { Drink = unfinished }, { Drink = drink2 }, { Drink = drink1 } })
+aim(area, area.StaticMesh)
+local area_scope = assert(Game.scope(api, session))
+assert(area_scope.source == area and area_scope.kind == 'drink')
+assert(Game.snapshot(api, session, area_scope).oldest == 'drink1@drink1')
+assert(Game.request(api, session.id, area_scope.id, 'drink1@drink1') and sent[3] == drink1)
+local second_area = obj('second-bar', 'area', world)
+second_area.StaticMesh = obj('second-bar-mesh')
+function second_area.StaticMesh:GetOwner() return second_area end
+second_area.OutputSlots = { Items = array({ { Drink = dish('other-bar-drink', 'drink', 1) } }) }
+lists.DrinkOutputArea = { second_area, area }
+assert(Game.scope(api, session).source == area, 'Never select the first area globally')
+local area_lock = Game.lock(session, area_scope)
+aim(second_area, second_area.StaticMesh)
+assert(Game.scope(api, session, area_lock) == nil, 'Changing drink areas cancels even without camera movement')
+assert(not Game.request(api, session.id, area_scope.id, 'drink1@drink1', area_lock))
+lists.DrinkOutputArea = { area }
+aim(area, area.StaticMesh)
+area.OutputSlots.Items = array({ { Drink = drink1 } })
+for _, entry in ipairs(exclusions) do
+    local key, value = entry[1], entry[2]
+    local old = drink1[key]; drink1[key] = value
+    assert(Game.scope(api, session) == nil, 'Drink area respects item exclusion: ' .. key)
+    drink1[key] = old
+end
+drink1.full = false
+assert(Game.scope(api, session) == nil, 'Unfinished drinks alone cannot activate the area')
+drink1.full = true
+drink1.CreationTime.year = 1
+assert(Game.scope(api, session) == nil)
+drink1.CreationTime.year = 2026
+tray.Slots.values[1].Dish = middle
+assert(Game.scope(api, session), 'A drink-only free slot accepts area pickup')
+tray.Slots.values[2].Dish = newer
+assert(Game.scope(api, session) == nil, 'A full tray cannot activate the drink area')
+assert(not Game.request(api, session.id, area_scope.id, 'drink1@drink1', area_lock))
+tray.Slots.values[1].Dish, tray.Slots.values[2].Dish = nil, drink1
+assert(Game.scope(api, session) == nil, 'A carried drink in stale output slots cannot activate pickup')
+tray.Slots.values[2].Dish = nil
+for _, key in ipairs({ 'destroyed', 'template', 'invalid' }) do
+    area[key] = true; assert(Game.scope(api, session) == nil, key); area[key] = nil
+end
+area.world = other_world; assert(Game.scope(api, session) == nil); area.world = world
+player.CurrentHit.bBlockingHit = false
+assert(Game.scope(api, session) == nil)
+player.CurrentHit.bBlockingHit = true
+area.StaticMesh.invalid = true
+assert(Game.scope(api, session) == nil)
+area.StaticMesh.invalid = nil
+area.OutputSlots.Items = array({})
+assert(Game.scope(api, session) == nil, 'An empty drink area cannot activate pickup')
+assert(#sent == 3, 'Rejected drink-area requests never reach the RPC')
+area.OutputSlots.Items = array({ { Drink = drink2 } })
 
 -- Source continuity uses the real adapter, not a scope stub. The aimed cup
 -- becomes busy, leaves its source, and exposes the empty output surface.
@@ -341,8 +400,13 @@ RegisterHook = function(path, callback) callbacks[path] = callback; return 1, 2 
 LoopInGameThreadWithDelay = function(_, callback) loop = callback end
 print = function() end
 for _, carrier_kind in ipairs({ 'tray', 'trolley' }) do
-for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
-    local kind = mode == 'pass' and 'food' or mode
+for _, mode in ipairs({ 'food', 'drink', 'pass', 'drink-area' }) do
+    local area_mode = mode == 'pass' or mode == 'drink-area'
+    local kind = (mode == 'pass' or mode == 'food') and 'food' or 'drink'
+    local function aim_area()
+        if mode == 'pass' then aim(pass, pass.PickupInteractionBox)
+        else aim(area, area.StaticMesh) end
+    end
     local a, b, c = dish(kind .. '-a', kind, 1), dish(kind .. '-b', kind, 2), dish(kind .. '-c', kind, 3)
     local source = kind == 'food' and kitchen or area
     local function set_members(values)
@@ -365,7 +429,7 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
         else slot.Dish = item end
     end
     sent, clock, controller.down = {}, 10, true
-    if mode == 'pass' then aim(pass, pass.PickupInteractionBox) else aim(a) end
+    if area_mode then aim_area() else aim(a) end
     dofile(MOD_ROOT .. '/Scripts/main.lua'); loop()
     assert(shown and #sent == 0)
     callbacks[input_path](Fakes.param(player), Fakes.param(true))
@@ -374,14 +438,14 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
     callbacks[input_path](Fakes.param(player), Fakes.param(true))
     loop(); assert(#sent == 1, 'Repeated input during pickup must wait for acknowledgement')
     assert(callbacks[wheel_path](Fakes.param(player)) == false, 'Keep the wheel suppressed during pickup')
-    if mode == 'pass' then
-        -- The player can pan across the pass without targeting any one plate.
+    if area_mode then
+        -- Pan across either output area without targeting a particular item.
         rotation.Yaw = 45
     else aim(source) end
     put(1, a); a.parent, clock = carrier, 10.06
     set_members({ c, b })
     loop(); assert(#sent == 2 and sent[2] == b, kind .. ': continue after aimed item is removed')
-    assert(shown == (mode == 'pass'), 'The native pass retains its hint while dishes remain')
+    assert(shown == area_mode, 'Output areas retain hint eligibility while items remain')
     put(2, b); b.parent, clock = carrier, 10.12
     player.CurrentHit.bBlockingHit = false
     loop(); assert(#sent == 3 and sent[3] == c, kind .. ': stale queue plus carrier acknowledgement must continue')
@@ -392,15 +456,15 @@ for _, mode in ipairs({ 'food', 'drink', 'pass' }) do
     controller.down = true
     for _ = 1, 4 do loop() end
     assert(#sent == 3, 'No restart from physical key state alone')
-    if mode == 'pass' then
+    if area_mode then
         -- Turning away still cancels an area-started hold before dispatch.
         put(1, nil); a.parent, a.bBeingPicked = nil, false
-        set_members({ a }); aim(pass, pass.PickupInteractionBox)
+        set_members({ a }); aim_area()
         callbacks[input_path](Fakes.param(player), Fakes.param(true))
         player.CurrentHit.bBlockingHit, rotation.Yaw = false, 90
         loop(); assert(#sent == 3)
         assert(callbacks[wheel_path](Fakes.param(player)) == nil)
-        aim(pass, pass.PickupInteractionBox)
+        aim_area()
         callbacks[input_path](Fakes.param(player), Fakes.param(true))
         for _ = 1, 4 do loop() end
         assert(#sent == 3, 'Returning to the pass cannot restart a canceled hold before release')

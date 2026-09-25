@@ -47,6 +47,7 @@ function Game.contract()
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish = required('/Script/BrasserieSimulator.Dish'),
         drink = required('/Script/BrasserieSimulator.Drink'),
+        drink_output = required('/Script/BrasserieSimulator.DrinkOutputArea'),
         food_trolley = required('/Script/BrasserieSimulator.FoodTrolley'),
         -- Older builds have no area actor; direct item targeting still works.
         dish_output = StaticFindObject('/Script/BrasserieSimulator.DishOutputArea'),
@@ -183,6 +184,14 @@ local function aimed_scope(api, session)
         local scope = { id = identity(source), source = source, kind = 'food' }
         -- Use the same per-item readiness, reach, floor and capacity checks as
         -- direct aiming. Never send the area-level batch pickup interaction.
+        if Game.snapshot(api, session, scope).oldest then return scope end
+        return nil
+    end
+    if target:IsA(api.drink_output) then
+        -- The drink output surface has no separate pickup box. Match its
+        -- actual mesh, not spawn/feedback components, and use its own slots.
+        if not same(component, target.StaticMesh) then return nil end
+        local scope = { id = identity(target), source = target, kind = 'drink' }
         if Game.snapshot(api, session, scope).oldest then return scope end
         return nil
     end

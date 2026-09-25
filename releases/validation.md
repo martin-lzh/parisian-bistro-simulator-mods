@@ -4,6 +4,8 @@
 
 ## English
 
+First to Serve **0.1.7-dev** adds direct drink-output-surface holds with tray/trolley support. Offline area isolation, eligible full-drink filtering, three-cup sequencing, panning and cancellation tests pass. Drink-area targeting, hints and native short-click deposit still need in-game acceptance.
+
 First to Serve **0.1.6-dev** adds held food-trolley support with ordinary/stack-slot acknowledgement, drink-only and top-slot capacity checks, and carrier-change cancellation. Offline tray/trolley regressions pass; trolley rendering, native pickup and host/guest behavior still need in-game acceptance.
 
 The 2026-09-25 hot reload update (Bartender's Note 0.1.2-dev, Auto Checkout 0.1.4-dev, Fresh to Serve 0.1.2-dev, First to Serve 0.1.5-dev and Smart Delivery 0.1.4-dev) adds reload lifecycle and state handoff handling. Manual Ctrl+R reload, live UI cleanup, AI recovery and pending orders still need in-game acceptance; DLL updates require a process restart.
@@ -49,6 +51,8 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+First to Serve **0.1.7-dev** 新增直接对准饮料出品台面长按，支持托盘和餐车。区域隔离、成品饮料过滤、连续三杯、移动准星及取消离线测试通过；饮料台实机瞄准、提示及原生短按放回饮料仍待验收。
 
 First to Serve **0.1.6-dev** 新增握持餐车取餐，识别普通位/堆叠位装车确认、饮料专用位与顶层容量限制，并在更换工具时取消。托盘及餐车离线回归通过；餐车实机提示、原生取餐及房主/客机行为仍待验收。
 
