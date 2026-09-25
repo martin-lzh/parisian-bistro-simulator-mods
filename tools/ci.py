@@ -74,7 +74,7 @@ def validate_config(mod: dict) -> None:
         for path in generated.values():
             if path.is_symlink() or not path.resolve().is_relative_to((ROOT / "outputs/smart-delivery/native").resolve()):
                 raise ValueError("Generated input must stay in the native build output")
-        native_inputs = {"native_build.py", "Native/bridge.cpp", "Native/dispatch.hpp", "Native/pe_image.hpp",
+        native_inputs = {"native_build.py", "Native/bridge.cpp", "Native/dispatch.hpp", "Native/pe_image.hpp", "Native/contract.hpp",
                          "Native/tests.cpp", "Native/probe.asm"}
         if any((source / name).relative_to(ROOT).as_posix() not in tracked for name in native_inputs):
             raise ValueError("Native build sources must be tracked")

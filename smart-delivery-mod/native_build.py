@@ -29,7 +29,7 @@ def build() -> Path:
     script.write_text(
         f'@echo off\ncall "{developer}" -arch=x64 -host_arch=x64 >nul\nif errorlevel 1 exit /b 1\n'
         f'cl /nologo /std:c++17 /EHsc /W4 /WX /O2 /MT /LD "{native / "bridge.cpp"}" '
-        '/link bcrypt.lib /OUT:delivery_bridge.dll /Brepro\nif errorlevel 1 exit /b 1\n'
+        '/link /OUT:delivery_bridge.dll /Brepro\nif errorlevel 1 exit /b 1\n'
         f'ml64 /nologo /c /Foprobe.obj "{native / "probe.asm"}"\nif errorlevel 1 exit /b 1\n'
         f'cl /nologo /std:c++17 /EHsc /W4 /WX /O2 /MT "{native / "tests.cpp"}" probe.obj '
         '/Fe:native_tests.exe /link /Brepro\nif errorlevel 1 exit /b 1\n'
@@ -41,7 +41,7 @@ def build() -> Path:
                     "import ctypes,sys; d=ctypes.CDLL(sys.argv[1]); "
                     "assert d.delivery_initialize(None)==0", str(DLL)], check=True)
     result = (OUTPUT / "bridge-status.txt").read_text(encoding="utf-8")
-    if not result.startswith("error: Unsupported game"):
+    if not result.startswith("error: Cannot uniquely resolve native automatic delivery code"):
         raise RuntimeError(f"Compatibility rejection failed: {result}")
     print("PASS native bridge rejects a non-game executable")
     return DLL

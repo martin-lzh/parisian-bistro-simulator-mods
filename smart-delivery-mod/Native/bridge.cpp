@@ -1,6 +1,5 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <bcrypt.h>
 #include <array>
 #include <filesystem>
 #include <fstream>
@@ -9,6 +8,7 @@
 #include <string>
 #include "dispatch.hpp"
 #include "pe_image.hpp"
+#include "contract.hpp"
 
 namespace {
 volatile long selected = -1;
@@ -17,12 +17,6 @@ unsigned char* site = nullptr;
 void* stub = nullptr;
 std::array<unsigned char, 5> original{}, installed{};
 bool active = false;
-// Compatibility contract for the verified Windows Steam build. No game bytes
-// are embedded or distributed. Runtime bytes are compared to the hashed file.
-constexpr std::size_t site_rva = 0x5061391, budget_rva = 0x50613a0;
-constexpr std::size_t premium_rva = 0x5061396, resume_rva = 0x50613a8;
-constexpr std::size_t free_fee_rva = 0x9145800;
-constexpr const char* expected_hash = "914cc10f1d803725d88caabe31c90f9e2d129bdde742fdbc7e467a4cb7ab25d8";
 
 std::filesystem::path module_path(HMODULE module) {
     std::wstring name(32768, L'\0');
@@ -37,22 +31,15 @@ void status(const std::string& message) {
     file.flush();
     if (!file) throw std::runtime_error("Cannot write bridge status");
 }
-std::vector<unsigned char> read_verified_image() {
+std::vector<unsigned char> read_image() {
     std::ifstream file(module_path(nullptr), std::ios::binary | std::ios::ate);
     if (!file) throw std::runtime_error("Cannot read game executable");
     auto size = file.tellg();
-    if (size != 157978112) throw std::runtime_error("Unsupported game executable size");
+    if (size <= 0 || static_cast<std::uint64_t>(size) > (std::numeric_limits<DWORD>::max)())
+        throw std::runtime_error("Invalid game executable size");
     std::vector<unsigned char> data(static_cast<std::size_t>(size));
     file.seekg(0); file.read(reinterpret_cast<char*>(data.data()), size);
     if (!file) throw std::runtime_error("Cannot read game executable");
-    std::array<unsigned char, 32> hash{};
-    if (BCryptHash(BCRYPT_SHA256_ALG_HANDLE, nullptr, 0, data.data(),
-                   static_cast<ULONG>(data.size()), hash.data(), static_cast<ULONG>(hash.size())) < 0)
-        throw std::runtime_error("SHA-256 failed");
-    const char* digits = "0123456789abcdef";
-    std::string hex;
-    for (auto byte : hash) { hex += digits[byte >> 4]; hex += digits[byte & 15]; }
-    if (hex != expected_hash) throw std::runtime_error("Unsupported game build; no patch applied");
     return data;
 }
 void* allocate_near(const void* address) {
@@ -77,18 +64,17 @@ void write_patch(const std::array<unsigned char, 5>& bytes) {
 }
 void initialize() {
     if (active) { status("ready"); return; }
-    const auto data = read_verified_image();
+    const auto data = read_image();
+    const auto contract = delivery::ContractImage(data).discover();
     auto* base = reinterpret_cast<unsigned char*>(GetModuleHandleW(nullptr));
     // The live free-service coefficient belongs to writable, zero-filled image
-    // data, not file-backed code. Validate its mapped location and retain its
-    // runtime value. Only the evaluator must match the verified file bytes.
-    delivery::pe::require_writable_data(data, free_fee_rva, sizeof(float));
-    if (std::memcmp(base + 0x5060e30, delivery::pe::file_at(data, 0x5060e30, 0x88f), 0x88f) != 0)
-        throw std::runtime_error("Automatic order code was already modified");
-    site = base + site_rva;
+    // data, not file-backed code. Discovery validates its mapped location and
+    // retains its runtime value. Only target code is compared with disk.
+    delivery::require_unmodified(data, contract, base);
+    site = base + contract.site;
     std::memcpy(original.data(), site, original.size());
-    const auto code = delivery::dispatch(&selected, base + free_fee_rva, base + budget_rva,
-                                          base + premium_rva, base + resume_rva);
+    const auto code = delivery::dispatch(&selected, base + contract.free_fee, base + contract.budget,
+                                          base + contract.premium, base + contract.resume, contract.threshold);
     stub = allocate_near(site);
     std::memcpy(stub, code.data(), code.size());
     DWORD ignored;

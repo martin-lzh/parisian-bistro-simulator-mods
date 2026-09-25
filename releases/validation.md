@@ -4,7 +4,9 @@
 
 ## English
 
-Smart Delivery 0.1.1-dev is awaiting in-game retesting. On 2026-09-24, the user reported that 0.1.0-dev loaded but its native helper failed compatibility validation before UI injection. Version 0.1.1-dev corrects the treatment of zero-filled runtime data. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
+Smart Delivery **0.1.2-dev** is available for testing the updated game. On 2026-09-25, native code discovery was checked read-only against installed Steam Build **25532071**. This version removes mandatory game-version, executable-size and hash allowlists, retaining target-structure and code-conflict checks. Synthetic native discovery tests and dispatch execution tests passed; real game startup, UI, fees and delivery staffing remain unverified.
+
+Earlier Smart Delivery startup history: On 2026-09-24, the user reported that 0.1.0-dev loaded but its native helper failed compatibility validation before UI injection. Version 0.1.1-dev corrects the treatment of zero-filled runtime data. Native dispatch execution tests, Lua behavior tests and package checks do not establish real UI, engine integration, delivery charges or multiplayer behavior. See its [acceptance checklist](../smart-delivery-mod/DEVELOPMENT.md#english).
 
 Fresh to Serve 0.1.1-dev adds drinks and cocktails to meal cleanup and replacement; in-game acceptance is pending. Offline tests and package verification do not establish real cleanup, kitchen/bar ordering or waiter delivery.
 
@@ -40,7 +42,9 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Smart Delivery 0.1.1-dev 待实机复测。2026-09-24，用户反馈 0.1.0-dev 已加载，但原生辅助模块在界面注入前校验失败。0.1.1-dev 修正了零填充运行时数据的校验方式。原生分派执行测试、Lua 行为测试和包校验不代表真实界面、引擎集成、配送扣款或联机行为通过；见其[验收清单](../smart-delivery-mod/DEVELOPMENT.md#中文)。
+Smart Delivery **0.1.2-dev** 用于测试更新后的游戏。2026-09-25，已对本机 Steam Build **25532071** 只读核对原生代码定位结果。本版取消游戏版本、EXE 固定大小与哈希白名单，保留目标结构及代码冲突检查。原生定位合成测试与分派执行测试通过；实际游戏启动、界面、费用及配送人数仍待验证。
+
+此前 Smart Delivery 的启动问题记录：2026-09-24，用户反馈 0.1.0-dev 已加载，但原生辅助模块在界面注入前校验失败。0.1.1-dev 修正了零填充运行时数据的校验方式。原生分派执行测试、Lua 行为测试和包校验不代表真实界面、引擎集成、配送扣款或联机行为通过；见其[验收清单](../smart-delivery-mod/DEVELOPMENT.md#中文)。
 
 Fresh to Serve 0.1.1-dev 将清理与重做从食物扩展至饮料和鸡尾酒，仍待游戏内验收。离线测试与包校验不等同于真实清理、厨房/吧台补单和服务员上菜成功。
 

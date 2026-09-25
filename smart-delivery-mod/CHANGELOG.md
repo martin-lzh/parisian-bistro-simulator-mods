@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Remove mandatory game-version, executable-size and SHA-256 allowlists. Discover the automatic delivery branch and fee data through native registration names and instruction operands instead of fixed addresses.
+- Check native discovery against Steam Build 25532071. Preserve code-conflict checks and the original quantity threshold when disabled. Add relocated-image, ambiguous-target, changed-structure and conflict regression tests. Package version: 0.1.2-dev; in-game testing is pending.
+
+- 取消游戏版本、可执行文件大小及 SHA-256 白名单限制，通过原生注册名称与指令操作数定位自动配送分支和费用数据，不再使用固定地址。
+- 已在 Steam Build 25532071 文件上核对定位结果；保留代码冲突检查，停用偏好时沿用原生数量阈值。新增地址移动、目标重复、结构变化及冲突回归测试。安装包版本为 0.1.2-dev，待实机测试。
+
+## 0.1.1-dev
+
 - Fix the 0.1.0-dev `Invalid compatibility range` startup failure by validating zero-filled runtime data against mapped PE sections. Keep full executable hashing and evaluator code checks.
 - Add PE range regression tests and a UI attachment diagnostic. Updating the native helper requires a game restart. Package version: 0.1.1-dev; in-game retesting is pending.
 

@@ -8,6 +8,9 @@ probe_dispatch proc
     mov rax, 1122334455667788h
     call rcx
     mov [r9], rax
+    pushfq
+    pop r10
+    mov [r9 + 8], r10
     add rsp, 20h
     pop rsi
     ret
