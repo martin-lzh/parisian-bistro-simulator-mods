@@ -4,6 +4,8 @@
 
 ## English
 
+Auto Menu **0.1.0-dev** also supports Ctrl+R after initial installation. Its previous button is removed on the next game-thread update, then rebuilt without changing either saved service menu.
+
 The development Mods support manual Lua reload with the checked UE4SS experimental API `v3.0.1-1140-gf58e8f84`. This requires the reload-aware versions: Bartender's Note **0.1.2-dev**, Auto Checkout **0.1.4-dev**, Fresh to Serve **0.1.2-dev**, First to Serve **0.1.5-dev**, Smart Delivery **0.1.4-dev**, and Scan to Order **0.1.0-dev** or later. Offline lifecycle tests do not establish in-game acceptance.
 
 1. Close the game and install the updated Mod folders once. Older scripts cannot hand over state they never recorded, and Smart Delivery's updated DLL requires a new process.
@@ -31,6 +33,8 @@ Shared state exists only in the current game process. It is not added to game sa
 Scan to Order reads outstanding orders again after reload, so replenishment can resume them without repeating accepted orders. An uncertain request keeps automation stopped in the current world across Ctrl+R; re-enter the session to reset it.
 
 ## 中文
+
+Auto Menu **0.1.0-dev** 首次安装后也支持 Ctrl+R；下一次游戏线程更新时清除旧按钮再创建新按钮，不改变已保存的午餐或晚餐菜单。
 
 开发版 Mod 支持手动重载 Lua，使用已核对的 UE4SS experimental API `v3.0.1-1140-gf58e8f84`。需要支持状态交接的版本：Bartender's Note **0.1.2-dev**、Auto Checkout **0.1.4-dev**、Fresh to Serve **0.1.2-dev**、First to Serve **0.1.5-dev**、Smart Delivery **0.1.4-dev**、Scan to Order **0.1.0-dev** 或之后版本。离线生命周期测试不等于实机验收。
 

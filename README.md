@@ -15,6 +15,7 @@ Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose th
 | [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks, requesting replacements while the original customer still has enough patience | 0.1.2-dev | Pending |
 | [First to Serve](first-to-serve-mod/README.md#english) | Hold at the kitchen or drink output area to take the oldest ready items first with a tray or food trolley | 0.1.7-dev | Pending |
 | [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.4-dev | Pending |
+| [Auto Menu](auto-menu-mod/README.md#english) | Compose lunch or dinner from the customer forecast, weather and local event | 0.1.0-dev | Pending |
 | [Scan to Order](scan-to-order-mod/README.md#english) | Automatically place customer food and drink orders on the host; wait for missing stock and resume after replenishment | 0.1.0-dev | Pending |
 
 Smart Delivery 0.1.2-dev adds native code discovery checked against Steam Build 25532071, without a mandatory executable version or hash allowlist. Version 0.1.3-dev adds white dropdown text. In-game acceptance remains pending.
@@ -61,6 +62,7 @@ This project is not affiliated with the game's creators. Game assets and reverse
 | [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；原顾客仍在等待且耐心足够时，请求重做并重新上桌 | 0.1.2-dev | 待验收 |
 | [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早制作的成品 | 0.1.7-dev | 待验收 |
 | [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev | 待验收 |
+| [Auto Menu（每日菜单组合）](auto-menu-mod/README.md#中文) | 根据预测客流喜好、天气和活动，一键组合午餐或晚餐菜单 | 0.1.0-dev | 待验收 |
 | [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 仅房主或单人自动提交顾客食物和饮料订单，缺货时等待、补货后继续，无需服务员／玩家点餐 | 0.1.0-dev | 待验收 |
 
 Smart Delivery 0.1.2-dev 已在 Steam Build 25532071 上核对原生代码定位结果，不再使用强制版本或 EXE 哈希白名单；0.1.3-dev 将下拉框文字改为白色，仍待实机验收。

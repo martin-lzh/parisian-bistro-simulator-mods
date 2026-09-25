@@ -15,6 +15,7 @@
 | Fresh to Serve | [Player guide](../fresh-to-serve-mod/README.md#english) · [Development and validation](../fresh-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../fresh-to-serve-mod/CHANGELOG.md) |
 | First to Serve | [Player guide](../first-to-serve-mod/README.md#english) · [Development and validation](../first-to-serve-mod/DEVELOPMENT.md#english) · [Changes](../first-to-serve-mod/CHANGELOG.md) |
 | Smart Delivery | [Player guide](../smart-delivery-mod/README.md#english) · [Development and validation](../smart-delivery-mod/DEVELOPMENT.md#english) · [Changes](../smart-delivery-mod/CHANGELOG.md) |
+| Auto Menu | [Player guide](../auto-menu-mod/README.md#english) · [Development and validation](../auto-menu-mod/DEVELOPMENT.md#english) · [Changes](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order | [Player guide](../scan-to-order-mod/README.md#english) · [Development and validation](../scan-to-order-mod/DEVELOPMENT.md#english) · [Changes](../scan-to-order-mod/CHANGELOG.md) |
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
 | Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
@@ -34,6 +35,7 @@ These pages describe original Mod behavior, development decisions and validation
 | Fresh to Serve（焕新上桌） | [玩家说明](../fresh-to-serve-mod/README.md#中文) · [开发与验收](../fresh-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../fresh-to-serve-mod/CHANGELOG.md) |
 | First to Serve（先做好先端） | [玩家说明](../first-to-serve-mod/README.md#中文) · [开发与验收](../first-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../first-to-serve-mod/CHANGELOG.md) |
 | Smart Delivery（智选配送） | [玩家说明](../smart-delivery-mod/README.md#中文) · [开发与验收](../smart-delivery-mod/DEVELOPMENT.md#中文) · [版本变化](../smart-delivery-mod/CHANGELOG.md) |
+| Auto Menu（每日菜单组合） | [玩家说明](../auto-menu-mod/README.md#中文) · [开发与验收](../auto-menu-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order（扫码点餐） | [玩家说明](../scan-to-order-mod/README.md#中文) · [开发与验收](../scan-to-order-mod/DEVELOPMENT.md#中文) · [版本变化](../scan-to-order-mod/CHANGELOG.md) |
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
