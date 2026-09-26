@@ -365,6 +365,22 @@ class ReleaseTests(unittest.TestCase):
             self.publish()
         self.assertEqual(self.api.writes, [])
 
+    def test_public_repository_with_published_versions_is_a_noop(self):
+        self.ready()
+        self.publish()
+        original = copy.deepcopy(self.api.records)
+        self.api.writes.clear()
+        self.api.private = False
+        self.publish()
+        self.assertEqual(self.api.records, original)
+        self.assertEqual(self.api.writes, [])
+
+    def test_public_repository_without_approval_is_a_noop(self):
+        self.head = self.source
+        self.api.private = False
+        self.publish()
+        self.assertEqual(self.api.writes, [])
+
 
 class GitHubTransportTests(unittest.TestCase):
     def test_cross_host_asset_redirect_strips_token(self):
