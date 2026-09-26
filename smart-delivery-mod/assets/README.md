@@ -6,6 +6,17 @@
 
 Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
 
+### In-game screenshots
+
+Provided by the maintainer on 2026-09-26 as screenshots of the smart-order settings and preserved without further edits. Both show the Smart Delivery selector in the English UI. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
+
+| Image | Size | Visible scene |
+| --- | --- | --- |
+| [delivery-settings-gameplay.png](delivery-settings-gameplay.png) | 1231 × 1228 | Automatic Smart Order settings with automatic ordering enabled and **Premium delivery** selected |
+| [delivery-selector-gameplay.png](delivery-selector-gameplay.png) | 1080 × 327 | Expanded **Delivery method** list with **Free service**, **Budget delivery** and highlighted **Premium delivery** |
+
+### Adding images
+
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
@@ -26,6 +37,17 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 ## 中文
 
 此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+
+### 实机截图
+
+维护者于 2026-09-26 提供的智能订购设置实机图，按原文件保存，未再编辑。两张图均展示英语界面中的配送随心选择框；拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
+
+| 图片 | 尺寸 | 可见场景 |
+| --- | --- | --- |
+| [delivery-settings-gameplay.png](delivery-settings-gameplay.png) | 1231 × 1228 | 自动智能订购设置，自动订购已勾选，配送方式为 **Premium delivery（高级配送）** |
+| [delivery-selector-gameplay.png](delivery-selector-gameplay.png) | 1080 × 327 | **Delivery method（配送方式）** 展开列表，含免费服务、经济型配送及高亮的高级配送 |
+
+### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |

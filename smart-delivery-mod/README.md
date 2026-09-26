@@ -20,6 +20,16 @@ Automatic ordering must already be enabled in the game. The Mod does not place e
 
 Your saved choice survives restarts and is shared by this installation's restaurants. It is stored in `SmartDelivery/Scripts/delivery-preference.txt`; keep that file when updating. The Mod folder must be writable.
 
+### In-game screenshots
+
+The automatic smart-order settings include a **Delivery method** field, shown here with **Premium delivery** selected.
+
+![Automatic Smart Order settings with the Delivery method field set to Premium delivery](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/delivery-settings-gameplay.png?raw=1)
+
+Open the selector to choose **Free service**, **Budget delivery** or **Premium delivery**.
+
+![Expanded delivery selector showing Free service, Budget delivery and Premium delivery](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/delivery-selector-gameplay.png?raw=1)
+
 ### Requirements
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately. The ready-to-use Mod ZIP includes its helper; no compiling is needed.
@@ -83,6 +93,16 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 须先在游戏中启用自动订购。Mod 不会额外下单，也不改变手动购买食材或家具的配送方式；库存规则、采购金额下限及余额检查仍由游戏处理。
 
 已保存的选择在重启后保留，同一安装下的各餐厅共用，保存在 `SmartDelivery/Scripts/delivery-preference.txt`。更新时请保留此文件，Mod 文件夹需允许写入。
+
+### 实机截图
+
+自动智能订购设置中新增 **Delivery method（配送方式）** 字段，图中选择的是 **Premium delivery（高级配送）**。
+
+![实机画面：自动智能订购设置显示配送方式字段，当前为高级配送](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/delivery-settings-gameplay.png?raw=1)
+
+展开列表可选择 **Free service（免费服务）**、**Budget delivery（经济型配送）** 或 **Premium delivery（高级配送）**。
+
+![实机画面：展开配送方式列表，显示免费服务、经济型配送和高级配送](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/delivery-selector-gameplay.png?raw=1)
 
 ### 使用要求
 
