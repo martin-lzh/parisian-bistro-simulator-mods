@@ -19,6 +19,16 @@ You can move the crosshair within the same output area or leave it on an item's 
 
 Only ready, clean items in reach at that source are collected. Dirty plates, unfinished drinks, other floors and carried items are excluded. Drink-only slots remain reserved for drinks; tower burgers need a top slot. Parked trolleys and storage carts do not activate pickup.
 
+### In-game screenshots
+
+With a tray at the kitchen pass, the hold hint appears above **Take the dish**.
+
+![Tray at the kitchen pass showing Hold: take oldest first and Take the dish](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
+
+With a tray at the drink output area, the same hold hint appears above **Take drinks**.
+
+![Tray at the drink output area showing Hold: take oldest first and Take drinks](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
+
 ### Requirements
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
@@ -82,6 +92,16 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 准星可以在同一出品区域内移动，拿走一份后也可留在原来的空位上。短按保留原版操作；持托盘或推餐车对准支持的取餐区域时，长按用于连续拿取，替代交互轮盘。
 
 只拿取当前来源中、范围内的干净成品，不处理脏盘、未完成饮料、其他楼层或已被搬走的物品。饮料专用位仅收饮料，高层汉堡需要顶层空位；停放的餐车和搬货推车不会启动功能。
+
+### 实机截图
+
+持托盘对准厨房出餐口，**Take the dish（拿取菜品）** 上方显示长按优先拿取最早成品的提示。
+
+![实机画面：持托盘对准出餐口，显示长按优先拿取最早成品及拿取菜品提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
+
+持托盘对准饮料出品台，**Take drinks（拿取饮料）** 上方显示同样的长按提示。
+
+![实机画面：持托盘对准饮料出品台，显示长按优先拿取最早成品及拿取饮料提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
 
 ### 使用要求
 

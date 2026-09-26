@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add maintainer-provided tray screenshots at the kitchen pass and drink output area to both README languages, with image provenance and visible-scene notes.
+- 将维护者提供的托盘出餐口、饮料出品台实机图加入中英文 README，并记录图片来源及可见场景。
+
 - Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 
