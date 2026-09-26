@@ -276,12 +276,12 @@ def check(repository: str) -> None:
 def publish(repository: str, commit: str, api=None) -> None:
     clean_checkout(commit)
     api = api or GitHub(repository)
-    if api.request("")["private"] is not True:
-        raise ValueError("This workflow is configured for a private repository")
     selected = candidates(commit, api.pages("/releases"))
     if not selected:
         print("No authorized new versions to publish.")
         return
+    if api.request("")["private"] is not True:
+        raise ValueError("This workflow is configured for a private repository")
     # Validate the complete artifact and every candidate before the first write.
     verify_artifacts(commit)
     prepared = []
