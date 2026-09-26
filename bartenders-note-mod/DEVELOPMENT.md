@@ -1,4 +1,4 @@
-# Development and validation / 开发与验收
+# Bartender's Note development / 调饮手记开发
 
 [English](#english) · [中文](#中文)
 

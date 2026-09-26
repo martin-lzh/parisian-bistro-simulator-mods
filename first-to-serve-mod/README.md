@@ -1,4 +1,4 @@
-# First to Serve / 先做好先端
+# First to Serve / 出餐有序
 
 [English](#english) · [中文](#中文)
 

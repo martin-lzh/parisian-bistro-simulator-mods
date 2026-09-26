@@ -1,4 +1,4 @@
-# Smart Delivery development / 开发说明
+# Smart Delivery development / 配送随心开发
 
 [English](#english) · [中文](#中文)
 

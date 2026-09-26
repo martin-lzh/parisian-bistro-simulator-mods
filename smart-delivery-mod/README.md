@@ -1,4 +1,4 @@
-# Smart Delivery / 智选配送
+# Smart Delivery / 配送随心
 
 [English](#english) · [中文](#中文)
 

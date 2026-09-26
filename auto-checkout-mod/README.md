@@ -1,4 +1,4 @@
-# Auto Checkout
+# Auto Checkout / 收银管家
 
 [English](#english) · [中文](#中文)
 

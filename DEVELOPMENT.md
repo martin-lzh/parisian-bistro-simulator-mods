@@ -134,12 +134,12 @@ cd parisian-bistro-simulator-mods
 
 | Mod | 实现与验证 |
 | --- | --- |
-| Bartender's Note | [开发说明](bartenders-note-mod/DEVELOPMENT.md#中文) |
-| Auto Checkout | [开发说明](auto-checkout-mod/DEVELOPMENT.md#中文) |
-| Fresh to Serve（焕新上桌） | [开发说明](fresh-to-serve-mod/DEVELOPMENT.md#中文) |
-| First to Serve（先做好先端） | [开发说明](first-to-serve-mod/DEVELOPMENT.md#中文) |
-| Smart Delivery（智选配送） | [开发说明](smart-delivery-mod/DEVELOPMENT.md#中文) |
-| Auto Menu（每日菜单组合） | [开发说明](auto-menu-mod/DEVELOPMENT.md#中文) |
+| Bartender's Note（调饮手记） | [开发说明](bartenders-note-mod/DEVELOPMENT.md#中文) |
+| Auto Checkout（收银管家） | [开发说明](auto-checkout-mod/DEVELOPMENT.md#中文) |
+| Fresh to Serve（焕鲜上桌） | [开发说明](fresh-to-serve-mod/DEVELOPMENT.md#中文) |
+| First to Serve（出餐有序） | [开发说明](first-to-serve-mod/DEVELOPMENT.md#中文) |
+| Smart Delivery（配送随心） | [开发说明](smart-delivery-mod/DEVELOPMENT.md#中文) |
+| Auto Menu（菜单巧配） | [开发说明](auto-menu-mod/DEVELOPMENT.md#中文) |
 | Scan to Order（扫码点餐） | [开发说明](scan-to-order-mod/DEVELOPMENT.md#中文) |
 
 通用要求及既有测试另见[多语言适配](docs/localization.md#中文)、[验收记录](releases/validation.md#中文)和[版本管理](releases/README.md#中文)。

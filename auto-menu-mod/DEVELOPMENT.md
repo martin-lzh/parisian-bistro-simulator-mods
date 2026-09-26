@@ -1,4 +1,4 @@
-# Auto Menu development / 开发
+# Auto Menu development / 菜单巧配开发
 
 [English](#english) · [中文](#中文)
 

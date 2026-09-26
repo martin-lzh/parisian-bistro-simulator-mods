@@ -44,12 +44,12 @@ These pages describe original Mod behavior, development decisions and validation
 | 原创代码和文档许可 | [MIT 许可证](../LICENSE) |
 | 支持语言与原生文案 | [多语言适配](localization.md#中文) |
 | Ctrl+R 重载 Lua 脚本 | [热重载](hot-reload.md#中文) |
-| Bartender's Note | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |
-| Auto Checkout | [玩家说明](../auto-checkout-mod/README.md#中文) · [开发与验收](../auto-checkout-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-checkout-mod/CHANGELOG.md) |
-| Fresh to Serve（焕新上桌） | [玩家说明](../fresh-to-serve-mod/README.md#中文) · [开发与验收](../fresh-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../fresh-to-serve-mod/CHANGELOG.md) |
-| First to Serve（先做好先端） | [玩家说明](../first-to-serve-mod/README.md#中文) · [开发与验收](../first-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../first-to-serve-mod/CHANGELOG.md) |
-| Smart Delivery（智选配送） | [玩家说明](../smart-delivery-mod/README.md#中文) · [开发与验收](../smart-delivery-mod/DEVELOPMENT.md#中文) · [版本变化](../smart-delivery-mod/CHANGELOG.md) |
-| Auto Menu（每日菜单组合） | [玩家说明](../auto-menu-mod/README.md#中文) · [开发与验收](../auto-menu-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-menu-mod/CHANGELOG.md) |
+| Bartender's Note（调饮手记） | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |
+| Auto Checkout（收银管家） | [玩家说明](../auto-checkout-mod/README.md#中文) · [开发与验收](../auto-checkout-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-checkout-mod/CHANGELOG.md) |
+| Fresh to Serve（焕鲜上桌） | [玩家说明](../fresh-to-serve-mod/README.md#中文) · [开发与验收](../fresh-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../fresh-to-serve-mod/CHANGELOG.md) |
+| First to Serve（出餐有序） | [玩家说明](../first-to-serve-mod/README.md#中文) · [开发与验收](../first-to-serve-mod/DEVELOPMENT.md#中文) · [版本变化](../first-to-serve-mod/CHANGELOG.md) |
+| Smart Delivery（配送随心） | [玩家说明](../smart-delivery-mod/README.md#中文) · [开发与验收](../smart-delivery-mod/DEVELOPMENT.md#中文) · [版本变化](../smart-delivery-mod/CHANGELOG.md) |
+| Auto Menu（菜单巧配） | [玩家说明](../auto-menu-mod/README.md#中文) · [开发与验收](../auto-menu-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order（扫码点餐） | [玩家说明](../scan-to-order-mod/README.md#中文) · [开发与验收](../scan-to-order-mod/DEVELOPMENT.md#中文) · [版本变化](../scan-to-order-mod/CHANGELOG.md) |
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |

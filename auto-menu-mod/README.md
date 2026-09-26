@@ -1,4 +1,4 @@
-# Auto Menu / 每日菜单组合
+# Auto Menu / 菜单巧配
 
 [English](#english) · [中文](#中文)
 

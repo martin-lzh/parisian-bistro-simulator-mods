@@ -1,4 +1,4 @@
-# Bartender's Note
+# Bartender's Note / 调饮手记
 
 [English](#english) · [中文](#中文)
 

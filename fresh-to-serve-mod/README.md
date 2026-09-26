@@ -1,4 +1,4 @@
-# Fresh to Serve / 焕新上桌
+# Fresh to Serve / 焕鲜上桌
 
 [English](#english) · [中文](#中文)
 

@@ -48,12 +48,12 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 
 | Mod | 功能 | 版本 |
 | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.2-dev |
-| [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收现金或银行卡并完成结账 | 0.1.4-dev |
-| [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；顾客仍有足够耐心时请求重做 | 0.1.2-dev |
-| [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早做好的成品 | 0.1.7-dev |
-| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev |
-| [Auto Menu（每日菜单组合）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | 0.5.0-dev |
+| [Bartender's Note（调饮手记）](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.2-dev |
+| [Auto Checkout（收银管家）](auto-checkout-mod/README.md#中文) | 自动接收现金或银行卡并完成结账 | 0.1.4-dev |
+| [Fresh to Serve（焕鲜上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；顾客仍有足够耐心时请求重做 | 0.1.2-dev |
+| [First to Serve（出餐有序）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早做好的成品 | 0.1.7-dev |
+| [Smart Delivery（配送随心）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev |
+| [Auto Menu（菜单巧配）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | 0.5.0-dev |
 | [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | 0.1.1-dev |
 
 当前提供开发版。联机使用范围及玩法限制见各 Mod 说明。[实机测试记录](releases/validation.md#中文)列出已反馈的版本和测试范围；之后的修复仍需进一步测试。

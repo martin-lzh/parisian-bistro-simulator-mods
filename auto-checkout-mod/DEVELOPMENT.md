@@ -1,4 +1,4 @@
-# Development and validation / 开发与验收
+# Auto Checkout development / 收银管家开发
 
 [English](#english) · [中文](#中文)
 

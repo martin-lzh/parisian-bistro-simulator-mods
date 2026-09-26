@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Adopt **焕鲜上桌** as the Chinese display name in player guides and shared documentation.
+- 中文名称统一为 **焕鲜上桌**，同步玩家说明及公共文档。
+
 - Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
 - 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
 

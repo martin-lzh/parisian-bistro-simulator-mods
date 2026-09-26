@@ -92,12 +92,12 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 | Mod | 反馈时的源码版本 |
 | --- | --- |
-| Bartender's Note | 0.1.2-dev |
-| Auto Checkout | 0.1.4-dev |
-| Fresh to Serve（焕新上桌） | 0.1.2-dev |
-| First to Serve（先做好先端） | 0.1.7-dev |
-| Smart Delivery（智选配送） | 0.1.4-dev |
-| Auto Menu（每日菜单组合） | 0.5.0-dev |
+| Bartender's Note（调饮手记） | 0.1.2-dev |
+| Auto Checkout（收银管家） | 0.1.4-dev |
+| Fresh to Serve（焕鲜上桌） | 0.1.2-dev |
+| First to Serve（出餐有序） | 0.1.7-dev |
+| Smart Delivery（配送随心） | 0.1.4-dev |
+| Auto Menu（菜单巧配） | 0.5.0-dev |
 | Scan to Order（扫码点餐） | 0.1.1-dev |
 
 本次反馈关联上述当前开发版本，用户未单独提供已安装包版本和哈希，也未逐项列出游戏／加载器版本、语言、显示设置、联机角色、测试时长、性能数据或各项清单结果。开发说明中的清单继续作为回归参考，不将所有场景标记为逐项通过；本机参考版本和离线测试结果仍单独记录。
@@ -136,8 +136,8 @@ Fresh to Serve 0.1.1-dev 将清理与重做从食物扩展至饮料和鸡尾酒�
 
 | Mod | 已测试开发版本 | 正式版本 |
 | --- | --- | --- |
-| Bartender's Note | 0.1.0-dev | 0.1.0 |
-| Auto Checkout | 0.1.1-dev | 0.1.1 |
+| Bartender's Note（调饮手记） | 0.1.0-dev | 0.1.0 |
+| Auto Checkout（收银管家） | 0.1.1-dev | 0.1.1 |
 
 正式版沿用已测试的运行逻辑。Auto Checkout 仅更新诊断中的版本标识；同时更新文档、包名和 CI。实测功能源码基于提交 `0ad7c11`。
 

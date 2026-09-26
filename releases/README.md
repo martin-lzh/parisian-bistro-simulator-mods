@@ -68,13 +68,13 @@ This command reads the private repository using `GH_TOKEN` and requires a commit
 
 | Mod | 最新已验收正式版 | 正式版实机确认日期 | 正式包名称 | 当前源码 |
 | --- | --- | --- | --- | --- |
-| Bartender's Note | 0.1.0 | 2026-09-24 | `BartendersNote-0.1.0.zip` | 0.1.2-dev |
-| Auto Checkout | 0.1.2 | 2026-09-24 | `AutoCheckout-0.1.2.zip` | 0.1.4-dev |
-| Fresh to Serve | — | — | — | 0.1.2-dev |
-| First to Serve | — | — | — | 0.1.7-dev |
-| Smart Delivery | — | — | — | 0.1.4-dev |
-| Auto Menu | — | — | — | 0.5.0-dev |
-| Scan to Order | — | — | — | 0.1.1-dev |
+| Bartender's Note（调饮手记） | 0.1.0 | 2026-09-24 | `BartendersNote-0.1.0.zip` | 0.1.2-dev |
+| Auto Checkout（收银管家） | 0.1.2 | 2026-09-24 | `AutoCheckout-0.1.2.zip` | 0.1.4-dev |
+| Fresh to Serve（焕鲜上桌） | — | — | — | 0.1.2-dev |
+| First to Serve（出餐有序） | — | — | — | 0.1.7-dev |
+| Smart Delivery（配送随心） | — | — | — | 0.1.4-dev |
+| Auto Menu（菜单巧配） | — | — | — | 0.5.0-dev |
+| Scan to Order（扫码点餐） | — | — | — | 0.1.1-dev |
 
 历史正式版均基于用户对相应开发包的实机确认及明确转正式版要求。Auto Checkout 0.1.2 的反馈为三笔现金和两笔刷卡全部首次尝试完成，包含超过原交互范围的结账；[验收记录](validation.md#中文)保留该范围，并另行记录本次测试完成反馈。
 
@@ -92,13 +92,13 @@ CI 使用全部 7 个 Mod 的独立构建入口，运行全部 Lua 离线测试�
 
 | Mod | 独立标签 |
 | --- | --- |
-| Bartender's Note | `bartenders-note-v<版本>` |
-| Auto Checkout | `auto-checkout-v<版本>` |
-| Fresh to Serve | `fresh-to-serve-v<版本>` |
-| First to Serve | `first-to-serve-v<版本>` |
-| Smart Delivery | `smart-delivery-v<版本>` |
-| Auto Menu | `auto-menu-v<版本>` |
-| Scan to Order | `scan-to-order-v<版本>` |
+| Bartender's Note（调饮手记） | `bartenders-note-v<版本>` |
+| Auto Checkout（收银管家） | `auto-checkout-v<版本>` |
+| Fresh to Serve（焕鲜上桌） | `fresh-to-serve-v<版本>` |
+| First to Serve（出餐有序） | `first-to-serve-v<版本>` |
+| Smart Delivery（配送随心） | `smart-delivery-v<版本>` |
+| Auto Menu（菜单巧配） | `auto-menu-v<版本>` |
+| Scan to Order（扫码点餐） | `scan-to-order-v<版本>` |
 
 发布流程沿用菜市场模拟器项目：
 
