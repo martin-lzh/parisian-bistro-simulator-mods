@@ -6,7 +6,7 @@
 
 Choose Free service, Budget delivery or Premium delivery for automatic smart orders on the restaurant computer.
 
-**Version: 0.1.4-dev.** Single player or multiplayer host only. Only the host needs to install it; guests cannot edit the Mod's delivery choice.
+**Version: 0.1.5-dev.** Single player or multiplayer host only. Only the host needs to install it; guests cannot edit the Mod's delivery choice.
 
 ### How to use
 
@@ -27,7 +27,7 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 ### Download
 
 1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`SmartDelivery-0.1.4-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`SmartDelivery-0.1.5-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
 
 Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
@@ -70,7 +70,7 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 在餐厅电脑的自动智能订购设置中，选择免费服务、经济型配送或高级配送。
 
-**版本：0.1.4-dev。** 仅单人或联机房主可设置，只需房主安装；客机不能修改 Mod 配送选项。
+**版本：0.1.5-dev。** 仅单人或联机房主可设置，只需房主安装；客机不能修改 Mod 配送选项。
 
 ### 怎么使用
 
@@ -91,7 +91,7 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 ### 下载
 
 1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`SmartDelivery-0.1.4-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`SmartDelivery-0.1.5-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
 
 请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 

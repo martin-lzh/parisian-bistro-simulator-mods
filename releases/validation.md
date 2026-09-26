@@ -6,6 +6,8 @@
 
 ### Changes after the 2026-09-26 test report
 
+The user supplied Smart Delivery screenshots showing a pale selector, dark popup text and a bright blue selection highlight. Version 0.1.5-dev replaces these with a charcoal/white/muted-green palette and explicit popup text and focus styles. The new colors have not yet been verified in-game; earlier gameplay testing does not establish their rendered appearance.
+
 Commit `b948f7f` changes First to Serve 0.1.7-dev and Smart Delivery 0.1.4-dev to fall back to English when language lookup fails and recover on a later refresh. Offline failure/recovery regressions pass; these new paths have not been tested in-game. The earlier completion report below applies to its recorded source, not automatically to later changes with the same version number. Documentation and MIT packaging changes do not expand the reported gameplay coverage.
 
 ### 2026-09-26: all Mods tested in-game
@@ -83,6 +85,8 @@ This confirms cash, card and distant two-stage checkout in that test environment
 ## 中文
 
 ### 2026-09-26 测试反馈之后的改动
+
+用户提供的 Smart Delivery 截图显示选择框底色过浅、展开列表文字偏黑、选中项使用亮蓝高亮。0.1.5-dev 改为炭灰、柔白和低饱和绿色，并独立设置列表文字与焦点样式。新配色尚未实机确认，此前的功能测试不代表此次渲染效果已验收。
 
 提交 `b948f7f` 调整 First to Serve 0.1.7-dev 和 Smart Delivery 0.1.4-dev：语言读取失败时回退英语，后续刷新重新读取并恢复。离线失败与恢复回归通过，新增路径尚未实机测试。下方已有的完成反馈对应其记录的源码，不自动覆盖版本号相同的后续改动；文档及 MIT 打包调整也不扩大已反馈的游戏测试范围。
 

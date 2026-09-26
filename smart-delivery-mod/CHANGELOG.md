@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Restyle the delivery selector in 0.1.5-dev with charcoal backgrounds, soft white text and muted green selection. Set popup row text colors separately; style hover, pressed, disabled and keyboard-focus states without the default blue highlight. Only Lua changes; in-game visual verification is pending.
+- 0.1.5-dev 调整配送选择框配色：炭灰底色、柔白文字、低饱和绿色选中项；单独设置展开列表文字颜色，统一悬停、按下、禁用及键盘焦点状态，去除默认亮蓝高亮。本次仅修改 Lua，待实机确认显示效果。
+
+## 0.1.4-dev
+
 - Adopt **配送随心** as the Chinese display name in player guides and shared documentation.
 - 中文名称统一为 **配送随心**，同步玩家说明及公共文档。
 

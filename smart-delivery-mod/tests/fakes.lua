@@ -11,6 +11,18 @@ function F.object(class)
     F.serial = F.serial + 1
     local o = { class = class, address = F.serial, children = {}, options = {}, selected = -1,
         visible = true, authority = true, local_controller = true, enabled = true }
+    if class == '/Script/UMG.ComboBoxString' then
+        o.WidgetStyle = { ComboButtonStyle = { ButtonStyle = {
+            Normal = {}, Hovered = {}, Pressed = {}, Disabled = {},
+        }, DownArrowImage = {}, MenuBorderBrush = {} } }
+        o.ItemStyle = {}
+        for _, name in ipairs({ 'EvenRowBackgroundBrush', 'OddRowBackgroundBrush',
+            'EvenRowBackgroundHoveredBrush', 'OddRowBackgroundHoveredBrush',
+            'ActiveBrush', 'InactiveBrush', 'ActiveHighlightedBrush', 'InactiveHighlightedBrush',
+            'ActiveHoveredBrush', 'InactiveHoveredBrush', 'SelectorFocusedBrush' }) do
+            o.ItemStyle[name] = {}
+        end
+    end
     F.objects[#F.objects + 1] = o
     function o:IsValid() return not self.destroyed end
     function o:GetAddress() return self.address end
@@ -85,4 +97,5 @@ StaticFindObject = function(path)
 end
 StaticConstructObject = function(class) return F.object(class.class) end
 FText = function(value) return value end
+FName = function(value) return value end
 return F

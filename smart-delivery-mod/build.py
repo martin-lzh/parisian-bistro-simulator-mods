@@ -4,7 +4,7 @@ from pathlib import Path
 import runpy
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
-VERSION = "0.1.4-dev"
+VERSION = "0.1.5-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs/smart-delivery"
 FILES = ("Scripts/main.lua", "Scripts/reload.lua", "Scripts/ui.lua", "Scripts/bridge.lua", "Scripts/settings.lua",

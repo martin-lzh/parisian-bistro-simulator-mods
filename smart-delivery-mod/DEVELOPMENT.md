@@ -4,6 +4,8 @@
 
 ## English
 
+Version 0.1.5-dev styles each selector's `WidgetStyle` and `ItemStyle` before attaching it to the Slate tree. The popup's `TextColor` and `SelectedTextColor` must be set separately from `ForegroundColor`. The palette uses charcoal surfaces, soft white text and muted green selection, converts sRGB values to linear Slate colors, and gives keyboard focus an outlined brush. The native arrow, font and selection behavior are retained. This Lua-only change can use the existing 0.1.4-dev reload support; it still needs in-game visual verification, including disabled rendering.
+
 Smart Delivery adds one UMG selector to the existing automatic smart-order dialog. It reads the three native delivery labels at runtime, uses the dialog font and explicit white dropdown text, preserves the Save/Cancel footer and resets unsaved changes whenever the native settings are repopulated. Only a local authoritative owner can change the preference. The preference is installation-wide and lives outside game saves.
 
 The automatic-order evaluator is called by native timers and delegates and overwrites the shipping fee before checking affordability. A reflected `OrderIngredients` hook alone cannot intercept those direct calls. The original Windows helper changes only delivery selection within that evaluator. Native list generation, thresholds, availability, money checks, night fees, staff assignment and the eventual order remain intact, including calls made immediately when settings are saved. Manual order paths are outside the hook.
@@ -46,9 +48,9 @@ Offline results do not establish engine bridging, layout, multiplayer or real tr
 
 ### Loader, packaging and diagnostics
 
-The checked loader is UE4SS experimental `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. The build above emits `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` and its SHA-256 file. The compiled `Scripts/delivery_bridge.dll` is loaded by Lua, not from UE4SS's `dlls` directory. Builds do not install, start/stop the game or edit saves.
+The checked loader is UE4SS experimental `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. The build above emits `outputs/smart-delivery/SmartDelivery-0.1.5-dev.zip` and its SHA-256 file. The compiled `Scripts/delivery_bridge.dll` is loaded by Lua, not from UE4SS's `dlls` directory. Builds do not install, start/stop the game or edit saves.
 
-After a closed-game upgrade, verify `[SmartDelivery] START version=0.1.4-dev` and `UI attached to automatic-order settings` in `UE4SS.log`. Preserve the original startup error from that log: cleanup may subsequently replace `Scripts/bridge-status.txt` with `disabled`. The preference file is `Scripts/delivery-preference.txt`, with premium as the initial fallback.
+After a closed-game upgrade, verify `[SmartDelivery] START version=0.1.5-dev` and `UI attached to automatic-order settings` in `UE4SS.log`. Preserve the original startup error from that log: cleanup may subsequently replace `Scripts/bridge-status.txt` with `disabled`. The preference file is `Scripts/delivery-preference.txt`, with premium as the initial fallback.
 
 ### Manual script reload
 
@@ -57,6 +59,8 @@ After a closed-game upgrade, verify `[SmartDelivery] START version=0.1.4-dev` an
 The lifecycle above discards unsaved selector changes, removes the old selector on the new state's game-thread refresh and reapplies the saved preference. During the reload gap, native automatic ordering uses its quantity-based delivery choice. Replacing `delivery_bridge.dll`, updating UE4SS or removing the Mod requires closing and restarting the game. The overall in-game report does not supply a separate repeated-reload result.
 
 ## 中文
+
+0.1.5-dev 在选择框挂入 Slate 树之前设置实例的 `WidgetStyle` 和 `ItemStyle`。弹出列表的 `TextColor`、`SelectedTextColor` 必须独立于 `ForegroundColor` 设置。配色采用炭灰背景、柔白文字和低饱和绿色选中项，将 sRGB 值转换为 Slate 线性色彩，并为键盘焦点设置描边。保留原生箭头、字体和选择行为。本次仅修改 Lua，可沿用 0.1.4-dev 的热重载支持；包括禁用效果在内的实机显示仍待确认。
 
 在原有自动智能订购窗口中增加一个 UMG 配送选择框，运行时读取原生配送名称并沿用窗口字体，下拉框使用明确的白色文字，保留底部保存/取消按钮；每次重新填充原生设置时恢复已保存选择。仅本地房主能修改偏好；偏好由同一安装下的餐厅共用，保存在游戏存档之外。
 
@@ -86,9 +90,9 @@ Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua �
 
 ### 加载器、打包与诊断
 
-核对的加载器为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持稳定版 UE4SS 3.0.1。上方构建生成 `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` 及 SHA-256 文件。`Scripts/delivery_bridge.dll` 由 Lua 加载，不放入 UE4SS 的 `dlls` 目录。构建不安装、不启停游戏，也不修改存档。
+核对的加载器为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持稳定版 UE4SS 3.0.1。上方构建生成 `outputs/smart-delivery/SmartDelivery-0.1.5-dev.zip` 及 SHA-256 文件。`Scripts/delivery_bridge.dll` 由 Lua 加载，不放入 UE4SS 的 `dlls` 目录。构建不安装、不启停游戏，也不修改存档。
 
-关游戏升级后，在 `UE4SS.log` 中核对 `[SmartDelivery] START version=0.1.4-dev` 和 `UI attached to automatic-order settings`。保留该日志中的原始启动错误：后续清理可能把 `Scripts/bridge-status.txt` 改为 `disabled`。偏好文件为 `Scripts/delivery-preference.txt`，初始后备选择为高级配送。
+关游戏升级后，在 `UE4SS.log` 中核对 `[SmartDelivery] START version=0.1.5-dev` 和 `UI attached to automatic-order settings`。保留该日志中的原始启动错误：后续清理可能把 `Scripts/bridge-status.txt` 改为 `disabled`。偏好文件为 `Scripts/delivery-preference.txt`，初始后备选择为高级配送。
 
 ### 手动脚本重载
 

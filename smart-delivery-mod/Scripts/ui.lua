@@ -33,6 +33,62 @@ local function create(kind, owner)
     return object
 end
 
+-- Palette values are sRGB; Slate's specified colors take linear components.
+local function color(rgb, alpha)
+    local function linear(byte)
+        local value = byte / 255
+        return value <= 0.04045 and value / 12.92 or ((value + 0.055) / 1.055) ^ 2.4
+    end
+    return { SpecifiedColor = { R = linear((rgb >> 16) & 255), G = linear((rgb >> 8) & 255),
+        B = linear(rgb & 255), A = alpha or 1 }, ColorUseRule = 0 }
+end
+
+local function background(brush, rgb, border, radius, alpha)
+    -- Use Slate's rounded fill instead of tinting the default textured brush.
+    brush.ResourceObject, brush.ResourceName = nil, FName('None')
+    brush.DrawAs, brush.ImageType = 4, 0 -- RoundedBox, NoImage
+    brush.TintColor = color(rgb, alpha)
+    brush.OutlineSettings = {
+        CornerRadii = { X = radius, Y = radius, Z = radius, W = radius },
+        Color = color(border or rgb), Width = border and 1 or 0,
+        RoundingType = 0, bUseBrushTransparency = false,
+    }
+end
+
+local function style_dropdown(combo)
+    -- Apply to this widget before it enters the Slate tree. Keep the native
+    -- arrow, font, sounds and interaction behavior; style both text contexts.
+    local text, focus = 0xF2F4F3, 0x91B7A0
+    combo.ForegroundColor = color(text)
+    local control = combo.WidgetStyle.ComboButtonStyle
+    local button = control.ButtonStyle
+    background(button.Normal, 0x2B342F, 0x697C70, 4)
+    background(button.Hovered, 0x3A4740, focus, 4)
+    background(button.Pressed, 0x263B2F, focus, 4)
+    background(button.Disabled, 0x262D29, 0x465349, 4)
+    button.NormalForeground, button.HoveredForeground = color(text), color(text)
+    button.PressedForeground, button.DisabledForeground = color(text), color(0xB0BAB3)
+    control.DownArrowImage.TintColor = color(text)
+    background(control.MenuBorderBrush, 0x232B27, 0x697C70, 4)
+
+    -- FTableRowStyle controls popup text independently of ForegroundColor.
+    local item = combo.ItemStyle
+    item.TextColor, item.SelectedTextColor = color(text), color(text)
+    for _, name in ipairs({ 'EvenRowBackgroundBrush', 'OddRowBackgroundBrush' }) do
+        background(item[name], 0x232B27, nil, 0)
+    end
+    for _, name in ipairs({ 'EvenRowBackgroundHoveredBrush', 'OddRowBackgroundHoveredBrush' }) do
+        background(item[name], 0x34433B, nil, 0)
+    end
+    for _, name in ipairs({ 'ActiveBrush', 'InactiveBrush', 'ActiveHighlightedBrush', 'InactiveHighlightedBrush' }) do
+        background(item[name], 0x315A43, nil, 0)
+    end
+    for _, name in ipairs({ 'ActiveHoveredBrush', 'InactiveHoveredBrush' }) do
+        background(item[name], 0x3D6A50, nil, 0)
+    end
+    background(item.SelectorFocusedBrush, 0, focus, 3, 0)
+end
+
 function UI.destroy(view)
     if view and UI.valid(view.row) then view.row:RemoveFromParent() end
     if view and view.lifetime and view.token then
@@ -56,10 +112,7 @@ function UI.create(owner, lifetime)
         view.title:SetAutoWrapText(true)
         view.combo = create('ComboBoxString', owner)
         view.combo.Font = owner.MinimumAutomaticSmartOrderAmountInput.Font
-        -- Use an explicit color for the selected value and generated options.
-        view.combo.ForegroundColor = {
-            SpecifiedColor = { R = 1, G = 1, B = 1, A = 1 }, ColorUseRule = 0,
-        }
+        style_dropdown(view.combo)
         view.row:AddChildToVerticalBox(view.title):SetPadding({ Left = 0, Top = 0, Right = 0, Bottom = 6 })
         view.row:AddChildToVerticalBox(view.combo)
         -- Preserve the native footer's layout and keep Save/Cancel last.
