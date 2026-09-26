@@ -2,15 +2,17 @@
 
 from hashlib import sha256
 from pathlib import Path
+import runpy
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.4.1-dev"
+VERSION = "0.5.0-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "auto-menu"
 FILES = (
     "Scripts/main.lua",
     "Scripts/game.lua",
+    "Scripts/bridge.lua",
     "Scripts/planner.lua",
     "Scripts/ui.lua",
     "Scripts/reload.lua",
@@ -19,9 +21,11 @@ FILES = (
     "DEVELOPMENT.md",
     "CHANGELOG.md",
 )
+GENERATED_FILES = {"Scripts/auto_menu_bridge.dll": OUTPUT / "native/auto_menu_bridge.dll"}
 
 
 def build() -> Path:
+    runpy.run_path(str(SOURCE / "native_build.py"))["build"]()
     payload = {}
     for name in FILES:
         source = SOURCE / name
@@ -30,6 +34,10 @@ def build() -> Path:
         if not source.resolve().is_relative_to(SOURCE):
             raise ValueError(f"Package input escapes mod directory: {name}")
         payload[f"AutoMenu/{name}"] = source.read_bytes().replace(b"\r\n", b"\n")
+    for name, path in GENERATED_FILES.items():
+        if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(OUTPUT):
+            raise ValueError(f"Missing or linked generated input: {name}")
+        payload[f"AutoMenu/{name}"] = path.read_bytes()
     payload["AutoMenu/enabled.txt"] = b""
     OUTPUT.mkdir(parents=True, exist_ok=True)
     archive = OUTPUT / f"AutoMenu-{VERSION}.zip"

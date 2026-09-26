@@ -4,7 +4,7 @@
 
 ## English
 
-Auto Menu **0.4.1-dev** adds aggregate phase timing and workload logs to the direct synchronous native search, including empty courses and the entirely empty menu. Seven offline suites verify enumeration, native-call counts, eligibility, restoration, saving, timing attribution, bounded log output, language and reload behavior. Timing percentages use the existing `os.clock` and include instrumentation overhead; no in-game bottleneck or speedup is claimed. Real engine field writes, native saving and game responsiveness remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
+Auto Menu **0.5.0-dev** adds native enumeration and a per-search cache of original dish scores. Six Lua suites and the Windows native harness verify protocol handling, eligibility, exhaustive search, exact cached/uncached comparisons on synthetic projections, thread isolation, allocation ownership, failure restoration, saving, timing and reload behavior. Native targets were resolved read-only against the local reference executable. Actual in-game cache correctness and speed remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
 
 Scan to Order **0.1.1-dev** avoids full dish return conversion through Lua while retaining host/single-player automatic food and drink ordering with restock recovery. Local references were checked against Steam Build **25532071** / **1.0.1.44eb**. Offline catalog-reference, scalar-ingredient, stock-contention, customer-state, authority, native acceptance and reload tests pass; real engine calls, replenishment, staffing and multiplayer replication remain pending in-game acceptance.
 
@@ -56,7 +56,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Auto Menu **0.4.1-dev** 为直接同步原生搜索增加阶段累计计时与工作量日志，保留类别留空和全空菜单。七组离线测试验证遍历、原生调用次数、资格过滤、异常恢复、保存、计时归属、日志数量、多语言和热重载。占比沿用 `os.clock`，包含计时本身的开销，尚未据实机数据认定瓶颈或提速。真实引擎字段写入、原生保存和游戏响应仍待实机验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
+Auto Menu **0.5.0-dev** 新增原生枚举和单次搜索内的原生菜品评分缓存。六组 Lua 测试和 Windows 原生测试验证桥接协议、资格过滤、完整遍历、合成预测的缓存逐位对照、线程隔离、内存释放、异常恢复、保存、计时和热重载；已只读核对本机参考 EXE 的目标定位。真实游戏中的缓存正确性和速度仍待验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
 
 Scan to Order（扫码点餐）**0.1.1-dev** 避免在 Lua 中转换完整菜品返回值，保留仅房主／单人自动提交食物和饮料订单、补货后续单。本机参考核对基于 Steam Build **25532071** / **1.0.1.44eb**。菜品表引用、独立食材记录、库存争用、顾客状态、权限、原生受理结果及热重载离线测试通过；真实引擎调用、补货、人员条件和联机同步仍待实机验收。
 

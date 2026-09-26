@@ -1,5 +1,6 @@
 local Game = {}
 local Planner = require('planner')
+local Bridge = require('bridge')
 
 function Game.valid(object) return object ~= nil and object:IsValid() end
 function Game.same(a, b)
@@ -55,14 +56,12 @@ end
 function Game.compose(owner)
     local clock = os.clock
     local started = clock()
-    local timing = { writes = 0, projection = 0, rate_read = 0, field_writes = 0 }
+    local timing = {}
     assert(Game.available(owner), 'Daily menu is not available to this host')
     local manager, period = owner.BoundDailyMenuBrasserieManager, owner.SelectedDailyMenuPeriod
     local name = period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu'
     local storage = manager[name] -- Inline property view, retained only during this synchronous call.
     local original = Planner.copy(storage)
-    local template, applied = Planner.copy(original), Planner.copy(original)
-    template.Period = period
     local domains = choices(owner, original)
     local ceiling = manager:GetDailyMenuMaximumPromotedAdoptionChance()
     local counts, combinations = {}, 1
@@ -75,30 +74,8 @@ function Game.compose(owner)
         period, table.concat(counts, ','), combinations))
     timing.setup = clock() - started
     local search_started = clock()
-    -- Everything runs inside the click's game-thread callback. No delays,
-    -- sampled simulation writes or repeated condition scans are needed.
-    local ok, result = pcall(function()
-        storage.Period = period
-        return Planner.solve(domains, template, function(menu)
-            local before_write = clock()
-            for _, course in ipairs(Planner.courses) do
-                local field = course.field
-                if applied[field] ~= menu[field] then
-                    storage[field] = menu[field]; applied[field] = menu[field]
-                    timing.field_writes = timing.field_writes + 1
-                end
-            end
-            local before_projection = clock()
-            local projection = owner:GetDailyMenuProjection(period)
-            local before_read = clock()
-            local rate = projection.EstimatedAdoptionRate
-            local after_read = clock()
-            timing.writes = timing.writes + (before_projection - before_write)
-            timing.projection = timing.projection + (before_read - before_projection)
-            timing.rate_read = timing.rate_read + (after_read - before_read)
-            return rate
-        end, ceiling)
-    end)
+    -- One synchronous native invocation owns enumeration and its scoped cache.
+    local ok, result = pcall(Bridge.solve, owner, manager, storage, period, original, domains, Planner.courses, ceiling)
     timing.search = clock() - search_started
     -- Trial writes never use the save path. Restore even if a native call fails.
     local phase_started = clock()
@@ -118,10 +95,8 @@ function Game.compose(owner)
     owner:RefreshDailyMenus()
     timing.refresh = clock() - phase_started
     timing.total = clock() - started
-    -- Residual includes enumeration, bookkeeping and timing overhead. The
-    -- projection interval includes UE4SS dispatch and return conversion.
-    timing.lua_and_timing = timing.total - timing.setup - timing.writes - timing.projection
-        - timing.rate_read - timing.restore - timing.save - timing.verify - timing.refresh
+    timing.lua_and_timing = timing.total - timing.setup - timing.search
+        - timing.restore - timing.save - timing.verify - timing.refresh
     result.timing, result.combinations = timing, combinations
     return result
 end

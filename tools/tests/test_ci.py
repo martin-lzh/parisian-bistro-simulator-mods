@@ -98,6 +98,29 @@ class PackageChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Disallowed generated"):
             self.validate()
 
+    def test_auto_menu_native_allowlist_and_output_boundary(self):
+        self.mod["slug"] = "auto-menu"
+        name, inputs = ci.NATIVE["auto-menu"]
+        source = self.mod["source"]
+        for path in inputs:
+            file = source / path
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text("original test fixture\n", encoding="utf-8")
+        tracked = "\0".join(f"example-mod/{path}" for path in set(self.mod["files"]) | inputs).encode()
+        helper = self.root / "outputs/auto-menu/native/auto_menu_bridge.dll"
+        with patch.object(ci, "ROOT", self.root), patch.object(ci.subprocess, "check_output", return_value=tracked):
+            self.mod["generated"] = {name: helper}
+            ci.validate_config(self.mod)
+            self.mod["generated"] = {name: self.root / "outside.dll"}
+            with self.assertRaisesRegex(ValueError, "native build output"):
+                ci.validate_config(self.mod)
+            self.mod["generated"] = {"Scripts/delivery_bridge.dll": helper}
+            with self.assertRaisesRegex(ValueError, "Disallowed generated"):
+                ci.validate_config(self.mod)
+            self.mod["generated"] = {}
+            with self.assertRaisesRegex(ValueError, "Native helper"):
+                ci.validate_config(self.mod)
+
     def test_symbolic_link_entry_is_rejected(self):
         with ZipFile(self.archive, "w") as package:
             for name, data in self.payload.items():

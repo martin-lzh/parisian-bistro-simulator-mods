@@ -13,7 +13,7 @@ end
 
 function F.setup()
     local state = { objects = {}, hooks = {}, ticks = {}, loops = {}, shared = {}, saves = 0,
-        projections = 0, language = 'en' }
+        language = 'en' }
     local function object(kind)
         local value = { address = #state.objects + 1, kind = kind, valid = true }
         state.objects[#state.objects + 1] = value
@@ -49,23 +49,6 @@ function F.setup()
     owner.GetOwningPlayer = function() return player end
     owner.IsVisible = function() return state.hidden ~= true end
     owner.IsShowingDailyMenuCategory = function() return state.other_page ~= true end
-    function owner:GetDailyMenu(period)
-        return manager[period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu']
-    end
-    function owner:GetDailyMenuProjection(period)
-        state.projections = state.projections + 1
-        local menu = self:GetDailyMenu(period)
-        local copied = Planner.copy(menu)
-        if state.projection_error then error('Synthetic projection failure') end
-        local configured = false
-        for _, course in ipairs(Planner.courses) do configured = configured or menu[course.field] ~= 0 end
-        if not configured then return { Period = period, bConfigured = false, EstimatedAdoptionRate = 0 } end
-        if state.oracle then return { Period = period, bConfigured = true, EstimatedAdoptionRate = state.oracle(copied) } end
-        -- Invented non-additive objective, deliberately unrelated to dish tags.
-        local target = period == 1 and 21 or 20
-        local rate = menu.MainDish == target and menu.Starter == 11 and 0.8 or 0.1
-        return { Period = period, bConfigured = true, EstimatedAdoptionRate = rate }
-    end
     owner.RefreshDailyMenus = function()
         state.refreshes = (state.refreshes or 0) + 1
     end
@@ -145,6 +128,22 @@ function F.setup()
     end
     function state:click(value, index)
         self.hooks[index or #self.hooks]({ get = function() return value end })
+    end
+    require('bridge').solve = function(_, _, storage, period, original, domains, courses)
+        state.request = { domains = domains, original = original, period = period }
+        if state.native_override then return state.native_override(storage, original, domains) end
+        if state.projection_error then error('Synthetic native failure') end
+        local menu, count = Planner.copy(original), 1
+        menu.Period = period
+        for _, course in ipairs(courses) do
+            local ids = domains[course.field]
+            count = count * #ids
+            local wanted = course.field == 'MainDish' and (period == 1 and 21 or 20) or 0
+            menu[course.field] = ids[1]
+            for _, id in ipairs(ids) do if id == wanted then menu[course.field] = id; break end end
+        end
+        return { menu = menu, rate = state.ceiling or 0.8, evaluations = state.ceiling and 1 or count,
+            combinations = count, cache = { hits = count, misses = 2, bypasses = 0, checks = count + 1, seconds = 0.01 } }
     end
     return state
 end

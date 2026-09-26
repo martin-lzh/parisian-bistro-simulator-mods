@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Auto Menu 0.5.0-dev adds an original Windows x64 helper that enumerates menus and caches original single-dish scores for one synchronous search. Every combination still uses the full native projection; empty courses, exact rates, stable ties and the native ceiling are preserved.
+- Remove per-candidate Lua property writes and projection-table conversion. Compare every candidate in domains of at most 243 combinations with caching disabled; larger domains compare the first 32, and every search checks its winner. Restore the original menu before the existing one-save path, including failures.
+- Add native search/cache metrics, native calling-convention discovery and ownership tests, and a generated-DLL package allowlist. DLL updates require restarting the game. In-game speed and native integration acceptance remain pending.
+- Auto Menu 0.5.0-dev 新增原创 Windows x64 辅助模块，在一次同步搜索内枚举菜单并缓存原生单菜评分。每个组合仍调用完整原生预测，保留留空选项、精确选择率、固定同值顺序和原生上限。
+- 去掉逐组合 Lua 属性写入及预测表转换。最多 243 个组合时逐个关闭缓存对照；更大搜索对照前 32 个，每次都复核最终菜单。成功或失败均恢复原菜单，之后沿用原生单次保存。
+- 新增原生搜索／缓存统计、调用布局发现与内存归属测试，以及生成 DLL 的安装包白名单。DLL 更新需要重启游戏；实机速度和原生接入仍待验收。
+
+## 0.4.1-dev
+
 - Auto Menu 0.4.1-dev adds per-search timing logs: eligible option counts including empty choices, total combinations, actual evaluations, changed field writes, native projection average and stopping reason.
 - Report milliseconds and percentages for setup, trial writes, native projection dispatch/return, rate extraction, restore, save, save verification, refresh and remaining Lua/timing overhead. Aggregate in memory; never log individual trials. The existing `os.clock` timer has limited resolution, so short phase shares are approximate. Search and selection behavior are unchanged.
 - Auto Menu 0.4.1-dev 新增每次搜索的计时日志：包含留空的各类候选数、全部组合数、实际试算数、变化字段写入数、原生预测平均耗时和结束原因。

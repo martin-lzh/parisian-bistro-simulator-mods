@@ -17,6 +17,12 @@ MODS = {"bartenders-note": "BartendersNote", "auto-checkout": "AutoCheckout",
         "fresh-to-serve": "FreshToServe", "first-to-serve": "FirstToServe",
         "smart-delivery": "SmartDelivery", "scan-to-order": "ScanToOrder",
         "auto-menu": "AutoMenu"}
+NATIVE = {
+    "smart-delivery": ("Scripts/delivery_bridge.dll", {"native_build.py", "Native/bridge.cpp", "Native/dispatch.hpp",
+        "Native/pe_image.hpp", "Native/contract.hpp", "Native/tests.cpp", "Native/probe.asm"}),
+    "auto-menu": ("Scripts/auto_menu_bridge.dll", {"native_build.py", "Native/bridge.cpp", "Native/search.hpp",
+        "Native/pe_image.hpp", "Native/contract.hpp", "Native/tests.cpp"}),
+}
 
 
 def run(*args: str) -> None:
@@ -69,15 +75,16 @@ def validate_config(mod: dict) -> None:
     if set(files) != required:
         raise ValueError(f"{mod['slug']}: package allowlist must cover all Lua modules and user docs")
     generated = mod.get("generated", {})
+    if mod["slug"] in NATIVE and not generated:
+        raise ValueError("Native helper must be included in the package")
     if generated:
-        if mod["slug"] != "smart-delivery" or set(generated) != {"Scripts/delivery_bridge.dll"}:
+        native = NATIVE.get(mod["slug"])
+        if not native or set(generated) != {native[0]}:
             raise ValueError("Disallowed generated package input")
         for path in generated.values():
-            if path.is_symlink() or not path.resolve().is_relative_to((ROOT / "outputs/smart-delivery/native").resolve()):
+            if path.is_symlink() or not path.resolve().is_relative_to((ROOT / "outputs" / mod["slug"] / "native").resolve()):
                 raise ValueError("Generated input must stay in the native build output")
-        native_inputs = {"native_build.py", "Native/bridge.cpp", "Native/dispatch.hpp", "Native/pe_image.hpp", "Native/contract.hpp",
-                         "Native/tests.cpp", "Native/probe.asm"}
-        if any((source / name).relative_to(ROOT).as_posix() not in tracked for name in native_inputs):
+        if any((source / name).relative_to(ROOT).as_posix() not in tracked for name in native[1]):
             raise ValueError("Native build sources must be tracked")
 
 

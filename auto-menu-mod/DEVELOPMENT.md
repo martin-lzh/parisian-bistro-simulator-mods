@@ -4,36 +4,36 @@
 
 ## English
 
-**0.4.1-dev, pending in-game acceptance.** Independent Lua Mod, without a native helper DLL. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb. Native analysis and reference material stay in ignored `work/`.
+**0.5.0-dev, pending in-game acceptance.** Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
 
 ### Implementation
 
-- `game.lua` collects dish IDs from each selector, intersects them with `AvailableDishes`, and excludes `DisabledDishes`, `EmployeeRequirementDisabledDishes`, disabled selector entries and wrong-course entries. Each course also gets ID zero. The current choice comes first when eligible; remaining IDs use a stable order. No tags, ingredient arrays, cost, prices, satisfaction or influence snapshots are read for candidate preparation.
-- `planner.lua` recursively visits the Cartesian product with one reusable trial table. It compares the exact native rate and copies only improvements. Empty and completely empty choices are included. Reaching the native maximum can stop enumeration; there are no equivalence signatures, heuristic warm starts, memo tables or independent-course scoring.
-- `Game.compose` runs synchronously in the native button callback on the game thread. It reads the original daily-menu definition once, retains the inline reflected menu view during the call and writes only changed dish fields. Every trial calls `GetDailyMenuProjection(period).EstimatedAdoptionRate`. No trial saves, yields, RPCs or sample-property writes are made. The protected trial block restores the original definition on success or failure. Completion calls `SaveDailyMenu` once, checks the selected dish fields and refreshes the page. Native saving deactivates an empty menu; this is accepted rather than treated as a failed active-state check.
-- `main.lua` filters clicks by the Mod button identity and prevents reentrant composition. Its only timer discovers/updates widgets every 500 ms; it does not schedule search. Successful logs include the rate, evaluation count and timing breakdown. `ui.lua` keeps a fixed localized button and tooltip without progress, cancellation or status countdowns. `reload.lua` handles button cleanup between Lua states.
+- `game.lua` collects selector IDs intersected with `AvailableDishes`, excluding disabled, unstaffed and wrong-course entries. Every course includes zero. Eligible current choices lead, followed by ascending IDs. `planner.lua` holds the course metadata and menu-copy operation.
+- `bridge.lua` loads `auto_menu_bridge.dll` through `package.loadlib`. One synchronous request/result exchange passes object/property addresses, the original menu, native baseline rate, ceiling and domains. No Lua ABI internals or second Lua runtime are used. The pointer request is removed after invocation, previous results are cleared before it, and returned IDs must belong to the supplied domains. No per-candidate disk I/O occurs.
+- `Native/search.hpp` enumerates the complete product, including empty menus. Only strict improvements replace the winner; exact equality with the native ceiling permits early exit. It never applies a heuristic, rounded percentage or independent-course ranking.
+- `Native/contract.hpp` discovers the named native projection registration and checks the supported x64 instructions, return ownership, menu storage and five single-dish scoring call sites. Targets are derived from the installed executable, without fixed game RVAs or an executable hash allowlist. Unsupported layouts and pre-existing modifications are rejected before installation.
+- `Native/bridge.cpp` redirects those five calls to an original adapter. A pinned DLL and nearby leaf jump remain until process exit. Outside a search, including other threads, calls forward to the original function. During one synchronous game-thread search, a scoped cache reuses original float scores by dish, profile and intent for the same manager. Personal preferences and unknown enum values bypass caching. The cache is discarded after each click; menu-specific compatibility, ingredient filtering, weather/event effects, promotion, float accumulation and native caps still execute in the game's complete projection.
+- Enumeration and native projection calls stay inside the DLL, avoiding per-candidate Lua writes and conversion of the returned projection/profile arrays. Native-owned return arrays are released through the matching engine allocator. This version still performs the projection's display-only calculations; it does not claim an adoption-only API.
+- Before trials, the direct native projection must match the Lua baseline bit-for-bit. Domains with at most 243 combinations compare each visited candidate with caching disabled; larger domains compare the first 32. Every winner is checked again with caching disabled. A mismatch aborts. The native scope restores all seven menu bytes on success or C++ exceptions; Lua also restores the original definition before saving the winner once and refreshing. These checks do not recover from arbitrary process crashes.
 
-All combinations are evaluated in one game-thread callback, so there are no inter-slice condition snapshots or changed-condition cancellation paths. The search remains exponential in the number of active choices. Synchronous completion trades responsiveness on large menus for a smaller implementation and no artificial waits. This version does not claim a measured in-game speedup.
+Prices, dish data, weather and events are stable during the synchronous call on the game thread. No cache persists across clicks or Lua reload. DLL updates require restarting the game. Search remains exponential and can pause gameplay on large catalogues. Small-domain differential checks deliberately add extra projections. A final-winner check alone is not proof of global equivalence; the cache contract and exhaustive small-domain comparisons are also required. Real engine acceptance is pending.
 
 ### Timing logs
 
-`SEARCH` records the selected period, eligible option counts including zero, full product and `clock=os.clock`. `COMPOSED` retains the native rate, actual evaluations and elapsed seconds. `TIMING` reports total and search milliseconds, average projection milliseconds, changed dish-field writes and `stop=exhausted` or `native_ceiling` (fewer evaluations than combinations). `TIMING_PARTS` uses milliseconds and percentages of total composition time:
+Four lines per successful composition:
 
-| Field | Measured work |
+| Line | Meaning |
 | --- | --- |
-| `setup` | Host check, original menu, eligible IDs, native ceiling and initial log |
-| `writes` | Compare the five trial fields and write changed values |
-| `projection` | `GetDailyMenuProjection`, including UE4SS dispatch and returned struct conversion |
-| `rate_read` | Read `EstimatedAdoptionRate` from the returned struct |
-| `restore` | Restore the original menu before the final save |
-| `save` | `SaveDailyMenu`, including synchronous native callbacks |
-| `verify` | Read back and check the saved dish fields |
-| `refresh` | The explicit `RefreshDailyMenus` call |
-| `lua_and_timing` | Remaining enumeration, comparisons, copies, bookkeeping and timing overhead |
+| `SEARCH` | Period, eligible counts including empty, full product, Lua clock |
+| `COMPOSED` | Version, exact native rate, candidate evaluations, total seconds |
+| `TIMING_PARTS` | Setup, search/bridge, restoration, save, verification, refresh and residual Lua work; milliseconds and shares |
+| `NATIVE` | Native search milliseconds, cache hits/misses/bypasses, cached-versus-uncached checks, stopping reason |
 
-The nine shares are exclusive and sum to total before display rounding; `search_ms` is an inclusive subtotal, not an extra share. The timer is the existing Lua `os.clock`, not game time, with four clock reads per trial and no extra native scoring calls. Timer resolution makes very short intervals approximate or zero; averages come from accumulated time, not a single high-resolution sample. Clock/instrumentation overhead is distributed across intervals, so these are instrumented measurements, not an overhead-free benchmark. The total ends after refresh and excludes final summary formatting/output and the outer button-hook checks. Failed runs retain `SEARCH` and the existing error log, without claiming complete timing shares. Native internals are not separately timed.
+`TIMING_PARTS.search` includes DLL loading/discovery on first use, request I/O, the baseline, native enumeration and result decoding. `NATIVE.search_ms` uses a monotonic native clock and includes enumeration, differential checks, winner verification and restoration, excluding initialization and the baseline. It is an inclusive subtotal, not another share. Candidate evaluations exclude diagnostic projections. `checks` excludes the initial Lua/native baseline comparison. Cache misses count original single-dish calls retained for reuse; bypasses include the uncached checks. Full original projections still build their own UI data, so cache statistics are not a direct measure of saved wall time. Lua `os.clock` has limited resolution; zero milliseconds does not imply zero cost. There are no per-candidate logs, progress UI or search timers.
 
-### Verification
+### Build and verification
+
+Windows x64 with MSVC C++ Build Tools and the Windows SDK:
 
 ```powershell
 uv run --with lupa==2.6 python auto-menu-mod/tests/run.py
@@ -44,61 +44,47 @@ python -m unittest discover -s tools/tests -v
 git diff --check
 ```
 
-Seven offline suites cover complete enumeration, joint optima, sub-display rate improvements, current-menu ties, native ceiling termination, eligible choices, empty-menu saving, only changed field writes, native failure restoration, one save, timing attribution and totals with a synthetic clock, bounded logging, zero-duration logs, reentrant callbacks, language fallback and reload cleanup.
+The build runs native tests before packaging. Six Lua suites check request serialization/cleanup, fresh results, eligible domains, host restrictions, final save/restoration, logs, language and reload behavior. The native harness checks every supported dish/profile/intent cache key, cache lifetime and thread isolation, exhaustive non-additive search, empty menus, ties, exact ceilings, float comparisons, synthetic full-projection differential checks, native array ownership and restoration on failures. A non-game executable must be rejected before patching. Local native discovery is also checked read-only against the installed reference executable; that does not execute the game functions or establish in-game speed.
 
-Synthetic work counts: two active dishes per course give 243 native evaluations, including the empty menu. Eight per course give 59,049. Restricting the same catalogue to three dishes in three courses gives eight. The tests require no separate pricing, stock or simulation snapshots and no search timer. These are counts on fake objects, not real engine timings or native-bridge acceptance.
-
-The build creates `outputs/auto-menu/AutoMenu-0.4.1-dev.zip` and its SHA-256. The explicit allowlist contains six Lua modules, README, DEVELOPMENT, CHANGELOG and the activation marker. No game content, tools, tests or references are packaged. No release publication is authorized.
+Build output: `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` and SHA-256. The allowlist contains seven Lua modules, one generated helper DLL, README, DEVELOPMENT, CHANGELOG and the activation marker. CI verifies the generated DLL hash. Source, tests, request/result files, tools and game references are excluded. Builds do not install, modify saves, start/stop the game or publish a release.
 
 ### In-game checks
 
-1. Compare every combination in a small active catalogue with native predictions, including partial/empty menus, different forecasts/weather/events, prices and missing ingredients.
-2. Verify unavailable, disabled and unstaffed dishes do not enter the result; current tied choices remain; lunch/dinner remain separate.
-3. Verify only the final menu is saved, the page refreshes, and an empty result is accepted and deactivated by the native game.
-4. Check one button, supported languages, host-only use and repeated Lua hot reload. Compare timing shares and gameplay responsiveness for different active catalogue sizes; retain the four search log lines for diagnosis.
+1. Restart after installing the new DLL. Test both services with small domains and confirm every visited menu passes the cached/uncached checks, including empty menus, absent main dishes, missing ingredients and promotion.
+2. Change prices, weather/events and enabled/staffed choices between clicks; confirm each search rebuilds its cache and the native forecast agrees with the chosen rate.
+3. Repeat the larger catalogue used with 0.4.1-dev. Compare native time, cache misses/hits, checks and candidate counts. Do not infer a measured speedup from offline test duration.
+4. Confirm one final save, the other service untouched, native empty-menu deactivation, host-only behavior, one localized button and repeated Lua reload. Removing/updating the DLL requires game exit.
 
 ## 中文
 
-**0.4.1-dev，待游戏内验收。** 独立 Lua Mod，不使用原生辅助 DLL。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb。原生分析和参考资料留在忽略的 `work/`。
+**0.5.0-dev，待实机验收。** 独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
 
 ### 实现
 
-- `game.lua` 从各类别选择器读取菜品编号，与 `AvailableDishes` 取交集，排除 `DisabledDishes`、`EmployeeRequirementDisabledDishes`、选择器禁用项和类别不符项。每类加入零编号表示留空；当前选项符合条件时排在首位，其余按固定编号排序。生成候选不读取标签、食材数组、成本、价格、满意度或影响力快照。
-- `planner.lua` 用一个复用的试算表递归遍历全部组合，直接比较原生选择率，只复制更好的结果。包含各类别留空和全空菜单，达到原生最大值可提前结束；无等价签名、预搜索、记忆表或独立菜品评分。
-- `Game.compose` 在原生按钮的游戏线程回调内同步执行。只读一次原菜单，当前调用内复用菜单结构引用，仅写变化的菜品字段；每个组合调用 `GetDailyMenuProjection(period).EstimatedAdoptionRate`。试算不保存、不让出执行、不发 RPC，也不改采样属性；受保护的试算段结束或失败后恢复原菜单。完成后调用 `SaveDailyMenu` 一次，核对菜品字段并刷新页面。全空菜单由原生保存自动停用，属于正常结果。
-- `main.lua` 按 Mod 按钮身份筛选点击并阻止重入。唯一的定时器每 500 毫秒发现／更新按钮，不调度搜索。成功日志记录选择率、试算次数和耗时分布。`ui.lua` 仅维护本地化按钮文字和提示，无进度、取消或状态倒计时；`reload.lua` 负责 Lua 重载后的按钮清理。
+- Lua 仍负责按钮、候选资格过滤和最终保存。每类包含留空；符合条件的当前选项优先，其余编号升序。通过一次同步请求将对象／属性地址、原菜单、原生基准选择率、上限和候选传入 DLL；调用后删除含地址的请求文件，调用前清除旧结果。不逐组合读写文件，也不依赖 Lua ABI 内部结构。
+- DLL 完整枚举全部组合，严格比较原生浮点数，同值保留首个组合；只有精确达到原生上限才提前停止。无需贪心、近似分数或预先固化的菜单排名。
+- 从游戏的原生函数注册名发现调用目标，核对调用布局、返回数组归属、菜单存储和五处单菜评分调用。不能识别或已被其他模块修改时停止，不写入固定游戏地址，也不强制匹配整个 EXE 哈希。
+- 五处调用转至原创适配器；DLL 和跳转保持到进程退出。只在本次游戏线程搜索内，按同一餐厅、菜品、顾客类型和用餐意图缓存原生分数。个体偏好、未知枚举值以及其他线程直接执行原函数；搜索之外也直接转发。每次点击重新建立缓存，价格、天气和活动不会沿用上次结果。
+- 每份菜单仍调用游戏完整预测，保留食材过滤、菜单组合规则、原生浮点运算和各种上限，也仍计算展示字段。枚举在 DLL 内进行，去掉逐组合 Lua 属性写入和整个预测结果转成 Lua 表的开销；原生返回数组由匹配的引擎释放函数回收。此版本不是单独的“只算选择率”接口。
+- 开始前对照 Lua 与直接原生调用的基准值；最多 243 个组合时逐个关闭缓存复算，较大搜索检查前 32 个，每次都关闭缓存复核最终菜单。逐位不一致就中止。正常结束或 C++ 异常时恢复七字节原菜单；Lua 也会恢复，再调用原生保存一次并刷新。任意进程崩溃不属于可恢复异常。
 
-全部组合在一次游戏线程回调中完成，因此没有跨批次条件快照或“条件已变化”取消流程。组合数量仍呈乘积增长；同步执行去掉了人为等待并简化实现，但候选较多时游戏会等待枚举完成。此版本不宣称已经测得实机提速。
+搜索同步运行，期间价格、菜品、天气和活动不随游戏帧更新。缓存不跨点击或 Lua 重载保留；更新 DLL 必须重启游戏。组合数仍呈乘积增长，大菜单可能让游戏等待；小菜单的逐项对照会额外调用预测。仅复核最佳菜单不能单独证明全局等价，仍需缓存输入契约和完整的小规模对照。真实引擎验收尚未完成。
 
 ### 计时日志
 
-`SEARCH` 记录餐段、含零编号的各类有效选项数、全部组合数和 `clock=os.clock`。`COMPOSED` 保留原生选择率、实际试算数和耗时秒数。`TIMING` 记录总／搜索毫秒数、预测调用平均毫秒数、变化菜品字段写入数，以及 `stop=exhausted`（完整枚举）或 `native_ceiling`（达到上限，试算少于全部组合）。`TIMING_PARTS` 记录各阶段毫秒数及占总耗时百分比：
+成功时四行：`SEARCH` 记录餐段、含空选项的候选数和组合数；`COMPOSED` 记录版本、选择率、试算次数及总秒数；`TIMING_PARTS` 记录准备、搜索／桥接、恢复、保存、保存核对、刷新和其余 Lua 开销的毫秒数与占比；`NATIVE` 记录原生搜索毫秒数、缓存命中／未命中／绕过次数、对照检查数和结束原因。
 
-| 字段 | 测量范围 |
-| --- | --- |
-| `setup` | 房主检查、原菜单、候选编号、原生上限和开始日志 |
-| `writes` | 比较五个试算字段并写入变化项 |
-| `projection` | `GetDailyMenuProjection`，包含 UE4SS 分派和返回结构转换 |
-| `rate_read` | 从返回结构读取 `EstimatedAdoptionRate` |
-| `restore` | 最终保存前恢复原菜单 |
-| `save` | `SaveDailyMenu`，包括它触发的同步原生回调 |
-| `verify` | 回读并核对保存的菜品字段 |
-| `refresh` | 显式调用 `RefreshDailyMenus` |
-| `lua_and_timing` | 其余遍历、比较、复制、统计和计时开销 |
+Lua 的 `search` 包括首次 DLL 加载／定位、文件交换、基准预测、原生枚举及结果解析；原生单调时钟的 `search_ms` 只覆盖枚举、对照、最佳菜单复核和恢复，不含初始化及基准值。这是子合计，不能再次加入阶段占比。试算次数不含诊断预测；`checks` 不含开始时的 Lua／原生基准对照，`bypasses` 包括关闭缓存的检查。缓存命中数不能直接当作耗时减少比例。Lua `os.clock` 精度有限，零毫秒不表示没有开销。不显示进度，也不加入搜索定时器或逐组合日志。
 
-九项互不重复，显示取整前相加等于总耗时；`search_ms` 是包含搜索各项的子合计，不再加进占比。沿用 Lua `os.clock`，不使用游戏时间；每个组合读四次时钟，不增加原生预测调用。时钟精度有限，极短阶段可能为零，占比为近似值；平均值由累计时间除以次数得到，不代表单次高精度采样。计时本身的开销分布在各区间内，不能把结果当作零开销基准。总耗时截至刷新完成，不含结束摘要的格式化／输出和外层按钮钩子检查。失败时保留 `SEARCH` 和原有错误日志，不输出完整占比。不会据此声称已经测出原生函数内部各项的耗时。
+### 构建与验证
 
-### 验证
+使用 Windows x64、MSVC C++ Build Tools 和 Windows SDK，执行英文部分命令。六组 Lua 测试覆盖协议、候选、恢复／保存、计时、多语言和重载；原生测试覆盖全部支持的缓存键、线程与搜索隔离、非加性完整枚举、空菜单、同值／上限、逐位浮点比较、合成预测的逐组合缓存对照、原生数组释放及异常恢复。构建还验证非游戏 EXE 被拒绝。本机已只读核对参考 EXE 的目标发现；这不代表已执行真实游戏函数或测得提速。
 
-执行英文部分命令。七组离线测试覆盖完整遍历、非加性目标、微小选择率提升、当前菜单同值保留、原生上限提前结束、资格过滤、空菜单保存、变化字段写入、预测异常恢复、单次保存、合成时钟的阶段归属与总和、日志数量、零耗时日志、重入、多语言和热重载。
-
-合成计数：每类两道启用菜为 243 次原生试算，包含全空菜单；每类八道为 59,049 次。将同一目录限制为三个类别各一道启用菜后为八次。测试要求没有额外的价格、库存或模拟状态采集，也没有搜索定时器。以上使用假对象验证工作量，不是实机计时或真实引擎桥接验收。
-
-构建生成 `outputs/auto-menu/AutoMenu-0.4.1-dev.zip` 和 SHA-256。固定白名单只含六个 Lua 模块、README、DEVELOPMENT、CHANGELOG 和启用标记，不含游戏内容、工具、测试或参考资料。此版本未授权公开发布。
+产物为 `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` 和 SHA-256。固定白名单只含七个 Lua 模块、一个编译生成的 DLL、三份文档及启用标记，CI 核对 DLL 哈希；不包含源码、测试、交换文件、工具或游戏参考。构建不安装、不改存档、不启停游戏，也不发布版本。
 
 ### 实机检查
 
-1. 少量启用菜时逐个组合对照原生预测，包含部分／全空菜单、不同客流／天气／活动、价格和缺料情况。
-2. 确认不可用、停用和缺少员工的菜品不进入结果，同值保留当前合规选项，午餐／晚餐互不影响。
-3. 确认只保存最终菜单并刷新页面，全空结果正常保存并自动停用。
-4. 检查单按钮、多语言、房主限制和反复热重载，按不同启用菜品数量对比耗时占比和游戏响应，保留四条搜索日志用于定位。
+1. 安装 DLL 后重启，午餐／晚餐分别用少量候选测试逐组合对照，涵盖全空、无主菜、缺料和推广影响。
+2. 两次点击之间改变菜价、天气／活动和启用／员工条件，核对重新建立缓存及最终原生预测。
+3. 使用与 0.4.1-dev 相同的大菜单条件比较原生耗时、缓存计数、检查数和组合数；不把离线测试时长当作实机提速。
+4. 核对只保存一次、另一餐段不变、空菜单原生停用、房主限制、单按钮、多语言和反复 Lua 重载。更新或卸载 DLL 必须退出游戏。
