@@ -61,9 +61,22 @@ Each Mod owns its runtime and build inputs:
 | `build.py` | Version, explicit package allowlist and ZIP/checksum generation |
 | `Native/` and `native_build.py` | Original helper source and native tests, for Smart Delivery and Auto Menu only |
 | `README.md` | Player installation and usage guide |
+| `assets/` | In-game test screenshots and promotional artwork for documentation; excluded from Mod ZIPs |
 | `DEVELOPMENT.md` | Implementation details and test checklist |
 | `CHANGELOG.md` | Pending changes and version history |
 | `LICENSE` | Complete MIT text, identical to the root license |
+
+### Mod images
+
+Each Mod has an `assets/README.md` with naming and embedding examples. Following Old Market Simulator Mods, use `assets/cover.png` for the cover, `assets/<scene>-gameplay.png` for actual in-game captures, and `assets/<scene>-promo.png` for other promotional artwork. Keep test context with the images and distinguish artwork from gameplay evidence. Add embeds only after the images exist; the directory guide itself keeps the folder in Git until then.
+
+Repository-only documents can use relative image paths. Player READMEs also ship in Mod ZIPs, which exclude `assets/`, so use a full GitHub image URL with `?raw=1` when embedding images there. Match the documentation's branch or tag; access to this private repository is still required. For example, after adding the actual file:
+
+```markdown
+![Bartender's Note cover artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
+```
+
+Keep social-platform exports, drafts and archives in ignored `outputs/<mod>/promo/`; extracted assets and reverse-engineering material remain in `work/`.
 
 ### Build and checks
 
@@ -169,9 +182,22 @@ cd parisian-bistro-simulator-mods
 | `build.py` | 版本、固定包白名单及 ZIP／校验文件生成 |
 | `Native/` 与 `native_build.py` | 原创辅助模块源码及原生测试，仅 Smart Delivery 和 Auto Menu 使用 |
 | `README.md` | 面向玩家的安装与使用说明 |
+| `assets/` | 文档用实机测试图与宣传图，不进入 Mod ZIP |
 | `DEVELOPMENT.md` | 实现细节及验收清单 |
 | `CHANGELOG.md` | 待发布改动及版本历史 |
 | `LICENSE` | 与根目录一致的完整 MIT 许可 |
+
+### Mod 图片
+
+每个 Mod 的 `assets/README.md` 提供命名与引用示例。沿用菜市场模拟器 Mods 的约定：`assets/cover.png` 存放封面，`assets/<scene>-gameplay.png` 存放真实实机图，`assets/<scene>-promo.png` 存放其他宣传图。测试图附上测试环境与结果，宣传图与实机证据明确区分。实际加入图片后再启用引用；在此之前，目录说明文件使图片目录也能随 Git 同步。
+
+仅供仓库阅读的文档可以使用相对路径。玩家 README 同时进入 Mod ZIP，而 `assets/` 不打包，因此其中展示图片时使用带 `?raw=1` 的完整 GitHub 图片地址。分支或标签与文档一致，查看图片仍需私密仓库访问权限。实际添加图片后，可按以下示例引用：
+
+```markdown
+![调饮手记宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
+```
+
+社交平台专用导出、草稿及打包文件存放在被忽略的 `outputs/<mod>/promo/`；提取资源和反编译资料继续留在 `work/`。
 
 ### 构建与检查
 

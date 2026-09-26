@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
+- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
+
 - Keep the Auto-compose button label on one line and size the button to its localized text.
 - 自动组合按钮文字固定单行，按钮宽度随本地化文字自动调整。
 

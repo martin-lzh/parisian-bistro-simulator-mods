@@ -4,6 +4,7 @@
 
 ### English
 
+- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - Adopt **收银管家** as the Chinese display name in player guides and shared documentation.
 - Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
 - Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
@@ -17,6 +18,7 @@
 
 ### 中文
 
+- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 - 中文名称统一为 **收银管家**，同步玩家说明及公共文档。
 - 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
 - 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。

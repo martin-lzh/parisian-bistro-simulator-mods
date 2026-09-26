@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
+- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
+
 - Adopt **焕鲜上桌** as the Chinese display name in player guides and shared documentation.
 - 中文名称统一为 **焕鲜上桌**，同步玩家说明及公共文档。
 
