@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "mod": "auto-checkout",
+  "version": "0.1.4",
+  "prerelease": false,
+  "sourceCommit": "12d99040cc3ad8e90c834c67d3016b9d65f101e2",
+  "inputsSha256": "1560548a94cb5a622a8cc8312be34dbfde1c3d28493d7bbe155e8365ec195a38",
+  "authorization": "2026-09-26: The maintainer confirmed all current Mods at 4c51f21 passed in-game and multiplayer testing and explicitly requested removing the dev suffix and publishing stable versions. This authorizes auto-checkout 0.1.4 as a stable GitHub Release in the existing private repository; gameplay logic is unchanged during promotion. Original instruction: 现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版"
+}

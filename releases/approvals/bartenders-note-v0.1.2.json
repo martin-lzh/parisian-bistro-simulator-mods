@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "mod": "bartenders-note",
+  "version": "0.1.2",
+  "prerelease": false,
+  "sourceCommit": "12d99040cc3ad8e90c834c67d3016b9d65f101e2",
+  "inputsSha256": "bc257bd359d741b60e365ef1184f55fad05cf7bfb677cac0c7a0276cf0163d9f",
+  "authorization": "2026-09-26: The maintainer confirmed all current Mods at 4c51f21 passed in-game and multiplayer testing and explicitly requested removing the dev suffix and publishing stable versions. This authorizes bartenders-note 0.1.2 as a stable GitHub Release in the existing private repository; gameplay logic is unchanged during promotion. Original instruction: 现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版"
+}
