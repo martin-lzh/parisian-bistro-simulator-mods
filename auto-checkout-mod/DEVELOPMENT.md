@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
+Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
 
 ### Implementation
 
@@ -93,7 +93,7 @@ Lua 5.4 tests cover cash/card stages, animation waits, deduplication, bounded re
 
 The distance tests cover both payment stages, movement between stages, preserving original restrictions, request/diagnostic errors, partial preparation, independent restoration after a failed field, destroyed payments and invalid distances. Localization tests check all cultures and messages, aliases, failed language reads, live switches, missing-language fallback and stable diagnostic fields. Substitute objects cannot establish real engine bridging, actual hook delivery or gameplay results.
 
-The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4-dev` with `player_guard=transaction-only`.
+The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4-dev` with `player_guard=transaction-only`.
 
 ### Earlier investigation and acceptance
 
@@ -105,11 +105,11 @@ Later hot-reload logs showed one cash transaction advancing immediately and othe
 
 The user confirmed 0.1.1-dev in-game and requested 0.1.1 on 2026-09-24, retaining runtime logic and changing the diagnostic version. Full environment versions, multiplayer role and duration were not enumerated.
 
-Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The 0.1.4-dev hot-reload behavior and localization have no in-game acceptance yet.
+Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The later 2026-09-26 completion report did not separately describe 0.1.4-dev hot-reload or localization results.
 
 ### In-game regression checklist
 
-Reload repeatedly while waiting for cash, card processing, an open drawer, and an exhausted retry budget. Check one live notification listener/poller, unchanged cooldowns and attempt counts, restored/reapplied AI jobs, then world travel and recovery failure. These reload scenarios have not yet been accepted in-game.
+Reload repeatedly while waiting for cash, card processing, an open drawer, and an exhausted retry budget. Check one live notification listener/poller, unchanged cooldowns and attempt counts, restored/reapplied AI jobs, then world travel and recovery failure. The overall completion report did not provide separate in-game results for these reload scenarios.
 
 These are pending scenarios, not completed test claims. Record actual game/loader versions, language, role and any manual intervention; compare `REQUEST context` with `AFTER`, bill and income.
 
@@ -128,9 +128,19 @@ These are pending scenarios, not completed test claims. Record actual game/loade
 
 Repeat the appropriate checks after game or loader interface changes. A passing build or offline test suite does not establish in-game acceptance.
 
+### Runtime compatibility and retry timing
+
+The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. In each transaction stage, sent requests are at least three seconds apart and limited to three attempts. Exhaustion stops only that stage; later transactions can still proceed. Polling includes all current-world registers, including other floors, even when no arrival notification is received.
+
+### Manual script reload
+
+Close the game for the first upgrade from 0.1.3-dev or earlier. Once 0.1.4-dev is running, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english), replace the complete Lua package, then use **Ctrl+R** or the loader's Reload Mods action. Verify the new `START` version and review `RELOAD` and `ERROR` entries using the diagnostic reference above.
+
+Reload requires the experimental loader's `ModRef` shared-variable and unload support. The lifecycle section above defines retry history and AI recovery, including permanent-removal requirements. Restart if state is damaged or uses an unsupported future format.
+
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](../releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
 
 ### 多语言适配
 
@@ -244,6 +254,16 @@ git diff --check
 9. 故意让某次请求不被游戏接受，确认重试有上限、日志不刷屏，仍能手动完成结账。
 10. 顾客到柜台提醒出现时检查 `EVENT` 日志，确认对应正确柜台；与 `source=notification` 请求及后续状态对照。没有收到提醒、提醒早于付款就绪、监听注册失败时，确认定时检查仍可推进；旧世界通知和普通客户端通知不得触发交易。
 11. 让 AI 在吧台工作，确认 `STATE ai` 中发现任务容器且 `suppressed` 大于零，AI 不再领取新的柜台收银任务，仍正常制作饮料和做其他工作。已领取的收银应能完成，各楼层及新雇员工同样检查。切换存档和自动流程异常后检查任务恢复，员工配置应不变。
-12. 在等待现金、刷卡处理中、钱柜打开及重试已耗尽时连续热重载，检查只有一组有效监听/轮询、冷却与次数不重置、员工任务先恢复再应用，并测试切换世界及恢复失败；这些重载场景尚未实机验收。
+12. 在等待现金、刷卡处理中、钱柜打开及重试已耗尽时连续热重载，检查只有一组有效监听/轮询、冷却与次数不重置、员工任务先恢复再应用，并测试切换世界及恢复失败；总体完成反馈未单独提供这些重载场景的实机结果。
 
 接口或加载器升级后，应重新核对本机参考并重复上述验收。构建成功、离线测试通过不代表完成游戏内验收。
+
+### 运行兼容性与重试时序
+
+本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。同一交易阶段发送请求至少间隔 3 秒，最多尝试 3 次；耗尽后仅停止该阶段，后续交易仍可处理。即使未收到顾客到达通知，也轮询当前世界全部收银机，包括其他楼层。
+
+### 手动脚本重载
+
+首次从 0.1.3-dev 或更早版本升级时须关闭游戏。0.1.4-dev 开始运行后，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器，完整替换 Lua 安装包，再按 **Ctrl+R** 或使用加载器的 Reload Mods。核对新的 `START` 版本，并按上方诊断说明检查 `RELOAD` 和 `ERROR`。
+
+重载需要实验版加载器的 `ModRef` 共享变量及卸载支持。重试历史、AI 恢复和永久卸载要求见上方生命周期章节；记录损坏或来自不支持的未来格式时重启游戏。

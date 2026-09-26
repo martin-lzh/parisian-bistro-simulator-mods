@@ -4,6 +4,7 @@
 
 ### English
 
+- Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
 - Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
 
 - 0.1.4-dev: support experimental UE4SS Lua hot reload. Persist primitive AI recovery records and per-transaction cooldowns/retry budgets across instances, and restore inherited AI changes on the game thread before continuing.
@@ -15,6 +16,7 @@
 
 ### 中文
 
+- 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
 - 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
 - 0.1.4-dev：支持 UE4SS 实验版 Lua 热重载；跨实例保留普通值形式的 AI 恢复记录、每笔交易冷却时间及重试预算，新实例先在游戏线程恢复旧 AI 改动，再继续运行。
 - 改写引擎数组和发送请求前先保存恢复方案与尝试次数；卸载时停用旧回调，不访问 UObject、不排队，并保留失败恢复记录供下次重载重试；异常交接内容被校验拒绝，不作为代码执行。

@@ -4,7 +4,7 @@
 
 ## English
 
-The user reported completion of in-game testing for 0.1.1-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
+The user reported completion of in-game testing for 0.1.1-dev on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
 
 The independent Lua Mod polls on the game thread once per second. It requires an authoritative local controller and possessed player in one world. Table, customer, producer and service objects must belong to that world. A client, paused game or missing possession never dispatches an order.
 
@@ -47,9 +47,21 @@ Behavior tests reject full dish conversion, unrelated asset access and reconstru
 
 Keep the game installation read-only during development. Gameplay acceptance must be reported separately with game/loader versions and host/client role.
 
+### Loader, output and diagnostics
+
+The checked loader API is UE4SS experimental `v3.0.1-1140-gf58e8f84`, for the Windows / Unreal Engine 5.4 baseline above. Old stable UE4SS 3.0.1 is not the target. Build output is `outputs/scan-to-order/ScanToOrder-0.1.1-dev.zip` and its SHA-256 file.
+
+No in-game wording is added; native order text remains localized by the game. Technical log prefix `[ScanToOrder]` includes `START`, confirmed `ORDER` and `ERROR`. An order event is logged only after native queue binding confirms acceptance.
+
+### Manual script reload
+
+After a closed-game initial installation, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english). Copy both `Scripts/main.lua` and `Scripts/game.lua` completely before pressing **Ctrl+R**.
+
+Confirmed orders remain in game state and outstanding orders are reread. The stop-marker lifecycle above prevents uncertain calls from replaying; script reload does not clear a current-world stop. Re-enter the session to reset that state. Removal requires closing the game.
+
 ## 中文
 
-用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.1-dev，见[验收记录](../releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.1-dev，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 
 独立 Lua Mod 每秒在游戏线程检查一次。仅本地控制器及其玩家均有服务器权限、且属于同一世界时运行；餐桌、顾客、制作管理器和服务对象也必须属于该世界。客机、暂停或尚未控制玩家时，不发送订单。
 
@@ -79,3 +91,15 @@ Keep the game installation read-only during development. Gameplay acceptance mus
 - 与焕新上桌、自动结账、Bartender's Note 同时启用，功能互不替代。
 
 开发期间游戏安装只读。实机验收需单独反馈游戏／加载器版本和房主／客机身份。
+
+### 加载器、产物与诊断
+
+核对的加载器 API 为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，适用于上文 Windows / Unreal Engine 5.4 参考基线；不以旧稳定版 UE4SS 3.0.1 为目标。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.1-dev.zip` 及 SHA-256 文件。
+
+不新增游戏内文案，订单文字沿用游戏本地化。技术日志前缀 `[ScanToOrder]` 包含 `START`、已确认的 `ORDER` 和 `ERROR`；只有原生队列绑定确认接受后才记录成功订单。
+
+### 手动脚本重载
+
+首次关闭游戏安装后，可按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器。完整复制 `Scripts/main.lua` 和 `Scripts/game.lua` 后，再按 **Ctrl+R**。
+
+已确认订单保留在游戏状态中，未完成订单重新读取。上方停止标记机制防止结果不明的请求被重放；脚本重载不会清除当前世界的停止状态，重新进入会话后才重置。卸载须关闭游戏。

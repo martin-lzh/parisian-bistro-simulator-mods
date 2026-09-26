@@ -4,90 +4,118 @@
 
 ## English
 
-See the drinks you have claimed and still need to make, directly below the restaurant name. Repeated orders are grouped by drink type, for example `Espresso x 10 · Lemonade x 3`.
+See your claimed, unfinished drinks below the restaurant name. Repeated orders are grouped, such as `Espresso x 10 · Lemonade x 3`.
 
-**Current source: 0.1.2-dev.** The user reported completion of in-game testing on 2026-09-26. This version includes the two-line layout, expanded localization and Lua reload lifecycle. See the [validation record](../releases/validation.md#english) for the report's scope and earlier 0.1.0 acceptance.
+**Version: 0.1.2-dev.** Single player, multiplayer host or guest. Install it on each player's computer that wants the display; each sees only their own claimed orders.
 
-### How it works
+### How to use
 
-Claim drink orders on the tablet, then close it to see your list. Only the local player's claimed orders count. Drinks waiting to be made or currently being made are included; finished drinks are removed without waiting for delivery. Canceling a claim or order updates the count. An empty list is hidden.
+1. Claim drink orders on the tablet.
+2. Close the tablet to see the list below the restaurant name.
+3. Make the drinks. Finished drinks leave the list immediately; canceled claims and orders also update it.
 
-The display uses the restaurant name bar's native background, font and text color. Entries wrap as whole `name x quantity` items across at most two lines, keeping the original font size and leaving space inside the faded ends of the bar. Overflow shows a translated “... + N more”; **N counts hidden drink types, not cups**. An overlong name joins that count instead of being split or cut off.
+The list hides when empty. It uses up to two lines; “... + N more” counts hidden drink types, not cups. Long names may be included in that count. The display follows the game language and window size and does not take control of your mouse, keyboard or controller.
 
-The list follows changes in the window size and game language, and never takes keyboard, mouse or controller focus. It does not modify orders, saves or the existing restaurant name bar.
+### Requirements
 
-### Languages
+Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
-Supports the game's 14 languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese. No separate setting or language pack is needed.
+### Download
 
-Drink names come from the game's native translation lookup. If a name is unavailable, the Mod first uses the game's translated “Drinks” category plus `#ID`; if that also fails, it uses its own translated generic drink label and ID. Different drinks with identical translated names remain separate types. The overflow message and final fallback label have Mod-owned translations; unsupported or unreadable languages use English. Technical loader/error logs remain English.
+1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
+2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`BartendersNote-0.1.2-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+
+Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
 ### Install
 
-For Windows Parisian Bistro Simulator with **UE4SS experimental**. The local reference baseline is Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. The checked loader API is `v3.0.1-1140-gf58e8f84`, requiring `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay`; this is an experimental build, not stable UE4SS 3.0.1.
+1. Close the game. In Steam, right-click **Parisian Bistro Simulator** → **Manage** → **Browse local files**. This opens the `<game>` folder used below.
+2. Install the basic experimental UE4SS package using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping that package's folder structure.
+3. Copy the extracted **`BartendersNote`** folder, with all its contents, into `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`. If your loader uses another location, use its existing `Mods` folder instead.
+4. Confirm these files exist, with no extra `BartendersNote/BartendersNote` folder:
 
-1. Close the game and install the required experimental loader using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html). Keep that release's own directory structure and default settings.
-2. Extract the ZIP's `BartendersNote` folder into the loader's `Mods` directory. A common location is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote`; use your actual loader location.
-3. Check that `BartendersNote/Scripts/main.lua` and `BartendersNote/enabled.txt` exist. Do not replace the whole `mods.txt` or add a duplicate enable entry.
-4. Start the game, enter the restaurant and claim drink orders on the tablet.
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote/enabled.txt`
 
-The package includes neither UE4SS nor game assets. Building from source does not install anything. Restart once when first installing this version, so earlier versions' widgets are cleared.
+5. Start the game, enter your restaurant and claim a drink order on the tablet.
 
-With this version running, Lua-only updates can be applied using UE4SS's **Ctrl+R** reload when `EnableHotReloadSystem=1` is enabled. Reload stops the previous callbacks and removes its banner and measurement widget on the new state's next game-thread refresh before rebuilding the display. Claimed orders remain in the game. Reload support still needs in-game acceptance.
-
-### If the list is missing
-
-It is hidden when you have no unfinished claimed drinks, the restaurant name bar is hidden, or you are outside the gameplay HUD. Very narrow windows may leave no room even for the overflow indicator; widening the window allows it to reappear.
-
-The Mod refreshes after relevant events and checks the queue every 750 ms. It clears stale entries when a data source becomes unavailable, logs the reason under `[Bartender's Note]`, and reconnects when the source recovers. Missing required loader APIs disable the Mod with a log message. For an unexpected problem, record the Mod/game/loader versions, language, resolution, host/client role and relevant log excerpt.
+The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; do not replace the loader's `mods.txt` or other Mods.
 
 ### Update or remove
 
-For Lua-only updates after the initial restart, replace the Lua files and reload as described above. Close the game before removing the `BartendersNote` folder or changing the loader. No custom save data needs cleanup. Host/client isolation and live language changes remain part of the pending regression checklist.
+**Update:** close the game, download and extract the new Mod ZIP, then copy its complete `BartendersNote` folder into the same `Mods` folder and replace matching files. Start the game again.
 
-[Changes](CHANGELOG.md) · [Build, implementation and validation](DEVELOPMENT.md#english)
+**Remove:** close the game and delete only `Mods/BartendersNote`. Leave UE4SS and other Mods in place. Removing the Mod removes only the display; your orders and save need no cleanup.
+
+Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
+
+### Languages and help
+
+Follows the game language automatically, with no separate setting or language pack. Drink names use the game's translations. Missing names use a translated drink label and item number; unsupported languages fall back to English. Technical logs remain English.
+
+Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+
+If the list is missing, first claim an unfinished drink and close any screen that hides the restaurant name bar. Widen an unusually narrow game window. If the problem remains, use the help link below and include relevant `[Bartender's Note]` lines from `UE4SS.log`.
+
+In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+
+[Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
-在餐厅名称下方显示自己认领且尚未制作完成的饮料，同类订单合并计数，例如：`浓缩咖啡 x 10 · 柠檬水 x 3`。
+在餐厅名称下显示自己认领且尚未做完的饮料，同类订单合并计数，例如“浓缩咖啡 x 10 · 柠檬水 x 3”。
 
-**当前源码：0.1.2-dev。** 用户于 2026-09-26 反馈实机测试完成。本版包含两行布局、多语言扩展及 Lua 重载生命周期；本次确认范围与此前 0.1.0 的验收见[验收记录](../releases/validation.md#中文)。
+**版本：0.1.2-dev。** 单人、联机房主和客机均可使用。想看到清单的玩家在自己的电脑安装，各自只显示自己的认领订单。
 
 ### 怎么使用
 
-在平板认领饮料订单，关闭平板即可查看清单。只统计当前本地玩家认领的订单，待制作和制作中均计入；制作完成后移除，无需等到送达。取消认领或取消订单会更新数量，清单为空时隐藏。
+1. 在平板中认领饮料订单。
+2. 关闭平板，在餐厅名称下查看清单。
+3. 制作饮料。制作完成后立即从清单移除；取消认领或订单也会更新数量。
 
-显示栏沿用餐厅名称条的原生背景、字体与文字颜色。每个“饮料名 x 数量”整体换行，最多两行，保留原字号，并避开两端渐隐区域。超出部分显示本地化的“另有 N 种”提示；**N 表示隐藏的饮料种类数，不是杯数**。名称过长时也计入隐藏种类，不截断名称或拆开数量。
+清单为空时隐藏，最多显示两行；“另有 N 种”表示隐藏的饮料种类，不是杯数。过长的名称也可能计入隐藏数量。显示跟随游戏语言和窗口尺寸，不影响鼠标、键盘或手柄操作。
 
-清单会随窗口尺寸和游戏语言重新排版，不占用鼠标、键盘或手柄焦点，也不修改订单、存档或原有餐厅名称条。
+### 使用要求
 
-### 语言
+Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
 
-支持游戏中的英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语与巴西葡萄牙语，无需额外设置或语言包。
+### 下载
 
-饮料名通过游戏原生翻译接口读取。名称不可用时，先使用游戏原生的“饮料”分类翻译加 `#编号`；该查询也失败时，使用 Mod 自有的本地化通用饮料标签和编号。不同饮料即使译名相同，仍分别统计。隐藏种类提示与最终后备标签由 Mod 提供翻译；语言不支持或不可读时回退英语。加载器及异常等技术日志保留英文。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
+2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`BartendersNote-0.1.2-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+
+请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 
 ### 安装
 
-适用于 Windows 版 Parisian Bistro Simulator，需要 **UE4SS experimental**。本机参考基线为 Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。核对的加载器 API 为 `v3.0.1-1140-gf58e8f84`，需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`；这是实验版，不是稳定版 UE4SS 3.0.1。
+1. 关闭游戏。在 Steam 中右键 **Parisian Bistro Simulator** → **管理** → **浏览本地文件**，打开的就是下方所说的 `<game>` 游戏目录。
+2. 按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 experimental 的基础包，保留该发行包自己的目录结构。
+3. 将解压出的 **`BartendersNote`** 文件夹连同全部内容复制到 `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`。若加载器实际装在其他位置，请使用它已有的 `Mods` 文件夹。
+4. 确认存在以下文件，不要多套一层 `BartendersNote/BartendersNote` 文件夹：
 
-1. 关闭游戏，按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装所需实验版，使用该版本自己的目录结构与默认设置。
-2. 将 ZIP 内的 `BartendersNote` 文件夹放到加载器的 `Mods` 目录。常见位置为 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote`，以实际加载器位置为准。
-3. 确认存在 `BartendersNote/Scripts/main.lua` 和 `BartendersNote/enabled.txt`。无需替换整个 `mods.txt`，也不要添加重复启用项。
-4. 启动游戏、进入餐厅，在平板中认领饮料订单。
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/BartendersNote/enabled.txt`
 
-包内不含 UE4SS 或游戏资产。从源码构建不会自动安装；首次安装本版本后需重启一次，清除旧版本遗留的控件。
+5. 启动游戏进入餐厅，在平板中认领饮料订单。
 
-本版本开始运行后，仅更新 Lua 文件时可使用 UE4SS 的 **Ctrl+R** 重载，需启用 `EnableHotReloadSystem=1`。重载会停止旧回调；新状态在下一次游戏线程刷新时移除旧显示栏和测量控件，再重建清单。游戏中的认领订单保持原状；本次总体测试反馈未单独列出热重载场景结果。
-
-### 清单没有出现时
-
-没有未完成的已认领饮料、餐厅名称条隐藏或不在游戏 HUD 时，清单会隐藏。极窄窗口可能连隐藏种类提示也容纳不下，加宽窗口后会重新显示。
-
-Mod 在相关事件后刷新，并每 750 毫秒核对队列。数据源不可用时清空旧条目，在 `[Bartender's Note]` 日志中记录原因，恢复后自动重连。缺少所需加载器 API 时会停用并记录提示。反馈异常时请提供 Mod、游戏和加载器版本、语言、分辨率、房主或客户端身份及相关日志片段。
+包内的 `enabled.txt` 会启用 Mod。请完整保留 Mod 文件夹，不要替换加载器的整个 `mods.txt` 或其他 Mod。
 
 ### 更新与卸载
 
-首次重启后，仅更新 Lua 文件可按上文覆盖并重载；删除 `BartendersNote` 文件夹或更新加载器前请关闭游戏，无需清理自定义存档数据。房主与客户端各自显示、运行中语言切换仍列在后续回归清单中。
+**更新：** 关闭游戏，下载并解压新版 Mod ZIP，把完整的 `BartendersNote` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件，再启动游戏。
 
-[版本变化](CHANGELOG.md) · [构建、实现与验收](DEVELOPMENT.md#中文)
+**卸载：** 关闭游戏，只删除 `Mods/BartendersNote`，保留 UE4SS 和其他 Mod。卸载仅移除显示，不需要清理订单或存档。
+
+可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
+
+### 语言与帮助
+
+自动跟随游戏语言，无需设置或安装语言包。饮料名沿用游戏译文；名称不可用时显示本地化饮料标签和编号，不支持的语言回退英语。技术日志保持英文。
+
+游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+
+清单未出现时，先确认已认领尚未做完的饮料，并关闭会遮住餐厅名称条的界面。游戏窗口过窄时请加宽。仍有问题时，按下方反馈说明提供 `UE4SS.log` 中相关的 `[Bartender's Note]` 日志。
+
+用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+
+[版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

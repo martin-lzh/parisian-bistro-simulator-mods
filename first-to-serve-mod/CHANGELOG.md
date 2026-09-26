@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
+- 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
+
 - Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
 - 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
 

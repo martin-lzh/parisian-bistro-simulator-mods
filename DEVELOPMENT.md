@@ -4,7 +4,37 @@
 
 ## English
 
-Player guides: [project](README.md#english), [Bartender's Note](bartenders-note-mod/README.md#english), [Auto Checkout](auto-checkout-mod/README.md#english). Implementation and test checklists: [Bartender's Note](bartenders-note-mod/DEVELOPMENT.md#english) · [Auto Checkout](auto-checkout-mod/DEVELOPMENT.md#english). See [languages](docs/localization.md#english), [validation](releases/validation.md#english) and [release management](releases/README.md#english) for their respective scope.
+Start with [Contributing](CONTRIBUTING.md#english) for the change process and the [documentation index](docs/README.md#english) for player guides, implementation notes and test records. Installation and gameplay help belong in [Support](SUPPORT.md#english).
+
+### Development environment
+
+- Install Git, Python 3.12 and uv; make `git`, `python` and `uv` available in PowerShell. CI uses Python 3.12 and uv 0.10.7. Check `python --version` and `uv --version` before running the commands below.
+- Building all seven Mods requires Windows x64 with Visual Studio or Build Tools, the C++ x64 tools and a Windows SDK. Smart Delivery also uses the x64 MASM assembler (`ml64`) for its native test harness. Auto Menu uses the C++ compiler for its helper and native tests.
+- The native build scripts locate the C++ installation with `vswhere` and initialize `VsDevCmd.bat` themselves; use an ordinary PowerShell terminal at the repository root. The Lua-only Mods do not need the native compiler.
+- Offline tests and packaging need no game installation, UE4SS, extracted SDK or local game references. The Lua test command uses uv to obtain the pinned `lupa==2.6` dependency; the first run may download it. Actual gameplay checks require the game and the loader described in the Mod's player guide.
+
+For a first checkout only, use an account with access to the private repository:
+
+```powershell
+git clone --branch dev https://github.com/martin-lzh/parisian-bistro-simulator-mods.git
+cd parisian-bistro-simulator-mods
+```
+
+If a checkout already exists, use that directory and inspect `git status --short` before editing. Do not create another clone or a temporary worktree for the task. Read [AGENTS.md](AGENTS.md), then run the checks below. No generated files from another machine are required.
+
+### Mod development guides
+
+| Mod | Implementation and validation |
+| --- | --- |
+| Bartender's Note | [Development guide](bartenders-note-mod/DEVELOPMENT.md#english) |
+| Auto Checkout | [Development guide](auto-checkout-mod/DEVELOPMENT.md#english) |
+| Fresh to Serve | [Development guide](fresh-to-serve-mod/DEVELOPMENT.md#english) |
+| First to Serve | [Development guide](first-to-serve-mod/DEVELOPMENT.md#english) |
+| Smart Delivery | [Development guide](smart-delivery-mod/DEVELOPMENT.md#english) |
+| Auto Menu | [Development guide](auto-menu-mod/DEVELOPMENT.md#english) |
+| Scan to Order | [Development guide](scan-to-order-mod/DEVELOPMENT.md#english) |
+
+See [languages](docs/localization.md#english), [validation](releases/validation.md#english) and [release management](releases/README.md#english) for shared requirements and recorded testing.
 
 ### Repository layout and boundaries
 
@@ -14,6 +44,7 @@ Player guides: [project](README.md#english), [Bartender's Note](bartenders-note-
 | `docs/` | Original design, compatibility and documentation index | Yes |
 | `tools/` | Original build, packaging and repository checks | Yes |
 | `releases/` | Version, authorization and validation records | Yes |
+| `LICENSE` | MIT license for original code and documentation | Yes |
 | `work/` | All game references, extracted material, analysis, logs, tools and research scripts | No |
 | `outputs/` | Local ZIPs, checksums and CI packages | No |
 
@@ -21,11 +52,24 @@ Read [AGENTS.md](AGENTS.md) before making changes. Local reference locations are
 
 All reverse-engineering material belongs in ignored `work/`, including game files, assets, mappings, blueprints, native analysis, SDK/header exports, memory snapshots, logs, third-party tools, extraction scripts and research notes. Do not copy it into tracked directories or force-add ignored files, even in this private repository. Packages contain original Mod files and necessary notices only.
 
+Each Mod owns its runtime and build inputs:
+
+| Mod path | Purpose |
+| --- | --- |
+| `Scripts/` | Lua entry point and runtime modules |
+| `tests/run.py` and `tests/` | Lua behavior tests and their runner |
+| `build.py` | Version, explicit package allowlist and ZIP/checksum generation |
+| `Native/` and `native_build.py` | Original helper source and native tests, for Smart Delivery and Auto Menu only |
+| `README.md` | Player installation and usage guide |
+| `DEVELOPMENT.md` | Implementation details and test checklist |
+| `CHANGELOG.md` | Pending changes and version history |
+| `LICENSE` | Complete MIT text, identical to the root license |
+
 ### Build and checks
 
 The offline build uses Python and uv, with `lupa==2.6` providing Lua 5.4 for behavior tests. CI pins Python 3.12 and uv 0.10.7. It does not need the game, UE4SS or local references.
 
-Smart Delivery and Auto Menu also build an original Windows x64 helper with MSVC C++/MASM and the Windows SDK, and executes a native dispatch test harness. It uses an explicit generated-DLL allowlist; no binaries are tracked. CI records the compiled helper's hash in commit-bound build evidence for package and release verification.
+Smart Delivery and Auto Menu also build original Windows x64 helpers with MSVC and the Windows SDK, and execute native test harnesses. Smart Delivery's tests additionally use MASM. The build uses an explicit generated-DLL allowlist; no binaries are tracked. CI records each compiled helper's hash in commit-bound build evidence for package and release verification.
 
 Run from the repository root:
 
@@ -37,7 +81,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` runs all registered Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
+`tools/ci.py build` runs all registered Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Every ZIP includes its complete `LICENSE`; configuration validation requires each Mod's license to match the root MIT license. Stage new intended package inputs before validation because the allowlist accepts only Git-tracked files. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
 
 These checks establish offline behavior and package integrity, not rendering, real engine bridging or in-game acceptance. The confirmed game baseline is recorded separately from reported player test environments in the [validation record](releases/validation.md#english).
 
@@ -45,11 +89,15 @@ These checks establish offline behavior and package integrity, not rendering, re
 
 Create an independent `<feature>-mod/` only when there is an actual feature to implement. Maintain a bilingual `README.md` for players, bilingual `DEVELOPMENT.md` for implementation and validation, and `CHANGELOG.md` with pending changes under `Unreleased`. Add meaningful tests for behavior that can be verified offline. Keep package allowlists explicit and update version/diagnostic checks together when a version advances.
 
+Keep a copy of the root `LICENSE` in each Mod and include it in `build.py`'s allowlist. Bundled documentation may use relative links to files in the same Mod, such as `CHANGELOG.md` or `LICENSE`. For root documentation, shared guides or another Mod, use a full GitHub URL for the matching branch or tag, such as [the development branch's support guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md). A `../docs/` or `../SUPPORT.md` link does not resolve inside an extracted individual ZIP.
+
 Read the game language at runtime and reuse native text before adding original translations; see [localization](docs/localization.md#english). Keep each Mod self-contained. The folder convention follows Old Market Simulator Mods, but its Unity/C# interfaces, loaders and SDK are not applicable to this Unreal game. Verify engine types and calls against local references; do not invent signatures or describe extracted assets as recovered original C++ source.
+
+Follow [.editorconfig](.editorconfig) for encoding, indentation and line endings, and [.gitattributes](.gitattributes) for Git's text normalization.
 
 ### Commits, CI and branch protection
 
-Use the current working directory without creating temporary worktrees. Work on `development` or a feature branch and merge to protected `main` through a PR. A PR from `development` targets `main`. Do not bypass branch protection. Commit and push task-related changes at the end of each task unless explicitly told not to; preserve unrelated user changes.
+Use the current working directory without creating temporary worktrees. The current development branch is `dev`; use it, an existing `development` branch, or a feature branch, and merge to protected `main` through a PR. A PR from `development` targets `main`. Do not bypass branch protection. Commit and push task-related changes at the end of each task unless explicitly told not to; preserve unrelated user changes.
 
 Selectively stage intended files, run `python tools/check_repository.py`, review `git diff --staged`, and check `git diff --check` and `git status --short` before committing. The repository checker examines tracked and staged paths, so stage new intended files before the final check. A clean worktree does not require deleting ignored `work/` or `outputs/`.
 
@@ -64,7 +112,37 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 
 ## 中文
 
-玩家说明：[项目](README.md#中文)、[Bartender's Note](bartenders-note-mod/README.md#中文)、[Auto Checkout](auto-checkout-mod/README.md#中文)。实现与验收清单：[Bartender's Note](bartenders-note-mod/DEVELOPMENT.md#中文) · [Auto Checkout](auto-checkout-mod/DEVELOPMENT.md#中文)。另有[多语言适配](docs/localization.md#中文)、[验收记录](releases/validation.md#中文)和[版本管理](releases/README.md#中文)。
+先阅读[参与贡献](CONTRIBUTING.md#中文)了解改动流程，再通过[文档索引](docs/README.md#中文)查找玩家说明、实现说明与测试记录。安装和玩法问题请查看[帮助](SUPPORT.md#中文)。
+
+### 开发环境
+
+- 安装 Git、Python 3.12 和 uv，确保 PowerShell 能调用 `git`、`python` 和 `uv`。CI 使用 Python 3.12 和 uv 0.10.7；执行下方命令前先核对 `python --version` 与 `uv --version`。
+- 全量构建 7 个 Mod 需要 Windows x64，以及 Visual Studio 或 Build Tools 中的 C++ x64 工具和 Windows SDK。Smart Delivery 的原生测试还使用 x64 MASM 汇编器（`ml64`）；Auto Menu 的辅助模块和原生测试使用 C++ 编译器。
+- 原生构建脚本通过 `vswhere` 查找 C++ 工具，再自行初始化 `VsDevCmd.bat` 环境，可在仓库根目录使用普通 PowerShell 执行。纯 Lua Mod 不需要原生编译器。
+- 离线测试与打包不需要安装游戏、UE4SS、提取 SDK 或准备本机游戏参考。Lua 测试通过 uv 获取固定的 `lupa==2.6` 依赖，首次运行可能需要下载。实际游戏测试才需要各 Mod 玩家说明中指定的游戏与加载器。
+
+仅在首次获取仓库时，使用有权访问私密仓库的账号：
+
+```powershell
+git clone --branch dev https://github.com/martin-lzh/parisian-bistro-simulator-mods.git
+cd parisian-bistro-simulator-mods
+```
+
+已有本地仓库时，直接使用该目录，修改前先检查 `git status --short`。不要为本次任务另行克隆或创建临时工作树。阅读 [AGENTS.md](AGENTS.md) 后执行下方检查，不需要从其他电脑复制生成产物。
+
+### 各 Mod 开发说明
+
+| Mod | 实现与验证 |
+| --- | --- |
+| Bartender's Note | [开发说明](bartenders-note-mod/DEVELOPMENT.md#中文) |
+| Auto Checkout | [开发说明](auto-checkout-mod/DEVELOPMENT.md#中文) |
+| Fresh to Serve（焕新上桌） | [开发说明](fresh-to-serve-mod/DEVELOPMENT.md#中文) |
+| First to Serve（先做好先端） | [开发说明](first-to-serve-mod/DEVELOPMENT.md#中文) |
+| Smart Delivery（智选配送） | [开发说明](smart-delivery-mod/DEVELOPMENT.md#中文) |
+| Auto Menu（每日菜单组合） | [开发说明](auto-menu-mod/DEVELOPMENT.md#中文) |
+| Scan to Order（扫码点餐） | [开发说明](scan-to-order-mod/DEVELOPMENT.md#中文) |
+
+通用要求及既有测试另见[多语言适配](docs/localization.md#中文)、[验收记录](releases/validation.md#中文)和[版本管理](releases/README.md#中文)。
 
 ### 目录与内容边界
 
@@ -74,6 +152,7 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 | `docs/` | 原创设计、兼容性与文档索引 | 是 |
 | `tools/` | 原创构建、打包与仓库检查脚本 | 是 |
 | `releases/` | 版本、授权与验收记录 | 是 |
+| `LICENSE` | 原创代码和文档的 MIT 许可证 | 是 |
 | `work/` | 全部游戏参考、提取资料、分析、日志、工具及研究脚本 | 否 |
 | `outputs/` | 本地 ZIP、校验文件与 CI 产物 | 否 |
 
@@ -81,11 +160,24 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 
 所有反编译相关内容均放在被忽略的 `work/`，包括游戏文件、资产、映射、蓝图、原生分析、SDK/头文件导出、内存快照、日志、第三方工具、提取脚本和研究笔记。即使仓库私密，也不得复制到跟踪目录或强制加入 Git。安装包只含原创 Mod 文件和必要声明。
 
+各 Mod 独立维护运行时和构建输入：
+
+| Mod 内路径 | 用途 |
+| --- | --- |
+| `Scripts/` | Lua 入口及运行时模块 |
+| `tests/run.py` 与 `tests/` | Lua 行为测试及运行入口 |
+| `build.py` | 版本、固定包白名单及 ZIP／校验文件生成 |
+| `Native/` 与 `native_build.py` | 原创辅助模块源码及原生测试，仅 Smart Delivery 和 Auto Menu 使用 |
+| `README.md` | 面向玩家的安装与使用说明 |
+| `DEVELOPMENT.md` | 实现细节及验收清单 |
+| `CHANGELOG.md` | 待发布改动及版本历史 |
+| `LICENSE` | 与根目录一致的完整 MIT 许可 |
+
 ### 构建与检查
 
 离线构建使用 Python 和 uv，`lupa==2.6` 提供 Lua 5.4 行为测试环境。CI 固定 Python 3.12 和 uv 0.10.7，不需要游戏、UE4SS 或本机参考资料。
 
-Smart Delivery 和 Auto Menu 还使用 MSVC C++/MASM 和 Windows SDK 构建原创 Windows x64 辅助模块，并执行原生分派测试。生成的 DLL 使用固定白名单，不跟踪二进制文件。CI 在绑定提交的构建证据中记录辅助模块哈希，用于安装包及发布校验。
+Smart Delivery 和 Auto Menu 还使用 MSVC 和 Windows SDK 构建原创 Windows x64 辅助模块，并执行原生测试；Smart Delivery 的测试还使用 MASM。生成的 DLL 使用固定白名单，不跟踪二进制文件。CI 在绑定提交的构建证据中记录各辅助模块哈希，用于安装包及发布校验。
 
 在仓库根目录执行：
 
@@ -97,7 +189,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` 运行所有已登记 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
+`tools/ci.py build` 运行所有已登记 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。每个 ZIP 均包含完整 `LICENSE`，配置验证要求各 Mod 许可与根 MIT 许可一致。新增且准备入包的文件须先暂存再验证，白名单仅接受 Git 已跟踪文件。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
 
 这些检查验证离线行为与包完整性，不代表渲染、真实引擎桥接或实机验收通过。[验收记录](releases/validation.md#中文)区分本机开发参考基线与用户实际反馈的测试环境。
 
@@ -105,11 +197,15 @@ git diff --check
 
 有实际功能要实现时才创建独立 `<feature>-mod/`。维护面向玩家的双语 `README.md`、面向实现与验收的双语 `DEVELOPMENT.md`，以及将待发布内容放在 `Unreleased` 的 `CHANGELOG.md`。仅为适合离线验证的行为添加有意义的测试。打包使用固定白名单；推进版本时同步更新版本与诊断检查。
 
+每个 Mod 保存根 `LICENSE` 的副本，并纳入 `build.py` 白名单。随包文档链接同一 Mod 内文件时，可以使用 `CHANGELOG.md`、`LICENSE` 等相对路径；链接根文档、公共说明或其他 Mod 时，应使用对应分支或标签的完整 GitHub URL，例如[开发分支帮助说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md)。单个 ZIP 解压后，`../docs/` 或 `../SUPPORT.md` 之类链接无法找到仓库内目标。
+
 运行时读取游戏语言，优先复用原生文案，再补充原创翻译，详见[多语言适配](docs/localization.md#中文)。各 Mod 保持独立。目录组织参考菜市场模拟器，但该项目的 Unity/C# 接口、加载器及 SDK 不适用于本 Unreal 游戏。类型和调用须经本机参考核对，不编造签名，也不把资源提取称为恢复原始 C++ 源码。
+
+编码、缩进和换行遵循 [.editorconfig](.editorconfig)，Git 文本归一化遵循 [.gitattributes](.gitattributes)。
 
 ### 提交、CI 与分支保护
 
-直接使用当前工作目录，不创建临时工作树。在 `development` 或功能分支开发，通过 PR 合入受保护的 `main`；从 `development` 开 PR 时，目标为 `main`。不得绕过保护。每次任务结束提交并推送任务相关改动，除非用户明确要求不推送；保留无关用户改动。
+直接使用当前工作目录，不创建临时工作树。当前开发分支为 `dev`，可使用该分支、已有的 `development` 分支或功能分支，通过 PR 合入受保护的 `main`；从 `development` 开 PR 时，目标为 `main`。不得绕过保护。每次任务结束提交并推送任务相关改动，除非用户明确要求不推送；保留无关用户改动。
 
 选择性暂存目标文件，执行 `python tools/check_repository.py`，审查 `git diff --staged`，并在提交前检查 `git diff --check` 和 `git status --short`。仓库检查器审查已跟踪及暂存路径，因此新增目标文件应先暂存再做最终检查。干净的 Git 工作区不代表删除被忽略的 `work/` 或 `outputs/`。
 

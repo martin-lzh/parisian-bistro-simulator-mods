@@ -4,10 +4,17 @@
 
 ## English
 
+Players can start with the [Mod list and downloads](../README.md#english) or [help](../SUPPORT.md#english). Contributors should read [Contributing](../CONTRIBUTING.md#english) before setting up the development environment.
+
 | Topic | Guide |
 | --- | --- |
 | Features and installation | [Project overview](../README.md#english) |
+| Installation problems and feedback | [Support](../SUPPORT.md#english) |
+| Changes, translations and pull requests | [Contributing](../CONTRIBUTING.md#english) |
 | Build, repository boundaries and CI | [Development](../DEVELOPMENT.md#english) |
+| Vulnerability reports | [Security](../SECURITY.md#english) |
+| Participation and moderation | [Community guidelines](../CODE_OF_CONDUCT.md#english) |
+| Original code and documentation terms | [MIT License](../LICENSE) |
 | Supported languages and native text | [Localization](localization.md#english) |
 | Reload Lua scripts with Ctrl+R | [Hot reload](hot-reload.md#english) |
 | Bartender's Note | [Player guide](../bartenders-note-mod/README.md#english) · [Development and validation](../bartenders-note-mod/DEVELOPMENT.md#english) · [Changes](../bartenders-note-mod/CHANGELOG.md) |
@@ -20,14 +27,21 @@
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
 | Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
 
-These pages describe original Mod behavior, development decisions and validation scope. Extracted assets, type/function exports, translation catalogs and research notes belong only in ignored `work/`; they must not be added here. The user reported completion of in-game testing for all seven Mods on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope.
+These pages describe original Mod behavior, development decisions and validation scope. Extracted assets, type/function exports, translation catalogs and research notes belong only in ignored `work/`; they must not be added here. The user reported completion of in-game testing for all seven Mods on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Later changes require their own validation and do not inherit that report automatically.
 
 ## 中文
+
+玩家可从 [Mod 列表与下载](../README.md#中文)或[帮助](../SUPPORT.md#中文)开始。贡献者应先阅读[参与贡献](../CONTRIBUTING.md#中文)，再准备开发环境。
 
 | 主题 | 文档 |
 | --- | --- |
 | 功能与安装 | [项目介绍](../README.md#中文) |
+| 安装排查与反馈 | [帮助](../SUPPORT.md#中文) |
+| 改动、翻译与 PR | [参与贡献](../CONTRIBUTING.md#中文) |
 | 构建、仓库边界与 CI | [开发说明](../DEVELOPMENT.md#中文) |
+| 漏洞反馈 | [安全反馈](../SECURITY.md#中文) |
+| 参与及管理规则 | [社区规范](../CODE_OF_CONDUCT.md#中文) |
+| 原创代码和文档许可 | [MIT 许可证](../LICENSE) |
 | 支持语言与原生文案 | [多语言适配](localization.md#中文) |
 | Ctrl+R 重载 Lua 脚本 | [热重载](hot-reload.md#中文) |
 | Bartender's Note | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |
@@ -40,4 +54,4 @@ These pages describe original Mod behavior, development decisions and validation
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
 
-这里记录原创 Mod 行为、开发设计和验证范围。提取资源、类型与函数导出、游戏翻译目录及研究笔记仅存于被忽略的 `work/`，不得加入此目录。用户于 2026-09-26 反馈全部 7 个 Mod 实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。
+这里记录原创 Mod 行为、开发设计和验证范围。提取资源、类型与函数导出、游戏翻译目录及研究笔记仅存于被忽略的 `work/`，不得加入此目录。用户于 2026-09-26 反馈全部 7 个 Mod 实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。后续改动须另行验证，不自动继承该次反馈。

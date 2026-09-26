@@ -4,11 +4,15 @@
 
 ## English
 
+### Changes after the 2026-09-26 test report
+
+Commit `b948f7f` changes First to Serve 0.1.7-dev and Smart Delivery 0.1.4-dev to fall back to English when language lookup fails and recover on a later refresh. Offline failure/recovery regressions pass; these new paths have not been tested in-game. The earlier completion report below applies to its recorded source, not automatically to later changes with the same version number. Documentation and MIT packaging changes do not expand the reported gameplay coverage.
+
 ### 2026-09-26: all Mods tested in-game
 
 The user reported: “全部mods实机测试完毕。” (“In-game testing of all Mods is complete.”) This records completion of user testing for all seven Mods. The source versions at the time of the report, at commit `d917eb59314e2c3b36848eee2f5f3204a893f21a`, were:
 
-| Mod | Current source version |
+| Mod | Source version at the time of the report |
 | --- | --- |
 | Bartender's Note | 0.1.2-dev |
 | Auto Checkout | 0.1.4-dev |
@@ -78,11 +82,15 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
+### 2026-09-26 测试反馈之后的改动
+
+提交 `b948f7f` 调整 First to Serve 0.1.7-dev 和 Smart Delivery 0.1.4-dev：语言读取失败时回退英语，后续刷新重新读取并恢复。离线失败与恢复回归通过，新增路径尚未实机测试。下方已有的完成反馈对应其记录的源码，不自动覆盖版本号相同的后续改动；文档及 MIT 打包调整也不扩大已反馈的游戏测试范围。
+
 ### 2026-09-26：全部 Mod 实机测试完成
 
 用户反馈原文：“全部mods实机测试完毕。”据此记录全部 7 个 Mod 的用户实机测试已完成。反馈时仓库提交为 `d917eb59314e2c3b36848eee2f5f3204a893f21a`，当前源码版本如下：
 
-| Mod | 当前源码版本 |
+| Mod | 反馈时的源码版本 |
 | --- | --- |
 | Bartender's Note | 0.1.2-dev |
 | Auto Checkout | 0.1.4-dev |

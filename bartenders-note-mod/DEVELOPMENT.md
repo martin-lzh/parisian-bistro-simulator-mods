@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.2-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Individual checklist results were not reported separately. Version 0.1.0's earlier user confirmation is recorded below.
+Player instructions: [README](README.md#english). **Current source: 0.1.2-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. Version 0.1.0's earlier user confirmation is recorded below.
 
 ### Implementation
 
@@ -49,7 +49,7 @@ git diff --check
 
 The tests execute Lua 5.4 without the game or UE4SS. They cover ownership/state filtering, deduplication, unavailable sources, HUD lifecycle, margins, measured wrapping, hidden-type counts, height recovery and reflow when the window/font changes. Localization coverage checks the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes while the order list stays the same.
 
-The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering. Reload tests cover stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
+The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering. Reload tests cover stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
 
 ### In-game validation
 
@@ -66,9 +66,19 @@ The following remains a regression checklist, not a list of completed tests:
 7. Check UE4SS logs and extended play for sustained errors or refresh stalls. Record actual game and full loader versions, language, resolution and results.
 8. Reload repeatedly with claimed drinks visible and with a delayed refresh pending. Confirm one banner and one measurement widget, fresh counts, no duplicate hooks or timers, and correct recovery after traveling or changing language.
 
+### Runtime compatibility
+
+The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. The checked UE4SS experimental API is `v3.0.1-1140-gf58e8f84`; `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required. Missing required APIs stop the Mod and produce a `[Bartender's Note]` log entry. Old stable UE4SS 3.0.1 is not the target.
+
+### Manual script reload
+
+Install or upgrade to 0.1.2-dev with the game closed once, clearing widgets left by earlier runtimes. For subsequent Lua-only updates, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english), copy every updated script, then press **Ctrl+R**. No reload is needed for a normal closed-game update.
+
+The implementation and handoff are described above; the 2026-09-26 overall report does not provide a separate result for repeated reload, host/client isolation or live language changes.
+
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](../releases/validation.md#中文)；未单独反馈清单各项结果。0.1.0 的历史用户确认见下文。
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.0 的历史用户确认见下文。
 
 ### 实现
 
@@ -113,7 +123,7 @@ git diff --check
 
 测试使用 Lua 5.4，无需游戏或 UE4SS。覆盖认领者与状态过滤、去重、数据源不可用、HUD 生命周期、留白、实测换行、隐藏种类计数、面板高度恢复及窗口和字体变化后的重排。多语言检查覆盖 14 种语言、地区别名、原生名称/分类/最终后备优先级、服务缺失和订单不变时切换语言。
 
-固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
+固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.2-dev.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
 
 ### 游戏内验收
 
@@ -128,3 +138,13 @@ git diff --check
 5. 有订单时切换全部 14 种语言，包含简繁中文和两种葡萄牙语，检查原生名称、本地化提示与后备值、字体及即时重排。在 1920×1080、2560×1600 和 3440×1440 下测试长名称，检查渐隐留白、两行布局、隐藏种类计数及不缩小字体的单行恢复。
 6. 房主与客户端分别认领订单，确认各自只显示自己的清单，远端取消、制作完成及重连能正确更新。
 7. 检查 UE4SS 日志与长时间运行，确认无持续异常或刷新卡顿，记录实际游戏和加载器完整版本、语言、分辨率与结果。
+
+### 运行兼容性
+
+本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。已核对的 UE4SS experimental API 为 `v3.0.1-1140-gf58e8f84`，需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`。缺少必需接口时停止 Mod，并记录 `[Bartender's Note]` 日志；不以旧稳定版 UE4SS 3.0.1 为目标。
+
+### 手动脚本重载
+
+首次安装或升级至 0.1.2-dev 时先关闭游戏，以清除旧版本遗留控件。之后仅更新 Lua 文件时，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器，复制完所有更新脚本，再按 **Ctrl+R**。正常关游戏更新不需要热重载。
+
+实现与交接见上文；2026-09-26 总体测试反馈未单独提供连续重载、房主/客机隔离或运行中切换语言的结果。

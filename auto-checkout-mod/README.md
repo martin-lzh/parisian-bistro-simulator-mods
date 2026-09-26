@@ -4,102 +4,124 @@
 
 ## English
 
-Automatically accept cash or cards from customers at the counter, wait for the register to be ready, and complete its checkout interaction.
+Automatically accept customers' cash or cards at the counter and finish the register interaction.
 
-**Current source: 0.1.4-dev.** This version supports UE4SS Lua hot reload, retaining AI recovery records and checkout retry history. The user reported completion of in-game testing on 2026-09-26. The earlier stable 0.1.2 confirmation covered three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. See the [validation record](../releases/validation.md#english) for each report's scope.
+**Version: 0.1.4-dev.** Single player or multiplayer host only. Only the host needs to install it; guests do not run checkout.
 
 ### How to use
 
-Enter the restaurant as the single-player host or multiplayer host. The Mod starts automatically, with no key binding, toggle or settings file. Ordinary multiplayer clients remain idle; only the host needs it enabled. Multiplayer synchronization still needs in-game testing.
+Enter your restaurant as host. Checkout starts automatically, with no key, toggle or settings to change. You can carry items, make drinks, open the tablet or work away from the counter.
 
-The Mod uses the game's normal interaction requests, so the game calculates bills, tips and income and handles customers leaving. It does not directly rewrite money, payment flags or customer state, and does not handle table checkout, cash declarations, withdrawals or cash bags.
+- Bills, tips, income and customer departure follow the game's normal rules.
+- It waits during a real pause, card processing, drawer movement or an employee's current checkout.
+- Employees stop taking new counter-checkout jobs while the Mod runs; existing jobs may finish. Their other work is unchanged.
+- Table checkout, cash declarations, withdrawals and cash bags are outside its scope.
 
-It checks a register when the game's customer-at-counter notification arrives, and checks all current-world registers every second, including counters on other floors. A missing notification does not disable periodic checks. Actual acceptance across floors remains on the regression checklist.
+If one transaction repeatedly fails, finish it manually; later customers can still be processed. If an error stops all checkout, check the help section before re-entering the restaurant.
 
-### During play
+### Requirements
 
-You can carry items, make drinks, open interfaces or move away from the register while it works. Immediately before each request, the Mod checks that the same transaction is still waiting. A manual payment, closed drawer or invalidated payment object cancels the outdated request. It waits while the game is actually paused, a card payment is processing, a drawer is moving, or an employee already owns that transaction.
+Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
-New AI counter-checkout jobs are suppressed on the host while the Mod runs; drink preparation, serving and other jobs are retained. Already claimed checkout jobs may finish. Employee configuration and saves are not edited. On leaving a host session, changing worlds or stopping after an error, the Mod attempts to restore the jobs it removed. A failed restoration is logged and requires reloading the world.
+### Download
 
-The Mod temporarily adjusts only the current target's interaction distance and furniture-placement restriction for the immediate native call, then restores them. It does not move the player or change the player's current activity.
+1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
+2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`AutoCheckout-0.1.4-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
 
-Requests in the same stage are at least three seconds apart, with at most three attempts. If the game does not advance that stage, the Mod stops retrying it and logs a warning; finish that transaction manually. Later customers can still be processed. An interface or execution error can stop automation for the current load; inspect the log before reloading.
+Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
-### Languages
+### Install
 
-The game's own payment prompts, notifications and item names remain native. The Mod adds no payment interface. Its host explanations, retry warnings, stop messages, notification fallback and AI-restoration advice follow the game's 14 supported languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+1. Close the game. In Steam, right-click **Parisian Bistro Simulator** → **Manage** → **Browse local files**. This opens the `<game>` folder used below.
+2. Install the basic experimental UE4SS package using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping that package's folder structure.
+3. Copy the extracted **`AutoCheckout`** folder, with all its contents, into `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`. If your loader uses another location, use its existing `Mods` folder instead.
+4. Confirm these files exist, with no extra `AutoCheckout/AutoCheckout` folder:
 
-Technical event names, field keys, phase/reason identifiers and exception details stay unchanged. Startup messages before the first safe game-thread language read remain English; unsupported or unavailable languages also fall back to English. There is no separate Mod language setting.
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/enabled.txt`
 
-### Install, update or remove
+5. Start the game and enter your restaurant in single player or as the multiplayer host.
 
-The local reference baseline is Windows Parisian Bistro Simulator, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. Use **UE4SS experimental** with UE 5.4 support; the locally checked API is `v3.0.1-1140-gf58e8f84`, not old stable 3.0.1.
+The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; do not replace the loader's `mods.txt` or other Mods.
 
-1. Close the game and install the experimental loader following the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html).
-2. Place the ZIP's `AutoCheckout` folder in the loader's `Mods` directory. A common location is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`; use your actual loader layout.
-3. Check that `AutoCheckout/Scripts/main.lua` and `AutoCheckout/enabled.txt` exist. Do not replace the whole `mods.txt` or add a duplicate enable entry.
-4. Start the game and enter your restaurant as host.
+### Update or remove
 
-Close the game for first installation, removal, loader updates, or the first upgrade from 0.1.3-dev and earlier. Once 0.1.4-dev is running, you can replace the complete Lua package and use the loader’s Reload Mods action. Pending requests retain their cooldown and attempt limit. The next game-thread callback restores the previous instance’s AI changes before resuming automation. Check the new `START` version and any `RELOAD` or `ERROR` messages. If recovery fails, automation stops and keeps its recovery records for another reload.
+**Update:** close the game, download and extract the new Mod ZIP, then copy its complete `AutoCheckout` folder into the same `Mods` folder and replace matching files. Start the game again.
 
-Hot reload requires the experimental loader’s `ModRef` shared-variable and unload support. Disabling or deleting the Mod without loading a replacement leaves AI restoration until the world is reloaded; close the game before permanent removal. Shared history lasts only for the current game process. Restart the game if the handoff is damaged or from an unsupported future format. The Mod creates no custom save data, but completed transactions are saved normally by the game and are not reversed by removal. Packages contain no loader, game files or research material; builds do not install anything.
+**Remove:** close the game and delete only `Mods/AutoCheckout`. Leave UE4SS and other Mods in place. Close the game before removal so the game's normal employee checkout behavior returns on the next launch. Completed sales and income are not undone.
 
-### If checkout does not start
+Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
 
-Diagnostics are always enabled in `UE4SS.log` under `[AutoCheckout]`. Check `START version=0.1.4-dev` after updating, followed by `HOST`, `STATE ai`, `REQUEST`, `SKIP` and `AFTER`. Keep the stack after any `ERROR` as well. A returned call does not by itself mean that the game accepted the request.
+### Languages and help
 
-State changes are logged immediately, with unchanged state repeated every 30 polls, usually about 30 seconds. `suppressed=0` does not prove AI checkout is suppressed. Current code should not emit `blocked=player-interacting`. If a warning reports that interaction restrictions or AI jobs could not be restored, reload the world. The development guide contains the [diagnostic reference](DEVELOPMENT.md#diagnostic-reference) and test checklist.
+The game's payment prompts and notifications keep their normal translations. The Mod's explanatory log messages follow the game language, with English used at early startup or when a language is unavailable. Technical identifiers and error details stay unchanged. No language pack is needed.
 
-[Changes](CHANGELOG.md) · [Build, implementation and validation](DEVELOPMENT.md#english)
+Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+
+If checkout does not start, confirm you are the host and the Mod folder is in the correct place. For a stuck transaction, try finishing it manually. If a warning says employee jobs or interaction settings could not be restored, leave and reload the restaurant. Include relevant `[AutoCheckout]` lines from `UE4SS.log` with a problem report.
+
+In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+
+[Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
-自动接收柜台顾客递出的现金或银行卡，等待收银机准备好，再完成收银机结账交互。
+自动接收柜台顾客递出的现金或银行卡，并完成收银机结账。
 
-**当前源码：0.1.4-dev。** 本版支持 UE4SS Lua 热重载，保留员工任务恢复记录和结账重试历史。用户于 2026-09-26 反馈实机测试完成。此前正式版 0.1.2 的确认覆盖 3 笔现金、2 笔刷卡，均首次尝试成功，包括超出原交互范围的结账；各次反馈的范围见[验收记录](../releases/validation.md#中文)。
+**版本：0.1.4-dev。** 仅单人或联机房主运行，只需房主安装，客机不会执行自动结账。
 
 ### 怎么使用
 
-以单人玩家或联机房主身份进入餐厅即可自动运行，无需按键、开关或设置文件。普通联机客户端保持空闲，只需房主启用；联机同步仍待实机测试。
+以房主身份进入餐厅即可自动结账，无需按键、开关或额外设置。可以同时搬运物品、制作饮料、打开平板或离开柜台做其他工作。
 
-Mod 使用游戏原有交互请求，由游戏计算账单、小费和收入并处理顾客离店，不直接改写金额、付款标记或顾客状态，也不处理餐桌结账、现金申报、取钱或现金袋。
+- 账单、小费、收入及顾客离店按游戏原有规则处理。
+- 游戏实际暂停、刷卡中、钱柜移动中或员工正在处理该笔结账时会等待。
+- Mod 运行时，员工不再领取新的柜台收银任务；已领取的任务可以完成，其他工作照常进行。
+- 不处理餐桌结账、现金申报、取钱或现金袋。
 
-收到游戏的顾客到柜台提醒后检查对应收银机，同时每秒检查当前世界所有收银机，包括其他楼层柜台。提醒缺失时仍有定时检查；跨楼层实际验收继续保留在回归清单中。
+某笔交易多次未成功时，请手动完成，后续顾客仍可自动处理。若异常导致全部自动结账停止，请先查看下方帮助，再重新进入餐厅。
 
-### 运行行为
+### 使用要求
 
-玩家手持物品、制作饮料、打开界面或远离柜台时仍可运行。每次请求前重新确认同一笔交易是否还在等待；玩家手动收款、关闭钱柜或付款对象失效时，取消过时请求。游戏实际暂停、刷卡进行中、钱柜运动中或员工已认领该笔交易时会等待。
+Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
 
-运行期间，房主端禁止 AI 新领取柜台收银任务，保留制作饮料、上菜及其他任务。已领取的收银任务允许完成，不修改员工配置或存档。离开房主会话、切换世界或异常停止时尝试恢复本次移除的任务；恢复失败会记录警告，需要重新载入世界。
+### 下载
 
-每次原生调用仅临时调整当前目标的交互距离和摆放家具限制，调用后恢复，不移动玩家，也不改变玩家正在做的工作。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
+2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`AutoCheckout-0.1.4-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
 
-同一阶段的请求至少间隔三秒、最多三次。游戏状态未推进时，停止重试该阶段并记录警告，可手动完成这笔交易；后续顾客仍可自动处理。接口读取或执行异常可能停止本次加载的自动功能，请先检查日志再重新加载。
+请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 
-### 语言
+### 安装
 
-付款提示、通知与物品名称保留游戏原生值，不新增付款界面。房主状态说明、重试警告、停止信息、提醒监听回退和 AI 恢复建议适配游戏中的 14 种语言：英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语与巴西葡萄牙语。
+1. 关闭游戏。在 Steam 中右键 **Parisian Bistro Simulator** → **管理** → **浏览本地文件**，打开的就是下方所说的 `<game>` 游戏目录。
+2. 按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 experimental 的基础包，保留该发行包自己的目录结构。
+3. 将解压出的 **`AutoCheckout`** 文件夹连同全部内容复制到 `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`。若加载器实际装在其他位置，请使用它已有的 `Mods` 文件夹。
+4. 确认存在以下文件，不要多套一层 `AutoCheckout/AutoCheckout` 文件夹：
 
-技术事件名、字段名、阶段与原因标识、异常详情保持不变。首次安全的游戏线程语言读取之前，启动信息使用英语；语言不支持或不可用时也回退英语。无需独立的 Mod 语言设置。
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/enabled.txt`
 
-### 安装、更新与卸载
+5. 启动游戏，以单人玩家或联机房主身份进入餐厅。
 
-本机参考基线为 Windows 版 Parisian Bistro Simulator，Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。需要支持 UE 5.4 的 **UE4SS experimental**；本机核对的 API 为 `v3.0.1-1140-gf58e8f84`，不是旧稳定版 3.0.1。
+包内的 `enabled.txt` 会启用 Mod。请完整保留 Mod 文件夹，不要替换加载器的整个 `mods.txt` 或其他 Mod。
 
-1. 关闭游戏，按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装实验版加载器。
-2. 将 ZIP 内的 `AutoCheckout` 文件夹放入加载器 `Mods` 目录。常见位置为 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`，以实际布局为准。
-3. 确认存在 `AutoCheckout/Scripts/main.lua` 和 `AutoCheckout/enabled.txt`。不要替换整个 `mods.txt` 或添加重复启用项。
-4. 启动游戏，以房主身份进入餐厅。
+### 更新与卸载
 
-首次安装、永久卸载、更新加载器，或首次从 0.1.3-dev 及更早版本升级时，请关闭游戏。已经运行 0.1.4-dev 后，可完整替换 Lua 安装包，再使用加载器的 Reload Mods 操作。尚未推进的交易会保留冷却时间和尝试次数；新脚本在下一次游戏线程回调中先恢复旧实例对员工任务的改动，再继续自动结账。更新后检查新的 `START` 版本以及 `RELOAD`、`ERROR` 消息。恢复失败时停止自动流程，并保留记录供下一次重载重试。
+**更新：** 关闭游戏，下载并解压新版 Mod ZIP，把完整的 `AutoCheckout` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件，再启动游戏。
 
-热重载要求实验版加载器提供 `ModRef` 共享变量与卸载回调。只停用或删除 Mod、没有加载新实例时，需重新载入世界才能恢复被排除的员工任务；永久卸载前请关闭游戏。交接历史仅存在于本次游戏进程；记录损坏或来自不支持的未来格式时，请重新启动游戏。Mod 不创建自定义存档数据，但已完成交易会由游戏正常保存，卸载不会撤销。包内不含加载器、游戏文件或研究资料；构建不会自动安装。
+**卸载：** 关闭游戏，只删除 `Mods/AutoCheckout`，保留 UE4SS 和其他 Mod。务必关闭游戏后卸载，下次启动恢复游戏原有的员工收银行为；已完成交易和收入不会撤销。
 
-### 没有自动结账时
+可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
 
-诊断默认启用，在 `UE4SS.log` 中查看 `[AutoCheckout]` 条目。更新后检查 `START version=0.1.4-dev`，再查看 `HOST`、`STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`；保留 `ERROR` 后的堆栈。调用返回本身不代表游戏接受请求。
+### 语言与帮助
 
-状态变化时立即记录，不变时每 30 次轮询再次记录，通常约 30 秒。`suppressed=0` 不能证明 AI 收银已被抑制，当前代码不应产生 `blocked=player-interacting`。若日志报告交互限制或 AI 任务恢复失败，请重新载入世界。开发说明提供完整[诊断标记](DEVELOPMENT.md#诊断标记)及验收清单。
+付款提示和通知沿用游戏译文。Mod 的说明日志跟随游戏语言，启动初期或语言不可用时使用英语；技术标识与错误详情保持原样，无需语言包。
 
-[版本变化](CHANGELOG.md) · [构建、实现与验收](DEVELOPMENT.md#中文)
+游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+
+未自动结账时，先确认自己是房主，且 Mod 文件夹位置正确。单笔交易卡住可先手动完成。若警告提示员工任务或交互设置恢复失败，请退出餐厅后重新载入。反馈时附上 `UE4SS.log` 中相关的 `[AutoCheckout]` 日志。
+
+用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+
+[版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

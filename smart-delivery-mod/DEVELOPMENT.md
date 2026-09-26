@@ -32,7 +32,7 @@ The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler
 
 ### In-game regression checklist
 
-The user reported completion of in-game testing for 0.1.4-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
+The user reported completion of in-game testing for 0.1.4-dev on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 1. For each delivery option, save settings, reopen the dialog, restart the game and verify the choice. Cancel a different choice and verify the saved choice survives, including rapid close/reopen.
 2. Trigger small and large automatic orders. Compare service fees, full amount charged and arriving unloaders: 0 / 1 / 4. Repeat on different difficulty levels and at night.
@@ -43,6 +43,18 @@ The user reported completion of in-game testing for 0.1.4-dev on 2026-09-26; see
 7. Reload repeatedly with the dialog open and with an unsaved selection. Confirm one selector, no duplicate hooks/timers, restored saved preference and continued native orders. Test reload during travel, on host/client, and while an automatic order becomes eligible. Offline tests exercise worker-thread suspension, patch reuse/conflict refusal, old callback guards, primitive-only widget cleanup and Save/Cancel recovery; they do not establish real engine timing.
 
 Offline results do not establish engine bridging, layout, multiplayer or real transaction correctness. The user-reported in-game testing is recorded separately above.
+
+### Loader, packaging and diagnostics
+
+The checked loader is UE4SS experimental `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. The build above emits `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` and its SHA-256 file. The compiled `Scripts/delivery_bridge.dll` is loaded by Lua, not from UE4SS's `dlls` directory. Builds do not install, start/stop the game or edit saves.
+
+After a closed-game upgrade, verify `[SmartDelivery] START version=0.1.4-dev` and `UI attached to automatic-order settings` in `UE4SS.log`. Preserve the original startup error from that log: cleanup may subsequently replace `Scripts/bridge-status.txt` with `disabled`. The preference file is `Scripts/delivery-preference.txt`, with premium as the initial fallback.
+
+### Manual script reload
+
+0.1.4-dev includes a changed helper, so its initial upgrade requires closing the game and replacing the complete package. Once running, Lua-only updates can use **Ctrl+R** after the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english). Replace all updated Lua files before reloading.
+
+The lifecycle above discards unsaved selector changes, removes the old selector on the new state's game-thread refresh and reapplies the saved preference. During the reload gap, native automatic ordering uses its quantity-based delivery choice. Replacing `delivery_bridge.dll`, updating UE4SS or removing the Mod requires closing and restarting the game. The overall in-game report does not supply a separate repeated-reload result.
 
 ## 中文
 
@@ -64,10 +76,22 @@ Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua �
 
 ### 实机回归清单
 
-用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.4-dev，见[验收记录](../releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.4-dev，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 逐项检查三种配送的保存、重新打开、重启保留及取消恢复；小额/大额、不同难度和夜间订单的费用与 0/1/4 名卸货员；缺货优先、采购下限、余额不足、配送进行中、关闭自动订购及保存时立即触发的行为，确认不重复下单。确认手动食材/家具采购独立，切换餐厅、返回菜单及房主/客户端重连正常。检查 14 种语言、键盘/手柄、窄分辨率和大 UI 缩放。检查目标代码缺失或变化、冲突 Mod、无效配置及不可写目录的诊断与停用行为。
 
 新增离线测试覆盖工作线程原子暂停、跳板复用和冲突拒绝、旧回调停止、字符串控件身份清理和保存偏好恢复。实机需在窗口打开、选项未保存、切换餐厅、联机和自动订单即将触发时连续重载，确认单一选择框且无重复 Hook/定时器。
 
 离线检查不代表引擎桥接、界面布局、联机或真实扣款验收通过；用户实机测试反馈单独记录于上文。
+
+### 加载器、打包与诊断
+
+核对的加载器为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持稳定版 UE4SS 3.0.1。上方构建生成 `outputs/smart-delivery/SmartDelivery-0.1.4-dev.zip` 及 SHA-256 文件。`Scripts/delivery_bridge.dll` 由 Lua 加载，不放入 UE4SS 的 `dlls` 目录。构建不安装、不启停游戏，也不修改存档。
+
+关游戏升级后，在 `UE4SS.log` 中核对 `[SmartDelivery] START version=0.1.4-dev` 和 `UI attached to automatic-order settings`。保留该日志中的原始启动错误：后续清理可能把 `Scripts/bridge-status.txt` 改为 `disabled`。偏好文件为 `Scripts/delivery-preference.txt`，初始后备选择为高级配送。
+
+### 手动脚本重载
+
+0.1.4-dev 包含更新的辅助模块，首次升级须关闭游戏并替换完整安装包。运行后，仅更新 Lua 文件可按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器，复制全部更新脚本后按 **Ctrl+R**。
+
+上方生命周期会放弃未保存选项，新状态在游戏线程刷新时移除旧选择框并恢复已保存偏好；短暂重载期间，原生自动订购按数量选择配送。更换 `delivery_bridge.dll`、更新 UE4SS 或卸载 Mod，均须关闭并重启游戏；总体实机反馈未单独提供连续重载结果。

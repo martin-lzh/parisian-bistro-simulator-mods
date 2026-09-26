@@ -4,82 +4,126 @@
 
 ## English
 
-Fresh to Serve removes poor-quality cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. When the original customer is still waiting and has enough patience, it requests a replacement from the kitchen or bar. The game's waiters collect and serve it normally. Finished cocktails are included.
+Clear spoiled cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. If the original customer is still waiting and has enough patience, request a replacement for the game's staff to prepare and serve.
 
-Current version: **0.1.2-dev**. The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope.
+**Version: 0.1.2-dev.** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
 
-### Behavior
+### How to use
 
-- Checks once per second in a single-player or host session. Multiplayer clients do not clean up or place orders.
-- Uses the game's two negative quality categories. Healthy items, dirty plates/glasses, served items, items being consumed or picked up, and items attached to another actor are excluded. Partial glasses, active filling/pouring and tables marked for player service are excluded.
-- Confirms the original customer, table, group and order; counts existing items and queued replacements to prevent duplicate orders, including several customers ordering the same meal or drink. Drink order IDs identify the original customer's order.
-- Requires remaining patience to exceed the relevant kitchen/bar backlog, replacement preparation time and a 30-second dispatch/service allowance. Each earlier queued item adds its full preparation time plus 5 seconds. Parallel staff and preparation bonuses do not shorten this estimate. With patience disabled, only this time limit is omitted.
-- Drinks use the assigned floor's live equipment fill/interaction durations, recipe preparation time and 10 seconds for glass/ingredient handling. Unknown timing prevents a remake. A working bartender assigned to that floor must allow the relevant preparation task. Unfinished player-claimed drink orders defer automatic remakes without changing those claims.
-- If the customer has left, the order changed, patience is insufficient or timing cannot be established, the spoiled item is removed without a replacement. Patience is never reset or extended.
-- Orders use the normal kitchen/bar paths, retaining ingredients and preparation requirements. Rejected requests receive at most three attempts, at least 10 seconds apart; pending work expires after 120 seconds. Each attempt checks customer and patience again.
+Enter your restaurant as host. Cleanup starts automatically, with no hotkey or settings to change. Finished cocktails are included.
 
-Cleanup removes the entire spoiled item and frees its pickup position. It does not add a walking-to-trash animation, return a dirty plate or glass to the sink, refund ingredients, or increase bin contents. Carried trolleys, served items, glasses still at dispensers and bakery trays are outside this version's cleanup scope. Staffing, ingredients, navigation and production capacity still affect delivery. The time budget is an estimate, not a guarantee against later delays.
+- Replacements still need the normal ingredients, equipment and staff. Patience is never reset; a busy kitchen or bar may leave too little time to remake an item.
+- If the customer has left or a timely replacement cannot be confirmed, the spoiled item is removed without a replacement.
+- Good-quality items, dirty dishes, served or carried items, unfinished drinks, drinks still being poured and player-service tables are left alone. Bakery trays are outside this version's scope.
+- Player-claimed unfinished drinks delay automatic drink remakes. The assigned floor needs a working bartender who is allowed to make that drink.
+- Discarding removes the spoiled item and its plate or glass; it does not return dishes to the sink, refund ingredients or add trash to a bin. Staff and delivery delays can still prevent timely service.
 
-### Installation
+### Requirements
 
-Baseline: Windows / Steam Build **25393699**, game **1.0.0.44eb**, Unreal **5.4**. Requires **UE4SS experimental**, with the locally checked API `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not supported.
+Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
-1. Close the game yourself and install the required loader if needed.
-2. Obtain `FreshToServe-0.1.2-dev.zip` and its `.sha256` from the matching CI artifact, or run `python fresh-to-serve-mod/build.py` from the repository root.
-3. Extract `FreshToServe/` into the loader's `Mods/`. Confirm `enabled.txt` and `Scripts/main.lua` are present.
-4. Start the game and host your restaurant. No hotkey or configuration is needed.
+### Download
 
-If you installed the earlier Fresh Service package, close the game and remove its `Mods/FreshService/` folder before enabling `FreshToServe/`. Running both copies would duplicate the automation.
+1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
+2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`FreshToServe-0.1.2-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
 
-To disable, close the game and remove `FreshToServe/enabled.txt` or the Mod folder. This does not undo discarded items or accepted orders. Builds never install the Mod, change saves or start/close the game. No game files or loader are bundled.
+Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
-### Reloading scripts
+### Install
 
-Install 0.1.2-dev with the game closed when upgrading from an earlier version: older code cannot hand over its pending replacement records. Once this version is running, use UE4SS's manual **Ctrl+R** reload after copying every updated script. In `UE4SS-settings.ini`, use `[General]` settings `EnableHotReloadSystem = 1`, `HotReloadKey = R`, and `EnableAutoReloadingLuaMods = 0`. Ctrl+R reloads all enabled Lua Mods, so their reload support matters too. See the [shared reload guide](../docs/hot-reload.md#english).
+1. Close the game. In Steam, right-click **Parisian Bistro Simulator** → **Manage** → **Browse local files**. This opens the `<game>` folder used below.
+2. Install the basic experimental UE4SS package using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping that package's folder structure.
+3. Copy the extracted **`FreshToServe`** folder, with all its contents, into `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`. If your loader uses another location, use its existing `Mods` folder instead.
+4. Confirm these files exist, with no extra `FreshToServe/FreshToServe` folder:
 
-Pending food/drink replacements survive script reload in the same session, including their original age, retry count and next retry time. Reload does not grant more attempts or extra patience. Each request still checks the live customer and queues. A safety stop after an uncertain engine operation also survives reload; a different game session clears that stopped state and the old tickets. Records are held only in the running loader's memory, not written to saves or retained after exiting the game.
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FreshToServe/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FreshToServe/enabled.txt`
 
-No player-facing text is added; names and order UI stay in the game's language. Technical logs use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED`, `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not delivery. Engine errors stop automation for the current session, including across script reloads, to avoid repeating an uncertain request. Report relevant logs, game/loader versions and host/client role.
+5. Start the game and enter your restaurant in single player or as the multiplayer host.
 
-See [development and acceptance checklist](DEVELOPMENT.md#english) and [changes](CHANGELOG.md).
+The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; do not replace the loader's `mods.txt` or other Mods.
+
+If you used the earlier **Fresh Service** package, remove its old `Mods/FreshService` folder with the game closed before installing this Mod. Do not run both copies.
+
+### Update or remove
+
+**Update:** close the game, download and extract the new Mod ZIP, then copy its complete `FreshToServe` folder into the same `Mods` folder and replace matching files. Start the game again.
+
+**Remove:** close the game and delete only `Mods/FreshToServe`. Leave UE4SS and other Mods in place. Removing the Mod does not restore discarded items or cancel orders already accepted by the game.
+
+Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
+
+### Languages and help
+
+Adds no in-game text. Dish names, drink names and order messages remain in the game's selected language; no language pack is needed. Technical logs remain English.
+
+Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+
+If an item is not remade, check customer patience, stock, staff and equipment first. A cleanup does not guarantee a replacement or delivery. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report.
+
+In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+
+[Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
-Fresh to Serve（焕新上桌）自动清理厨房出餐台、饮料出品区和升降机出餐位上的低劣熟食及成品饮料，包含鸡尾酒；原顾客仍在等待且剩余耐心足够时，向厨房或吧台补单，再由游戏原有服务员正常取餐、送达。
+自动清理厨房出餐台、饮料出品区及升降机出餐位上的低劣熟食和成品饮料；原顾客仍在等待且耐心足够时补单，由游戏原有员工制作并送达。
 
-当前版本：**0.1.2-dev**。用户于 2026-09-26 反馈实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。
+**版本：0.1.2-dev。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
 
-### 工作流程
+### 怎么使用
 
-- 单人或联机房主每秒检查一次；客户端不执行清理或下单。
-- 沿用游戏的两档负面质量判定。正常成品、脏盘/脏杯、已上桌、正在食用、正在拿取或附着于其他角色的物品不处理；未满杯、正在灌装或倒入配料的饮料，以及标记为玩家服务的桌子也不处理。
-- 补单前核对原顾客、桌子、顾客组和订单，并统计已有成品及制作订单，同菜或同饮料多人也不会因此重复补单。饮料使用订单编号定位原顾客。
-- 剩余耐心必须大于：对应厨房/吧台积压耗时 + 重做耗时 + 30 秒调度和送餐余量。每份前序订单按完整制作时间另加 5 秒估算，不假设员工并行或加速加成。餐厅关闭耐心时，仅略过时间限制。
-- 饮料按目标楼层设备的实际灌装/交互时长、配方制作时间及额外 10 秒取杯/取料余量估算；耗时未知则不补单。该楼层须有正在工作且允许对应制作任务的调酒师；存在未完成的玩家认领饮料订单时延后补单，不改变认领状态。
-- 顾客离开、订单改变、耐心不足或时间无法确认时，只清理、不补单。不重置、不延长耐心。
-- 补单走原生厨房或吧台流程，继续消耗原料、检查制作要求。被拒绝的请求最多尝试三次，间隔至少 10 秒；待补单记录 120 秒后结束，每次重试重新检查顾客和耐心。
+以房主身份进入餐厅后自动清理，无需快捷键或设置，成品鸡尾酒也包括在内。
 
-当前清理会移除整份低劣成品并释放取餐位置，不新增走向垃圾桶的动画，不向水槽返还脏盘或脏杯、不退原料，也不增加垃圾桶容量。搬运中的餐车、已上桌成品、仍在饮料设备上的杯子及烘焙托盘不在本版清理范围内。送达仍依赖员工、原料、寻路和制作容量；时间为估算，不能保证之后不会出现延迟。
+- 重做仍需正常消耗原料，并满足设备和员工条件。不会重置耐心；厨房或吧台积压过多时可能来不及补单。
+- 顾客已离开，或无法确认有足够时间重做时，只清理低劣成品，不补单。
+- 不处理正常成品、脏餐具、已上桌或搬运中的餐品、未完成或正在灌装的饮料，以及玩家负责的餐桌。本版也不处理烘焙托盘。
+- 玩家已认领且尚未做完的饮料会延后自动重做；目标楼层须有正在工作并允许制作该饮料的调酒师。
+- 清理会连同餐盘或杯子一起移除，不返还脏餐具、不退原料，也不增加垃圾桶内的垃圾；员工和送餐延迟仍可能导致来不及上桌。
 
-### 安装与卸载
+### 使用要求
 
-参考基线：Windows / Steam Build **25393699**、游戏 **1.0.0.44eb**、Unreal **5.4**；依赖 **UE4SS experimental**，本机核对 API 为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1。
+Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
 
-1. 自行关闭游戏，安装所需加载器。
-2. 从对应 CI artifact 取得 `FreshToServe-0.1.2-dev.zip` 及 `.sha256`，或在仓库根目录运行 `python fresh-to-serve-mod/build.py`。
-3. 把包内 `FreshToServe/` 解压到加载器的 `Mods/`，确认有 `enabled.txt` 和 `Scripts/main.lua`。
-4. 启动游戏，以房主身份进入餐厅即可；无需快捷键或配置。
+### 下载
 
-如果已安装此前的 Fresh Service 包，请关闭游戏，移除旧的 `Mods/FreshService/` 文件夹，再启用 `FreshToServe/`，避免同时运行两份自动化。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
+2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`FreshToServe-0.1.2-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
 
-停用时关闭游戏，移除 `FreshToServe/enabled.txt` 或 Mod 文件夹。卸载不会撤销已丢弃成品和已接受订单。构建不安装、不改存档、不启停游戏，包内不含加载器或游戏内容。
+请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 
-### 脚本热重载
+### 安装
 
-从旧版首次升级到 0.1.2-dev 时，请关闭游戏后安装；旧代码无法移交已有的待补单记录。本版已运行后，完整复制本次更新的所有脚本，再使用 UE4SS 的手动 **Ctrl+R** 重载。`UE4SS-settings.ini` 的 `[General]` 使用 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`。Ctrl+R 会重载所有已启用的 Lua Mod，其他 Mod 也需要支持重载。另见[统一热重载说明](../docs/hot-reload.md#中文)。
+1. 关闭游戏。在 Steam 中右键 **Parisian Bistro Simulator** → **管理** → **浏览本地文件**，打开的就是下方所说的 `<game>` 游戏目录。
+2. 按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 experimental 的基础包，保留该发行包自己的目录结构。
+3. 将解压出的 **`FreshToServe`** 文件夹连同全部内容复制到 `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`。若加载器实际装在其他位置，请使用它已有的 `Mods` 文件夹。
+4. 确认存在以下文件，不要多套一层 `FreshToServe/FreshToServe` 文件夹：
 
-同一会话中的待补食物/饮料订单会跨脚本重载保留，连同最初生成时间、已尝试次数和下一次重试时间；重载不增加尝试机会或顾客耐心。每次补单仍重新检查当前顾客和队列。结果不明的引擎操作触发的安全停止也会跨重载保留；进入不同游戏会话后，才清除旧凭据及停止状态。记录仅保存在运行中的加载器内存里，不写入存档，也不在退出游戏后保留。
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FreshToServe/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FreshToServe/enabled.txt`
 
-本 Mod 不新增玩家界面文字，菜名及订单沿用游戏语言。技术日志前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）、`ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达。引擎异常后，本会话中持续停止自动化，脚本重载也不会解除，以避免反复发送结果不明的请求。反馈请附相关日志、游戏及加载器版本、房主或客户端身份。
+5. 启动游戏，以单人玩家或联机房主身份进入餐厅。
 
-参见[开发及验收清单](DEVELOPMENT.md#中文)与[版本变化](CHANGELOG.md)。
+包内的 `enabled.txt` 会启用 Mod。请完整保留 Mod 文件夹，不要替换加载器的整个 `mods.txt` 或其他 Mod。
+
+若安装过旧名 **Fresh Service** 的开发包，请先关闭游戏并删除旧的 `Mods/FreshService` 文件夹，避免同时运行两份。
+
+### 更新与卸载
+
+**更新：** 关闭游戏，下载并解压新版 Mod ZIP，把完整的 `FreshToServe` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件，再启动游戏。
+
+**卸载：** 关闭游戏，只删除 `Mods/FreshToServe`，保留 UE4SS 和其他 Mod。卸载不会恢复已丢弃的物品，也不会取消游戏已经接受的补单。
+
+可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
+
+### 语言与帮助
+
+不新增游戏内文字，菜名、饮料名和订单提示沿用游戏当前语言，无需语言包。技术日志保持英文。
+
+游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+
+没有重做时，先检查顾客耐心、库存、员工及设备。清理成功不代表一定补单或送达。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志。
+
+用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+
+[版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

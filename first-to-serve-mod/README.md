@@ -1,69 +1,131 @@
-# First to Serve · 先做好先端
+# First to Serve / 先做好先端
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-Version: **0.1.7-dev**. Aim at the kitchen pass's native pickup area or the drink output surface and hold the interaction key to collect the earliest-created ready items in order. You do not need to aim at a particular plate or cup; moving the crosshair across the same output area keeps the hold active. You can also start by aiming directly at a ready dish or finished drink. The gesture remembers the source after each item is taken. Empty output areas, areas with only unfinished drinks and unrelated surfaces do not start pickup.
+Hold the interaction key at a kitchen pass or drink output area to collect the earliest-made ready items with a tray or food trolley.
 
-Equip your tray or take hold of a food trolley first. A native hold-key hint appears directly below the normal click-to-pick-up hint when the targeted output area or item has an eligible candidate and a suitable tray or trolley slot is available. It appears only in the native central pickup panel, with no extra sidebar hint, and disappears when the pickup hint or its panel is hidden. Hot reload removes leftover Mod hints, including old sidebar hints, before showing a single central row. Its icon follows the game's keyboard/controller mappings and its wording follows the game's language. The default mouse binding is the left button; gamepad uses the game's hold-interaction binding. Tap keeps the game's normal behavior, including native pass pickup and putting drinks back on the drink output area. While carrying a tray or holding a food trolley and aiming at the kitchen pickup area, drink output surface or a supported ready item, holding is used for oldest-first pickup instead of the interaction wheel. Other furniture keeps its normal interaction.
+**Version: 0.1.7-dev.** Single player, multiplayer host or guest. Install it on each player's computer that wants to use the hold action; other players do not need it.
 
-Items are ordered by their native creation timestamps, not order placement time, recipe duration or when the Mod first saw them. Only ready, clean, unconsumed items in the current source are considered. Dirty plates, unfinished drinks, carried items, other floors and items outside pickup reach are excluded. No items are spawned, teleported or removed directly.
+### How to use
 
-Release the key, turn away, walk away, switch areas/tools, or open a menu to stop. After taking the aimed item, the crosshair may stay on its empty spot while the remaining items are collected. The Mod stops when the suitable tray or trolley slots are full. Requests are at least 0.05 seconds apart, with progress checked every 25 ms during the hold. Each request still waits for the previous pickup to be confirmed; actual speed depends on the game and network response. If a request remains unconfirmed for two seconds, release and hold again to retry. Staff and other players can take items in between; the game retains final authority over each request.
+1. Equip a tray or take hold of a food trolley.
+2. Aim at the kitchen pickup area, drink output surface, a ready dish or a finished drink.
+3. Hold the interaction key shown by the game. The default mouse control is the left button; keyboard/controller remapping follows the game.
+4. Release the key, turn away, move away, change tools or open a menu to stop. Pickup also stops when the suitable slots are full.
 
-Food trolleys use their own slots and pickup acknowledgements. Ready items require an empty compatible slot; gaps in a dirty-plate stack do not count. Drink-only slots stay reserved for drinks, and tower burgers require a top slot. Parked food trolleys and storage carts do not activate pickup. Releasing or switching the trolley cancels the current hold.
+You can move the crosshair within the same output area or leave it on an item's empty spot after pickup. Tap keeps the game's normal action. In a supported pickup area with a tray or trolley, holding takes items instead of opening the interaction wheel.
 
-### Script hot reload
+Only ready, clean items in reach at that source are collected. Dirty plates, unfinished drinks, other floors and carried items are excluded. Drink-only slots remain reserved for drinks; tower burgers need a top slot. Parked trolleys and storage carts do not activate pickup.
 
-Enable `EnableHotReloadSystem = 1` and `HotReloadKey = R` in the `[General]` section of `UE4SS-settings.ini`, then restart the game once. Keep `EnableAutoReloadingLuaMods = 0` so copying several files cannot load a partial update. With the game focused, press **Ctrl+R** after replacing all Lua scripts. A reload cancels the current pickup; release the interaction key before starting a new hold. Hooks and timers are replaced by UE4SS, and leftover hints are cleaned on the game thread. Install this version with the game closed before the first reload; older versions cannot hand over all state.
+### Requirements
 
-### Installation
+Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
-Requires Windows Parisian Bistro Simulator and **UE4SS experimental**. Current pickup-area reference: Steam Build **25532071**, ProjectVersion **1.0.1.44eb**, UE **5.4**, UE4SS API **v3.0.1-1140-gf58e8f84**. Older stable UE4SS 3.0.1 is not the target.
+### Download
 
-1. With the game closed, install the required loader separately.
-2. Extract `FirstToServe-0.1.7-dev.zip` into the loader's `Mods` directory. It should contain `Mods/FirstToServe/Scripts/main.lua` and `Mods/FirstToServe/enabled.txt`.
-3. Start the game yourself, enter the restaurant, equip the tray or take hold of a food trolley and aim at the kitchen pickup area, drink output surface, a ready dish or a finished drink, then hold the mapped key. The hold hint requires a visible native click row; if that row is absent on the drink surface, the hold still works.
+1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
+2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`FirstToServe-0.1.7-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
 
-Previously named **Oldest First**. If you installed that development package, disable its `Mods/OldestFirst/enabled.txt` before enabling `FirstToServe` so only one copy runs.
+Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
-Disable by removing `FirstToServe/enabled.txt` while the game is closed. The package includes only original Mod scripts and documentation, with no loader or game assets. Building does not install anything or change saves.
+### Install
 
-The implementation handles the local player in solo, host and guest sessions and uses ordinary server-validated interaction requests. **The user reported completion of in-game testing on 2026-09-26.** See the [validation record](../releases/validation.md#english) for its scope. Guest synchronization, hint rendering, input mappings and Mod combinations were not reported separately; retain the [development checklist](DEVELOPMENT.md#english) for regressions. Other Mods are optional.
+1. Close the game. In Steam, right-click **Parisian Bistro Simulator** → **Manage** → **Browse local files**. This opens the `<game>` folder used below.
+2. Install the basic experimental UE4SS package using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping that package's folder structure.
+3. Copy the extracted **`FirstToServe`** folder, with all its contents, into `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`. If your loader uses another location, use its existing `Mods` folder instead.
+4. Confirm these files exist, with no extra `FirstToServe/FirstToServe` folder:
 
-The hint supports English, French, Simplified Chinese, Traditional Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Turkish, Polish, Portuguese and Brazilian Portuguese. Diagnostic logs use `[FirstToServe]`. Report the Mod/loader/game versions, language, keyboard or gamepad, host/guest role, surface type and relevant log lines. Keep extracted files and full saves out of the repository.
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FirstToServe/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FirstToServe/enabled.txt`
+
+5. Start the game, enter a restaurant, equip a tray or take hold of a food trolley, then try holding at an output area.
+
+The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; do not replace the loader's `mods.txt` or other Mods.
+
+If you used the earlier **Oldest First** package, remove its old `Mods/OldestFirst` folder with the game closed before installing this Mod. Do not run both copies.
+
+### Update or remove
+
+**Update:** close the game, download and extract the new Mod ZIP, then copy its complete `FirstToServe` folder into the same `Mods` folder and replace matching files. Start the game again.
+
+**Remove:** close the game and delete only `Mods/FirstToServe`. Leave UE4SS and other Mods in place. Removing the Mod restores the normal hold interaction. Items already picked up stay where the game placed them.
+
+Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
+
+### Languages and help
+
+The hold hint follows the game language and its keyboard/controller icons follow your current controls. No language setting or language pack is needed. Technical logs remain English.
+
+Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+
+The hold hint appears below the normal pickup hint when an eligible item and a suitable free slot are available. A drink surface without the game's normal pickup hint can still accept the hold action. If pickup stops while there is room, release and hold again; slow multiplayer responses can also stop it. Include relevant `[FirstToServe]` lines from `UE4SS.log`, your controls and host/guest role with a problem report.
+
+In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+
+[Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
-**First to Serve（先做好先端）**：先制作好的餐品，优先拿取出餐。
+持托盘或推餐车，对准厨房出餐口或饮料出品台长按交互键，优先连续拿取最早做好的成品。
 
-版本：**0.1.7-dev**。对准厨房出餐口的原生拿取区域或饮料出品台面，长按交互键，即可按制作时间先后连续拿取成品。无需固定瞄准某一盘菜品或某一杯饮料，准星在同一出品区域内移动时仍会继续。也可以沿用直接瞄准成品菜品或饮料的方式启动；每份拿走后会记住所选来源。空出品区域、仅有未灌满饮料的台面和无关台面不启动取餐。
+**版本：0.1.7-dev。** 单人、联机房主和客机均可使用。想使用连续拿取的玩家在自己的电脑安装，其他玩家无需安装。
 
-使用前先装备托盘，或握住餐车进入推行状态。对准的出品区域或餐品有可取成品，且托盘或餐车有对应空位时，在原生“点击拿取”提示正下方显示长按键位提示；仅显示在原生中央取餐提示区，不在右侧栏额外显示；原生拿取提示或其容器隐藏时，长按提示也随之清除。热重载后会清理遗留的 Mod 提示，包括旧版侧边栏提示，仅保留一份中央提示。按键图标跟随游戏的键鼠/手柄映射和改键，说明文字跟随游戏语言。鼠标默认是左键；手柄使用游戏的长按交互键。短按保留游戏原本的交互，包括出餐口的原生拿取和向饮料出品台放回饮料。持托盘或推餐车对准厨房拿取区域、饮料出品台面或支持的成品时，长按用于按制作时间取餐；其他家具保留原本的交互。
+### 怎么使用
 
-排序使用餐品原生创建时间，不按顾客下单时间、配方制作耗时或 Mod 首次看到餐品的时间排序。只考虑当前出餐区域中已完成、干净且尚未食用的成品；排除脏盘、未灌满的饮料、已被拿走的餐品、其他楼层及拿取范围外的物品。不直接生成、传送或删除餐品。
+1. 装备托盘，或握住餐车进入推行状态。
+2. 对准厨房拿取区域、饮料出品台面、可取菜品或成品饮料。
+3. 长按游戏显示的交互键。鼠标默认为左键；键鼠和手柄跟随游戏改键。
+4. 松键、转开视线、走离、换工具或打开菜单即可停止；合适的空位装满也会停止。
 
-松键、明显转开视线、走离原位置、切换区域或工具、打开菜单后停止。瞄准的餐品被拿走后，准星可以保持在原来的空位上，继续拿取同一区域剩余成品；托盘或餐车对应位置装满也会停止。两次请求最短间隔降为 0.05 秒，长按期间每 25 毫秒检查进展。仍需确认上一件已被拿走，实际速度取决于游戏和网络响应。若两秒内仍未确认进展，本次长按停止，松开后重新长按可重试。员工或其他玩家可以同时拿取，最终是否允许交互仍由游戏判断。
+准星可以在同一出品区域内移动，拿走一份后也可留在原来的空位上。短按保留原版操作；持托盘或推餐车对准支持的取餐区域时，长按用于连续拿取，替代交互轮盘。
 
-餐车使用自身槽位和装车状态确认进展。成品需要完整空出的合适位置，脏盘堆叠中的空隙不算成品空位；饮料专用位仅收饮料，高层汉堡需要顶层位置。停放的餐车及搬货推车不触发取餐；放开或更换餐车会取消当前长按。
+只拿取当前来源中、范围内的干净成品，不处理脏盘、未完成饮料、其他楼层或已被搬走的物品。饮料专用位仅收饮料，高层汉堡需要顶层空位；停放的餐车和搬货推车不会启动功能。
 
-### 脚本热重载
+### 使用要求
 
-在 `UE4SS-settings.ini` 的 `[General]` 中设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`，然后重启游戏一次。保持 `EnableAutoReloadingLuaMods = 0`，避免多文件覆盖到一半就自动加载。更新完所有 Lua 脚本后，游戏窗口中按 **Ctrl+R**。重载会取消当前取餐，松开交互键后才能重新长按。UE4SS 替换 Hook 与计时器，遗留提示由游戏线程清理。首次升级请关闭游戏安装本版，旧版无法交接完整状态。
+Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
+
+### 下载
+
+1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
+2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`FirstToServe-0.1.7-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+
+请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 
 ### 安装
 
-需要 Windows 版 Parisian Bistro Simulator 和 **UE4SS experimental**。当前出餐口参考：Steam Build **25532071**、ProjectVersion **1.0.1.44eb**、UE **5.4**，UE4SS API **v3.0.1-1140-gf58e8f84**。旧稳定版 UE4SS 3.0.1 不是目标加载器。
+1. 关闭游戏。在 Steam 中右键 **Parisian Bistro Simulator** → **管理** → **浏览本地文件**，打开的就是下方所说的 `<game>` 游戏目录。
+2. 按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 experimental 的基础包，保留该发行包自己的目录结构。
+3. 将解压出的 **`FirstToServe`** 文件夹连同全部内容复制到 `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`。若加载器实际装在其他位置，请使用它已有的 `Mods` 文件夹。
+4. 确认存在以下文件，不要多套一层 `FirstToServe/FirstToServe` 文件夹：
 
-1. 关闭游戏后，单独安装所需加载器。
-2. 将 `FirstToServe-0.1.7-dev.zip` 解压到加载器的 `Mods` 目录。应出现 `Mods/FirstToServe/Scripts/main.lua` 和 `Mods/FirstToServe/enabled.txt`。
-3. 自行启动游戏进入餐厅，装备托盘或握住餐车，对准厨房出餐口的拿取区域、饮料出品台面或可取成品，按住对应键位。长按提示需要原生点击提示行可见；饮料台没有该行时，仍可直接长按。
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FirstToServe/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/FirstToServe/enabled.txt`
 
-本 Mod 原名 **Oldest First**。若已安装旧开发包，请先禁用旧目录中的 `Mods/OldestFirst/enabled.txt`，再启用 `FirstToServe`，避免两个副本同时运行。
+5. 启动游戏进入餐厅，装备托盘或握住餐车，对准出品区域尝试长按。
 
-关闭游戏后移除 `FirstToServe/enabled.txt` 可禁用。安装包仅含原创 Mod 脚本和说明，不包含加载器及游戏资产。构建不会自动安装或修改存档。
+包内的 `enabled.txt` 会启用 Mod。请完整保留 Mod 文件夹，不要替换加载器的整个 `mods.txt` 或其他 Mod。
 
-实现面向单人、房主和联机客机的本地玩家，通过原生服务器交互请求拿取。**用户于 2026-09-26 反馈实机测试完成。** 确认范围见[验收记录](../releases/validation.md#中文)。客机同步、提示渲染、键位和 Mod 组合未单独反馈，继续保留[开发清单](DEVELOPMENT.md#中文)供回归使用。无需安装其他 Mod。
+若安装过旧名 **Oldest First** 的开发包，请先关闭游戏并删除旧的 `Mods/OldestFirst` 文件夹，避免同时运行两份。
 
-提示适配英语、法语、简体中文、繁体中文、意大利语、西班牙语、德语、俄语、日语、韩语、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。日志前缀为 `[FirstToServe]`。反馈时请提供 Mod、加载器及游戏版本、语言、键鼠或手柄、房主或客机身份、出餐区域类型和相关日志片段。请勿提交提取资料或完整存档。
+### 更新与卸载
+
+**更新：** 关闭游戏，下载并解压新版 Mod ZIP，把完整的 `FirstToServe` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件，再启动游戏。
+
+**卸载：** 关闭游戏，只删除 `Mods/FirstToServe`，保留 UE4SS 和其他 Mod。卸载后恢复原版长按交互，已拿取的餐品保持游戏中的现有位置。
+
+可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
+
+### 语言与帮助
+
+长按提示跟随游戏语言，键鼠或手柄图标跟随当前操作设置，无需额外语言设置或语言包。技术日志保持英文。
+
+游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+
+有可取成品及合适空位时，长按提示出现在原版拿取提示下方。饮料台面没有原版拿取提示时仍可长按。仍有空位却停止时，请松键后重新长按；联机响应慢也可能让本次拿取停止。反馈时附上 `UE4SS.log` 中相关的 `[FirstToServe]` 日志、操作设备及房主或客机身份。
+
+用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+
+[版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

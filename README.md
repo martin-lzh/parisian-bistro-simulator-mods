@@ -4,94 +4,76 @@
 
 ## English
 
-Unofficial Mods for running your Parisian Bistro Simulator restaurant. Choose the features you want; each Mod has its own installation guide, source and version history.
+Unofficial Mods for Parisian Bistro Simulator on Windows. Choose the features you want and follow their installation guides.
 
 ### Choose a Mod
 
-| Mod | What it does | Current source | User-reported in-game testing |
-| --- | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | 0.1.2-dev | Completed 2026-09-26 |
-| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards at the counter and completes the register interaction | 0.1.4-dev | Completed 2026-09-26 |
-| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks, requesting replacements while the original customer still has enough patience | 0.1.2-dev | Completed 2026-09-26 |
-| [First to Serve](first-to-serve-mod/README.md#english) | Hold at the kitchen or drink output area to take the oldest ready items first with a tray or food trolley | 0.1.7-dev | Completed 2026-09-26 |
-| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.4-dev | Completed 2026-09-26 |
-| [Auto Menu](auto-menu-mod/README.md#english) | Maximize the native estimated selection rate for lunch or dinner | 0.5.0-dev | Completed 2026-09-26 |
-| [Scan to Order](scan-to-order-mod/README.md#english) | Automatically place customer food and drink orders on the host; wait for missing stock and resume after replenishment | 0.1.1-dev | Completed 2026-09-26 |
+| Mod | What it does | Version |
+| --- | --- | --- |
+| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | 0.1.2-dev |
+| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards and completes checkout automatically | 0.1.4-dev |
+| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks and requests replacements when the customer can still wait | 0.1.2-dev |
+| [First to Serve](first-to-serve-mod/README.md#english) | Hold at a kitchen pass or drink output area to collect the oldest ready items with a tray or food trolley | 0.1.7-dev |
+| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | 0.1.4-dev |
+| [Auto Menu](auto-menu-mod/README.md#english) | Choose a lunch or dinner menu with the highest estimated selection rate | 0.5.0-dev |
+| [Scan to Order](scan-to-order-mod/README.md#english) | Take customer orders automatically, waiting for missing stock and continuing after replenishment | 0.1.1-dev |
 
-Smart Delivery 0.1.2-dev adds native code discovery checked against Steam Build 25532071, without a mandatory executable version or hash allowlist. Version 0.1.3-dev adds white dropdown text.
+These are development builds. Check each guide for multiplayer requirements and gameplay limits. [In-game test reports](releases/validation.md#english) record the versions and scenarios reported as tested; later fixes require further testing.
 
-The current development packages add support for the game's 14 languages. Bartender's Note also has a new two-line layout. On 2026-09-26, the user reported that in-game testing of all seven Mods was complete. The [validation record](releases/validation.md#english) associates that report with the current source versions and records its scope; individual regression scenarios were not reported separately.
+### Download and install
 
-### Getting started
+1. Sign in to a GitHub account with access to this repository. Open [Mod downloads](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev), choose a successful **dev** run, and download **mod-packages** under **Artifacts**. Downloads are retained for 14 days. If no download is available, see [help](SUPPORT.md#english).
+2. Extract the downloaded archive, then extract the ZIP for the Mod you want. GitHub's **Source code** archive is not an installable Mod. Keep the matching `.sha256` file if you want to verify the download.
+3. Close the game. In Steam, right-click **Parisian Bistro Simulator → Manage → Browse local files**. Install **UE4SS experimental** using its [installation guide](https://docs.ue4ss.com/dev/installation-guide.html). The checked loader version is `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not supported. Use the loader package's own folder layout.
+4. Put the extracted Mod folder inside the loader's existing `Mods` folder. The usual location is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods` inside the game folder. For example, Bartender's Note should contain `Mods/BartendersNote/Scripts/main.lua` and `Mods/BartendersNote/enabled.txt`, with no extra nested `BartendersNote` folder.
+5. Start the game and follow the Mod's usage steps. Install only the Mods you want. The loader is not included; no compilation is needed to use a Mod ZIP.
 
-The development baseline is **Parisian Bistro Simulator on Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4**. These Mods require **UE4SS experimental**. The locally checked API is `v3.0.1-1140-gf58e8f84`; the old stable UE4SS 3.0.1 is not the target loader.
-
-1. Open the Mod's guide above and check its requirements and multiplayer notes.
-2. Obtain the Mod ZIP and its checksum from the matching [CI run](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml), or build it from source. GitHub's **Source code** archive is not an installable Mod package.
-3. Close the game, install the required loader, and place the Mod folder in the loader's `Mods` directory as its guide describes.
-4. Start the game and enter your restaurant. Bartender's Note appears after you claim drink orders; Auto Checkout runs automatically in a host session.
-
-Loaders and game files are not included. Builds only create packages; they do not install Mods, change saves, or start or close the game. This repository remains private. Numbered versions and GitHub Release publication are separate; see [release management](releases/README.md#english) for publication conditions.
-
-The current development versions support **Ctrl+R** Lua hot reload after an initial closed-game upgrade and loader configuration. See the [hot reload guide](docs/hot-reload.md#english); DLL updates still require restarting the game.
+The repository is currently private, so downloads require access. Updates and removal should be done with the game closed; each Mod's guide names the folder to replace or remove. Keep the loader and other Mods in place.
 
 ### Languages and help
 
-Localized Mod wording follows the game's language without a separate language pack. The supported languages are English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+Mod text follows the game's language. English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese are supported. No extra language pack is needed. Mods without their own interface keep the game's original text.
 
-Existing game text stays native: drink names come from the game's translation lookup, and checkout keeps the game's payment prompts, notifications and transaction behavior. Only Mod-specific wording needs its own translations. Auto Checkout adds translated explanations to its log while preserving diagnostic identifiers. See the [language guide](docs/localization.md#english).
+For installation problems or a feature that is not working, start with [help and feedback](SUPPORT.md#english). Include the Mod version, game and loader versions, language, and whether you are the host or a guest.
 
-For a problem report, include the Mod version, full UE4SS version, game build, selected language, host/client role and the relevant log excerpt. Bartender's Note logs use `[Bartender's Note]`; Auto Checkout logs use `[AutoCheckout]`. Review logs before sharing them, and keep game files, extracted data and full saves out of the repository.
+Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT License](LICENSE). Each Mod ZIP includes its license. Game files and the loader are distributed separately under their own terms. This project is not affiliated with the game's creators.
 
-### Development
-
-Start with the [documentation index](docs/README.md#english) or [development guide](DEVELOPMENT.md#english). Each `<feature>-mod/` is independent. The structure follows Old Market Simulator Mods; this game's Unreal/UE4SS implementation uses its own verified interfaces.
-
-This project is not affiliated with the game's creators. Game assets and reverse-engineered material stay in the ignored local `work/` directory and are never distributed with the Mods.
+[Contributing](CONTRIBUTING.md#english) · [Development](DEVELOPMENT.md#english) · [Security](SECURITY.md#english) · [Community guidelines](CODE_OF_CONDUCT.md#english)
 
 ## 中文
 
-为法式小馆儿模拟器提供便利的非官方 Mod。可以按需选择，也可以同时使用；每个 Mod 都有独立的安装说明、源码和版本记录。
+为 Windows 版法式小馆儿模拟器提供便利的非官方 Mod。按需选择功能，再按对应说明安装即可。
 
 ### 选择 Mod
 
-| Mod | 功能 | 当前源码 | 用户实机测试反馈 |
-| --- | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.2-dev | 2026-09-26 已完成 |
-| [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收柜台顾客的现金或银行卡，并完成收银机交互 | 0.1.4-dev | 2026-09-26 已完成 |
-| [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；原顾客仍在等待且耐心足够时，请求重做并重新上桌 | 0.1.2-dev | 2026-09-26 已完成 |
-| [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早制作的成品 | 0.1.7-dev | 2026-09-26 已完成 |
-| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev | 2026-09-26 已完成 |
-| [Auto Menu（每日菜单组合）](auto-menu-mod/README.md#中文) | 沿用原生预测计算，最大化午餐或晚餐菜单预计选择率 | 0.5.0-dev | 2026-09-26 已完成 |
-| [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 仅房主或单人自动提交顾客食物和饮料订单，缺货时等待、补货后继续，无需服务员／玩家点餐 | 0.1.1-dev | 2026-09-26 已完成 |
+| Mod | 功能 | 版本 |
+| --- | --- | --- |
+| [Bartender's Note](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | 0.1.2-dev |
+| [Auto Checkout](auto-checkout-mod/README.md#中文) | 自动接收现金或银行卡并完成结账 | 0.1.4-dev |
+| [Fresh to Serve（焕新上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；顾客仍有足够耐心时请求重做 | 0.1.2-dev |
+| [First to Serve（先做好先端）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早做好的成品 | 0.1.7-dev |
+| [Smart Delivery（智选配送）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | 0.1.4-dev |
+| [Auto Menu（每日菜单组合）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | 0.5.0-dev |
+| [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | 0.1.1-dev |
 
-Smart Delivery 0.1.2-dev 已在 Steam Build 25532071 上核对原生代码定位结果，不再使用强制版本或 EXE 哈希白名单；0.1.3-dev 将下拉框文字改为白色。
+当前提供开发版。联机使用范围及玩法限制见各 Mod 说明。[实机测试记录](releases/validation.md#中文)列出已反馈的版本和测试范围；之后的修复仍需进一步测试。
 
-当前开发包新增游戏 14 种语言的适配；Bartender's Note 还包含新的两行布局。2026-09-26，用户反馈全部 7 个 Mod 实机测试完毕。[验收记录](releases/validation.md#中文)将本次反馈关联当前源码版本并记录确认范围；各项回归场景未单独反馈。
+### 下载与安装
 
-### 开始使用
+1. 登录有权访问本仓库的 GitHub 账号，打开 [Mod 下载](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择一次成功的 **dev** 运行，在 **Artifacts** 区域下载 **mod-packages**。下载保留 14 天；没有可用下载时见[帮助](SUPPORT.md#中文)。
+2. 解压下载的压缩包，再解压其中需要的 Mod ZIP。GitHub 的 **Source code** 是源码，不能当作 Mod 安装。需要核对下载文件时，可保留配套的 `.sha256` 校验文件。
+3. 关闭游戏。在 Steam 中右键点击**法式小馆儿模拟器 → 管理 → 浏览本地文件**。按[官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；请保留加载器压缩包自身的目录结构。
+4. 将解压出的 Mod 文件夹整体放入加载器已有的 `Mods` 文件夹。常见位置是游戏目录中的 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods`。例如 Bartender's Note 安装后应有 `Mods/BartendersNote/Scripts/main.lua` 和 `Mods/BartendersNote/enabled.txt`，不要多套一层同名文件夹。
+5. 启动游戏，按对应 Mod 的操作说明使用。可以只安装需要的 Mod；安装包不含加载器，使用 Mod ZIP 无需自行编译。
 
-开发参考基线为 **Windows 版 Parisian Bistro Simulator，Steam Build 25393699 / ProjectVersion 1.0.0.44eb，Unreal Engine 5.4**。这些 Mod 均需要 **UE4SS experimental**。本机核对的 API 为 `v3.0.1-1140-gf58e8f84`；旧稳定版 UE4SS 3.0.1 不是目标加载器。
+仓库目前为私密，下载需要访问权限。更新和卸载均应先关闭游戏；各 Mod 说明列出应替换或移除的文件夹，请保留加载器及其他 Mod。
 
-1. 打开上方 Mod 说明，查看依赖和联机使用范围。
-2. 从对应的 [CI 运行](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml)取得 Mod ZIP 和校验文件，或自行构建。GitHub 的 **Source code** 压缩包不是可安装 Mod。
-3. 关闭游戏，安装所需加载器，再按各 Mod 说明把文件夹放入加载器的 `Mods` 目录。
-4. 启动游戏并进入餐厅。认领饮料订单后可看到 Bartender's Note；Auto Checkout 在房主会话自动运行。
+### 语言与帮助
 
-安装包不含加载器或游戏文件。构建只生成安装包，不自动安装、不修改存档，也不启动或关闭游戏。仓库保持私密。编号版本与 GitHub Release 发布是不同步骤，发布条件见[版本管理](releases/README.md#中文)。
+Mod 文案跟随游戏语言，支持英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语及巴西葡萄牙语，无需额外语言包。不新增界面的 Mod 继续使用游戏原有文案。
 
-当前开发版支持 **Ctrl+R** 热重载 Lua；首次需关闭游戏升级 Mod 并配置加载器。操作见[热重载说明](docs/hot-reload.md#中文)，DLL 更新仍须重启游戏。
+安装遇到问题或功能没有生效时，先查看[帮助与反馈](SUPPORT.md#中文)。反馈时请提供 Mod、游戏及加载器版本、所选语言，以及自己是房主还是客机。
 
-### 语言与反馈
+原创 Mod 代码及文档由 **Zhaohan Liu** 编写，使用 [MIT 许可证](LICENSE)，每份 Mod ZIP 均附许可全文。游戏文件及加载器另行分发，遵循各自条款。本项目与游戏制作方无隶属关系。
 
-Mod 本地化文案跟随游戏语言，无需额外语言包。适配英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
-
-游戏已有文案优先沿用原生值：饮料名通过游戏翻译接口读取，自动结账保留原生付款提示、通知和交易行为；仅 Mod 新增文案自行翻译。Auto Checkout 在日志中增加本地化说明，并保留诊断标识。详见[语言说明](docs/localization.md#中文)。
-
-反馈问题时请提供 Mod 版本、UE4SS 完整版本号、游戏构建、所选语言、房主或客户端身份及相关日志片段。Bartender's Note 使用 `[Bartender's Note]` 日志前缀，Auto Checkout 使用 `[AutoCheckout]`。分享前检查日志内容，不要将游戏文件、提取数据或完整存档提交到仓库。
-
-### 参与开发
-
-从[文档索引](docs/README.md#中文)或[开发说明](DEVELOPMENT.md#中文)开始。每个 `<feature>-mod/` 独立维护；目录组织参考菜市场模拟器项目，实际实现使用本游戏经核对的 Unreal / UE4SS 接口。
-
-本项目与游戏制作方无隶属关系。游戏资产及反编译资料仅保存在本地被忽略的 `work/` 中，不随 Mod 分发。
+[参与贡献](CONTRIBUTING.md#中文) · [开发说明](DEVELOPMENT.md#中文) · [安全反馈](SECURITY.md#中文) · [社区规范](CODE_OF_CONDUCT.md#中文)

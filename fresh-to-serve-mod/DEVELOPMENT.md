@@ -40,7 +40,7 @@ CI validates the independent package allowlist, source bytes and SHA-256. Synthe
 
 ### In-game regression checklist
 
-The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
+The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 1. Let a cooked meal, dispenser drink, bottled drink and finished cocktail become poor. Confirm removal and a freed pickup position, exactly one new order, normal ingredient consumption, and delivery to its original customer.
 2. Repeat on all floors/elevators and full food/drink output areas. Check queue/slot cleanup, reuse after several rounds, and the deliberate loss of the discarded plate/glass.
@@ -51,6 +51,18 @@ The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see
 7. After installing 0.1.2-dev with the game closed, reload with Ctrl+R after a spoiled item is discarded but its remake is waiting, after a rejected order, and after acceptance. Confirm one eventual replacement, unchanged cooldown/attempt/expiration limits, live patience checks and no duplicate loop. Reload during pause or temporarily missing possession. Verify an uncertain-operation stop persists across reload, and a different session clears old records before resuming.
 
 Builds never install, change saves or start/stop the game. A numbered release requires explicit authorization. Offline checks are not in-game acceptance.
+
+### Runtime compatibility and diagnostics
+
+The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. Authoritative cleanup polls once per second. Rejected replacement requests have at most three attempts, separated by at least 10 seconds; pending tickets expire after 120 seconds. Customer and patience checks run again before each request.
+
+No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED` and `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not completed delivery. Include game/loader versions and host/client role when interpreting a report.
+
+### Manual script reload
+
+The first upgrade from pre-0.1.2 code requires a closed-game installation. In `UE4SS-settings.ini`, configure `[General]` with `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english). Restart once after configuring. Copy every updated script before pressing **Ctrl+R**, which reloads all enabled Lua Mods.
+
+The checkpoint implementation above defines preserved pending work and safety stops; verify those invariants with the reload regression scenarios.
 
 ## 中文
 
@@ -78,7 +90,7 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 ### 游戏内回归清单
 
-用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.2-dev，见[验收记录](../releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.2-dev，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 1. 熟食、饮料机饮料、瓶装饮料及成品鸡尾酒变低劣后，确认旧成品移除并释放位置、恰好补一份、正常扣原料、送给原顾客。
 2. 各楼层、升降机及食物/饮料满出品位测试，检查队列和位置清理、多轮复用，并确认丢弃会损失餐盘/杯子的行为。
@@ -89,3 +101,15 @@ Builds never install, change saves or start/stop the game. A numbered release re
 7. 关闭游戏安装 0.1.2-dev 后，在低劣成品已清理但补单仍等待、请求被拒绝以及补单已接受时分别 Ctrl+R 重载；确认最终恰好一份替代品，冷却/次数/到期限制保持、耐心读取当前值且没有重复循环。覆盖暂停和暂时无本地玩家；结果不明后的停止应跨重载保留，不同会话清除旧记录后恢复。
 
 构建不安装、不改存档、不启停游戏。编号发布须明确授权，离线通过不等于实机验收。
+
+### 运行兼容性与诊断
+
+本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。房主每秒检查清理一次。被拒绝的补单最多尝试 3 次、至少间隔 10 秒，待处理凭据 120 秒后到期；每次请求重新核对顾客与耐心。
+
+本 Mod 不自行添加玩家界面文案。诊断前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）及 `ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达；分析反馈时需同时记录游戏/加载器版本及房主/客机身份。
+
+### 手动脚本重载
+
+从 0.1.2 之前的代码首次升级须关闭游戏。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)，设置后重启一次。复制完全部更新脚本后再按 **Ctrl+R**；该操作会重载所有已启用 Lua Mod。
+
+上方检查点实现定义待处理工作与安全停止的保留规则，需按重载回归场景核对这些约束。
