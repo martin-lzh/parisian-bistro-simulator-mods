@@ -6,6 +6,16 @@
 
 Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
 
+### In-game screenshot
+
+Provided by the maintainer on 2026-09-26 as an Auto Checkout gameplay screenshot and preserved without further edits. The image records a checkout-counter scene in the English UI. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
+
+| Image | Size | Visible scene |
+| --- | --- | --- |
+| [counter-checkout-gameplay.png](counter-checkout-gameplay.png) | 1887 × 1240 | Customer at the counter, bill on the register screen, open cash drawer and **Customer is at the billing computer** notification |
+
+### Adding images
+
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
@@ -26,6 +36,16 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 ## 中文
 
 此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+
+### 实机截图
+
+维护者于 2026-09-26 提供的收银管家实机图，按原文件保存，未再编辑。图片记录英语界面中的收银台场景；拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
+
+| 图片 | 尺寸 | 可见场景 |
+| --- | --- | --- |
+| [counter-checkout-gameplay.png](counter-checkout-gameplay.png) | 1887 × 1240 | 顾客站在柜台前，收银机显示账单，钱箱打开，并显示 **Customer is at the billing computer** 提示 |
+
+### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |

@@ -19,6 +19,12 @@ Enter your restaurant as host. Checkout starts automatically, with no key, toggl
 
 If one transaction repeatedly fails, finish it manually; later customers can still be processed. If an error stops all checkout, check the help section before re-entering the restaurant.
 
+### In-game screenshot
+
+A customer stands at the checkout counter, with the bill displayed on the register and the cash drawer open.
+
+![Customer at the checkout counter with the bill on the register screen and the cash drawer open](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
+
 ### Requirements
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
@@ -80,6 +86,12 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 - 不处理餐桌结账、现金申报、取钱或现金袋。
 
 某笔交易多次未成功时，请手动完成，后续顾客仍可自动处理。若异常导致全部自动结账停止，请先查看下方帮助，再重新进入餐厅。
+
+### 实机截图
+
+顾客站在收银台前，收银机显示账单，钱箱处于打开状态。
+
+![实机画面：顾客站在收银台前，收银机显示账单，钱箱打开](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
 
 ### 使用要求
 

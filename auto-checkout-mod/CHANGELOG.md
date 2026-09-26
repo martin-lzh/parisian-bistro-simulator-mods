@@ -4,6 +4,7 @@
 
 ### English
 
+- Add the maintainer-provided checkout-counter screenshot to the English and Chinese README sections, with image provenance and scene notes.
 - Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - Adopt **收银管家** as the Chinese display name in player guides and shared documentation.
 - Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
@@ -18,6 +19,7 @@
 
 ### 中文
 
+- 将维护者提供的收银台实机图加入中英文 README，并记录图片来源及可见场景。
 - 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 - 中文名称统一为 **收银管家**，同步玩家说明及公共文档。
 - 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
