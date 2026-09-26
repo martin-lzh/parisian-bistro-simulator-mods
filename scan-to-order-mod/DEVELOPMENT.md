@@ -4,6 +4,8 @@
 
 ## English
 
+The user reported completion of in-game testing for 0.1.1-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
+
 The independent Lua Mod polls on the game thread once per second. It requires an authoritative local controller and possessed player in one world. Table, customer, producer and service objects must belong to that world. A client, paused game or missing possession never dispatches an order.
 
 Candidates contain scalar table/customer identities, group, item and route. Each dispatch rechecks the session, seating, current wanted item, existing order state, player ownership, waiter activity and enabled patience. The first pending same-item customer must be eligible because native ordering assigns that row. No customer selection, order flags, GUIDs, inventories or worker evaluators are written by Lua.
@@ -46,6 +48,8 @@ Behavior tests reject full dish conversion, unrelated asset access and reconstru
 Keep the game installation read-only during development. Gameplay acceptance must be reported separately with game/loader versions and host/client role.
 
 ## 中文
+
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.1-dev，见[验收记录](../releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 
 独立 Lua Mod 每秒在游戏线程检查一次。仅本地控制器及其玩家均有服务器权限、且属于同一世界时运行；餐桌、顾客、制作管理器和服务对象也必须属于该世界。客机、暂停或尚未控制玩家时，不发送订单。
 

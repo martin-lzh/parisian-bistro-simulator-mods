@@ -38,7 +38,9 @@ git diff --check
 
 CI validates the independent package allowlist, source bytes and SHA-256. Synthetic tests cover customer departure/table reuse, patience boundaries and unavailable timing, backlog, identical dishes/drinks, existing replacements, equipment and bartender availability, manual claims, partial glasses/cocktail pours, prepared-order cleanup, food/drink coexistence, authority, pickup, elevators, rejected/ambiguous requests, bounded retries, pause, world changes and scheduling. Reload tests exercise the real adapters and remake logic, preserving destroyed-item tickets, food/drink identities, retry limits, expiration and live patience checks; they also verify persistent safety stops, failed checkpoint writes, off-thread unload and stale queued callbacks. They cannot verify real Unreal bridging, replication or AI delivery.
 
-### In-game acceptance — pending
+### In-game regression checklist
+
+The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 1. Let a cooked meal, dispenser drink, bottled drink and finished cocktail become poor. Confirm removal and a freed pickup position, exactly one new order, normal ingredient consumption, and delivery to its original customer.
 2. Repeat on all floors/elevators and full food/drink output areas. Check queue/slot cleanup, reuse after several rounds, and the deliberate loss of the discarded plate/glass.
@@ -74,7 +76,9 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 仓库根目录执行上方命令。CI 核对独立包白名单、源码字节与 SHA-256。合成测试覆盖离开/换客、耐心边界及不可读计时、积压、同款多人、已有替代成品、设备与调酒师可用性、手动认领、未满杯/倒入配料、已制作订单清理、食物饮料共存、权限、拿取、升降机、拒绝/不明结果、有限重试、暂停、换世界和调度。重载测试联动真实适配层与补单逻辑，验证已销毁餐品的凭据、食物饮料身份、尝试限制、到期时间及实时耐心检查的保留，并覆盖跨重载安全停止、状态写入失败、非游戏线程卸载和旧排队回调；无法替代真实 Unreal 桥接、同步及 AI 送达验收。
 
-### 游戏内验收——待完成
+### 游戏内回归清单
+
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.2-dev，见[验收记录](../releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 1. 熟食、饮料机饮料、瓶装饮料及成品鸡尾酒变低劣后，确认旧成品移除并释放位置、恰好补一份、正常扣原料、送给原顾客。
 2. 各楼层、升降机及食物/饮料满出品位测试，检查队列和位置清理、多轮复用，并确认丢弃会损失餐盘/杯子的行为。

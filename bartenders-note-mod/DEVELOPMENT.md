@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.2-dev; layout, localization and hot reload acceptance is pending.** Version 0.1.0's earlier user confirmation is recorded below.
+Player instructions: [README](README.md#english). **Current source: 0.1.2-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Individual checklist results were not reported separately. Version 0.1.0's earlier user confirmation is recorded below.
 
 ### Implementation
 
@@ -68,7 +68,7 @@ The following remains a regression checklist, not a list of completed tests:
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2-dev，布局、多语言及热重载改动仍待实机验收。** 0.1.0 的历史用户确认见下文。
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](../releases/validation.md#中文)；未单独反馈清单各项结果。0.1.0 的历史用户确认见下文。
 
 ### 实现
 

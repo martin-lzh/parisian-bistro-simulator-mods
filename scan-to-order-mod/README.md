@@ -4,7 +4,7 @@
 
 ## English
 
-**Version: 0.1.1-dev — in-game acceptance pending.**
+**Version: 0.1.1-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope.
 
 Automatically places seated customers' food and drink orders in single player or on the multiplayer host. No waiter or player needs to take the order. Customers keep the choices made by the game's AI; the Mod does not select substitutes or change the menu.
 
@@ -28,7 +28,7 @@ Build with `python scan-to-order-mod/build.py` from the repository root. Package
 
 ## 中文
 
-**版本：0.1.1-dev，待实机验收。**
+**版本：0.1.1-dev。** 用户于 2026-09-26 反馈实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。
 
 在单人游戏或联机房主端，自动为已入座顾客提交食物和饮料订单，无需服务员或玩家操作点餐。沿用游戏 AI 已选好的餐品，不替顾客换菜、不修改菜单。
 

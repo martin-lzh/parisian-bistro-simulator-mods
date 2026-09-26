@@ -20,7 +20,7 @@
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
 | Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
 
-These pages describe original Mod behavior, development decisions and validation scope. Extracted assets, type/function exports, translation catalogs and research notes belong only in ignored `work/`; they must not be added here. The current localization changes and Bartender's Note layout still await in-game acceptance.
+These pages describe original Mod behavior, development decisions and validation scope. Extracted assets, type/function exports, translation catalogs and research notes belong only in ignored `work/`; they must not be added here. The user reported completion of in-game testing for all seven Mods on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope.
 
 ## 中文
 
@@ -40,4 +40,4 @@ These pages describe original Mod behavior, development decisions and validation
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
 | 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
 
-这里记录原创 Mod 行为、开发设计和验证范围。提取资源、类型与函数导出、游戏翻译目录及研究笔记仅存于被忽略的 `work/`，不得加入此目录。当前多语言改动和 Bartender's Note 新布局仍待游戏内验收。
+这里记录原创 Mod 行为、开发设计和验证范围。提取资源、类型与函数导出、游戏翻译目录及研究笔记仅存于被忽略的 `work/`，不得加入此目录。用户于 2026-09-26 反馈全部 7 个 Mod 实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。

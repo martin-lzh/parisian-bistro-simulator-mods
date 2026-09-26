@@ -6,7 +6,7 @@
 
 Fresh to Serve removes poor-quality cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. When the original customer is still waiting and has enough patience, it requests a replacement from the kitchen or bar. The game's waiters collect and serve it normally. Finished cocktails are included.
 
-Current version: **0.1.2-dev — awaiting in-game acceptance**.
+Current version: **0.1.2-dev**. The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope.
 
 ### Behavior
 
@@ -47,7 +47,7 @@ See [development and acceptance checklist](DEVELOPMENT.md#english) and [changes]
 
 Fresh to Serve（焕新上桌）自动清理厨房出餐台、饮料出品区和升降机出餐位上的低劣熟食及成品饮料，包含鸡尾酒；原顾客仍在等待且剩余耐心足够时，向厨房或吧台补单，再由游戏原有服务员正常取餐、送达。
 
-当前版本：**0.1.2-dev，待游戏内验收**。
+当前版本：**0.1.2-dev**。用户于 2026-09-26 反馈实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。
 
 ### 工作流程
 

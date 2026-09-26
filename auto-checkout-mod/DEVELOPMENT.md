@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** Hot reload and log localization await in-game acceptance. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
+Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
 
 ### Implementation
 
@@ -130,7 +130,7 @@ Repeat the appropriate checks after game or loader interface changes. A passing 
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev，热重载与多语言日志仍待实机验收。** 0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](../releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
 
 ### 多语言适配
 

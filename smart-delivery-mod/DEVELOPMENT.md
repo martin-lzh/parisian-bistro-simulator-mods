@@ -30,7 +30,9 @@ git diff --check
 
 The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler warnings are errors. The native executable harness exercises the generated dispatch code for every delivery mode, default routing, order-size boundaries, difficulty factors and register preservation. Synthetic PE fixtures cover moved code/data, different image bases, unrelated file changes, duplicate targets, changed operands, malformed unwind records, code conflicts and live fee data. Dispatch tests include discovered quantity thresholds of 4 and 7. A separate process verifies that an unrelated executable with no delivery registrations is rejected. Native discovery was also checked read-only against the installed Steam Build 25532071; detailed evidence remains in `work/smart-delivery-research/build-25532071/`. Lua tests cover preference parsing, recovery, Save/Cancel, host isolation and UI behavior. CI compares source files byte-for-byte and verifies the explicitly allowed generated DLL against build hashes; release verification uses the commit-bound CI evidence.
 
-### In-game acceptance still required
+### In-game regression checklist
+
+The user reported completion of in-game testing for 0.1.4-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 1. For each delivery option, save settings, reopen the dialog, restart the game and verify the choice. Cancel a different choice and verify the saved choice survives, including rapid close/reopen.
 2. Trigger small and large automatic orders. Compare service fees, full amount charged and arriving unloaders: 0 / 1 / 4. Repeat on different difficulty levels and at night.
@@ -40,7 +42,7 @@ The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler
 6. Check missing or changed target code, another Mod changing the same routine, invalid preferences and an unwritable Mod directory. Review diagnostics and ensure automatic orders do not silently use the displayed preference after an error.
 7. Reload repeatedly with the dialog open and with an unsaved selection. Confirm one selector, no duplicate hooks/timers, restored saved preference and continued native orders. Test reload during travel, on host/client, and while an automatic order becomes eligible. Offline tests exercise worker-thread suspension, patch reuse/conflict refusal, old callback guards, primitive-only widget cleanup and Save/Cancel recovery; they do not establish real engine timing.
 
-Offline results do not establish engine bridging, layout, multiplayer or real transaction correctness. No in-game acceptance is claimed.
+Offline results do not establish engine bridging, layout, multiplayer or real transaction correctness. The user-reported in-game testing is recorded separately above.
 
 ## 中文
 
@@ -60,10 +62,12 @@ Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua �
 
 命令见上方。构建需要 Windows x64、MSVC C++/MASM 和 Windows SDK，编译警告按错误处理。原生测试程序直接执行生成的分派代码，覆盖配送方式、默认分支、订单数量边界、难度倍率及寄存器保留；合成 PE 用例覆盖代码与数据移动、不同映像基址、无关文件变化、目标重复、操作数变化、异常展开记录、代码冲突及实时费用数据；分派执行用例覆盖动态取得的 4 和 7 两种数量阈值。另用独立进程确认不含配送注册信息的程序被拒绝。已对本机 Steam Build 25532071 只读核对原生定位结果，详细证据保存在 `work/smart-delivery-research/build-25532071/`。Lua 测试覆盖偏好解析、恢复、保存/取消、房主范围及界面行为。CI 逐字节核对源码文件，并对显式允许的原创 DLL 核验构建哈希；发布校验使用绑定提交的 CI 证据。
 
-### 待实机验收
+### 实机回归清单
+
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.4-dev，见[验收记录](../releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 逐项检查三种配送的保存、重新打开、重启保留及取消恢复；小额/大额、不同难度和夜间订单的费用与 0/1/4 名卸货员；缺货优先、采购下限、余额不足、配送进行中、关闭自动订购及保存时立即触发的行为，确认不重复下单。确认手动食材/家具采购独立，切换餐厅、返回菜单及房主/客户端重连正常。检查 14 种语言、键盘/手柄、窄分辨率和大 UI 缩放。检查目标代码缺失或变化、冲突 Mod、无效配置及不可写目录的诊断与停用行为。
 
 新增离线测试覆盖工作线程原子暂停、跳板复用和冲突拒绝、旧回调停止、字符串控件身份清理和保存偏好恢复。实机需在窗口打开、选项未保存、切换餐厅、联机和自动订单即将触发时连续重载，确认单一选择框且无重复 Hook/定时器。
 
-离线检查不代表引擎桥接、界面布局、联机或真实扣款验收通过；当前没有实机验收结论。
+离线检查不代表引擎桥接、界面布局、联机或真实扣款验收通过；用户实机测试反馈单独记录于上文。

@@ -6,7 +6,7 @@
 
 See the drinks you have claimed and still need to make, directly below the restaurant name. Repeated orders are grouped by drink type, for example `Espresso x 10 · Lemonade x 3`.
 
-**Current source: 0.1.2-dev.** The two-line layout, expanded localization and Lua reload lifecycle await in-game acceptance. Version 0.1.0 was confirmed in-game on 2026-09-24; that confirmation does not cover these new changes.
+**Current source: 0.1.2-dev.** The user reported completion of in-game testing on 2026-09-26. This version includes the two-line layout, expanded localization and Lua reload lifecycle. See the [validation record](../releases/validation.md#english) for the report's scope and earlier 0.1.0 acceptance.
 
 ### How it works
 
@@ -51,7 +51,7 @@ For Lua-only updates after the initial restart, replace the Lua files and reload
 
 在餐厅名称下方显示自己认领且尚未制作完成的饮料，同类订单合并计数，例如：`浓缩咖啡 x 10 · 柠檬水 x 3`。
 
-**当前源码：0.1.2-dev。** 两行布局、多语言扩展与 Lua 重载生命周期仍待实机验收。0.1.0 已于 2026-09-24 获得实机确认，该结论不覆盖这些新改动。
+**当前源码：0.1.2-dev。** 用户于 2026-09-26 反馈实机测试完成。本版包含两行布局、多语言扩展及 Lua 重载生命周期；本次确认范围与此前 0.1.0 的验收见[验收记录](../releases/validation.md#中文)。
 
 ### 怎么使用
 
@@ -78,7 +78,7 @@ For Lua-only updates after the initial restart, replace the Lua files and reload
 
 包内不含 UE4SS 或游戏资产。从源码构建不会自动安装；首次安装本版本后需重启一次，清除旧版本遗留的控件。
 
-本版本开始运行后，仅更新 Lua 文件时可使用 UE4SS 的 **Ctrl+R** 重载，需启用 `EnableHotReloadSystem=1`。重载会停止旧回调；新状态在下一次游戏线程刷新时移除旧显示栏和测量控件，再重建清单。游戏中的认领订单保持原状，热重载仍待实机验收。
+本版本开始运行后，仅更新 Lua 文件时可使用 UE4SS 的 **Ctrl+R** 重载，需启用 `EnableHotReloadSystem=1`。重载会停止旧回调；新状态在下一次游戏线程刷新时移除旧显示栏和测量控件，再重建清单。游戏中的认领订单保持原状；本次总体测试反馈未单独列出热重载场景结果。
 
 ### 清单没有出现时
 

@@ -6,7 +6,7 @@
 
 Adds an **Auto-compose** button beside **Print menu** on the computer's daily-menu page. This is an independent Mod.
 
-**Current source: 0.5.0-dev. In-game acceptance is pending.** Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4.
+**Current source: 0.5.0-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4.
 
 ### Use
 
@@ -38,7 +38,7 @@ For failures, check `[AutoMenu]` in the loader's `UE4SS.log`. Include Mod/game/l
 
 在电脑每日菜单页面的“打印菜单”旁增加 **自动组合** 按钮。这是独立 Mod。
 
-**当前源码：0.5.0-dev，待游戏内验收。** 需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。
+**当前源码：0.5.0-dev。** 用户于 2026-09-26 反馈实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。
 
 ### 使用
 

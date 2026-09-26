@@ -24,7 +24,7 @@ A new version without a record is skipped, allowing normal development merges. A
 
 When source changes invalidate a record, first check whether the original release instruction still covers those changes. Move the old record unchanged into `history/`, adding its source commit to the filename, then commit the archive and source changes. Only afterward may a new record be created for the version still covered by the original instruction. Archived records do not participate in publication. Never expand the authorized version scope or edit an old digest merely to make CI pass.
 
-Current source versions Bartender's Note 0.1.1-dev and Auto Checkout 0.1.3-dev are development packages. Localization work does not add release authorization or replace historical stable acceptance records.
+All seven current source versions remain development packages; see the [version record](../README.md#english). The 2026-09-26 report that all Mods completed in-game testing does not request stable promotion or add release authorization. Historical stable acceptance records remain unchanged.
 
 ## 中文
 
@@ -48,4 +48,4 @@ python tools/release.py record-approval --mod bartenders-note --authorization '<
 
 源码变化导致记录失效时，先核对原发布指令是否仍覆盖变更。将旧记录原样移入 `history/`，在文件名附来源提交，再提交归档和源码；之后才可为原指令仍覆盖的版本重新记录。归档记录不参与发布，禁止为了让 CI 通过而扩大版本范围或修改旧摘要。
 
-当前源码 Bartender's Note 0.1.1-dev 和 Auto Checkout 0.1.3-dev 为开发包。多语言开发工作不新增发布授权，也不替代历史正式版验收记录。
+全部 7 个 Mod 的当前源码仍为开发版，见[版本记录](../README.md#中文)。2026-09-26 全部 Mod 实机测试完成的反馈未要求转正式版，也不新增发布授权；历史正式版验收记录保持不变。

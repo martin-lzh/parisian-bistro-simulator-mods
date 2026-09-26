@@ -6,7 +6,7 @@
 
 Automatically accept cash or cards from customers at the counter, wait for the register to be ready, and complete its checkout interaction.
 
-**Current source: 0.1.4-dev.** This version supports UE4SS Lua hot reload, retaining AI recovery records and checkout retry history. Hot reload and language-aware logs await in-game acceptance. The latest accepted version is 0.1.2: on 2026-09-24, the user confirmed three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. That result does not establish acceptance of hot reload or the new localization.
+**Current source: 0.1.4-dev.** This version supports UE4SS Lua hot reload, retaining AI recovery records and checkout retry history. The user reported completion of in-game testing on 2026-09-26. The earlier stable 0.1.2 confirmation covered three cash and two card transactions, all on the first attempt, including checkout beyond the original interaction range. See the [validation record](../releases/validation.md#english) for each report's scope.
 
 ### How to use
 
@@ -57,7 +57,7 @@ State changes are logged immediately, with unchanged state repeated every 30 pol
 
 自动接收柜台顾客递出的现金或银行卡，等待收银机准备好，再完成收银机结账交互。
 
-**当前源码：0.1.4-dev。** 本版支持 UE4SS Lua 热重载，保留员工任务恢复记录和结账重试历史；热重载及多语言日志仍待实机验收。最近已验收版本为 0.1.2：2026-09-24 用户确认 3 笔现金、2 笔刷卡均首次尝试成功，包括超出原交互范围的结账。该结论不代表热重载或新增多语言功能已验收。
+**当前源码：0.1.4-dev。** 本版支持 UE4SS Lua 热重载，保留员工任务恢复记录和结账重试历史。用户于 2026-09-26 反馈实机测试完成。此前正式版 0.1.2 的确认覆盖 3 笔现金、2 笔刷卡，均首次尝试成功，包括超出原交互范围的结账；各次反馈的范围见[验收记录](../releases/validation.md#中文)。
 
 ### 怎么使用
 

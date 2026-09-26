@@ -26,7 +26,9 @@ git diff --check
 
 Tests run the real adapter and runtime together through a three-item hold with both trays and food trolleys for direct food, drinks, the native kitchen pickup area and drink output surface, including panning across either area without aiming at an item, busy targets, missing hits, source removal and stale source lists with ordinary/stack-slot acknowledgement. Trolley cases cover dirty stacks with gaps, reserved drink slots, tower-burger top slots, stale hidden trays, wrong carrier types/worlds, capacity changes before dispatch, and releasing/switching trolleys during a pending pickup. They also cover reload orphan cleanup without an active tray session, native-row visibility recovery and game-thread/off-thread unloading. Tests cover time ordering and equal-time ties, source isolation, dirty/unfinished/busy/carried/foreign items, reach and floor checks, tray capacity, ownership and input revalidation, fast confirmed sequencing, the 50 ms request limit, idle scan throttling, delayed acknowledgement, rejection timeouts, canceled gestures, deferred hook startup, optional area discovery, exact pickup-component matching, world-specific manager lookup, area rejection with empty queues/full trays/ineligible items, direct-item targeting, native-hint placement after row refreshes, preserved sibling layout, missing pickup rows, hidden parent containers, sidebar isolation, insertion failure recovery, cleanup, and language changes. Tests use original engine-shaped doubles, not exported game code. The package uses an explicit allowlist, normalized source bytes and a SHA-256 sidecar. It is not installed automatically.
 
-### In-game acceptance — pending
+### In-game regression checklist
+
+The user reported completion of in-game testing for 0.1.7-dev on 2026-09-26; see the [validation record](../releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 - On the recorded game/loader baseline, equip a tray or take hold of a food trolley and aim at a newer dish with older dishes at the pass. Confirm the oldest is taken first; continue holding to fill available food slots. Keep the crosshair on the first item’s empty spot and confirm pickup continues without a new hold. Repeat at both pass shelves. Also start by aiming at the native pickup area between plates; pan across it while holding and verify oldest-first order and the native-adjacent hint. Confirm empty passes and unrelated components do not start pickup.
 - At two separate drink output areas, arrange different completion times and partially filled drinks. Start on each output surface and pan across it while holding; repeat with direct finished-drink aiming. Verify source isolation, full drinks only, creation-time ordering, tray/trolley capacity and preserved short-click drink deposit. Empty areas and areas with only unfinished drinks must not activate pickup. Check hold behavior even if the surface has no visible native click row; the Mod does not add a hint without that row.
@@ -51,7 +53,9 @@ First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](../
 
 在仓库根目录运行上方命令。离线测试将真实适配层与运行逻辑联动，覆盖托盘及餐车直接瞄准菜品、饮料、厨房出餐口及饮料出品台后一次长按连续拿取三份、准星在两种出品区域内移动而不瞄准具体盘子或杯子、瞄准餐品正在拿取、命中消失、来源移除、普通位或堆叠位已确认但来源列表滞后；餐车另覆盖脏盘堆叠空隙、饮料专用位、高层汉堡顶层限制、无效隐藏托盘、错误工具类型/世界、请求前容量变化，待确认期间放开/更换餐车。还覆盖无持盘会话时清理重载遗留提示、恢复原生行可见性、游戏线程及非游戏线程卸载。另覆盖时间排序与同时间决胜、区域隔离、脏盘/未完成/占用/已携带/其他世界的物品、距离和楼层、托盘容量、身份与按键重新验证、快速确认后的连续取餐、50 毫秒请求间隔、空闲检查限频、延迟确认、超时、取消、延迟安装 Hook、可选出餐口类、准确匹配拿取组件、按世界查找厨房、空队列/满托盘/无合适餐品时拒绝区域触发、直接瞄准成品、原生行刷新后的相邻布局、其他行布局保留、拿取提示缺失、父容器隐藏、侧边栏隔离、插入失败恢复、提示清理和语言切换。测试使用原创模拟对象，不使用导出的游戏代码。安装包采用明确白名单、统一源码换行和 SHA-256 校验文件，不会自动安装。
 
-### 实机验收——待完成
+### 实机回归清单
+
+用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.7-dev，见[验收记录](../releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 - 在基线游戏和加载器上装备托盘或握住餐车，瞄准较新的菜品，确认先拿最早制作的，并持续按住装满可用菜品位；第一盘拿走后保持准星在原空位，确认无需重新长按即可继续；覆盖上下两层出餐架；另对准盘子之间的原生拿取区域启动长按，在该区域内移动准星，确认最早优先及相邻原生提示；空出餐口和无关组件不启动取餐。
 - 在两个饮料台放置不同时间的成品和未灌满饮料，分别对准出品台面启动并在台面内移动准星长按，再重复直接瞄准成品杯子；确认仅拿本区域成品、时间排序、托盘/餐车容量及短按放回饮料。空台面及仅有未灌满饮料时不触发功能。台面没有可见原生点击行时仍应能长按，Mod 不在缺少该行时添加提示。

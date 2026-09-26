@@ -42,7 +42,7 @@ Bartender's Note localizes its HUD; its technical loader/error diagnostics stay 
 
 ### Validation
 
-The development guides describe offline checks and the in-game test checklist. Translation coverage is not proof of glyph rendering, language switching or game/loader compatibility. The [validation record](../releases/validation.md#english) distinguishes earlier accepted builds from these pending changes. Keep any extracted language references and research notes in ignored `work/`.
+The development guides describe offline checks and the in-game test checklist. Translation coverage is not proof of glyph rendering, language switching or game/loader compatibility. The [validation record](../releases/validation.md#english) includes the 2026-09-26 report that all Mods completed in-game testing; language-by-language results were not supplied separately. Keep any extracted language references and research notes in ignored `work/`.
 
 ## 中文
 
@@ -67,4 +67,4 @@ Bartender's Note 本地化的是 HUD，加载器及异常等技术日志仍使�
 
 ### 验证范围
 
-各 Mod 开发说明列出离线检查与实机回归步骤。翻译覆盖不代表已验证字形、语言切换或游戏和加载器兼容性。[验收记录](../releases/validation.md#中文)区分此前已验收版本与当前待测改动。提取的语言参考及研究笔记始终保留在被忽略的 `work/`。
+各 Mod 开发说明列出离线检查与实机回归步骤。翻译覆盖不代表已验证字形、语言切换或游戏和加载器兼容性。[验收记录](../releases/validation.md#中文)已收录 2026-09-26 全部 Mod 实机测试完成的反馈，用户未单独提供逐语言结果。提取的语言参考及研究笔记始终保留在被忽略的 `work/`。

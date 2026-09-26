@@ -4,7 +4,7 @@
 
 ## English
 
-**0.5.0-dev, pending in-game acceptance.** Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
+**0.5.0-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
 
 ### Implementation
 
@@ -16,7 +16,7 @@
 - Enumeration and native projection calls stay inside the DLL, avoiding per-candidate Lua writes and conversion of the returned projection/profile arrays. Native-owned return arrays are released through the matching engine allocator. This version still performs the projection's display-only calculations; it does not claim an adoption-only API.
 - Before trials, the direct native projection must match the Lua baseline bit-for-bit. Domains with at most 243 combinations compare each visited candidate with caching disabled; larger domains compare the first 32. Every winner is checked again with caching disabled. A mismatch aborts. The native scope restores all seven menu bytes on success or C++ exceptions; Lua also restores the original definition before saving the winner once and refreshing. These checks do not recover from arbitrary process crashes.
 
-Prices, dish data, weather and events are stable during the synchronous call on the game thread. No cache persists across clicks or Lua reload. DLL updates require restarting the game. Search remains exponential and can pause gameplay on large catalogues. Small-domain differential checks deliberately add extra projections. A final-winner check alone is not proof of global equivalence; the cache contract and exhaustive small-domain comparisons are also required. Real engine acceptance is pending.
+Prices, dish data, weather and events are stable during the synchronous call on the game thread. No cache persists across clicks or Lua reload. DLL updates require restarting the game. Search remains exponential and can pause gameplay on large catalogues. Small-domain differential checks deliberately add extra projections. A final-winner check alone is not proof of global equivalence; the cache contract and exhaustive small-domain comparisons are also required. The overall in-game report does not supply cache comparison results or performance measurements separately.
 
 ### Timing logs
 
@@ -57,7 +57,7 @@ Build output: `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` and SHA-256. The allowl
 
 ## 中文
 
-**0.5.0-dev，待实机验收。** 独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
+**0.5.0-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](../releases/validation.md#中文)。独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
 
 ### 实现
 
@@ -68,7 +68,7 @@ Build output: `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` and SHA-256. The allowl
 - 每份菜单仍调用游戏完整预测，保留食材过滤、菜单组合规则、原生浮点运算和各种上限，也仍计算展示字段。枚举在 DLL 内进行，去掉逐组合 Lua 属性写入和整个预测结果转成 Lua 表的开销；原生返回数组由匹配的引擎释放函数回收。此版本不是单独的“只算选择率”接口。
 - 开始前对照 Lua 与直接原生调用的基准值；最多 243 个组合时逐个关闭缓存复算，较大搜索检查前 32 个，每次都关闭缓存复核最终菜单。逐位不一致就中止。正常结束或 C++ 异常时恢复七字节原菜单；Lua 也会恢复，再调用原生保存一次并刷新。任意进程崩溃不属于可恢复异常。
 
-搜索同步运行，期间价格、菜品、天气和活动不随游戏帧更新。缓存不跨点击或 Lua 重载保留；更新 DLL 必须重启游戏。组合数仍呈乘积增长，大菜单可能让游戏等待；小菜单的逐项对照会额外调用预测。仅复核最佳菜单不能单独证明全局等价，仍需缓存输入契约和完整的小规模对照。真实引擎验收尚未完成。
+搜索同步运行，期间价格、菜品、天气和活动不随游戏帧更新。缓存不跨点击或 Lua 重载保留；更新 DLL 必须重启游戏。组合数仍呈乘积增长，大菜单可能让游戏等待；小菜单的逐项对照会额外调用预测。仅复核最佳菜单不能单独证明全局等价，仍需缓存输入契约和完整的小规模对照。本次总体实机反馈未单独提供缓存对照结果或性能数据。
 
 ### 计时日志
 

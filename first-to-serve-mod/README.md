@@ -30,7 +30,7 @@ Previously named **Oldest First**. If you installed that development package, di
 
 Disable by removing `FirstToServe/enabled.txt` while the game is closed. The package includes only original Mod scripts and documentation, with no loader or game assets. Building does not install anything or change saves.
 
-The implementation handles the local player in solo, host and guest sessions and uses ordinary server-validated interaction requests. **In-game acceptance, including guest synchronization and native hint rendering, is pending.** Offline tests do not establish engine or multiplayer compatibility. See [development and acceptance checks](DEVELOPMENT.md#english). Other Mods are optional; combinations still need acceptance testing.
+The implementation handles the local player in solo, host and guest sessions and uses ordinary server-validated interaction requests. **The user reported completion of in-game testing on 2026-09-26.** See the [validation record](../releases/validation.md#english) for its scope. Guest synchronization, hint rendering, input mappings and Mod combinations were not reported separately; retain the [development checklist](DEVELOPMENT.md#english) for regressions. Other Mods are optional.
 
 The hint supports English, French, Simplified Chinese, Traditional Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Turkish, Polish, Portuguese and Brazilian Portuguese. Diagnostic logs use `[FirstToServe]`. Report the Mod/loader/game versions, language, keyboard or gamepad, host/guest role, surface type and relevant log lines. Keep extracted files and full saves out of the repository.
 
@@ -64,6 +64,6 @@ The hint supports English, French, Simplified Chinese, Traditional Chinese, Ital
 
 关闭游戏后移除 `FirstToServe/enabled.txt` 可禁用。安装包仅含原创 Mod 脚本和说明，不包含加载器及游戏资产。构建不会自动安装或修改存档。
 
-实现面向单人、房主和联机客机的本地玩家，通过原生服务器交互请求拿取。**仍待实机验收，包括客机同步、原生提示渲染和键位行为。** 离线测试不能证明引擎桥接及联机兼容性，详见[开发与验收清单](DEVELOPMENT.md#中文)。无需安装其他 Mod；组合使用仍需验收。
+实现面向单人、房主和联机客机的本地玩家，通过原生服务器交互请求拿取。**用户于 2026-09-26 反馈实机测试完成。** 确认范围见[验收记录](../releases/validation.md#中文)。客机同步、提示渲染、键位和 Mod 组合未单独反馈，继续保留[开发清单](DEVELOPMENT.md#中文)供回归使用。无需安装其他 Mod。
 
 提示适配英语、法语、简体中文、繁体中文、意大利语、西班牙语、德语、俄语、日语、韩语、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。日志前缀为 `[FirstToServe]`。反馈时请提供 Mod、加载器及游戏版本、语言、键鼠或手柄、房主或客机身份、出餐区域类型和相关日志片段。请勿提交提取资料或完整存档。

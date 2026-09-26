@@ -4,6 +4,28 @@
 
 ## English
 
+### 2026-09-26: all Mods tested in-game
+
+The user reported: “全部mods实机测试完毕。” (“In-game testing of all Mods is complete.”) This records completion of user testing for all seven Mods. The source versions at the time of the report, at commit `d917eb59314e2c3b36848eee2f5f3204a893f21a`, were:
+
+| Mod | Current source version |
+| --- | --- |
+| Bartender's Note | 0.1.2-dev |
+| Auto Checkout | 0.1.4-dev |
+| Fresh to Serve | 0.1.2-dev |
+| First to Serve | 0.1.7-dev |
+| Smart Delivery | 0.1.4-dev |
+| Auto Menu | 0.5.0-dev |
+| Scan to Order | 0.1.1-dev |
+
+The report is associated with these current development versions; installed package versions and hashes were not supplied separately. The user did not enumerate game/loader versions, languages, display settings, multiplayer roles, test duration, performance measurements or individual checklist results. The development checklists remain regression references, without marking every scenario as individually passed. Local reference builds and offline test results remain separate evidence.
+
+Version numbers remain unchanged. This report does not request stable promotion or GitHub Release publication; historical stable acceptance records remain below.
+
+### Development notes before the 2026-09-26 report
+
+The following notes preserve the evidence and pending status recorded during development, before the overall test-completion report above.
+
 Auto Menu **0.5.0-dev** adds native enumeration and a per-search cache of original dish scores. Six Lua suites and the Windows native harness verify protocol handling, eligibility, exhaustive search, exact cached/uncached comparisons on synthetic projections, thread isolation, allocation ownership, failure restoration, saving, timing and reload behavior. Native targets were resolved read-only against the local reference executable. Actual in-game cache correctness and speed remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
 
 Scan to Order **0.1.1-dev** avoids full dish return conversion through Lua while retaining host/single-player automatic food and drink ordering with restock recovery. Local references were checked against Steam Build **25532071** / **1.0.1.44eb**. Offline catalog-reference, scalar-ingredient, stock-contention, customer-state, authority, native acceptance and reload tests pass; real engine calls, replenishment, staffing and multiplayer replication remain pending in-game acceptance.
@@ -55,6 +77,28 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-09-26：全部 Mod 实机测试完成
+
+用户反馈原文：“全部mods实机测试完毕。”据此记录全部 7 个 Mod 的用户实机测试已完成。反馈时仓库提交为 `d917eb59314e2c3b36848eee2f5f3204a893f21a`，当前源码版本如下：
+
+| Mod | 当前源码版本 |
+| --- | --- |
+| Bartender's Note | 0.1.2-dev |
+| Auto Checkout | 0.1.4-dev |
+| Fresh to Serve（焕新上桌） | 0.1.2-dev |
+| First to Serve（先做好先端） | 0.1.7-dev |
+| Smart Delivery（智选配送） | 0.1.4-dev |
+| Auto Menu（每日菜单组合） | 0.5.0-dev |
+| Scan to Order（扫码点餐） | 0.1.1-dev |
+
+本次反馈关联上述当前开发版本，用户未单独提供已安装包版本和哈希，也未逐项列出游戏／加载器版本、语言、显示设置、联机角色、测试时长、性能数据或各项清单结果。开发说明中的清单继续作为回归参考，不将所有场景标记为逐项通过；本机参考版本和离线测试结果仍单独记录。
+
+各 Mod 版本号保持不变。本次反馈未要求转为正式版或发布 GitHub Release；历史正式版验收记录保留如下。
+
+### 2026-09-26 反馈之前的开发记录
+
+以下保留开发期间的验证证据及当时待验收状态；全部 Mod 实机测试完成的最新反馈见上文。
 
 Auto Menu **0.5.0-dev** 新增原生枚举和单次搜索内的原生菜品评分缓存。六组 Lua 测试和 Windows 原生测试验证桥接协议、资格过滤、完整遍历、合成预测的缓存逐位对照、线程隔离、内存释放、异常恢复、保存、计时和热重载；已只读核对本机参考 EXE 的目标定位。真实游戏中的缓存正确性和速度仍待验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
 

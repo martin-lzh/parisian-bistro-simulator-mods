@@ -4,13 +4,13 @@
 
 ## English
 
-**Version: 0.1.4-dev — in-game acceptance pending.** Choose Free service, Budget delivery or Premium delivery for automatic smart orders from the restaurant computer's existing automatic-order settings dialog. Click the game's Save button to apply the choice; Cancel discards it.
+**Version: 0.1.4-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Choose Free service, Budget delivery or Premium delivery for automatic smart orders from the restaurant computer's existing automatic-order settings dialog. Click the game's Save button to apply the choice; Cancel discards it.
 
 The purchase minimum, stockout override, shopping list, money checks, night surcharge and delivery processing remain controlled by the game. Manual ingredient and furniture orders keep their own delivery choices. Delivery names use the game's current translations; the new field label supports all 14 game languages.
 
 ### Requirements and installation
 
-- Windows x64. Native code discovery has been checked against Steam Build **25532071**. There is no mandatory game-version, executable-size or SHA-256 allowlist. The helper locates the delivery branch from native registration names and checks its actual code structure; missing or ambiguous targets and conflicting patches stop initialization. In-game acceptance on this build is pending.
+- Windows x64. Native code discovery has been checked against Steam Build **25532071**. There is no mandatory game-version, executable-size or SHA-256 allowlist. The helper locates the delivery branch from native registration names and checks its actual code structure; missing or ambiguous targets and conflicting patches stop initialization. This is the local reference build; the user's tested build was not reported separately.
 - UE4SS experimental, locally checked API `v3.0.1-1140-gf58e8f84`. UE4SS stable 3.0.1 is not supported.
 - Single-player or the multiplayer host. Only the host's choice controls automatic deliveries; clients do not get an editable Mod selector.
 
@@ -34,13 +34,13 @@ See [development and validation](DEVELOPMENT.md#english) for the test scope.
 
 ## 中文
 
-**版本：0.1.4-dev，待实机验收。** 在餐厅电脑原有的“自动智能订购”设置窗口中，新增免费服务、经济型配送、高级配送三种选择。点击游戏原有的“保存”后生效；“取消”放弃本次修改。
+**版本：0.1.4-dev。** 用户于 2026-09-26 反馈实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。在餐厅电脑原有的“自动智能订购”设置窗口中，新增免费服务、经济型配送、高级配送三种选择。点击游戏原有的“保存”后生效；“取消”放弃本次修改。
 
 采购金额下限、缺货优先、采购清单、余额检查、夜间附加费及配送处理继续由游戏负责。手动购买食材或家具仍使用各自的配送选择。配送名称读取游戏当前译文，新字段标题覆盖游戏的 14 种语言。
 
 ### 依赖与安装
 
-- Windows x64。已在 Steam Build **25532071** 文件上核对原生代码定位结果，不再强制检查游戏版本、EXE 固定大小或 SHA-256 白名单。辅助模块通过原生注册名称查找配送分支并检查实际代码结构；无法唯一定位或发现补丁冲突时停止初始化。本构建仍待实机验收。
+- Windows x64。已在 Steam Build **25532071** 文件上核对原生代码定位结果，不再强制检查游戏版本、EXE 固定大小或 SHA-256 白名单。辅助模块通过原生注册名称查找配送分支并检查实际代码结构；无法唯一定位或发现补丁冲突时停止初始化。此处是本机参考构建，用户未单独反馈实测构建号。
 - UE4SS experimental，本机核对 API 为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 3.0.1。
 - 单人或联机房主使用。自动配送以房主选择为准；客户端不显示可编辑的 Mod 配送选项。
 
