@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Store the maintainer-provided gameplay GIF in assets using Git LFS, preserving the original file.
+- 将维护者提供的实机 GIF 通过 Git LFS 存入 assets，保留原文件。
+
 - Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 
