@@ -6,7 +6,7 @@
 
 Hold the interaction key at a kitchen pass or drink output area to collect the earliest-made ready items with a tray or food trolley.
 
-**Version: 0.1.7-dev.** Single player, multiplayer host or guest. Install it on each player's computer that wants to use the hold action; other players do not need it.
+**Version: 0.1.7.** Single player, multiplayer host or guest. Install it on each player's computer that wants to use the hold action; other players do not need it.
 
 ### How to use
 
@@ -23,17 +23,17 @@ Only ready, clean items in reach at that source are collected. Dirty plates, unf
 
 Tray pickup at the kitchen pass, shown in a 4.48-second gameplay recording.
 
-![Gameplay animation of tray pickup at the kitchen pass](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+![Gameplay animation of tray pickup at the kitchen pass](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
-[Open animation (GIF, 5.13 MiB)](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+[Open animation (GIF, 5.13 MiB)](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
 With a tray at the kitchen pass, the hold hint appears above **Take the dish**.
 
-![Tray at the kitchen pass showing Hold: take oldest first and Take the dish](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
+![Tray at the kitchen pass showing Hold: take oldest first and Take the dish](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
 
 With a tray at the drink output area, the same hold hint appears above **Take drinks**.
 
-![Tray at the drink output area showing Hold: take oldest first and Take drinks](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
+![Tray at the drink output area showing Hold: take oldest first and Take drinks](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
 
 ### Requirements
 
@@ -41,10 +41,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`FirstToServe-0.1.7-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [First to Serve 0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7).
+2. Under **Assets**, download **`FirstToServe-0.1.7.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/SUPPORT.md#english).
 
 ### Install
 
@@ -78,15 +78,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 The hold hint appears below the normal pickup hint when an eligible item and a suitable free slot are available. A drink surface without the game's normal pickup hint can still accept the hold action. If pickup stops while there is room, release and hold again; slow multiplayer responses can also stop it. Include relevant `[FirstToServe]` lines from `UE4SS.log`, your controls and host/guest role with a problem report.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 持托盘或推餐车，对准厨房出餐口或饮料出品台长按交互键，优先连续拿取最早做好的成品。
 
-**版本：0.1.7-dev。** 单人、联机房主和客机均可使用。想使用连续拿取的玩家在自己的电脑安装，其他玩家无需安装。
+**版本：0.1.7。** 单人、联机房主和客机均可使用。想使用连续拿取的玩家在自己的电脑安装，其他玩家无需安装。
 
 ### 怎么使用
 
@@ -103,17 +103,17 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 持托盘在厨房出餐口取餐的实机演示，时长约 4.48 秒。
 
-![实机动图：持托盘在厨房出餐口取餐](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+![实机动图：持托盘在厨房出餐口取餐](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
-[打开动图（GIF，5.13 MiB）](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+[打开动图（GIF，5.13 MiB）](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
 持托盘对准厨房出餐口，**Take the dish（拿取菜品）** 上方显示长按优先拿取最早成品的提示。
 
-![实机画面：持托盘对准出餐口，显示长按优先拿取最早成品及拿取菜品提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
+![实机画面：持托盘对准出餐口，显示长按优先拿取最早成品及拿取菜品提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/kitchen-pass-gameplay.png?raw=1)
 
 持托盘对准饮料出品台，**Take drinks（拿取饮料）** 上方显示同样的长按提示。
 
-![实机画面：持托盘对准饮料出品台，显示长按优先拿取最早成品及拿取饮料提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
+![实机画面：持托盘对准饮料出品台，显示长按优先拿取最早成品及拿取饮料提示](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/drink-output-gameplay.png?raw=1)
 
 ### 使用要求
 
@@ -121,10 +121,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`FirstToServe-0.1.7-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [出餐有序 0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7)。
+2. 在 **Assets** 中下载 **`FirstToServe-0.1.7.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -158,6 +158,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 有可取成品及合适空位时，长按提示出现在原版拿取提示下方。饮料台面没有原版拿取提示时仍可长按。仍有空位却停止时，请松键后重新长按；联机响应慢也可能让本次拿取停止。反馈时附上 `UE4SS.log` 中相关的 `[FirstToServe]` 日志、操作设备及房主或客机身份。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/first-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

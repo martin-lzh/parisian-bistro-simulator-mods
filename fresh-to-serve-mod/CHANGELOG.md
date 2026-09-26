@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.2 - 2026-09-26
+
+### English
+
+- Promote 0.1.2-dev to 0.1.2 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Clear spoiled meals and drinks and request replacements while the original customer has enough patience; preserve order deduplication and pending work across Lua reload.
+- Provide an assets directory for future gameplay captures and promotional artwork.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.2-dev 转为 0.1.2；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 清理低劣食物与饮料，在原顾客耐心足够时请求重做；保留订单去重及 Lua 重载中的待补单状态。
+- 提供 assets 目录，用于后续实机截图及宣传图。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.2-dev
+
 - Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 

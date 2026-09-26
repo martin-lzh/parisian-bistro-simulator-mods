@@ -6,7 +6,7 @@
 
 See your claimed, unfinished drinks below the restaurant name. Repeated orders are grouped, such as `Espresso x 10 · Lemonade x 3`.
 
-**Version: 0.1.2-dev.** Single player, multiplayer host or guest. Install it on each player's computer that wants the display; each sees only their own claimed orders.
+**Version: 0.1.2.** Single player, multiplayer host or guest. Install it on each player's computer that wants the display; each sees only their own claimed orders.
 
 ### How to use
 
@@ -22,10 +22,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`BartendersNote-0.1.2-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [Bartender's Note 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2).
+2. Under **Assets**, download **`BartendersNote-0.1.2.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/SUPPORT.md#english).
 
 ### Install
 
@@ -57,15 +57,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If the list is missing, first claim an unfinished drink and close any screen that hides the restaurant name bar. Widen an unusually narrow game window. If the problem remains, use the help link below and include relevant `[Bartender's Note]` lines from `UE4SS.log`.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/bartenders-note-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 在餐厅名称下显示自己认领且尚未做完的饮料，同类订单合并计数，例如“浓缩咖啡 x 10 · 柠檬水 x 3”。
 
-**版本：0.1.2-dev。** 单人、联机房主和客机均可使用。想看到清单的玩家在自己的电脑安装，各自只显示自己的认领订单。
+**版本：0.1.2。** 单人、联机房主和客机均可使用。想看到清单的玩家在自己的电脑安装，各自只显示自己的认领订单。
 
 ### 怎么使用
 
@@ -81,10 +81,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`BartendersNote-0.1.2-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [调饮手记 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2)。
+2. 在 **Assets** 中下载 **`BartendersNote-0.1.2.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -116,6 +116,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 清单未出现时，先确认已认领尚未做完的饮料，并关闭会遮住餐厅名称条的界面。游戏窗口过窄时请加宽。仍有问题时，按下方反馈说明提供 `UE4SS.log` 中相关的 `[Bartender's Note]` 日志。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/bartenders-note-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

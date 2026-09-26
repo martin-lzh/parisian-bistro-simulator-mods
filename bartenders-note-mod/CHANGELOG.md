@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.2 - 2026-09-26
+
+### English
+
+- Promote 0.1.2-dev to 0.1.2 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Show claimed unfinished drinks with localized, wrapping and fading HUD notes; preserve safe Lua reload handling.
+- Include the gameplay GIF compressed to 12.02 MiB, stored with Git LFS.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.2-dev 转为 0.1.2；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 以本地化 HUD 显示已认领但尚未完成的饮料，支持换行、淡出及安全 Lua 重载。
+- 附上压缩为 12.02 MiB 的实机 GIF，通过 Git LFS 保存。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.2-dev
+
 - Compress the gameplay GIF from 166.02 MiB to 12.02 MiB using 960 × 600 frames, approximately 6.25 fps and a 96-color palette; retain the full 13.28-second recording and loop.
 - 将实机 GIF 从 166.02 MiB 压缩为 12.02 MiB，采用 960 × 600、约 6.25 帧/秒及 96 色，保留完整 13.28 秒录制与循环播放。
 

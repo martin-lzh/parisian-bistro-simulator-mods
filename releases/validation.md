@@ -4,6 +4,22 @@
 
 ## English
 
+### 2026-09-26: stable release authorization after in-game and multiplayer testing
+
+The maintainer confirmed: “现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版” (“Remove the dev suffix from all current Mods; all passed in-game and multiplayer testing and may be released as stable versions.”). This feedback applies to the current source at `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`, including the later language-recovery and UI changes, and authorizes these stable releases:
+
+| Mod | Tested development version → stable version |
+| --- | --- |
+| Bartender's Note | 0.1.2-dev → 0.1.2 |
+| Auto Checkout | 0.1.4-dev → 0.1.4 |
+| Fresh to Serve | 0.1.2-dev → 0.1.2 |
+| First to Serve | 0.1.7-dev → 0.1.7 |
+| Smart Delivery | 0.1.5-dev → 0.1.5 |
+| Auto Menu | 0.5.0-dev → 0.5.0 |
+| Scan to Order | 0.1.1-dev → 0.1.1 |
+
+Stable promotion preserves the tested gameplay logic and updates diagnostic/package version identifiers and release documentation. The maintainer's in-game and multiplayer pass is the acceptance basis; build checks are separate evidence. Individual game/loader versions, per-language results, role assignments and scenario measurements were not supplied with this report. Existing host-only restrictions remain as documented. Historical reports below retain their original scope and pending status at the time; they do not supersede this latest acceptance.
+
 ### Changes after the 2026-09-26 test report
 
 The user supplied Smart Delivery screenshots showing a pale selector, dark popup text and a bright blue selection highlight. Version 0.1.5-dev replaces these with a charcoal/white/muted-green palette and explicit popup text and focus styles. The new colors have not yet been verified in-game; earlier gameplay testing does not establish their rendered appearance.
@@ -83,6 +99,22 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-09-26：实机与联机测试通过，授权正式发布
+
+维护者确认：“现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版”。本次反馈对应当前源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`，包括此前追加的语言恢复和界面修改，并明确授权以下正式版本：
+
+| Mod | 已测试开发版 → 正式版 |
+| --- | --- |
+| Bartender's Note（调饮手记） | 0.1.2-dev → 0.1.2 |
+| Auto Checkout（收银管家） | 0.1.4-dev → 0.1.4 |
+| Fresh to Serve（焕鲜上桌） | 0.1.2-dev → 0.1.2 |
+| First to Serve（出餐有序） | 0.1.7-dev → 0.1.7 |
+| Smart Delivery（配送随心） | 0.1.5-dev → 0.1.5 |
+| Auto Menu（菜单巧配） | 0.5.0-dev → 0.5.0 |
+| Scan to Order（扫码点餐） | 0.1.1-dev → 0.1.1 |
+
+正式化保留已测试的玩法逻辑，更新诊断／包版本及发布说明。实机和联机验收依据为维护者确认，构建检查单独记录。本次反馈未逐项附游戏／加载器版本、各语言结果、角色分工及场景测量数据；原有仅房主执行等限制继续以各 Mod 说明为准。下方历史记录保留当时范围和待验收状态，不覆盖本次最新验收结论。
 
 ### 2026-09-26 测试反馈之后的改动
 

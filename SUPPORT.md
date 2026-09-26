@@ -8,8 +8,8 @@ Start with the [Mod list](README.md#english) and the installation guide for your
 
 ### Download or installation problems
 
-- **GitHub shows 404 or no download:** this repository is private. Sign in with the account granted access. Open a successful `dev` run in [Mod downloads](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and look for **Artifacts → mod-packages**. Downloads expire after 14 days; if none remain, ask the maintainer through an existing contact or an [issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues) for a new build.
-- **The download contains more ZIPs:** extract `mod-packages` first, then extract the individual Mod ZIP you want. Copy that Mod's folder into the loader's existing `Mods` directory. Do not install the Source code archive.
+- **GitHub shows 404 or no download:** this repository is private. Sign in with the account granted access and open [Mod Releases](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases). Use the version link in the Mod guide, then download its ZIP under **Assets**. For missing files, contact the maintainer through an existing contact or an [issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues).
+- **The download contains more ZIPs:** CI artifacts contain an outer `mod-packages` archive; extract that first, then the individual Mod ZIP. Release attachments are individual Mod ZIPs. Do not install the Source code archive.
 - **The Mod does not appear:** check the folder layout. For example, use `Mods/AutoMenu/Scripts/main.lua` and `Mods/AutoMenu/enabled.txt`, not `Mods/AutoMenu/AutoMenu/Scripts/main.lua`. Keep every file from the package, including a DLL when present.
 - **The loader does not start:** these Mods need UE4SS experimental, with checked version `v3.0.1-1140-gf58e8f84`. Follow the [official installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping the loader's folder layout. Old stable 3.0.1 is not supported. With a custom loader location, use its actual `Mods` folder.
 
@@ -32,8 +32,8 @@ Review attachments for usernames, local paths, room codes and other private info
 
 ### 下载或安装遇到问题
 
-- **GitHub 显示 404 或找不到下载：**仓库目前私密，请登录已获授权的账号。在 [Mod 下载](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)中打开一次成功的 `dev` 运行，找到 **Artifacts → mod-packages**。下载 14 天后过期；没有可用文件时，通过已有联系方式或 [Issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues)请维护者提供新构建。
-- **解压后还有 ZIP：**先解压 `mod-packages`，再解压需要的单个 Mod ZIP，将其中的 Mod 文件夹整体放入加载器已有的 `Mods` 目录。不要安装 Source code 源码包。
+- **GitHub 显示 404 或找不到下载：**仓库目前私密，请登录已获授权的账号，打开 [Mod 正式版本](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases)，或使用 Mod 说明中的版本链接，在 **Assets** 下载 ZIP。文件缺失时，通过已有联系方式或 [Issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues)联系维护者。
+- **解压后还有 ZIP：**CI artifact 包含外层 `mod-packages` 压缩包，先解压外层，再解压单个 Mod ZIP。Release 附件直接提供各 Mod ZIP。不要安装 Source code 源码包。
 - **Mod 没有出现：**检查目录层级，例如应有 `Mods/AutoMenu/Scripts/main.lua` 和 `Mods/AutoMenu/enabled.txt`，不能多套成 `Mods/AutoMenu/AutoMenu/Scripts/main.lua`。保留安装包内全部文件，包含其中已有的 DLL。
 - **加载器没有启动：**这些 Mod 需要 UE4SS experimental，已核对版本为 `v3.0.1-1140-gf58e8f84`。按[官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)保留加载器目录结构，不支持旧稳定版 3.0.1。自定义安装位置时，使用实际加载器的 `Mods` 文件夹。
 

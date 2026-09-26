@@ -90,4 +90,4 @@ end)
 
 LoopInGameThreadWithDelay(750, safe_refresh)
 request_refresh()
-log('Loaded version=0.1.2-dev. Waiting for the local player HUD.')
+log('Loaded version=0.1.2. Waiting for the local player HUD.')

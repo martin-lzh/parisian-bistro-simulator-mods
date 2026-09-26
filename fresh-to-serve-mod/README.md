@@ -6,7 +6,7 @@
 
 Clear spoiled cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. If the original customer is still waiting and has enough patience, request a replacement for the game's staff to prepare and serve.
 
-**Version: 0.1.2-dev.** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
+**Version: 0.1.2.** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
 
 ### How to use
 
@@ -24,10 +24,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`FreshToServe-0.1.2-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [Fresh to Serve 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2).
+2. Under **Assets**, download **`FreshToServe-0.1.2.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/SUPPORT.md#english).
 
 ### Install
 
@@ -61,15 +61,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If an item is not remade, check customer patience, stock, staff and equipment first. A cleanup does not guarantee a replacement or delivery. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/fresh-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 自动清理厨房出餐台、饮料出品区及升降机出餐位上的低劣熟食和成品饮料；原顾客仍在等待且耐心足够时补单，由游戏原有员工制作并送达。
 
-**版本：0.1.2-dev。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
+**版本：0.1.2。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
 
 ### 怎么使用
 
@@ -87,10 +87,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`FreshToServe-0.1.2-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [焕鲜上桌 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2)。
+2. 在 **Assets** 中下载 **`FreshToServe-0.1.2.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -124,6 +124,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 没有重做时，先检查顾客耐心、库存、员工及设备。清理成功不代表一定补单或送达。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/fresh-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

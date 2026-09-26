@@ -24,7 +24,7 @@ local function start()
         if ok then
             last_error = nil
             local timing = result.timing
-            print(string.format('[AutoMenu] COMPOSED version=0.5.0-dev rate=%.9f evaluations=%d elapsed=%.3f\n',
+            print(string.format('[AutoMenu] COMPOSED version=0.5.0 rate=%.9f evaluations=%d elapsed=%.3f\n',
                 result.rate, result.evaluations, timing.total))
             local parts = {}
             for _, phase in ipairs({ 'setup', 'search', 'restore', 'save', 'verify', 'refresh', 'lua_and_timing' }) do
@@ -72,7 +72,7 @@ local function start()
         if not ok then report(err) end
         return false
     end)
-    print('[AutoMenu] START version=0.5.0-dev\n')
+    print('[AutoMenu] START version=0.5.0\n')
 end
 
 local ok, err = xpcall(start, traceback)

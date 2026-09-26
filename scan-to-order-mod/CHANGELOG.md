@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.1 - 2026-09-26
+
+### English
+
+- Promote 0.1.1-dev to 0.1.1 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Submit customer food and drink orders on the host, defer missing-stock items and resume after replenishment; preserve native order data without converting complete dish assets through Lua.
+- Include the gameplay screenshot of food and drink order indicators.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.1-dev 转为 0.1.1；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 房主端自动提交顾客食物与饮料订单，缺货时等待并在补货后续单；保留原生订单数据，不通过 Lua 转换完整菜品资源。
+- 附上餐品与饮料订单状态实机截图。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.1-dev
+
 - Add the maintainer-provided gameplay screenshot showing food and drink order indicators to both README languages, with image provenance and scene notes.
 - 将维护者提供的餐品与饮料订单状态实机图加入中英文 README，并记录图片来源及可见场景。
 

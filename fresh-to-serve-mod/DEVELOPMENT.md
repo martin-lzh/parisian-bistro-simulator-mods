@@ -40,7 +40,7 @@ CI validates the independent package allowlist, source bytes and SHA-256. Synthe
 
 ### In-game regression checklist
 
-The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
+The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.2 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 1. Let a cooked meal, dispenser drink, bottled drink and finished cocktail become poor. Confirm removal and a freed pickup position, exactly one new order, normal ingredient consumption, and delivery to its original customer.
 2. Repeat on all floors/elevators and full food/drink output areas. Check queue/slot cleanup, reuse after several rounds, and the deliberate loss of the discarded plate/glass.
@@ -48,7 +48,7 @@ The user reported completion of in-game testing for 0.1.2-dev on 2026-09-26; see
 4. Test departures, eviction, table reuse, course changes, backlog, disabled patience and patience at/above/below the budget. The timer must never reset.
 5. Test missing ingredients/devices, absent chefs/bartenders, staff on another floor or with preparation excluded, manual claims/pickup, active filling/pouring, carried trolleys, consumed items, player-service tables, pause and world/menu transitions.
 6. Verify host cleanup/queue replication on a client, client-only installation doing nothing, and coexistence with Bartender's Note, First to Serve and other Mods that inspect production queues.
-7. After installing 0.1.2-dev with the game closed, reload with Ctrl+R after a spoiled item is discarded but its remake is waiting, after a rejected order, and after acceptance. Confirm one eventual replacement, unchanged cooldown/attempt/expiration limits, live patience checks and no duplicate loop. Reload during pause or temporarily missing possession. Verify an uncertain-operation stop persists across reload, and a different session clears old records before resuming.
+7. After installing 0.1.2 with the game closed, reload with Ctrl+R after a spoiled item is discarded but its remake is waiting, after a rejected order, and after acceptance. Confirm one eventual replacement, unchanged cooldown/attempt/expiration limits, live patience checks and no duplicate loop. Reload during pause or temporarily missing possession. Verify an uncertain-operation stop persists across reload, and a different session clears old records before resuming.
 
 Builds never install, change saves or start/stop the game. A numbered release requires explicit authorization. Offline checks are not in-game acceptance.
 
@@ -60,7 +60,7 @@ No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`:
 
 ### Manual script reload
 
-The first upgrade from pre-0.1.2 code requires a closed-game installation. In `UE4SS-settings.ini`, configure `[General]` with `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english). Restart once after configuring. Copy every updated script before pressing **Ctrl+R**, which reloads all enabled Lua Mods.
+The first upgrade from pre-0.1.2 code requires a closed-game installation. In `UE4SS-settings.ini`, configure `[General]` with `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/docs/hot-reload.md#english). Restart once after configuring. Copy every updated script before pressing **Ctrl+R**, which reloads all enabled Lua Mods.
 
 The checkpoint implementation above defines preserved pending work and safety stops; verify those invariants with the reload regression scenarios.
 
@@ -90,7 +90,7 @@ The checkpoint implementation above defines preserved pending work and safety st
 
 ### 游戏内回归清单
 
-用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.2-dev，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.2，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 1. 熟食、饮料机饮料、瓶装饮料及成品鸡尾酒变低劣后，确认旧成品移除并释放位置、恰好补一份、正常扣原料、送给原顾客。
 2. 各楼层、升降机及食物/饮料满出品位测试，检查队列和位置清理、多轮复用，并确认丢弃会损失餐盘/杯子的行为。
@@ -98,7 +98,7 @@ The checkpoint implementation above defines preserved pending work and safety st
 4. 离开、驱逐、换客、换菜序、积压、关闭耐心，以及耐心等于/高于/低于预算；计时器不得被重置。
 5. 缺原料/设备、无厨师/调酒师、员工楼层不符或排除制作任务、手动认领/拿取、正在灌装/倒入配料、搬运中的餐车、食用中、玩家服务桌、暂停及换世界/菜单。
 6. 联机房主清理与订单同步、仅客户端安装无操作，并检查与 Bartender's Note、First to Serve 及其他读取制作队列的 Mod 共存。
-7. 关闭游戏安装 0.1.2-dev 后，在低劣成品已清理但补单仍等待、请求被拒绝以及补单已接受时分别 Ctrl+R 重载；确认最终恰好一份替代品，冷却/次数/到期限制保持、耐心读取当前值且没有重复循环。覆盖暂停和暂时无本地玩家；结果不明后的停止应跨重载保留，不同会话清除旧记录后恢复。
+7. 关闭游戏安装 0.1.2 后，在低劣成品已清理但补单仍等待、请求被拒绝以及补单已接受时分别 Ctrl+R 重载；确认最终恰好一份替代品，冷却/次数/到期限制保持、耐心读取当前值且没有重复循环。覆盖暂停和暂时无本地玩家；结果不明后的停止应跨重载保留，不同会话清除旧记录后恢复。
 
 构建不安装、不改存档、不启停游戏。编号发布须明确授权，离线通过不等于实机验收。
 
@@ -110,6 +110,6 @@ The checkpoint implementation above defines preserved pending work and safety st
 
 ### 手动脚本重载
 
-从 0.1.2 之前的代码首次升级须关闭游戏。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)，设置后重启一次。复制完全部更新脚本后再按 **Ctrl+R**；该操作会重载所有已启用 Lua Mod。
+从 0.1.2 之前的代码首次升级须关闭游戏。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/docs/hot-reload.md#中文)，设置后重启一次。复制完全部更新脚本后再按 **Ctrl+R**；该操作会重载所有已启用 Lua Mod。
 
 上方检查点实现定义待处理工作与安全停止的保留规则，需按重载回归场景核对这些约束。

@@ -6,21 +6,19 @@
 
 ### Accepted versions and current source
 
-On 2026-09-26, the user reported that in-game testing of all seven Mods was complete. The [validation record](validation.md#english) associates the report with the current development versions below and records its scope. This report does not promote versions or authorize publication.
+On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-game and multiplayer testing and explicitly authorized removing the development suffix and publishing stable Releases. The [validation record](validation.md#english) ties this acceptance to source `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`. Current source and approved stable package versions are:
 
-| Mod | Latest accepted stable version | Stable in-game confirmation | Stable package name | Current source |
-| --- | --- | --- | --- | --- |
-| Bartender's Note | 0.1.0 | 2026-09-24 | `BartendersNote-0.1.0.zip` | 0.1.2-dev |
-| Auto Checkout | 0.1.2 | 2026-09-24 | `AutoCheckout-0.1.2.zip` | 0.1.4-dev |
-| Fresh to Serve | — | — | — | 0.1.2-dev |
-| First to Serve | — | — | — | 0.1.7-dev |
-| Smart Delivery | — | — | — | 0.1.4-dev |
-| Auto Menu | — | — | — | 0.5.0-dev |
-| Scan to Order | — | — | — | 0.1.1-dev |
+| Mod | Stable version | In-game and multiplayer confirmation | Package |
+| --- | --- | --- | --- |
+| Bartender's Note | 0.1.2 | 2026-09-26 | [`BartendersNote-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) |
+| Auto Checkout | 0.1.4 | 2026-09-26 | [`AutoCheckout-0.1.4.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) |
+| Fresh to Serve | 0.1.2 | 2026-09-26 | [`FreshToServe-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2) |
+| First to Serve | 0.1.7 | 2026-09-26 | [`FirstToServe-0.1.7.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) |
+| Smart Delivery | 0.1.5 | 2026-09-26 | [`SmartDelivery-0.1.5.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) |
+| Auto Menu | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
+| Scan to Order | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
 
-The historical stable versions followed user confirmation of the corresponding development packages and an explicit request for stable versions. Auto Checkout 0.1.2 was confirmed with three cash and two card transactions, all completed on the first attempt, including checkout beyond the original interaction range. The [validation record](validation.md#english) preserves that scope alongside the current test-completion report.
-
-Stable version numbering and GitHub Release publication are separate steps. [CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) and local builds use the versions in the checked-out source, currently the development versions above. To obtain a historical stable package, build its corresponding source revision or use a published attachment for that version when available; building current source does not reproduce a historical stable package.
+The historical Bartender's Note 0.1.0 and Auto Checkout 0.1.1/0.1.2 acceptance records remain in the validation history. Current builds use the stable versions above; building current source does not reproduce those historical packages.
 
 Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english); the repository remains private. Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
 
@@ -64,21 +62,19 @@ This command reads the private repository using `GH_TOKEN` and requires a commit
 
 ### 已验收版本与当前源码
 
-2026-09-26，用户反馈全部 7 个 Mod 实机测试完成。[验收记录](validation.md#中文)将本次反馈关联下表当前开发版本，并记录确认范围。本次反馈不升级版本或授予发布授权。
+2026-09-26，维护者确认全部 7 个当前 Mod 实机及联机测试通过，明确要求去掉开发版后缀并发布正式 Release。[验收记录](validation.md#中文)将本次确认关联源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`。当前源码与获准正式包版本如下：
 
-| Mod | 最新已验收正式版 | 正式版实机确认日期 | 正式包名称 | 当前源码 |
-| --- | --- | --- | --- | --- |
-| Bartender's Note（调饮手记） | 0.1.0 | 2026-09-24 | `BartendersNote-0.1.0.zip` | 0.1.2-dev |
-| Auto Checkout（收银管家） | 0.1.2 | 2026-09-24 | `AutoCheckout-0.1.2.zip` | 0.1.4-dev |
-| Fresh to Serve（焕鲜上桌） | — | — | — | 0.1.2-dev |
-| First to Serve（出餐有序） | — | — | — | 0.1.7-dev |
-| Smart Delivery（配送随心） | — | — | — | 0.1.4-dev |
-| Auto Menu（菜单巧配） | — | — | — | 0.5.0-dev |
-| Scan to Order（扫码点餐） | — | — | — | 0.1.1-dev |
+| Mod | 正式版本 | 实机与联机确认日期 | 安装包 |
+| --- | --- | --- | --- |
+| Bartender's Note（调饮手记） | 0.1.2 | 2026-09-26 | [`BartendersNote-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) |
+| Auto Checkout（收银管家） | 0.1.4 | 2026-09-26 | [`AutoCheckout-0.1.4.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) |
+| Fresh to Serve（焕鲜上桌） | 0.1.2 | 2026-09-26 | [`FreshToServe-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2) |
+| First to Serve（出餐有序） | 0.1.7 | 2026-09-26 | [`FirstToServe-0.1.7.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) |
+| Smart Delivery（配送随心） | 0.1.5 | 2026-09-26 | [`SmartDelivery-0.1.5.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) |
+| Auto Menu（菜单巧配） | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
+| Scan to Order（扫码点餐） | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
 
-历史正式版均基于用户对相应开发包的实机确认及明确转正式版要求。Auto Checkout 0.1.2 的反馈为三笔现金和两笔刷卡全部首次尝试完成，包含超过原交互范围的结账；[验收记录](validation.md#中文)保留该范围，并另行记录本次测试完成反馈。
-
-正式版本号与 GitHub Release 发布是独立步骤。[CI artifacts](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml) 和本地构建均使用所检出源码的版本，目前为上表中的开发版。获取历史正式包应检出对应源码修订后构建；若该版本已有 Release 附件，也可直接下载。构建当前源码不会生成历史正式包。
+调饮手记 0.1.0、收银管家 0.1.1／0.1.2 的历史验收仍保留在验收记录中。当前构建使用上表正式版本，不会重新生成历史版本安装包。
 
 每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)，仓库保持私密。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
 

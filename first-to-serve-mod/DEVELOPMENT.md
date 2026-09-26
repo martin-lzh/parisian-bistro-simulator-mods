@@ -4,7 +4,7 @@
 
 ## English
 
-First to Serve is an independent, original UE4SS Lua Mod. Read the [repository development rules](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/DEVELOPMENT.md#english) and [player guide](README.md#english). Local interface evidence and analysis remain under ignored `work/`; no game files are build inputs.
+First to Serve is an independent, original UE4SS Lua Mod. Read the [repository development rules](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/DEVELOPMENT.md#english) and [player guide](README.md#english). Local interface evidence and analysis remain under ignored `work/`; no game files are build inputs.
 
 The adapter reads the current local pawn, physical mapped-key state, camera hit, source membership, native creation times and tray or food-trolley slots on the game thread. An eligible dish or finished drink identifies its source. The kitchen pass's native pickup box also identifies its world's kitchen through the reflected world subsystem. A drink output area's own StaticMesh identifies that area's OutputSlots, without aiming at a cup. Both area paths keep the same candidate filters and per-item default-action requests; neither dispatches the area's deposit or batch action. Area targeting requires an eligible candidate and a compatible free carrier slot; unrelated components and furniture remain excluded. The Mod still sends one request to the selected dish, never the native area-level batch interaction. The kitchen area class is optional so older builds retain direct-item targeting. The native hold locks the source by scalar identity and records the view direction and player position. Each request re-resolves that source and validates the candidate. When the aimed item becomes busy, carried or absent, pickup continues within 10 degrees and 30 cm of the last eligible aim. A different eligible source cancels immediately. Repeated native trigger events cannot reset a pending pickup or restart a canceled hold before release. It compares native date structs through the engine rather than converting opaque structs to Lua tables or imprecise numbers. A native hold event arms a session scoped to the player, world, carrier kind/identity and pickup area. A separate loop revalidates active pickups every 25 ms and allows a new ordinary interaction request after 50 ms, once the previous pickup is acknowledged. Idle and stopped sessions retain 100 ms scans; a fresh native hold bypasses that idle countdown. The pure sequencing module stores identities and timing only, waits for source/carrier acknowledgement and stops an unconfirmed gesture after two seconds. It never retries indefinitely or writes game queues, timestamps, capacity or distance settings.
 
@@ -28,7 +28,7 @@ Tests run the real adapter and runtime together through a three-item hold with b
 
 ### In-game regression checklist
 
-The user reported completion of in-game testing for 0.1.7-dev on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
+The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.7 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/releases/validation.md#english). These scenarios remain regression references; individual results were not reported separately.
 
 - On the recorded game/loader baseline, equip a tray or take hold of a food trolley and aim at a newer dish with older dishes at the pass. Confirm the oldest is taken first; continue holding to fill available food slots. Keep the crosshair on the first item’s empty spot and confirm pickup continues without a new hold. Repeat at both pass shelves. Also start by aiming at the native pickup area between plates; pan across it while holding and verify oldest-first order and the native-adjacent hint. Confirm empty passes and unrelated components do not start pickup.
 - At two separate drink output areas, arrange different completion times and partially filled drinks. Start on each output surface and pan across it while holding; repeat with direct finished-drink aiming. Verify source isolation, full drinks only, creation-time ordering, tray/trolley capacity and preserved short-click drink deposit. Empty areas and areas with only unfinished drinks must not activate pickup. Check hold behavior even if the surface has no visible native click row; the Mod does not add a hint without that row.
@@ -47,13 +47,13 @@ The pickup-area reference is Windows, Steam Build 25532071 / ProjectVersion 1.0.
 
 ### Manual script reload
 
-Install this version with the game closed before the first reload; older versions cannot hand over every state field. In `UE4SS-settings.ini`, set `[General]` values `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`, then restart once. After replacing every Lua script, focus the game and press **Ctrl+R**; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english).
+Install this version with the game closed before the first reload; older versions cannot hand over every state field. In `UE4SS-settings.ini`, set `[General]` values `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`, then restart once. After replacing every Lua script, focus the game and press **Ctrl+R**; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/docs/hot-reload.md#english).
 
 Reload cancels the current pickup; release the interaction key before a new hold. Cleanup and native-hint restoration follow the implementation above. Automatic Lua reload stays disabled so multi-file copying cannot load a partial update.
 
 ## 中文
 
-First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/DEVELOPMENT.md#中文)和[玩家说明](README.md#中文)。本机接口证据和分析仅位于忽略的 `work/`；游戏文件不是构建输入。
+First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/DEVELOPMENT.md#中文)和[玩家说明](README.md#中文)。本机接口证据和分析仅位于忽略的 `work/`；游戏文件不是构建输入。
 
 适配层在游戏线程读取本地玩家、实际按键状态、瞄准命中、出餐区域成员、原生创建时间及托盘或餐车空位。通过瞄准可拿取菜品、成品饮料、厨房出餐口的原生拿取框或饮料出品台的 StaticMesh 识别来源；饮料台直接使用自身 OutputSlots，无需瞄准杯子。两种区域入口均保留候选过滤和逐件默认交互请求，不发送区域放回饮料或批量拿取动作。对准出餐口时，通过其世界的反射子系统获取厨房管理器，仅在有符合条件的成品及对应承载工具空位时启动；不接受其他组件或无关家具。每次仍向排序选中的具体菜品发送一次交互请求，不调用区域的批量拿取。出餐口类可选，旧版游戏仍保留直接瞄准餐品的方式；原生长按以标量身份锁定来源，记录视线方向和玩家位置；每次请求重新查找来源并验证候选餐品。瞄准餐品变为正在拿取、已携带或消失后，只要仍在最后一次有效瞄准的 10 度及 30 厘米范围内就继续；瞄准其他有效来源时立即取消。重复的原生触发事件不会清空待确认的拿取，也不会在松键前重新启动已取消的操作。通过引擎比较原生日期结构，不将不透明结构转换成 Lua 表或有精度损失的数字。原生长按事件启动一次限定于玩家、世界、承载工具类型及身份和出餐区域的操作；长按取餐期间每 25 毫秒检查状态，上一件确认拿走且距离上次请求至少 50 毫秒后发送下一次普通交互请求。空闲及停止状态保持 100 毫秒检查，新长按会立即跳过空闲等待。纯逻辑模块仅保存身份和计时，等待台面成员或承载工具状态确认；两秒未确认则停止本次长按。不无限重试，也不改写队列、时间戳、容量或交互距离。
 
@@ -65,7 +65,7 @@ First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](htt
 
 ### 实机回归清单
 
-用户于 2026-09-26 反馈实机测试完成，本次关联 0.1.7-dev，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.7，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/releases/validation.md#中文)。以下场景保留作为回归参考，未单独反馈逐项结果。
 
 - 在基线游戏和加载器上装备托盘或握住餐车，瞄准较新的菜品，确认先拿最早制作的，并持续按住装满可用菜品位；第一盘拿走后保持准星在原空位，确认无需重新长按即可继续；覆盖上下两层出餐架；另对准盘子之间的原生拿取区域启动长按，在该区域内移动准星，确认最早优先及相邻原生提示；空出餐口和无关组件不启动取餐。
 - 在两个饮料台放置不同时间的成品和未灌满饮料，分别对准出品台面启动并在台面内移动准星长按，再重复直接瞄准成品杯子；确认仅拿本区域成品、时间排序、托盘/餐车容量及短按放回饮料。空台面及仅有未灌满饮料时不触发功能。台面没有可见原生点击行时仍应能长按，Mod 不在缺少该行时添加提示。
@@ -84,6 +84,6 @@ First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](htt
 
 ### 手动脚本重载
 
-首次重载前须关闭游戏安装本版，旧版无法交接全部状态。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，重启一次。更新完全部 Lua 脚本后，在游戏窗口中按 **Ctrl+R**；参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)。
+首次重载前须关闭游戏安装本版，旧版无法交接全部状态。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，重启一次。更新完全部 Lua 脚本后，在游戏窗口中按 **Ctrl+R**；参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/first-to-serve-v0.1.7/docs/hot-reload.md#中文)。
 
 重载取消当前取餐，须松开交互键后重新长按。残留清理和原生提示恢复采用上方实现。保持自动 Lua 重载关闭，避免多文件复制一半时加载不完整更新。

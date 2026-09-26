@@ -6,7 +6,7 @@
 
 Add an **Auto-compose** button beside **Print menu** on the computer's daily-menu page to find a menu with the highest estimated selection rate.
 
-**Version: 0.5.0-dev.** Single player or multiplayer host only. Only the host needs to install it; guests do not get the button.
+**Version: 0.5.0.** Single player or multiplayer host only. Only the host needs to install it; guests do not get the button.
 
 ### How to use
 
@@ -22,11 +22,11 @@ The chosen menu is saved; the other service is unchanged. No ingredients are bou
 
 The **Auto-compose** button sits beside **Print menu** on the daily-menu page, with its tooltip visible here.
 
-![Daily-menu page with the Auto-compose button beside Print menu and its tooltip visible](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
+![Daily-menu page with the Auto-compose button beside Print menu and its tooltip visible](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
 
 The captured menu forecast shows **86% estimated adoption**, compatibility by customer profile and **68 menus available** from current stock.
 
-![Menu forecast showing 86 percent estimated adoption, customer-profile compatibility and 68 menus available](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
+![Menu forecast showing 86 percent estimated adoption, customer-profile compatibility and 68 menus available](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
 
 ### Requirements
 
@@ -34,10 +34,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`AutoMenu-0.5.0-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [Auto Menu 0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0).
+2. Under **Assets**, download **`AutoMenu-0.5.0.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/SUPPORT.md#english).
 
 ### Install
 
@@ -70,15 +70,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If the button is missing, confirm you are host and the complete Mod folder, including its helper, is installed. If composition fails, keep the existing menu and report relevant `[AutoMenu]` lines from `UE4SS.log` with what you clicked.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 在电脑每日菜单页面的“打印菜单”旁增加 **自动组合** 按钮，按游戏的预计选择率选择菜单组合。
 
-**版本：0.5.0-dev。** 仅单人或联机房主可用，只需房主安装，客机不显示该按钮。
+**版本：0.5.0。** 仅单人或联机房主可用，只需房主安装，客机不显示该按钮。
 
 ### 怎么使用
 
@@ -94,11 +94,11 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 每日菜单页面的 **Print menu（打印菜单）** 旁显示 **Auto-compose（自动组合）** 按钮，图中同时展示了按钮的悬浮说明。
 
-![实机画面：每日菜单页面中的自动组合按钮位于打印菜单旁，并显示悬浮说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
+![实机画面：每日菜单页面中的自动组合按钮位于打印菜单旁，并显示悬浮说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
 
 图中菜单预测显示 **86% 的预计选择率**、各类顾客的适配度，以及现有库存可提供的 **68 份菜单**。
 
-![实机画面：菜单预测显示86%的预计选择率、顾客适配度及现有库存可提供的68份菜单](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
+![实机画面：菜单预测显示86%的预计选择率、顾客适配度及现有库存可提供的68份菜单](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
 
 ### 使用要求
 
@@ -106,10 +106,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`AutoMenu-0.5.0-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [菜单巧配 0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0)。
+2. 在 **Assets** 中下载 **`AutoMenu-0.5.0.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -142,6 +142,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 按钮未出现时，先确认自己是房主，并已安装包含辅助文件的完整 Mod 文件夹。组合失败时保留当前菜单，反馈点击过程及 `UE4SS.log` 中相关的 `[AutoMenu]` 日志。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/auto-menu-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

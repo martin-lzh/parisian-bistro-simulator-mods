@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.4-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
+Player instructions: [README](README.md#english). **Current source: 0.1.4.** The maintainer confirmed in-game and multiplayer testing passed on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
 
 ### Implementation
 
@@ -62,7 +62,7 @@ Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged 
 
 | Marker | Meaning |
 | --- | --- |
-| `START version=0.1.4-dev` | Loaded version, scheduler and `player_guard=transaction-only` |
+| `START version=0.1.4` | Loaded version, scheduler and `player_guard=transaction-only` |
 | `RELOAD` | Inherited AI recovery completed before resuming retained retry history |
 | `HOOK installed event=customer-at-billing` | Notification listener registered |
 | `EVENT customer-at-billing` | Deferred game-thread register state and number of coalesced notifications |
@@ -93,7 +93,7 @@ Lua 5.4 tests cover cash/card stages, animation waits, deduplication, bounded re
 
 The distance tests cover both payment stages, movement between stages, preserving original restrictions, request/diagnostic errors, partial preparation, independent restoration after a failed field, destroyed payments and invalid distances. Localization tests check all cultures and messages, aliases, failed language reads, live switches, missing-language fallback and stable diagnostic fields. Substitute objects cannot establish real engine bridging, actual hook delivery or gameplay results.
 
-The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4-dev` with `player_guard=transaction-only`.
+The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4` with `player_guard=transaction-only`.
 
 ### Earlier investigation and acceptance
 
@@ -105,13 +105,13 @@ Later hot-reload logs showed one cash transaction advancing immediately and othe
 
 The user confirmed 0.1.1-dev in-game and requested 0.1.1 on 2026-09-24, retaining runtime logic and changing the diagnostic version. Full environment versions, multiplayer role and duration were not enumerated.
 
-Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The later 2026-09-26 completion report did not separately describe 0.1.4-dev hot-reload or localization results.
+Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The later 2026-09-26 completion report did not separately describe 0.1.4 hot-reload or localization results.
 
 ### In-game regression checklist
 
 Reload repeatedly while waiting for cash, card processing, an open drawer, and an exhausted retry budget. Check one live notification listener/poller, unchanged cooldowns and attempt counts, restored/reapplied AI jobs, then world travel and recovery failure. The overall completion report did not provide separate in-game results for these reload scenarios.
 
-These are pending scenarios, not completed test claims. Record actual game/loader versions, language, role and any manual intervention; compare `REQUEST context` with `AFTER`, bill and income.
+These scenarios remain regression references; the overall in-game and multiplayer pass is recorded above. Record actual game/loader versions, language, role and any manual intervention; compare `REQUEST context` with `AFTER`, bill and income.
 
 1. In single player, let a finished customer reach the counter. Confirm automatic payment/departure while seated and dining customers remain unaffected.
 2. Test cash and cards, prompts and drawer animation; verify bills, tips, sales and income are counted once.
@@ -134,13 +134,13 @@ The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1
 
 ### Manual script reload
 
-Close the game for the first upgrade from 0.1.3-dev or earlier. Once 0.1.4-dev is running, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english), replace the complete Lua package, then use **Ctrl+R** or the loader's Reload Mods action. Verify the new `START` version and review `RELOAD` and `ERROR` entries using the diagnostic reference above.
+Close the game for the first upgrade from 0.1.3-dev or earlier. Once 0.1.4 is running, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#english), replace the complete Lua package, then use **Ctrl+R** or the loader's Reload Mods action. Verify the new `START` version and review `RELOAD` and `ERROR` entries using the diagnostic reference above.
 
 Reload requires the experimental loader's `ModRef` shared-variable and unload support. The lifecycle section above defines retry history and AI recovery, including permanent-removal requirements. Restart if state is damaged or uses an unsupported future format.
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.4-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.4。** 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
 
 ### 多语言适配
 
@@ -156,7 +156,7 @@ Reload requires the experimental loader's `ModRef` shared-variable and unload su
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.4-dev` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `START version=0.1.4` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
 | `RELOAD` | 已恢复旧实例的 AI 变更，并按当前会话核对交易历史 |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 延后在游戏线程检查时的柜台状态和合并提醒次数 |
@@ -223,9 +223,9 @@ git diff --check
 
 0.1.2 新增远距离现金和刷卡两阶段执行、两步之间玩家距离变化、已有交互设置保留、请求与诊断异常、部分准备失败、单项恢复失败后继续恢复其他项、付款对象销毁以及无效距离输入的验证。
 
-打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4-dev.zip` 和 SHA-256 文件。包不包含测试、开发工具、加载器或游戏资料。构建不会写入游戏目录、操作存档或启动/关闭游戏。
+打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4.zip` 和 SHA-256 文件。包不包含测试、开发工具、加载器或游戏资料。构建不会写入游戏目录、操作存档或启动/关闭游戏。
 
-本版的加载日志为 `START version=0.1.4-dev`，同时保留 `player_guard=transaction-only`；包的 SHA-256 用于核对完整内容。
+本版的加载日志为 `START version=0.1.4`，同时保留 `player_guard=transaction-only`；包的 SHA-256 用于核对完整内容。
 
 ### 远端测试反馈
 
@@ -264,6 +264,6 @@ git diff --check
 
 ### 手动脚本重载
 
-首次从 0.1.3-dev 或更早版本升级时须关闭游戏。0.1.4-dev 开始运行后，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器，完整替换 Lua 安装包，再按 **Ctrl+R** 或使用加载器的 Reload Mods。核对新的 `START` 版本，并按上方诊断说明检查 `RELOAD` 和 `ERROR`。
+首次从 0.1.3-dev 或更早版本升级时须关闭游戏。0.1.4 开始运行后，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#中文)设置加载器，完整替换 Lua 安装包，再按 **Ctrl+R** 或使用加载器的 Reload Mods。核对新的 `START` 版本，并按上方诊断说明检查 `RELOAD` 和 `ERROR`。
 
 重载需要实验版加载器的 `ModRef` 共享变量及卸载支持。重试历史、AI 恢复和永久卸载要求见上方生命周期章节；记录损坏或来自不支持的未来格式时重启游戏。

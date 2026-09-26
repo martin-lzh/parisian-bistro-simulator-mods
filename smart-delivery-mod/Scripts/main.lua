@@ -21,7 +21,7 @@ local function start()
         local restored, restore_error = pcall(bridge.calls.disable)
         for _, view in pairs(views) do pcall(UI.destroy, view) end
         for _, hook in ipairs(hooks) do pcall(UnregisterHook, table.unpack(hook)) end
-        print('[SmartDelivery] ERROR version=0.1.5-dev ' .. tostring(err)
+        print('[SmartDelivery] ERROR version=0.1.5 ' .. tostring(err)
             .. (restored and '' or '; restore=' .. tostring(restore_error)) .. '\n')
     end
     local function guard(fn)
@@ -70,7 +70,7 @@ local function start()
         assert(type(pre) == 'number' and type(post) == 'number', 'Reset hook unavailable')
         hooks[#hooks + 1] = { reset, pre, post }
         ready = true
-        print('[SmartDelivery] START version=0.1.5-dev method=' .. saved .. '\n')
+        print('[SmartDelivery] START version=0.1.5 method=' .. saved .. '\n')
     end
     local run = guard(function()
         initialize()

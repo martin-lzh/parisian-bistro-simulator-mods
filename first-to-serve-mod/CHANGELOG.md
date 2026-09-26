@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.7 - 2026-09-26
+
+### English
+
+- Promote 0.1.7-dev to 0.1.7 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Hold at kitchen passes or drink output surfaces to collect the oldest ready items with trays or food trolleys; retain native short-click behavior, localized hints and language-failure recovery.
+- Include kitchen/drink-area screenshots and a 5.13 MiB gameplay GIF with its complete 4.48-second duration.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.7-dev 转为 0.1.7；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 持托盘或餐车在出餐口、饮料出品台长按，按完成先后拿取成品；保留原生短按、本地化提示及语言读取失败恢复。
+- 附上出餐口与饮料出品台截图，以及保留完整 4.48 秒时长的 5.13 MiB 实机 GIF。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.7-dev
+
 - Compress the gameplay GIF from 81.05 MiB to 5.13 MiB using 960 × 600 frames, approximately 6.25 fps and a 96-color palette; retain the full 4.48-second recording and loop.
 - 将实机 GIF 从 81.05 MiB 压缩为 5.13 MiB，采用 960 × 600、约 6.25 帧/秒及 96 色，保留完整 4.48 秒录制与循环播放。
 

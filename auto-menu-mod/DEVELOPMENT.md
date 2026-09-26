@@ -4,7 +4,7 @@
 
 ## English
 
-**0.5.0-dev.** The user reported completion of in-game testing on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for its scope. Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
+**0.5.0.** The maintainer confirmed in-game and multiplayer testing passed on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#english) for its scope. Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
 
 ### Implementation
 
@@ -46,7 +46,7 @@ git diff --check
 
 The build runs native tests before packaging. Six Lua suites check request serialization/cleanup, fresh results, eligible domains, host restrictions, final save/restoration, logs, language and reload behavior. The native harness checks every supported dish/profile/intent cache key, cache lifetime and thread isolation, exhaustive non-additive search, empty menus, ties, exact ceilings, float comparisons, synthetic full-projection differential checks, native array ownership and restoration on failures. A non-game executable must be rejected before patching. Local native discovery is also checked read-only against the installed reference executable; that does not execute the game functions or establish in-game speed.
 
-Build output: `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` and SHA-256. The allowlist contains seven Lua modules, one generated helper DLL, README, DEVELOPMENT, CHANGELOG, LICENSE and the activation marker. CI verifies the generated DLL hash. Source, tests, request/result files, tools and game references are excluded. Builds do not install, modify saves, start/stop the game or publish a release.
+Build output: `outputs/auto-menu/AutoMenu-0.5.0.zip` and SHA-256. The allowlist contains seven Lua modules, one generated helper DLL, README, DEVELOPMENT, CHANGELOG, LICENSE and the activation marker. CI verifies the generated DLL hash. Source, tests, request/result files, tools and game references are excluded. Builds do not install, modify saves, start/stop the game or publish a release.
 
 ### In-game checks
 
@@ -57,13 +57,13 @@ Build output: `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` and SHA-256. The allowl
 
 ### Manual script reload
 
-Initial installation and helper updates require closing the game and installing the complete package. For subsequent Lua-only updates, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#english), replace every updated Lua file, then press **Ctrl+R**. The new state removes the previous button before attaching one replacement. The current click's search cache does not survive reload.
+Initial installation and helper updates require closing the game and installing the complete package. For subsequent Lua-only updates, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/docs/hot-reload.md#english), replace every updated Lua file, then press **Ctrl+R**. The new state removes the previous button before attaching one replacement. The current click's search cache does not survive reload.
 
 Lua reload cannot replace `Scripts/auto_menu_bridge.dll`; close and restart the game for DLL changes, loader updates or Mod removal. A refused native save is not repeatedly retried. The `[AutoMenu]` diagnostic and timing fields above describe each attempt without per-candidate logs.
 
 ## 中文
 
-**0.5.0-dev。** 用户于 2026-09-26 反馈实机测试完成，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
+**0.5.0。** 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#中文)。独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
 
 ### 实现
 
@@ -86,7 +86,7 @@ Lua 的 `search` 包括首次 DLL 加载／定位、文件交换、基准预测�
 
 使用 Windows x64、MSVC C++ Build Tools 和 Windows SDK，执行英文部分命令。六组 Lua 测试覆盖协议、候选、恢复／保存、计时、多语言和重载；原生测试覆盖全部支持的缓存键、线程与搜索隔离、非加性完整枚举、空菜单、同值／上限、逐位浮点比较、合成预测的逐组合缓存对照、原生数组释放及异常恢复。构建还验证非游戏 EXE 被拒绝。本机已只读核对参考 EXE 的目标发现；这不代表已执行真实游戏函数或测得提速。
 
-产物为 `outputs/auto-menu/AutoMenu-0.5.0-dev.zip` 和 SHA-256。固定白名单只含七个 Lua 模块、一个编译生成的 DLL、三份文档、LICENSE 及启用标记，CI 核对 DLL 哈希；不包含源码、测试、交换文件、工具或游戏参考。构建不安装、不改存档、不启停游戏，也不发布版本。
+产物为 `outputs/auto-menu/AutoMenu-0.5.0.zip` 和 SHA-256。固定白名单只含七个 Lua 模块、一个编译生成的 DLL、三份文档、LICENSE 及启用标记，CI 核对 DLL 哈希；不包含源码、测试、交换文件、工具或游戏参考。构建不安装、不改存档、不启停游戏，也不发布版本。
 
 ### 实机检查
 
@@ -97,6 +97,6 @@ Lua 的 `search` 包括首次 DLL 加载／定位、文件交换、基准预测�
 
 ### 手动脚本重载
 
-首次安装与辅助模块更新须关闭游戏，安装完整包。之后仅更新 Lua 文件时，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/docs/hot-reload.md#中文)设置加载器，替换全部更新脚本，再按 **Ctrl+R**。新状态先移除旧按钮，再挂接一个新按钮；本次点击的搜索缓存不跨重载保留。
+首次安装与辅助模块更新须关闭游戏，安装完整包。之后仅更新 Lua 文件时，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/docs/hot-reload.md#中文)设置加载器，替换全部更新脚本，再按 **Ctrl+R**。新状态先移除旧按钮，再挂接一个新按钮；本次点击的搜索缓存不跨重载保留。
 
 Lua 重载不能替换 `Scripts/auto_menu_bridge.dll`；DLL 变更、加载器更新或 Mod 卸载均须关闭并重启游戏。原生保存被拒绝后不反复重试；`[AutoMenu]` 的诊断和计时字段见上文，不逐候选输出日志。

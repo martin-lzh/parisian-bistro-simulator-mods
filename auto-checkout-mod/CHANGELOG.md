@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.4 - 2026-09-26
+
+### English
+
+- Promote 0.1.4-dev to 0.1.4 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Complete cash and card checkout on the host, including distant interactions, temporary-setting restoration, localization and reload recovery.
+- Include the checkout-counter gameplay screenshot in both player-guide languages.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.4-dev 转为 0.1.4；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 房主端自动完成现金与刷卡结账，支持远距离交互、临时设置恢复、本地化及重载恢复。
+- 中英文玩家说明附上收银台实机截图。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.4-dev
+
 ### English
 
 - Add the maintainer-provided checkout-counter screenshot to the English and Chinese README sections, with image provenance and scene notes.

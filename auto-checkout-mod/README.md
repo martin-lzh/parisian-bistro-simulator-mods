@@ -6,7 +6,7 @@
 
 Automatically accept customers' cash or cards at the counter and finish the register interaction.
 
-**Version: 0.1.4-dev.** Single player or multiplayer host only. Only the host needs to install it; guests do not run checkout.
+**Version: 0.1.4.** Single player or multiplayer host only. Only the host needs to install it; guests do not run checkout.
 
 ### How to use
 
@@ -23,7 +23,7 @@ If one transaction repeatedly fails, finish it manually; later customers can sti
 
 A customer stands at the checkout counter, with the bill displayed on the register and the cash drawer open.
 
-![Customer at the checkout counter with the bill on the register screen and the cash drawer open](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
+![Customer at the checkout counter with the bill on the register screen and the cash drawer open](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
 
 ### Requirements
 
@@ -31,10 +31,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`AutoCheckout-0.1.4-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [Auto Checkout 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4).
+2. Under **Assets**, download **`AutoCheckout-0.1.4.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#english).
 
 ### Install
 
@@ -66,15 +66,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If checkout does not start, confirm you are the host and the Mod folder is in the correct place. For a stuck transaction, try finishing it manually. If a warning says employee jobs or interaction settings could not be restored, leave and reload the restaurant. Include relevant `[AutoCheckout]` lines from `UE4SS.log` with a problem report.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 自动接收柜台顾客递出的现金或银行卡，并完成收银机结账。
 
-**版本：0.1.4-dev。** 仅单人或联机房主运行，只需房主安装，客机不会执行自动结账。
+**版本：0.1.4。** 仅单人或联机房主运行，只需房主安装，客机不会执行自动结账。
 
 ### 怎么使用
 
@@ -91,7 +91,7 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 顾客站在收银台前，收银机显示账单，钱箱处于打开状态。
 
-![实机画面：顾客站在收银台前，收银机显示账单，钱箱打开](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
+![实机画面：顾客站在收银台前，收银机显示账单，钱箱打开](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
 
 ### 使用要求
 
@@ -99,10 +99,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`AutoCheckout-0.1.4-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [收银管家 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4)。
+2. 在 **Assets** 中下载 **`AutoCheckout-0.1.4.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -134,6 +134,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 未自动结账时，先确认自己是房主，且 Mod 文件夹位置正确。单笔交易卡住可先手动完成。若警告提示员工任务或交互设置恢复失败，请退出餐厅后重新载入。反馈时附上 `UE4SS.log` 中相关的 `[AutoCheckout]` 日志。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

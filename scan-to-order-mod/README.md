@@ -6,7 +6,7 @@
 
 Automatically place seated customers' food and drink orders without a waiter or player taking them. No QR image or phone interaction is required.
 
-**Version: 0.1.1-dev.** Single player or multiplayer host only. Install it on the host; guests never send orders.
+**Version: 0.1.1.** Single player or multiplayer host only. Install it on the host; guests never send orders.
 
 ### How to use
 
@@ -22,7 +22,7 @@ Enter your restaurant as host. Ordering starts automatically, with no key or set
 
 Food and drink order icons beside seated customers display green check marks.
 
-![In-game food and drink order icons showing green check marks beside seated customers](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
+![In-game food and drink order icons showing green check marks beside seated customers](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
 
 ### Requirements
 
@@ -30,10 +30,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-1. Sign in to a GitHub account with access to this private repository. Open [Mod packages](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev) and choose the latest successful **dev** run with a **mod-packages** artifact.
-2. Open that run → **Artifacts** → **mod-packages** and download it. Extract this outer archive, then extract **`ScanToOrder-0.1.1-dev.zip`** inside it. Use the Mod ZIP, not GitHub's **Source code** archive.
+1. Sign in to a GitHub account with access to this private repository and open [Scan to Order 0.1.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1).
+2. Under **Assets**, download **`ScanToOrder-0.1.1.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-Use a run containing the version named above. Artifacts expire after 14 days; if the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/SUPPORT.md#english).
 
 ### Install
 
@@ -65,15 +65,15 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If an order waits, check stock, staff, equipment and whether the table is being handled manually. If an error stops automation, leave and re-enter the restaurant; restarting scripts alone does not clear an uncertain order. Include relevant `[ScanToOrder]` lines from `UE4SS.log` with a problem report.
 
-In-game testing was reported on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) describes its scope.
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english) describes its scope.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/scan-to-order-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
 
 自动为已入座顾客提交食物和饮料订单，无需服务员或玩家点餐，也不需要实际二维码或手机交互。
 
-**版本：0.1.1-dev。** 仅单人或联机房主运行，只需房主安装，客机不会提交订单。
+**版本：0.1.1。** 仅单人或联机房主运行，只需房主安装，客机不会提交订单。
 
 ### 怎么使用
 
@@ -89,7 +89,7 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 已入座顾客旁的餐品与饮料订单图标显示绿色勾选标记。
 
-![实机画面：已入座顾客旁的餐品与饮料订单图标显示绿色勾选标记](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
+![实机画面：已入座顾客旁的餐品与饮料订单图标显示绿色勾选标记](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
 
 ### 使用要求
 
@@ -97,10 +97,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-1. 登录有权访问本私密仓库的 GitHub 账号，打开[Mod 安装包](https://github.com/martin-lzh/parisian-bistro-simulator-mods/actions/workflows/mods.yml?query=branch%3Adev)，选择最近一次成功且含有 **mod-packages** 的 **dev** 运行。
-2. 打开该次运行 → **Artifacts** → **mod-packages** 并下载。先解压这一层压缩包，再解压里面的 **`ScanToOrder-0.1.1-dev.zip`**。请选择 Mod ZIP，不要把 GitHub 的 **Source code** 当作安装包。
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [扫码点餐 0.1.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1)。
+2. 在 **Assets** 中下载 **`ScanToOrder-0.1.1.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
 
-请选择包含上方版本的运行。安装包保留 14 天；包已过期、缺失或无法访问时，参见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/SUPPORT.md#中文)。
 
 ### 安装
 
@@ -132,6 +132,6 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 订单未提交时，先检查库存、员工、设备，以及餐桌是否正由玩家处理。异常导致自动点餐停止后，请退出餐厅并重新进入；仅重新加载脚本不会解除结果未确认订单的停止状态。反馈时附上 `UE4SS.log` 中相关的 `[ScanToOrder]` 日志。
 
-用户于 2026-09-26 反馈实机测试完成，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/scan-to-order-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

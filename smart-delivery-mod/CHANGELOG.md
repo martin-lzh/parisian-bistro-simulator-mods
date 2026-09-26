@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.1.5 - 2026-09-26
+
+### English
+
+- Promote 0.1.5-dev to 0.1.5 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
+- Choose free, budget or premium automatic-order delivery, with saved preferences, native discovery checks, language fallback and Lua reload support. Use dark selector surfaces, white text and green selection/focus styling.
+- Include smart-order settings and delivery-selector gameplay screenshots.
+- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+
+### 中文
+
+- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.5-dev 转为 0.1.5；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
+- 为自动智能订购选择免费、经济或高级配送，支持偏好保存、原生定位检查、语言回退及 Lua 重载；选择框采用深色底、白色文字与绿色选中及焦点样式。
+- 附上智能订购设置及配送选择框实机截图。
+- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+
+## 0.1.5-dev
+
 - Add maintainer-provided screenshots of the smart-order settings and expanded delivery selector to both README languages, with image provenance and scene notes.
 - 将维护者提供的智能订购设置与展开配送选项实机图加入中英文 README，并记录图片来源及可见场景。
 
