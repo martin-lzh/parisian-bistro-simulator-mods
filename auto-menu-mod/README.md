@@ -6,7 +6,7 @@
 
 Adds an **Auto-compose** button beside **Print menu** on the computer's daily-menu page. This is an independent Mod.
 
-**Current source: 0.4.0-dev. In-game acceptance is pending.** Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4.
+**Current source: 0.4.1-dev. In-game acceptance is pending.** Requires UE4SS experimental; the checked API is `v3.0.1-1140-gf58e8f84`. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4.
 
 ### Use
 
@@ -30,7 +30,7 @@ The button follows the game's 14 languages and is available only to the local ho
 
 The package contains original Mod scripts and documentation only. Building does not install it or start/stop the game. After initial installation, Lua updates support **Ctrl+R** with `EnableHotReloadSystem=1` in UE4SS settings. Reload removes the old button before creating a replacement. Close the game before removing the Mod or updating the loader.
 
-For failures, check `[AutoMenu]` logs. Include Mod/game/loader versions, language and host/client role. Successful logs include the native rate, prediction count and elapsed time. A refused native save is not repeatedly retried.
+For failures, check `[AutoMenu]` in the loader's `UE4SS.log`. Include Mod/game/loader versions, language and host/client role. Each click logs `SEARCH` with option counts (including empty) and the full combination count. Successful runs add `COMPOSED`, `TIMING` and `TIMING_PARTS` with evaluations, total/search time, average prediction time and phase percentages. No individual trials are logged. A refused native save is not repeatedly retried. See the [timing field descriptions](DEVELOPMENT.md#timing-logs).
 
 [Development and validation](DEVELOPMENT.md#english) · [Changes](CHANGELOG.md)
 
@@ -38,7 +38,7 @@ For failures, check `[AutoMenu]` logs. Include Mod/game/loader versions, languag
 
 在电脑每日菜单页面的“打印菜单”旁增加 **自动组合** 按钮。这是独立 Mod。
 
-**当前源码：0.4.0-dev，待游戏内验收。** 需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。
+**当前源码：0.4.1-dev，待游戏内验收。** 需要 UE4SS experimental，核对的 API 为 `v3.0.1-1140-gf58e8f84`。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。
 
 ### 使用
 
@@ -62,6 +62,6 @@ For failures, check `[AutoMenu]` logs. Include Mod/game/loader versions, languag
 
 安装包只含原创 Mod 脚本和文档。构建不自动安装、不启动或关闭游戏。首次安装后，在 UE4SS 设置中启用 `EnableHotReloadSystem=1`，Lua 更新可按 **Ctrl+R** 重载；重载会先移除旧按钮再建立新按钮。卸载 Mod 或更新加载器前需关闭游戏。
 
-若组合失败，查看 `[AutoMenu]` 日志，反馈 Mod／游戏／加载器版本、语言和房主／访客身份。成功日志记录原生选择率、试算次数和总耗时。原生保存被拒绝时不会反复提交。
+若组合失败，查看加载器 `UE4SS.log` 中的 `[AutoMenu]` 日志，反馈 Mod／游戏／加载器版本、语言和房主／访客身份。每次点击先输出 `SEARCH`，记录含留空的各类候选数和全部组合数；成功后输出 `COMPOSED`、`TIMING` 和 `TIMING_PARTS`，记录实际试算次数、总／搜索耗时、平均预测耗时和各阶段占比，不逐组合刷日志。原生保存被拒绝时不会反复提交。见[计时字段说明](DEVELOPMENT.md#计时日志)。
 
 [开发与验收](DEVELOPMENT.md#中文) · [版本变化](CHANGELOG.md)

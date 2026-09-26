@@ -19,13 +19,23 @@ local function start()
         if not view or view.handling or not Game.available(view.owner)
             or not button:IsInteractionEnabled() then return end
         view.handling = true
-        local started = os.clock()
         local ok, result = xpcall(Game.compose, traceback, view.owner)
         view.handling = false
         if ok then
             last_error = nil
-            print(string.format('[AutoMenu] COMPOSED version=0.4.0-dev rate=%.9f evaluations=%d elapsed=%.3f\n',
-                result.rate, result.evaluations, os.clock() - started))
+            local timing = result.timing
+            print(string.format('[AutoMenu] COMPOSED version=0.4.1-dev rate=%.9f evaluations=%d elapsed=%.3f\n',
+                result.rate, result.evaluations, timing.total))
+            print(string.format('[AutoMenu] TIMING total_ms=%.3f search_ms=%.3f projection_avg_ms=%.6f field_writes=%d stop=%s\n',
+                timing.total * 1000, timing.search * 1000, timing.projection * 1000 / result.evaluations,
+                timing.field_writes, result.evaluations < result.combinations and 'native_ceiling' or 'exhausted'))
+            local parts = {}
+            for _, phase in ipairs({ 'setup', 'writes', 'projection', 'rate_read', 'restore', 'save', 'verify', 'refresh', 'lua_and_timing' }) do
+                local seconds = timing[phase]
+                parts[#parts + 1] = string.format('%s=%.3fms(%.2f%%)', phase, seconds * 1000,
+                    timing.total > 0 and seconds * 100 / timing.total or 0)
+            end
+            print('[AutoMenu] TIMING_PARTS ' .. table.concat(parts, ' ') .. '\n')
         else report(result) end
     end
 
@@ -61,7 +71,7 @@ local function start()
         if not ok then report(err) end
         return false
     end)
-    print('[AutoMenu] START version=0.4.0-dev\n')
+    print('[AutoMenu] START version=0.4.1-dev\n')
 end
 
 local ok, err = xpcall(start, traceback)

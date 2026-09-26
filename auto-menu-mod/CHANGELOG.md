@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Auto Menu 0.4.1-dev adds per-search timing logs: eligible option counts including empty choices, total combinations, actual evaluations, changed field writes, native projection average and stopping reason.
+- Report milliseconds and percentages for setup, trial writes, native projection dispatch/return, rate extraction, restore, save, save verification, refresh and remaining Lua/timing overhead. Aggregate in memory; never log individual trials. The existing `os.clock` timer has limited resolution, so short phase shares are approximate. Search and selection behavior are unchanged.
+- Auto Menu 0.4.1-dev 新增每次搜索的计时日志：包含留空的各类候选数、全部组合数、实际试算数、变化字段写入数、原生预测平均耗时和结束原因。
+- 分别记录准备、试算字段写入、原生预测调用及返回、选择率读取、恢复、保存、保存核对、刷新，以及其余 Lua／计时开销的毫秒数和占比。内存累计，不逐组合写日志；沿用的 `os.clock` 精度有限，短阶段占比为近似值。搜索与选优行为不变。
+
+## 0.4.0-dev
+
 - Auto Menu 0.4.0-dev uses a direct synchronous search: collect eligible dish IDs, call the native prediction for each combination, then apply the highest-rate menu once.
 - Remove search timers, progress/cancellation UI, forecast snapshots, repeated price/stock checks, equivalence grouping and warm-start state. Reuse one trial table and write only changed dish fields.
 - Include empty choices in every course and the completely empty menu. An empty winning menu follows native saving behavior and is deactivated by the game. Ties retain the eligible current menu; reaching the native ceiling can still end search early.

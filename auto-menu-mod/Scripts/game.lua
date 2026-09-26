@@ -53,6 +53,9 @@ local function choices(owner, current)
 end
 
 function Game.compose(owner)
+    local clock = os.clock
+    local started = clock()
+    local timing = { writes = 0, projection = 0, rate_read = 0, field_writes = 0 }
     assert(Game.available(owner), 'Daily menu is not available to this host')
     local manager, period = owner.BoundDailyMenuBrasserieManager, owner.SelectedDailyMenuPeriod
     local name = period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu'
@@ -62,29 +65,64 @@ function Game.compose(owner)
     template.Period = period
     local domains = choices(owner, original)
     local ceiling = manager:GetDailyMenuMaximumPromotedAdoptionChance()
+    local counts, combinations = {}, 1
+    for _, course in ipairs(Planner.courses) do
+        local count = #domains[course.field]
+        counts[#counts + 1] = course.field .. '=' .. count
+        combinations = combinations * count
+    end
+    print(string.format('[AutoMenu] SEARCH period=%d options_including_empty=%s combinations=%d clock=os.clock\n',
+        period, table.concat(counts, ','), combinations))
+    timing.setup = clock() - started
+    local search_started = clock()
     -- Everything runs inside the click's game-thread callback. No delays,
     -- sampled simulation writes or repeated condition scans are needed.
     local ok, result = pcall(function()
         storage.Period = period
         return Planner.solve(domains, template, function(menu)
+            local before_write = clock()
             for _, course in ipairs(Planner.courses) do
                 local field = course.field
                 if applied[field] ~= menu[field] then
                     storage[field] = menu[field]; applied[field] = menu[field]
+                    timing.field_writes = timing.field_writes + 1
                 end
             end
-            return owner:GetDailyMenuProjection(period).EstimatedAdoptionRate
+            local before_projection = clock()
+            local projection = owner:GetDailyMenuProjection(period)
+            local before_read = clock()
+            local rate = projection.EstimatedAdoptionRate
+            local after_read = clock()
+            timing.writes = timing.writes + (before_projection - before_write)
+            timing.projection = timing.projection + (before_read - before_projection)
+            timing.rate_read = timing.rate_read + (after_read - before_read)
+            return rate
         end, ceiling)
     end)
+    timing.search = clock() - search_started
     -- Trial writes never use the save path. Restore even if a native call fails.
+    local phase_started = clock()
     manager[name] = original
+    timing.restore = clock() - phase_started
     if not ok then error(result) end
+    phase_started = clock()
     owner:SaveDailyMenu(result.menu)
+    timing.save = clock() - phase_started
+    phase_started = clock()
     local saved = manager[name]
     for _, course in ipairs(Planner.courses) do
         assert(saved[course.field] == result.menu[course.field], 'Native menu save did not accept the selection')
     end
+    timing.verify = clock() - phase_started
+    phase_started = clock()
     owner:RefreshDailyMenus()
+    timing.refresh = clock() - phase_started
+    timing.total = clock() - started
+    -- Residual includes enumeration, bookkeeping and timing overhead. The
+    -- projection interval includes UE4SS dispatch and return conversion.
+    timing.lua_and_timing = timing.total - timing.setup - timing.writes - timing.projection
+        - timing.rate_read - timing.restore - timing.save - timing.verify - timing.refresh
+    result.timing, result.combinations = timing, combinations
     return result
 end
 
