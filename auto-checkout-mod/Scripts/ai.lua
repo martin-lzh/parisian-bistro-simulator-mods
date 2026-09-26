@@ -2,8 +2,8 @@
 local AI = {}
 AI.__index = AI
 
-function AI.new(game)
-    return setmetatable({ game = game, removed = {} }, AI)
+function AI.new(game, checkpoint)
+    return setmetatable({ game = game, removed = {}, checkpoint = checkpoint or function() end }, AI)
 end
 
 function AI:active()
@@ -73,8 +73,10 @@ function AI:sync(contexts, billing_class)
                 self.removed[id] = record
                 record.recovery = {}
                 for index, evaluator in ipairs(original) do record.recovery[index] = game.identity(evaluator) end
+                self.checkpoint() -- Persist recovery before touching the engine-owned array.
                 replace_or_rollback(container.Evaluators, kept, original, game)
                 record.recovery = nil
+                self.checkpoint()
             end
             if self.removed[id] then suppressed = suppressed + 1 end
         end
@@ -83,7 +85,7 @@ function AI:sync(contexts, billing_class)
         #contexts, containers, suppressed)
 end
 
-function AI:restore(contexts)
+function AI:restore(contexts, retain_missing)
     local game, present, errors, restored = self.game, {}, {}, 0
     for _, context in ipairs(contexts) do
         for _, container in ipairs(context.containers) do
@@ -115,11 +117,13 @@ function AI:restore(contexts)
                     if added then
                         record.recovery = {}
                         for index, evaluator in ipairs(current) do record.recovery[index] = game.identity(evaluator) end
+                        self.checkpoint()
                         replace_or_rollback(container.Evaluators, current, original, game)
                     end
                 end)
                 if ok then
                     self.removed[id] = nil
+                    self.checkpoint()
                     restored = restored + 1
                 else
                     errors[#errors + 1] = id .. ': ' .. tostring(err)
@@ -128,7 +132,14 @@ function AI:restore(contexts)
         end
     end
     for id in pairs(self.removed) do
-        if not present[id] then self.removed[id] = nil end -- destroyed world/container
+        if not present[id] then
+            if retain_missing then
+                errors[#errors + 1] = id .. ': reload recovery container is unavailable'
+            else
+                self.removed[id] = nil -- destroyed world/container after normal session travel
+                self.checkpoint()
+            end
+        end
     end
     assert(#errors == 0, table.concat(errors, '; '))
     return restored

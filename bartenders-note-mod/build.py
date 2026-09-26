@@ -5,19 +5,23 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "bartenders-note"
 # An explicit list prevents local game references and development tools from
 # entering a package even if they are present next to the sources.
 FILES = (
     "Scripts/main.lua",
+    "Scripts/reload.lua",
     "Scripts/game.lua",
     "Scripts/hud.lua",
+    "Scripts/layout.lua",
+    "Scripts/localization.lua",
     "Scripts/summary.lua",
     "README.md",
     "DEVELOPMENT.md",
     "CHANGELOG.md",
+    "LICENSE",
 )
 
 

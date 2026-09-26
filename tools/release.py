@@ -164,16 +164,21 @@ def verify_artifacts(commit: str) -> dict:
         if (directory / name).is_symlink() or not (directory / name).is_file():
             raise ValueError(f"Non-regular CI artifact: {name}")
     evidence = json.loads((directory / "build-info.json").read_text(encoding="utf-8"))
-    if (set(evidence) != {"sourceCommit", "mods", "assets"} or evidence["sourceCommit"] != commit
+    generated_mods = {mod["slug"] for mod in mods if mod.get("generated")}
+    keys = {"sourceCommit", "mods", "assets"} | ({"generated"} if generated_mods else set())
+    if (set(evidence) != keys or evidence["sourceCommit"] != commit
             or evidence["mods"] != {mod["slug"]: mod["version"] for mod in mods}
             or set(evidence["assets"]) != names):
         raise ValueError("CI build evidence does not match release source/versions/assets")
+    if set(evidence.get("generated", {})) != generated_mods:
+        raise ValueError("CI generated file evidence does not match release source")
     for name in names:
         if sha256((directory / name).read_bytes()).hexdigest() != evidence["assets"][name]:
             raise ValueError(f"CI artifact checksum mismatch: {name}")
     for mod in mods:
         ci.validate_config(mod)
-        ci.verify_package(mod, directory / ci.package_path(mod).name)
+        ci.verify_package(mod, directory / ci.package_path(mod).name,
+                          evidence.get("generated", {}).get(mod["slug"]))
     return evidence
 
 

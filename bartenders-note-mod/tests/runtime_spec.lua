@@ -1,4 +1,5 @@
 local directory = debug.getinfo(1, 'S').source:sub(2):match('^(.*[/\\])')
+package.path = directory .. '../Scripts/?.lua;' .. package.path
 local passed = 0
 local original_print = print
 local function test(name, body)
@@ -18,7 +19,10 @@ local function fixture(supported)
     function game.find_hud() return f.candidate end
     function game.snapshot()
         if f.failure then error(f.failure) end
-        return f.entries, 7, function() return f.label or 'Coffee' end
+        return f.entries, 7, function()
+            if f.translation_missing then return nil end
+            return f.label or 'Coffee'
+        end, f.language, f.category
     end
     local hud = {}
     function hud.valid(view) return view.valid end
@@ -32,10 +36,27 @@ local function fixture(supported)
         view.valid = false
         f.removed = f.removed + 1
     end
-    function hud.update(view, text) view.text = text end
+    function hud.update(view, groups, language)
+        assert(type(groups) == 'table', 'Renderer needs groups for measured line layout')
+        view.groups = groups
+        view.language = language
+        local parts = {}
+        for _, group in ipairs(groups) do
+            parts[#parts + 1] = group.name .. ' x ' .. group.count
+        end
+        view.text = table.concat(parts, '  ·  ')
+    end
     package.loaded.game = game
     package.loaded.hud = hud
     package.loaded.summary = dofile(directory .. '../Scripts/summary.lua')
+    local shared = {}
+    ModRef = {
+        GetSharedVariable = function(_, key) return shared[key] end,
+        SetSharedVariable = function(_, key, value)
+            assert(type(value) == 'string')
+            shared[key] = value
+        end,
+    }
     print = function(message) f.logs[#f.logs + 1] = message end
     RegisterHook = function(path, pre, post) f.hooks[path] = post end
     NotifyOnNewObject = function(_, callback) f.notify = callback end
@@ -62,6 +83,23 @@ test('unsupported loader does not register work', function()
     local f = fixture(false)
     assert(f.tick == nil and f.notify == nil and next(f.hooks) == nil)
     assert(f.created == 0 and #f.logs == 1)
+end)
+
+test('language events and periodic refresh update mod-only wording and layout language', function()
+    local f = fixture(true)
+    f.candidate = f.owner
+    f.claim()
+    f.translation_missing, f.language = true, 'fr'
+    f.flush()
+    assert(f.view.text == 'Boisson 1 x 1' and f.view.language == 'fr')
+    f.language = 'zh-Hant'
+    f.hooks['/Script/BrasserieSimulator.LocaleGameInstanceSubsystem:OnLanguageChanged']()
+    f.flush()
+    assert(f.view.text == '飲料 1 x 1' and f.view.language == 'zh-Hant')
+    f.language, f.category = 'de', 'Native category'
+    f.tick()
+    assert(f.view.text == 'Native category #1 x 1' and f.view.language == 'de')
+    assert(f.created == 1)
 end)
 
 test('attach after HUD arrives, hide empty claims, reuse existing row', function()
@@ -157,6 +195,20 @@ test('inactive HUD still in viewport does not block a visible replacement', func
     f.tick()
     assert(f.removed == 1 and not old_view.valid)
     assert(f.created == 2 and f.view.owner == replacement)
+end)
+
+test('unload stops queued refreshes, hooks, notifications and the old timer', function()
+    local f = fixture(true)
+    f.candidate = f.owner
+    f.claim()
+    local unload = ModRef.OnUnload
+    unload()
+    assert(f.removed == 0 and f.created == 0) -- no UObject work on the unload thread
+    f.flush()
+    assert(f.tick() == true and f.created == 0)
+    for _, callback in pairs(f.hooks) do callback() end
+    f.notify()
+    assert(#f.pending == 0)
 end)
 
 original_print('Runtime lifecycle: ' .. passed .. ' tests passed')

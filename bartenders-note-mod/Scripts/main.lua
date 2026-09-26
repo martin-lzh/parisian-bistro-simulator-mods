@@ -1,6 +1,7 @@
 local Game = require('game')
 local Hud = require('hud')
 local Summary = require('summary')
+local Reload = require('reload')
 
 local PREFIX = "[Bartender's Note] "
 local function log(message) print(PREFIX .. message .. '\n') end
@@ -15,6 +16,7 @@ end
 
 local owner, view, last_error
 local queued = false
+local lifetime = Reload.new('BartendersNote.widgets.v1')
 
 local function discard()
     if view then pcall(Hud.destroy, view) end
@@ -22,30 +24,32 @@ local function discard()
 end
 
 local function refresh()
+    lifetime:cleanup()
     if not Game.active(owner) then
         discard()
         owner = Game.find_hud()
     end
     if not Game.valid(owner) then return end
 
-    local entries, player_id, translate = Game.snapshot(owner)
-    local summary = Summary.collect(entries, player_id, translate)
+    local entries, player_id, translate, language, native_category = Game.snapshot(owner)
+    local summary = Summary.collect(entries, player_id, translate, language, native_category)
     if view and not Hud.valid(view) then
         Hud.destroy(view)
         view = nil
     end
-    if not view and summary.total > 0 then view = Hud.create(owner) end
-    if view then Hud.update(view, summary.text) end
+    if not view and summary.total > 0 then view = Hud.create(owner, lifetime) end
+    if view then Hud.update(view, summary.groups, language) end
 end
 
 local function safe_refresh()
+    if lifetime.stopped then return true end
     local ok, problem = pcall(refresh)
     if ok then
         if last_error then log('HUD connection restored.') end
         last_error = nil
     else
         -- Never leave an old quantity visible after losing the data source.
-        if view then pcall(Hud.update, view, '') end
+        if view then pcall(Hud.update, view, {}) end
         problem = tostring(problem)
         if problem ~= last_error then log('HUD unavailable: ' .. problem) end
         last_error = problem
@@ -53,7 +57,7 @@ local function safe_refresh()
 end
 
 local function request_refresh()
-    if queued then return end
+    if lifetime.stopped or queued then return end
     queued = true
     ExecuteInGameThreadWithDelay(50, function()
         queued = false
@@ -86,4 +90,4 @@ end)
 
 LoopInGameThreadWithDelay(750, safe_refresh)
 request_refresh()
-log('Loaded. Waiting for the local player HUD.')
+log('Loaded version=0.1.2. Waiting for the local player HUD.')

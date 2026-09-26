@@ -68,6 +68,7 @@ local function fixture(modern, failure)
     end or nil
     LoopAsync = function(_, fn) f.timer = fn end
     print = function(message) f.logs[#f.logs + 1] = message end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     function f.emit(register)
         local expired = false
@@ -129,7 +130,7 @@ test('notification and poll requests share the three-attempt budget', function()
         f.session.now = time
         f.emit(f.registers[1]); f.flush(); f.poll()
     end
-    assert(#f.calls == 3 and f.contains('WARN No progress after three take requests'))
+    assert(#f.calls == 3 and f.contains('WARN No progress after three requests'))
 end)
 
 test('notification callbacks never bypass host, world, or object lifetime filtering', function()

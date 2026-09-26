@@ -1,5 +1,6 @@
 -- Pure order aggregation; no engine objects or shared mutable state.
 local Summary = {}
+local Localization = require('localization')
 
 local function nonnegative_integer(value)
     return type(value) == "number"
@@ -8,7 +9,7 @@ local function nonnegative_integer(value)
         and value == math.floor(value)
 end
 
-local function label_for(drink, translate)
+local function label_for(drink, translate, language, native_category)
     if type(translate) == "function" then
         local ok, name = pcall(translate, drink)
         if ok and type(name) == "string" then
@@ -20,11 +21,11 @@ local function label_for(drink, translate)
         end
     end
     -- Keep the remaining count useful even when a localized label is unavailable.
-    return "Drink " .. string.format("%.0f", drink)
+    return Localization.drink(drink, language, native_category)
 end
 
-function Summary.collect(entries, playerId, translate)
-    local result = { groups = {}, total = 0, text = "" }
+function Summary.collect(entries, playerId, translate, language, native_category)
+    local result = { groups = {}, total = 0 }
     if type(entries) ~= "table" or not nonnegative_integer(playerId) then
         return result
     end
@@ -53,12 +54,9 @@ function Summary.collect(entries, playerId, translate)
         return a.id < b.id
     end)
 
-    local parts = {}
     for _, group in ipairs(result.groups) do
-        group.name = label_for(group.id, translate)
-        parts[#parts + 1] = group.name .. " x " .. group.count
+        group.name = label_for(group.id, translate, language, native_category)
     end
-    result.text = table.concat(parts, "  ·  ")
     return result
 end
 

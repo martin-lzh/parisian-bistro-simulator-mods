@@ -54,6 +54,7 @@ local function fixture()
     RegisterHook = function() return 1, 2 end
     LoopInGameThreadWithDelay = function(_, fn) f.poll = fn end
     print = function(message) f.logs[#f.logs + 1] = message end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     function f.size(world) return #f.contexts[world].containers[1].Evaluators end
     function f.contains(text) return table.concat(f.logs, '\n'):find(text, 1, true) end

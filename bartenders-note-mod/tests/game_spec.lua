@@ -1,5 +1,6 @@
 -- Synthetic reflected-object fixtures; no captured game data.
 local directory = debug.getinfo(1, 'S').source:sub(2):match('^(.*[/\\])')
+package.path = directory .. '../Scripts/?.lua;' .. package.path
 local Game = dofile(directory .. '../Scripts/game.lua')
 local passed, next_address = 0, 0
 local function object(fields)
@@ -39,6 +40,15 @@ local function fixture()
     function f.locale:GetDishTranslation(drink)
         return { ToString = function() return '本地名称 ' .. drink end }
     end
+    function f.locale:GetUITranslation(key)
+        assert(key == 'Drinks')
+        return { ToString = function() return '本地类别' end }
+    end
+    f.language = 'zh-Hans'
+    f.internationalization = object()
+    function f.internationalization:GetCurrentLanguage()
+        return { ToString = function() return f.language end }
+    end
     local library = object()
     function library:GetWorldSubsystem(context, class)
         assert(context == f.hud)
@@ -46,6 +56,9 @@ local function fixture()
     end
     StaticFindObject = function(path)
         if path == '/Script/Engine.Default__SubsystemBlueprintLibrary' then return library end
+        if path == '/Script/Engine.Default__KismetInternationalizationLibrary' then
+            return f.internationalization
+        end
         return object({ name = path:match('%.([^%.]+)$') })
     end
     f.candidates = { f.hud }
@@ -81,16 +94,43 @@ test('snapshot copies primitive fields, keeps foreign entries for filtering, and
     local f = fixture()
     f.add(10, 8, 1, true, 37)
     f.add(11, 9, 0, false, -1)
-    local entries, player, translate = Game.snapshot(f.hud)
+    local entries, player, translate, language, category = Game.snapshot(f.hud)
     assert(player == 37 and #entries == 2)
     assert(entries[1].id == '10:2:3:4' and entries[1].drink == 8)
     assert(entries[1].claimed == true and entries[1].state == 1 and entries[1].player_id == 37)
     assert(entries[2].claimed == false and entries[2].player_id == -1)
     assert(translate(8) == '本地名称 8')
+    assert(language == 'zh-Hans' and category == '本地类别')
     f.data[1].Drink, f.data[1].DrinkId.A = 99, 999
     assert(entries[1].drink == 8 and entries[1].id == '10:2:3:4')
     entries[2].state = 2
     assert(f.data[2].State == 0)
+end)
+
+test('current language is reread and never retained across read failures', function()
+    local f = fixture()
+    assert(Game.language() == 'zh-Hans')
+    f.language = 'pt_BR'
+    assert(Game.language() == 'pt-BR')
+    f.internationalization.GetCurrentLanguage = function() return 'de-DE' end
+    assert(Game.language() == 'de')
+    f.internationalization.GetCurrentLanguage = function() error('not ready') end
+    assert(Game.language() == 'en')
+    f.internationalization.invalid = true
+    assert(Game.language() == 'en')
+end)
+
+test('unavailable localization does not lose valid queue quantities', function()
+    local f = fixture()
+    f.add(10, 8, 1, true, 37)
+    f.locale.invalid = true
+    local entries, player, translate, language, category = Game.snapshot(f.hud)
+    assert(#entries == 1 and player == 37 and language == 'zh-Hans')
+    assert(category == nil and not pcall(translate, 8))
+    f.locale.invalid = false
+    f.locale.GetUITranslation = function() error('missing category') end
+    local _, _, restored, _, missing_category = Game.snapshot(f.hud)
+    assert(restored(8) == '本地名称 8' and missing_category == nil)
 end)
 
 test('reject data from another world and unavailable player state', function()

@@ -1,59 +1,139 @@
-# Auto Checkout
+# Auto Checkout / 收银管家
 
-自动处理顾客在柜台的结账：接收顾客递出的现金或银行卡，等待收银机准备好，再执行收银机的结账交互。玩家无需逐个点击顾客和收银机。
+[English](#english) · [中文](#中文)
 
-使用游戏原本的交互请求，让游戏计算账单、小费、收入并处理顾客离店。Mod 不直接改写金额、付款标记或顾客状态，也不处理餐桌结账、现金申报、取钱或现金袋。
+## English
 
-## 状态与依赖
+Automatically accept customers' cash or cards at the counter and finish the register interaction.
 
-**0.1.1 正式版。** 2026-09-24 用户确认最新开发包实机测试成功。正式版保留已测试的交易检查、AI 收银任务抑制、运行诊断和“顾客到柜台”提醒监听；验证范围见[开发说明](DEVELOPMENT.md)。
+**Version: 0.1.4.** Single player or multiplayer host only. Only the host needs to install it; guests do not run checkout.
 
-- 目标基线：Steam Build 25393699，ProjectVersion 1.0.0.44eb，Unreal Engine 5.4。
-- 依赖支持 UE 5.4 的 [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental-latest)。本机核对源码版本为 `f58e8f84`；旧稳定版 3.0.1 不作为目标加载器。
-- 单人和联机房主运行；普通联机客户端自动保持空闲。只需在房主端启用，联机行为仍待实测。
-- 安装包只含原创 Lua、说明和启用标记，不含加载器、游戏文件、第三方工具或反编译内容。
+### How to use
 
-## 使用
+Enter your restaurant as host. Checkout starts automatically, with no key, toggle or settings to change. You can carry items, make drinks, open the tablet or work away from the counter.
 
-安装后，房主进入餐厅即自动运行，无需按键或设置开关。收到游戏的“顾客到柜台”提醒后，在游戏线程检查对应收银机；付款物件未就绪时继续等待。同时每秒检查一次当前世界中的所有收银机，包含其他楼层柜台，以处理已在等待的顾客或未捕获的提醒。运行信息写入 UE4SS 日志的 `[AutoCheckout]` 条目。
+- Bills, tips, income and customer departure follow the game's normal rules.
+- It waits during a real pause, card processing, drawer movement or an employee's current checkout.
+- Employees stop taking new counter-checkout jobs while the Mod runs; existing jobs may finish. Their other work is unchanged.
+- Table checkout, cash declarations, withdrawals and cash bags are outside its scope.
 
-提醒触发与定时检查共用付款状态、请求间隔和重试次数，重复提醒不会重置重试预算。监听不可用时记录原因并保留定时检查。原有提醒仍正常显示，普通客户端收到提醒也不会执行结账。
+If one transaction repeatedly fails, finish it manually; later customers can still be processed. If an error stops all checkout, check the help section before re-entering the restaurant.
 
-玩家手持物品、做其他工作或打开界面不再使自动结账等待。每一步请求前重新核对这笔交易：如果玩家抢先收款、关闭抽屉，或付款对象失效，就取消当前请求，之后按最新柜台状态继续判断。游戏实际暂停、刷卡进行中或抽屉运动时仍会等待。
+### In-game screenshot
 
-运行期间，房主端从 AI 的工作候选列表中移除柜台收银任务，保留饮料、上菜及其他任务，不改变员工配置或存档。已经领取的收银任务允许完成，期间 Mod 等待该柜台释放。切换世界、离开房主会话或自动流程异常停止时尝试恢复本次移除的任务；恢复失败会明确告警，需重新载入世界。更新和卸载请关闭游戏后进行，不使用脚本热重载。
+A customer stands at the checkout counter, with the bill displayed on the register and the cash drawer open.
 
-同一阶段的请求间隔至少三秒，最多三次。请求未使游戏状态推进时，停止重试该阶段并记录日志，可手动完成这笔结账；后续顾客仍会自动处理。读取接口或执行请求发生异常时，本次加载的自动功能停止，需查看日志并修正原因后重新加载 Mod。
+![Customer at the checkout counter with the bill on the register screen and the cash drawer open](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
 
-## 排查没有自动结账
+### Requirements
 
-诊断默认启用，无需开关。日志仍写入 UE4SS 的 `UE4SS.log`，诊断条目以 `[AutoCheckout]` 开头，异常堆栈可能占用后续多行。状态改变时记录；不变时每 30 次轮询再次记录，通常约 30 秒。
+Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
-| 日志标记 | 含义 |
-| --- | --- |
-| `START version=0.1.1` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
-| `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
-| `EVENT customer-at-billing` | 已处理提醒，附对应柜台在游戏线程检查时的状态和合并的提醒次数 |
-| `EVENT_IGNORED` | 当前不是房主，或提醒对应的柜台已失效、不属于当前世界 |
-| `API` / `HOST` | 接口枚举值与当前房主会话 |
-| `STATE session` | 游戏暂停状态、找到的柜台数量和累计发起请求次数 |
-| `STATE ai` / `AI` | AI 收银任务策略、发现与已处理的任务容器数量；`restored_containers` 为恢复数量。`suppressed=0` 不能证明 AI 收银已受抑制 |
-| `STATE` 的 `phase=wait-...` / `unavailable=...` | 具体等待或排除原因，附账单、付款物件、抽屉、刷卡、占用状态 |
-| `REQUEST` | 即将调用原生交互，附阶段、次数、目标和调用前状态；`source=notification` 表示提醒触发，`source=poll` 表示定时检查触发 |
-| `DISPATCH_RETURNED` / `AFTER` | 调用返回及即时状态；调用返回不代表游戏接受请求或结账成功，后续 `STATE` 可显示延迟变化 |
-| `SKIP` | 最后复查发现条件改变，未发送请求，不消耗重试次数 |
-| `WARN` / `ERROR` | 多次无进展，或异常导致停止；异常附执行阶段、最近状态及可用的 Lua 堆栈 |
+### Download
 
-更新原有 `AutoCheckout` 文件夹后，检查 `START version=0.1.1` 确认加载版本。若没有自动结账，查看从 `START` 开始的相关日志，尤其是 `STATE ai`、`REQUEST`、`SKIP` 和 `AFTER`，并保留 `ERROR` 后的堆栈。当前代码不会产生 `blocked=player-interacting`。
+1. Sign in to a GitHub account with access to this private repository and open [Auto Checkout 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4).
+2. Under **Assets**, download **`AutoCheckout-0.1.4.zip`** and `SHA256SUMS.txt`. Extract the Mod ZIP; GitHub's **Source code** archive is not an installable Mod.
 
-## 安装与卸载
+If the package is missing or you cannot access it, see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#english).
 
-构建不自动安装。由玩家在游戏关闭时手动进行：
+### Install
 
-1. 按 [UE4SS 官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装支持 UE 5.4 的实验版加载器。
-2. 将压缩包里的 `AutoCheckout` 放入加载器的 `Mods` 目录。当前常见位置是游戏目录内 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout`，以实际加载器布局为准。
-3. 确认 `AutoCheckout/Scripts/main.lua` 和 `AutoCheckout/enabled.txt` 存在。无需替换整个 `mods.txt` 或添加重复启用项。
+1. Close the game. In Steam, right-click **Parisian Bistro Simulator** → **Manage** → **Browse local files**. This opens the `<game>` folder used below.
+2. Install the basic experimental UE4SS package using the [UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html), keeping that package's folder structure.
+3. Copy the extracted **`AutoCheckout`** folder, with all its contents, into `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`. If your loader uses another location, use its existing `Mods` folder instead.
+4. Confirm these files exist, with no extra `AutoCheckout/AutoCheckout` folder:
 
-卸载时关闭游戏后移除 `AutoCheckout` 目录。Mod 不创建自定义存档数据；已经完成的交易会由游戏按正常流程保存，卸载不会撤销这些交易。
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/enabled.txt`
 
-构建与游戏内验收步骤见 [DEVELOPMENT.md](DEVELOPMENT.md)。
+5. Start the game and enter your restaurant in single player or as the multiplayer host.
+
+The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; do not replace the loader's `mods.txt` or other Mods.
+
+### Update or remove
+
+**Update:** close the game, download and extract the new Mod ZIP, then copy its complete `AutoCheckout` folder into the same `Mods` folder and replace matching files. Start the game again.
+
+**Remove:** close the game and delete only `Mods/AutoCheckout`. Leave UE4SS and other Mods in place. Close the game before removal so the game's normal employee checkout behavior returns on the next launch. Completed sales and income are not undone.
+
+Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
+
+### Languages and help
+
+The game's payment prompts and notifications keep their normal translations. The Mod's explanatory log messages follow the game language, with English used at early startup or when a language is unavailable. Technical identifiers and error details stay unchanged. No language pack is needed.
+
+Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
+
+If checkout does not start, confirm you are the host and the Mod folder is in the correct place. For a stuck transaction, try finishing it manually. If a warning says employee jobs or interaction settings could not be restored, leave and reload the restaurant. Include relevant `[AutoCheckout]` lines from `UE4SS.log` with a problem report.
+
+In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english) describes its scope.
+
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#english) · [MIT License](LICENSE)
+
+## 中文
+
+自动接收柜台顾客递出的现金或银行卡，并完成收银机结账。
+
+**版本：0.1.4。** 仅单人或联机房主运行，只需房主安装，客机不会执行自动结账。
+
+### 怎么使用
+
+以房主身份进入餐厅即可自动结账，无需按键、开关或额外设置。可以同时搬运物品、制作饮料、打开平板或离开柜台做其他工作。
+
+- 账单、小费、收入及顾客离店按游戏原有规则处理。
+- 游戏实际暂停、刷卡中、钱柜移动中或员工正在处理该笔结账时会等待。
+- Mod 运行时，员工不再领取新的柜台收银任务；已领取的任务可以完成，其他工作照常进行。
+- 不处理餐桌结账、现金申报、取钱或现金袋。
+
+某笔交易多次未成功时，请手动完成，后续顾客仍可自动处理。若异常导致全部自动结账停止，请先查看下方帮助，再重新进入餐厅。
+
+### 实机截图
+
+顾客站在收银台前，收银机显示账单，钱箱处于打开状态。
+
+![实机画面：顾客站在收银台前，收银机显示账单，钱箱打开](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/counter-checkout-gameplay.png?raw=1)
+
+### 使用要求
+
+Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
+
+### 下载
+
+1. 登录有权访问本私密仓库的 GitHub 账号，打开 [收银管家 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4)。
+2. 在 **Assets** 中下载 **`AutoCheckout-0.1.4.zip`** 和 `SHA256SUMS.txt`。解压 Mod ZIP；GitHub 的 **Source code** 是源码，不能当作安装包。
+
+找不到文件或无法访问时，见[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#中文)。
+
+### 安装
+
+1. 关闭游戏。在 Steam 中右键 **Parisian Bistro Simulator** → **管理** → **浏览本地文件**，打开的就是下方所说的 `<game>` 游戏目录。
+2. 按 [UE4SS 安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 experimental 的基础包，保留该发行包自己的目录结构。
+3. 将解压出的 **`AutoCheckout`** 文件夹连同全部内容复制到 `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/`。若加载器实际装在其他位置，请使用它已有的 `Mods` 文件夹。
+4. 确认存在以下文件，不要多套一层 `AutoCheckout/AutoCheckout` 文件夹：
+
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/Scripts/main.lua`
+   - `<game>/BrasserieSimulator/Binaries/Win64/ue4ss/Mods/AutoCheckout/enabled.txt`
+
+5. 启动游戏，以单人玩家或联机房主身份进入餐厅。
+
+包内的 `enabled.txt` 会启用 Mod。请完整保留 Mod 文件夹，不要替换加载器的整个 `mods.txt` 或其他 Mod。
+
+### 更新与卸载
+
+**更新：** 关闭游戏，下载并解压新版 Mod ZIP，把完整的 `AutoCheckout` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件，再启动游戏。
+
+**卸载：** 关闭游戏，只删除 `Mods/AutoCheckout`，保留 UE4SS 和其他 Mod。务必关闭游戏后卸载，下次启动恢复游戏原有的员工收银行为；已完成交易和收入不会撤销。
+
+可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
+
+### 语言与帮助
+
+付款提示和通知沿用游戏译文。Mod 的说明日志跟随游戏语言，启动初期或语言不可用时使用英语；技术标识与错误详情保持原样，无需语言包。
+
+游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
+
+未自动结账时，先确认自己是房主，且 Mod 文件夹位置正确。单笔交易卡住可先手动完成。若警告提示员工任务或交互设置恢复失败，请退出餐厅后重新载入。反馈时附上 `UE4SS.log` 中相关的 `[AutoCheckout]` 日志。
+
+维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
+
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

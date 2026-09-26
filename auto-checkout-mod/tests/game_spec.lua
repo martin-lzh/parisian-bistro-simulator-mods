@@ -10,7 +10,8 @@ local function fixture()
     local serial = 0
     local function object(kind, world)
         serial = serial + 1
-        local o = { kind = kind, world = world, address = serial, valid = true, authority = true }
+        local o = { kind = kind, world = world, address = serial, valid = true, authority = true,
+            DistanceToInteract = 200, DistanceReference = 1, bCanInteractWhilePlacing = false, distance = 5000 }
         function o:IsValid() return self.valid end
         function o:HasAnyFlags() return self.template or false end
         function o:IsActorBeingDestroyed() return self.destroying or false end
@@ -19,6 +20,10 @@ local function fixture()
         function o:GetFullName() return self.kind .. tostring(self.address) end
         function o:IsA(class) return self.kind == class end
         function o:HasAuthority() return self.authority end
+        function o:GetDistanceTo(other)
+            assert(other.kind == 'Player')
+            return self.distance
+        end
         return o
     end
     local world = object('World')
@@ -48,7 +53,7 @@ local function fixture()
         PaymentMethod = 1, bPaymentSuccessful = false,
     }
     local api = { player = 'Player', cash = 'Cash', card = 'Card', action = 57,
-        cash_method = 1, card_method = 2, gameplay = {} }
+        cash_method = 1, card_method = 2, actor_distance = 0, gameplay = {} }
     function api.gameplay:GetTimeSeconds() return 10 end
     function api.gameplay:IsGamePaused() return self.paused or false end
     FindAllOf = function(class)
@@ -88,6 +93,142 @@ test('finished card dispatch targets register without mutating money or state', 
     Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'finish')
     assert(#f.calls == 1 and f.calls[1].target == f.register)
     assert(f.register.bIsDrawerOpen and f.register.RepPaymentData.bPaymentSuccessful)
+end)
+
+test('remote cash and card stages pass target reach checks and restore settings after each call', function()
+    for _, method in ipairs({ 1, 2 }) do
+        local f = fixture()
+        local payment = method == 1 and f.cash or f.card
+        f.register.RegisteredPaymentMethod = payment
+        f.register.RepPaymentData.PaymentMethod = method
+        f.player.placing, f.player.interacting = true, true
+        local player_address = f.player.address
+        function f.controller:Server_RequestInteraction(target, context)
+            assert(self.Pawn == f.player and context.bIsPlayer and context.Action == 57)
+            assert(target.DistanceReference == 0, 'distance must use the same actor reference as GetDistanceTo')
+            assert(target.DistanceToInteract > target.distance, 'ordinary reach would reject this distant player')
+            assert(target.bCanInteractWhilePlacing, 'placement must not silently reject automatic payment')
+            f.calls[#f.calls + 1] = target
+            if target == payment then
+                f.register.RegisteredPaymentMethod = nil
+                if method == 2 then f.register.CreditCardInMachine = f.card end
+            else
+                assert(target == f.register)
+                f.register.RepPaymentData.Dishes.GetArrayNum = function() return 0 end
+                f.register.bIsMoving = true
+            end
+        end
+        local s = Game.session(f.api)
+        assert(Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take',
+            function(_, _, context)
+                assert(context:find('scope=target-call distance=5000.0 range_before=200.0 range_for_call=5100.0', 1, true))
+            end))
+        assert(payment.DistanceToInteract == 200 and payment.DistanceReference == 1)
+        assert(not payment.bCanInteractWhilePlacing)
+        if method == 2 then
+            local sent, reason = Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'finish')
+            assert(not sent and reason == 'card-processing')
+            f.register.CreditCardInMachine = nil
+            f.register.RepPaymentData.bPaymentSuccessful = true
+        end
+        f.register.bIsDrawerOpen, f.register.distance = true, 30000
+        assert(Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'finish'))
+        assert(#f.calls == 2 and not Game.snapshot(f.api, s, f.register).has_bill)
+        assert(f.register.DistanceToInteract == 200 and f.register.DistanceReference == 1)
+        assert(not f.register.bCanInteractWhilePlacing)
+        assert(f.player.address == player_address and f.player.placing and f.player.interacting)
+    end
+end)
+
+test('existing interaction allowances are preserved and a nearby target is not narrowed', function()
+    local f = fixture()
+    f.cash.DistanceToInteract, f.cash.DistanceReference = 1000, 0
+    f.cash.distance, f.cash.bCanInteractWhilePlacing = 50, true
+    local s = Game.session(f.api)
+    assert(Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take'))
+    assert(f.cash.DistanceToInteract == 1000 and f.cash.DistanceReference == 0 and f.cash.bCanInteractWhilePlacing)
+end)
+
+test('RPC and diagnostic exceptions restore every surviving target setting', function()
+    for _, source in ipairs({ 'rpc', 'observer' }) do
+        local f = fixture()
+        if source == 'rpc' then
+            f.controller.Server_RequestInteraction = function() error('injected RPC error') end
+        end
+        local s = Game.session(f.api)
+        local ok, err = pcall(Game.request, f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take',
+            source == 'observer' and function() error('injected observer error') end or nil)
+        assert(not ok and tostring(err):find('injected', 1, true))
+        assert(tostring(err):find('stack traceback', 1, true))
+        assert(f.cash.DistanceToInteract == 200 and f.cash.DistanceReference == 1)
+        assert(not f.cash.bCanInteractWhilePlacing)
+    end
+end)
+
+test('a preparation write that mutates then throws is rolled back before any RPC', function()
+    local f = fixture()
+    local range, failed = f.cash.DistanceToInteract, false
+    f.cash.DistanceToInteract = nil
+    setmetatable(f.cash, {
+        __index = function(_, key) if key == 'DistanceToInteract' then return range end end,
+        __newindex = function(target, key, value)
+            if key ~= 'DistanceToInteract' then rawset(target, key, value); return end
+            range = value
+            if not failed then failed = true; error('injected preparation failure') end
+        end,
+    })
+    local s = Game.session(f.api)
+    local ok = pcall(Game.request, f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take')
+    assert(not ok and #f.calls == 0 and range == 200 and f.cash.DistanceReference == 1)
+    assert(not f.cash.bCanInteractWhilePlacing)
+end)
+
+test('restoration failure reports the affected field and still restores other settings', function()
+    local f = fixture()
+    local range = f.cash.DistanceToInteract
+    f.cash.DistanceToInteract = nil
+    setmetatable(f.cash, {
+        __index = function(_, key) if key == 'DistanceToInteract' then return range end end,
+        __newindex = function(target, key, value)
+            if key ~= 'DistanceToInteract' then rawset(target, key, value); return end
+            if value == 200 then error('injected restore failure') end
+            range = value
+        end,
+    })
+    local s = Game.session(f.api)
+    local ok, err = pcall(Game.request, f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take')
+    assert(not ok and #f.calls == 1 and tostring(err):find('reload the world', 1, true))
+    assert(tostring(err):find('DistanceToInteract', 1, true))
+    assert(f.cash.DistanceReference == 1 and not f.cash.bCanInteractWhilePlacing)
+end)
+
+test('payment destruction during dispatch never writes back into a disappearing actor', function()
+    for _, invalid in ipairs({ true, false }) do
+        local f = fixture()
+        function f.controller:Server_RequestInteraction(target)
+            f.calls[#f.calls + 1] = target
+            target.destroying, target.valid = true, not invalid
+            target.DistanceToInteract, target.DistanceReference, target.bCanInteractWhilePlacing = nil, nil, nil
+            setmetatable(target, { __newindex = function() error('must not restore a destroyed payment') end })
+        end
+        local s = Game.session(f.api)
+        assert(Game.request(f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take') and #f.calls == 1)
+    end
+end)
+
+test('unusable target distances and field types fail without dispatch or partial mutation', function()
+    for _, value in ipairs({ -1, math.huge, 0/0, 'unknown' }) do
+        local f = fixture()
+        f.cash.distance = value
+        local s = Game.session(f.api)
+        assert(not pcall(Game.request, f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take'))
+        assert(#f.calls == 0 and f.cash.DistanceReference == 1 and f.cash.DistanceToInteract == 200)
+    end
+    local f = fixture()
+    f.cash.bCanInteractWhilePlacing = 0
+    local s = Game.session(f.api)
+    assert(not pcall(Game.request, f.api, s, f.register, Game.snapshot(f.api, s, f.register), 'take'))
+    assert(#f.calls == 0 and f.cash.DistanceReference == 1 and f.cash.DistanceToInteract == 200)
 end)
 
 test('clients, remote controllers and unpossessed pawns never run checkout', function()

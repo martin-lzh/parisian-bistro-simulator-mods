@@ -1,6 +1,9 @@
 -- Original Bartender's Note HUD. All entry points must run on the game thread.
 local Hud = {}
+local Layout = require('layout')
 local HIT_TEST_INVISIBLE, COLLAPSED, HIDDEN = 3, 1, 2
+local EDGE_PADDING_FRACTION, MIN_EDGE_PADDING = 0.18, 56
+local VERTICAL_PADDING, MIN_LINE_HEIGHT = 5, 24
 
 local function alive(object)
     return object ~= nil and object:IsValid()
@@ -18,11 +21,16 @@ end
 function Hud.valid(view)
     return view ~= nil and not view.destroyed and alive(view.owner) and alive(view.title)
         and alive(view.source_text) and alive(view.root) and alive(view.text) and alive(view.slot)
+        and alive(view.probe) and alive(view.size)
 end
 
 function Hud.destroy(view)
     if view and not view.destroyed then
         if alive(view.root) then view.root:RemoveFromParent() end
+        if alive(view.probe) then view.probe:RemoveFromParent() end
+        if view.lifetime then
+            for _, token in ipairs(view.tokens) do view.lifetime:forget(token) end
+        end
         view.destroyed = true
     end
 end
@@ -50,40 +58,71 @@ local function position(view)
     view.slot:SetAlignment({ X = 0, Y = 0 })
     local width = title_slot:GetAutoSize() and view.title:GetDesiredSize().X or offset.Right
     local x = offset.Left + width * (0.5 - alignment.X) + transform.Translation.X
-    view.slot:SetOffsets({ Left = x, Top = bottom + 7, Right = -x, Bottom = 34 })
+    view.slot:SetOffsets({ Left = x, Top = bottom + 7, Right = -x,
+        Bottom = (view.content_height or MIN_LINE_HEIGHT) + 2 * VERTICAL_PADDING })
     view.slot:SetAutoSize(false)
     view.slot:SetZOrder(title_slot:GetZOrder())
+    return half_width * 2
 end
 
-function Hud.create(owner)
+local function available_width(view, width_fraction)
+    local library = StaticFindObject('/Script/UMG.Default__WidgetLayoutLibrary')
+    assert(alive(library), 'WidgetLayoutLibrary is unavailable')
+    -- The restaurant title canvas fills the viewport. Use reflected FVector2D
+    -- and scalar results; opaque FGeometry cannot round-trip through Lua tables.
+    local viewport = library:GetViewportSize(view.owner)
+    local scale = library:GetViewportScale(view.owner)
+    if not viewport or type(viewport.X) ~= 'number' or not (viewport.X > 0 and viewport.X < math.huge)
+        or type(scale) ~= 'number' or not (scale > 0 and scale < math.huge) then return 0 end
+    local width = viewport.X / scale * width_fraction
+    local padding = math.max(MIN_EDGE_PADDING, width * EDGE_PADDING_FRACTION)
+    view.root:SetPadding({ Left = padding, Top = VERTICAL_PADDING,
+        Right = padding, Bottom = VERTICAL_PADDING })
+    return math.max(0, width - 2 * padding)
+end
+
+function Hud.create(owner, lifetime)
     assert(alive(owner), 'HUD is unavailable')
     local title, source_text, tree = owner.BrasserieNameBorder, owner.BrasserieNameTextBlock, owner.WidgetTree
     assert(alive(title) and alive(source_text) and alive(tree), 'Restaurant title is unavailable')
     local parent = title:GetParent()
     assert(alive(parent) and parent:IsA('/Script/UMG.CanvasPanel'), 'Restaurant title parent changed')
-    local view = { owner = owner, title = title, source_text = source_text }
+    local view = { owner = owner, title = title, source_text = source_text,
+        lifetime = lifetime, tokens = {} }
+    local function remember(kind, widget)
+        if lifetime then view.tokens[#view.tokens + 1] = lifetime:remember(kind, widget) end
+    end
     local ok, err = pcall(function()
         view.root = construct('Border', tree)
+        remember('Border', view.root)
         view.root:SetVisibility(COLLAPSED)
         view.root:SetBrush(title.Background)
         view.root:SetBrushColor(title.BrushColor)
         view.root:SetContentColorAndOpacity(title.ContentColorAndOpacity)
-        view.root:SetPadding({ Left = 14, Top = 5, Right = 14, Bottom = 5 })
-        local size = construct('SizeBox', tree)
-        size:SetHeightOverride(24)
-        view.root:SetContent(size)
-        local scale = construct('ScaleBox', tree)
-        scale:SetStretch(2) -- ScaleToFit
-        scale:SetStretchDirection(1) -- DownOnly
-        size:SetContent(scale)
+        view.root:SetHorizontalAlignment(0) -- Fill the padded content area.
+        view.size = construct('SizeBox', tree)
+        view.size:SetHeightOverride(MIN_LINE_HEIGHT)
+        view.size:SetClipping(1) -- ClipToBounds: never paint inside the fade margins.
+        view.root:SetContent(view.size)
         view.text = construct('TextBlock', tree)
         view.text:SetFont(source_text.Font)
         view.text:SetColorAndOpacity(source_text.ColorAndOpacity)
         view.text:SetAutoWrapText(false)
-        local text_slot = scale:SetContent(view.text)
+        view.text:SetJustification(1) -- ETextJustify::Center
+        local text_slot = view.size:SetContent(view.text)
         text_slot:SetHorizontalAlignment(2) -- Center
         text_slot:SetVerticalAlignment(2) -- Center
         view.slot = parent:AddChildToCanvas(view.root)
+        -- Hidden participates in Slate layout without painting or hit testing.
+        -- Keep the measuring widget outside the collapsible banner so an empty
+        -- list cannot prevent measuring the next list's localized text.
+        view.probe = construct('TextBlock', tree)
+        remember('TextBlock', view.probe)
+        view.probe:SetVisibility(HIDDEN)
+        view.probe:SetAutoWrapText(false)
+        local probe_slot = parent:AddChildToCanvas(view.probe)
+        probe_slot:SetAutoSize(true)
+        parent:ForceLayoutPrepass()
         position(view)
     end)
     if not ok then Hud.destroy(view); error(err) end
@@ -92,14 +131,44 @@ end
 
 -- Empty state is collapsed. Visibility comes from the native restaurant banner;
 -- sharing its canvas also inherits HUD and fullscreen-switcher visibility.
-function Hud.update(view, text)
+function Hud.update(view, groups, language)
     assert(Hud.valid(view), 'HUD was destroyed')
-    if text == nil or text == '' then
+    if groups == nil or #groups == 0 then
         view.root:SetVisibility(COLLAPSED)
         return
     end
     view.text:SetFont(view.source_text.Font)
     view.text:SetColorAndOpacity(view.source_text.ColorAndOpacity)
+    view.probe:SetFont(view.source_text.Font)
+    local width = available_width(view, position(view))
+    if width <= 0 then
+        view.root:SetVisibility(COLLAPSED)
+        return
+    end
+    -- Cache measurements only within this refresh: locale, font and viewport
+    -- changes must reflow even if the order quantities are unchanged.
+    local sizes = {}
+    local function measure(text)
+        if not sizes[text] then
+            view.probe:SetText(FText(text))
+            view.probe:ForceLayoutPrepass()
+            local size = view.probe:GetDesiredSize()
+            assert(size.X > 0 and size.X < math.huge and size.Y > 0 and size.Y < math.huge,
+                'Text measurement is not ready')
+            sizes[text] = { X = size.X, Y = size.Y }
+        end
+        return sizes[text].X
+    end
+    local layout = Layout.format(groups, width, measure, language)
+    local text = layout.text
+    if text == '' then
+        view.root:SetVisibility(COLLAPSED)
+        return
+    end
+    -- Measure the complete multiline result, including the font's line spacing.
+    measure(text)
+    view.content_height = math.max(MIN_LINE_HEIGHT * #layout.lines, sizes[text].Y)
+    view.size:SetHeightOverride(view.content_height)
     if view.last_text ~= text then
         view.text:SetText(FText(text))
         view.last_text = text

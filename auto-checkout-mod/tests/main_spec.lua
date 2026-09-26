@@ -16,7 +16,7 @@ local function test_mode(modern)
         identity = function() return 'register' end,
         snapshot = function() return snapshot end,
         request = function(_, _, _, _, action, on_dispatch)
-            on_dispatch(action == 'take' and 'payment' or 'register', 57)
+            on_dispatch(action == 'take' and 'payment' or 'register', 57, 'scope=target-call distance=5000.0')
             calls = calls + 1
             return true
         end,
@@ -26,6 +26,7 @@ local function test_mode(modern)
     ExecuteInGameThread = function(fn) queue[#queue + 1] = fn end
     local saved_print = print
     print = function(text) logs[#logs + 1] = text end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     local function flush()
         local pending = queue
@@ -59,10 +60,11 @@ local function test_mode(modern)
     assert(logs[#logs]:find('Stopped after an error', 1, true))
     assert(logs[#logs]:find('stage=session', 1, true) and logs[#logs]:find('stack traceback', 1, true))
     local text = table.concat(logs, '\n')
-    assert(text:find('version=0.1.1 ', 1, true))
+    assert(text:find('version=0.1.4 ', 1, true))
     assert(text:find('blocked=game-paused', 1, true))
     assert(text:find('player_guard=transaction-only', 1, true))
     assert(text:find('REQUEST phase=take attempt=1 target=payment', 1, true))
+    assert(text:find('context={scope=target-call distance=5000.0}', 1, true))
     assert(text:find('DISPATCH_RETURNED', 1, true) and text:find('acceptance=unconfirmed', 1, true))
     assert(text:find('AFTER register=register', 1, true))
     assert(text:find('waiting=no-local-controller', 1, true))
@@ -100,6 +102,7 @@ local function diagnostic_paths()
         end,
     }
     LoopInGameThreadWithDelay = function(_, fn) callback = fn end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     for _ = 1, 60 do callback() end
     local combined = table.concat(logs, '\n')
@@ -120,7 +123,8 @@ local function diagnostic_paths()
     assert(requests == 1, 'transiently invalid snapshots must not erase the cooldown or retry history')
     for t = 6, 15 do session.now = t; callback() end
     assert(requests == 3)
-    assert(table.concat(logs, '\n'):find('WARN No progress after three take requests', 1, true))
+    assert(table.concat(logs, '\n'):find('WARN No progress after three requests', 1, true))
+    assert(table.concat(logs, '\n'):find('phase=take register=register', 1, true))
 
     session.id, session.now, mode = 'new-world', 0, 'rpc-error'
     callback()
@@ -131,6 +135,7 @@ local function diagnostic_paths()
     assert(requests == 4, 'RPC exceptions must stop future automatic requests')
 
     LoopInGameThreadWithDelay = function() error('injected timer registration error') end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     assert(logs[#logs]:find('ERROR stage=startup', 1, true))
     assert(logs[#logs]:find('injected timer registration error', 1, true))
@@ -138,6 +143,7 @@ local function diagnostic_paths()
     LoopInGameThreadWithDelay = nil
     LoopAsync = function(_, fn) callback = fn end
     ExecuteInGameThread = function() error('injected scheduler error') end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     callback()
     assert(logs[#logs]:find('stage=game-thread-scheduling', 1, true))
@@ -146,6 +152,7 @@ local function diagnostic_paths()
     local saved_game, saved_loader = package.loaded.game, package.preload.game
     package.loaded.game = nil
     package.preload.game = function() error('injected module load error') end
+    ModRef = NewTestModRef()
     dofile(MOD_ROOT .. '/Scripts/main.lua')
     assert(logs[#logs]:find('ERROR stage=startup', 1, true))
     assert(logs[#logs]:find('injected module load error', 1, true))

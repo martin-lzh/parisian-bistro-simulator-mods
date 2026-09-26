@@ -1,6 +1,7 @@
 -- Run from any working directory with Lua 5.4: lua path/to/summary_spec.lua
 local source = debug.getinfo(1, "S").source:sub(2)
 local directory = source:match("^(.*[/\\])") or "./"
+package.path = directory .. '../Scripts/?.lua;' .. package.path
 local Summary = dofile(directory .. "../Scripts/summary.lua")
 local passed = 0
 
@@ -33,7 +34,9 @@ test("group by drink and sort by numeric ID", function()
     equal(result.groups[1].id, 2)
     equal(result.groups[1].count, 1)
     equal(result.groups[2].count, 2)
-    equal(result.text, "Localized 2 x 1  ·  Localized 10 x 2")
+    equal(result.groups[1].name, "Localized 2")
+    equal(result.groups[2].id, 10)
+    equal(result.groups[2].name, "Localized 10")
 end)
 
 test("only local claimed pending or preparing orders remain", function()
@@ -53,7 +56,7 @@ test("unclaim, reassignment, preparation and cancellation clear the next snapsho
     local entry = order("a", 1, 0, true, 7)
     equal(Summary.collect({ entry }, 7, label).total, 1)
     entry.claimed = false
-    equal(Summary.collect({ entry }, 7, label).text, "")
+    equal(#Summary.collect({ entry }, 7, label).groups, 0)
     entry.claimed, entry.player_id = true, 8
     equal(Summary.collect({ entry }, 7, label).total, 0)
     entry.player_id, entry.state = 7, 2
@@ -61,7 +64,6 @@ test("unclaim, reassignment, preparation and cancellation clear the next snapsho
     local cancelled = Summary.collect({}, 7, label)
     equal(cancelled.total, 0)
     equal(#cancelled.groups, 0)
-    equal(cancelled.text, "")
 end)
 
 test("deduplicate valid eligible order IDs", function()
@@ -85,7 +87,15 @@ end)
 
 test("input order does not change group ordering", function()
     local a, b = order("a", 9, 0, true, 7), order("b", 3, 0, true, 7)
-    equal(Summary.collect({ a, b }, 7, label).text, Summary.collect({ b, a }, 7, label).text)
+    local forward = Summary.collect({ a, b }, 7, label)
+    local reverse = Summary.collect({ b, a }, 7, label)
+    equal(forward.total, reverse.total)
+    equal(#forward.groups, #reverse.groups)
+    for index, group in ipairs(forward.groups) do
+        equal(group.id, reverse.groups[index].id)
+        equal(group.name, reverse.groups[index].name)
+        equal(group.count, reverse.groups[index].count)
+    end
 end)
 
 test("invalid local identity never shows orders", function()
@@ -104,24 +114,27 @@ test("malformed records and inputs are ignored", function()
     entries[#entries + 1] = order("string owner", 1, 0, true, "7")
     entries[#entries + 1] = order("valid", 0, 0, true, 7)
     equal(Summary.collect(entries, 7, label).total, 1)
-    equal(Summary.collect(nil, 7, label).text, "")
-    equal(Summary.collect("bad", 7, label).text, "")
+    equal(#Summary.collect(nil, 7, label).groups, 0)
+    equal(#Summary.collect("bad", 7, label).groups, 0)
 end)
 
 test("failed or empty translations preserve quantities with numeric fallback", function()
     local entries = { order("a", 4, 0, true, 7) }
-    equal(Summary.collect(entries, 7).text, "Drink 4 x 1")
+    equal(Summary.collect(entries, 7).groups[1].name, "Drink 4")
     for _, translate in ipairs({
         function() error("missing") end,
         function() return nil end,
         function() return false end,
         function() return " \n\t" end,
     }) do
-        equal(Summary.collect(entries, 7, translate).text, "Drink 4 x 1")
+        local result = Summary.collect(entries, 7, translate)
+        equal(result.groups[1].name, "Drink 4")
+        equal(result.groups[1].count, 1)
+        equal(result.total, 1)
     end
 end)
 
-test("translation runs once per group and keeps a single line", function()
+test("translation runs once per group and sanitizes label whitespace", function()
     local calls = 0
     local result = Summary.collect({ order("a", 1, 0, true, 7), order("b", 1, 1, true, 7) },
         7, function()
@@ -129,7 +142,20 @@ test("translation runs once per group and keeps a single line", function()
             return "  Thé\n\t glacé\r\n "
         end)
     equal(calls, 1)
-    equal(result.text, "Thé glacé x 2")
+    equal(result.groups[1].name, "Thé glacé")
+    equal(result.groups[1].count, 2)
+end)
+
+test("prefer native names then native category then translated numbered fallback", function()
+    local entries = { order("a", 4, 0, true, 7) }
+    equal(Summary.collect(entries, 7, label, 'fr', 'Native category').groups[1].name, 'Localized 4')
+    equal(Summary.collect(entries, 7, nil, 'fr', '  Native\ncategory  ').groups[1].name,
+        'Native category #4')
+    local result = Summary.collect(entries, 7, function() error('unavailable') end, 'fr', '')
+    equal(result.groups[1].name, 'Boisson 4')
+    equal(result.groups[1].count, 1)
+    equal(Summary.collect(entries, 7, nil, 'zh-TW').groups[1].name, '飲料 4')
+    equal(Summary.collect(entries, 7, nil, 'unsupported').groups[1].name, 'Drink 4')
 end)
 
 test("collect does not mutate inputs and returns fresh results", function()
