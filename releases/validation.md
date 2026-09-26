@@ -4,7 +4,7 @@
 
 ## English
 
-Auto Menu **0.3.0-dev** adds explicit eligibility filtering, native-equivalent candidate reduction, a ceiling-only warm-start shortcut and protected projection batches. Six offline suites pass, including brute-force agreement and a synthetic 59,048-to-242 prediction reduction. These work counts do not establish real game speed. Native grouping, live stock checks, rendering, save/replication and performance remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
+Auto Menu **0.4.0-dev** replaces the search state machine with direct synchronous native enumeration and one final save. Empty courses and the entirely empty menu are included; progress, search timers, equivalence grouping and repeated input snapshots are removed. Six offline suites verify enumeration, native-call counts, eligibility, restoration, saving, language and reload behavior. Real engine field writes, native saving and game responsiveness remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
 
 Scan to Order **0.1.1-dev** avoids full dish return conversion through Lua while retaining host/single-player automatic food and drink ordering with restock recovery. Local references were checked against Steam Build **25532071** / **1.0.1.44eb**. Offline catalog-reference, scalar-ingredient, stock-contention, customer-state, authority, native acceptance and reload tests pass; real engine calls, replenishment, staffing and multiplayer replication remain pending in-game acceptance.
 
@@ -56,7 +56,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Auto Menu **0.3.0-dev** 新增显式资格过滤、原生等价候选压缩、仅达到上限才提前完成的预搜索及受保护的批量试算。六组离线测试通过，包含与完整枚举的最优值对照、合成场景从 59,048 次压缩至 242 次预测；该工作量不代表实机速度。原生分组、实时库存检查、显示、保存与联机同步及性能仍待实机验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
+Auto Menu **0.4.0-dev** 改为直接同步枚举并调用原生预测，最后保存一次；包含类别留空和全空菜单，移除进度、搜索定时器、等价分组和重复条件快照。六组离线测试验证遍历、原生调用次数、资格过滤、异常恢复、保存、多语言和热重载。真实引擎字段写入、原生保存和游戏响应仍待实机验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
 
 Scan to Order（扫码点餐）**0.1.1-dev** 避免在 Lua 中转换完整菜品返回值，保留仅房主／单人自动提交食物和饮料订单、补货后续单。本机参考核对基于 Steam Build **25532071** / **1.0.1.44eb**。菜品表引用、独立食材记录、库存争用、顾客状态、权限、原生受理结果及热重载离线测试通过；真实引擎调用、补货、人员条件和联机同步仍待实机验收。
 

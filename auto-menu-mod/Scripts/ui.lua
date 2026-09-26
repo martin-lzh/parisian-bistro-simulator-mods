@@ -3,7 +3,6 @@ local Game = require('game')
 local localize = require('localization')
 
 function UI.destroy(view)
-    view.job, view.snapshot, view.busy = nil, nil, false
     if Game.valid(view.button) then view.button:RemoveFromParent() end
     if view.token then view.lifetime:forget(view.token); view.token = nil end
 end
@@ -36,25 +35,15 @@ end
 function UI.update(view)
     assert(Game.valid(view.button), 'Menu button was destroyed')
     local words = localize(Game.language())
-    local period = view.owner.SelectedDailyMenuPeriod
-    if period ~= view.period then view.result, view.remaining = nil, nil end
-    view.period = period
-    local text = view.busy and string.format(words.searching,
-        math.floor(100 * view.job.checked / view.job.total)) or words[view.result or 'button']
+    local text = words.button
     if text ~= view.text then view.button:UpdateText(FText(text)); view.text = text end
     if words.tooltip ~= view.tooltip then
         view.button:SetToolTipText(FText(words.tooltip)); view.tooltip = words.tooltip
     end
-    view.button:SetIsInteractionEnabled(Game.available(view.owner))
-    if view.remaining and not view.busy then
-        view.remaining = view.remaining - 1
-        if view.remaining <= 0 then view.result, view.remaining = nil, nil end
+    local enabled = Game.available(view.owner)
+    if enabled ~= view.enabled then
+        view.button:SetIsInteractionEnabled(enabled); view.enabled = enabled
     end
-end
-
-function UI.result(view, status)
-    view.result, view.remaining = status, 6
-    UI.update(view)
 end
 
 return UI

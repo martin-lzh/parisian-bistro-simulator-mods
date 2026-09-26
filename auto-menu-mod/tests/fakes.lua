@@ -13,7 +13,7 @@ end
 
 function F.setup()
     local state = { objects = {}, hooks = {}, ticks = {}, loops = {}, shared = {}, saves = 0,
-        projections = 0, prices = {}, language = 'en' }
+        projections = 0, language = 'en' }
     local function object(kind)
         local value = { address = #state.objects + 1, kind = kind, valid = true }
         state.objects[#state.objects + 1] = value
@@ -34,43 +34,14 @@ function F.setup()
     manager.HasAuthority = function() return state.client ~= true end
     manager.IsActorBeingDestroyed = function() return state.destroying == true end
     manager.GetDailyMenuMaximumPromotedAdoptionChance = function() return state.ceiling or 1 end
-    manager.DailyMenuInfluence, manager.DailyMenuInfluenceHalfLifeGameHours, manager.Satisfaction = 0, 12, 1
-    manager.GetDailyMenuInfluence = function(self)
-        -- Synthetic clock drift, not an implementation of the game's formula.
-        return self.DailyMenuInfluenceHalfLifeGameHours == 0 and self.DailyMenuInfluence
-            or math.max(0, self.DailyMenuInfluence - (state.decay or 0))
-    end
-    manager.GetTier = function() return state.tier or 0 end
-    manager.GetDifficulty = function() return 0 end
-    manager.GetSatisfaction = function(self) return self.Satisfaction end
-    manager.GetDishPrice = function(_, id) return state.prices[id] or 10 end
-    manager.DailyMenuMaxAdoptionChanceBonus = 0.2
-    for _, name in ipairs({ 'AvailableDishes', 'UnlockedDailyDishes', 'DisabledDishes', 'EmployeeRequirementDisabledDishes' }) do
+    for _, name in ipairs({ 'AvailableDishes', 'DisabledDishes', 'EmployeeRequirementDisabledDishes' }) do
         manager[name] = F.array({})
     end
-    local function forecast(period, profile, intent)
-        return { Period = period, ProfileProbabilities = F.array({ { Profile = profile, Probability = 1 } }),
-            IntentProbabilities = F.array({ { Intent = intent, Probability = 1 } }) }
-    end
-    manager.DailyCustomerContext = { DayNumber = 7, WeekDay = 0, TemperatureCelsius = 20, LocalEvent = 0, TemperatureBand = 1,
-        LunchForecast = forecast(1, 0, 0), DinnerForecast = forecast(2, 1, 5) }
     for period, name in ipairs({ 'LunchDailyMenu', 'DinnerDailyMenu' }) do
         manager[name] = { Period = period, bIsActive = true }
         for _, course in ipairs(Planner.courses) do manager[name][course.field] = 0 end
     end
     state.manager = manager
-    local dishes = object('DishGameInstanceSubsystem')
-    dishes.GetDishCostPrice = function(_, id) return state.costs and state.costs[id] or 5 end
-    manager.DishGameInstanceSubsystem = dishes
-    local storage, subsystem = object('StorageManager'), object('WorldGameInstanceSubsystem')
-    storage.HasAuthority = function() return state.client ~= true end
-    storage.IsActorBeingDestroyed = function() return false end
-    storage.HasEnoughIngredients = function(_, ingredients, policy)
-        assert(policy == 0)
-        return ingredients[1].Ingredient ~= state.missing
-    end
-    subsystem.GetStorageManager = function() return storage end
-    manager.WorldGameInstanceSubsystem = subsystem
     local owner = object('WBP_MenuApp_C')
     state.owner = owner
     owner.BoundDailyMenuBrasserieManager = manager
@@ -78,14 +49,13 @@ function F.setup()
     owner.GetOwningPlayer = function() return player end
     owner.IsVisible = function() return state.hidden ~= true end
     owner.IsShowingDailyMenuCategory = function() return state.other_page ~= true end
-    owner.IsDishMissingIngredients = function(_, id) return id == state.missing end
     function owner:GetDailyMenu(period)
         return manager[period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu']
     end
     function owner:GetDailyMenuProjection(period)
         state.projections = state.projections + 1
         local menu = self:GetDailyMenu(period)
-        local copied = {}; for key, value in pairs(menu) do copied[key] = value end
+        local copied = Planner.copy(menu)
         if state.projection_error then error('Synthetic projection failure') end
         local configured = false
         for _, course in ipairs(Planner.courses) do configured = configured or menu[course.field] ~= 0 end
@@ -103,18 +73,17 @@ function F.setup()
         state.saves = state.saves + 1
         if state.on_save then state.on_save() end
         if state.reject then return end
-        local copied = {}
-        for k, v in pairs(menu) do copied[k] = v end
+        local copied, empty = Planner.copy(menu), true
+        for _, course in ipairs(Planner.courses) do empty = empty and copied[course.field] == 0 end
+        if empty then copied.bIsActive = false end
         manager[menu.Period == 1 and 'LunchDailyMenu' or 'DinnerDailyMenu'] = copied
     end
     for index, course in ipairs(Planner.courses) do
         local row = object('DailyMenu')
         local selector = object('DishSelector')
         selector.DishOptions = F.array({
-            { Key = index * 10, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({index * 10}),
-                Ingredients = F.array({{Ingredient = index * 10, Amount = 1}}) },
-            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({index * 10 + 1}),
-                Ingredients = F.array({{Ingredient = index * 10 + 1, Amount = 1}}) },
+            { Key = index * 10, DishType = course.kind, bEnabled = true },
+            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true },
         })
         row.WBP_DailyMenu_DishSelector = selector
         owner['WBP_DailyMenu_' .. course.field] = row
@@ -171,15 +140,8 @@ function F.setup()
         return #state.hooks, #state.hooks
     end
     LoopInGameThreadWithDelay = function(ms, fn)
-        assert(ms == 500 or ms == 16)
+        assert(ms == 500, 'Only widget discovery needs a timer')
         state.ticks[#state.ticks + 1] = fn; state.loops[ms] = fn
-    end
-    function state:complete()
-        for _ = 1, 1000 do
-            self.loops[16]()
-            if self.footer.children[2] and not self.footer.children[2].text:find('%d+%%') then return end
-        end
-        error('Search did not complete')
     end
     function state:click(value, index)
         self.hooks[index or #self.hooks]({ get = function() return value end })

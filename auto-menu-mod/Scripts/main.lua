@@ -3,20 +3,12 @@ local function traceback(message)
 end
 
 local function start()
-    assert(type(LoopInGameThreadWithDelay) == 'function', 'UE4SS experimental game-thread loop required')
-    local Game, Planner, UI = require('game'), require('planner'), require('ui')
+    local Game, UI = require('game'), require('ui')
     local lifetime = require('reload').new('AutoMenu.widgets.v1')
     local views, last_error = {}, nil
-    local hook = '/Script/CommonUI.CommonButtonBase:HandleButtonClicked'
-
     local function report(err)
         local message = tostring(err)
         if message ~= last_error then print('[AutoMenu] ERROR ' .. message .. '\n'); last_error = message end
-    end
-
-    local function finish(view, status)
-        view.job, view.snapshot, view.busy = nil, nil, false
-        UI.result(view, status)
     end
 
     local function clicked(context)
@@ -26,70 +18,25 @@ local function start()
         local view = views[Game.identity(button)]
         if not view or view.handling or not Game.available(view.owner)
             or not button:IsInteractionEnabled() then return end
-        if view.busy then finish(view, 'cancelled'); return end
         view.handling = true
-        local ok, status = xpcall(function()
-            local snapshot = Game.snapshot(view.owner)
-            local job, reason = Planner.new(snapshot)
-            if not job then return reason end
-            view.job, view.snapshot, view.busy = job, snapshot, true
-            view.started = os.clock()
-            print(string.format('[AutoMenu] SEARCH eligible=%d representatives=%d combinations=%d reduced=%d\n',
-                job.candidates, job.representatives, job.raw_total, job.total))
-            UI.update(view)
-        end, traceback)
+        local started = os.clock()
+        local ok, result = xpcall(Game.compose, traceback, view.owner)
         view.handling = false
-        if not ok then report(status); status = 'error' end
-        if status then finish(view, status) end
+        if ok then
+            last_error = nil
+            print(string.format('[AutoMenu] COMPOSED version=0.4.0-dev rate=%.9f evaluations=%d elapsed=%.3f\n',
+                result.rate, result.evaluations, os.clock() - started))
+        else report(result) end
     end
 
-    -- Native UMG click dispatch runs on the game thread. Filter by the new
-    -- button's full identity so every existing game button retains its action.
-    local pre, post = RegisterHook(hook, function() end, function(context)
+    -- Filter by our button; existing game buttons retain their native actions.
+    local pre, post = RegisterHook('/Script/CommonUI.CommonButtonBase:HandleButtonClicked', function() end, function(context)
         local ok, err = xpcall(clicked, traceback, context)
         if not ok then report(err) end
     end)
     assert(type(pre) == 'number' and type(post) == 'number', 'Menu button hook unavailable')
 
-    LoopInGameThreadWithDelay(16, function()
-        if lifetime.stopped then return true end
-        for _, view in pairs(views) do
-            if view.job then
-                view.handling = true
-                local ok, status = xpcall(function()
-                    local snapshot, job = view.snapshot, view.job
-                    if not Game.valid(view.button) then return 'changed' end
-                    local unchanged, reason = Game.unchanged(view.owner, snapshot)
-                    if not unchanged then
-                        print(string.format('[AutoMenu] CANCELLED reason=%s evaluated=%d total=%d\n',
-                            reason, job.evaluations, job.total))
-                        return 'changed'
-                    end
-                    local deadline = os.clock() + 0.004
-                    local done = Game.with_projection(view.owner, snapshot, function(oracle)
-                        return job:step(oracle, 128, function() return os.clock() >= deadline end)
-                    end)
-                    if not done then return end
-                    local live_rate, saved = Game.apply(view.owner, snapshot, job.best, job.rate)
-                    print(string.format('[AutoMenu] COMPOSED version=0.3.0-dev day=%s period=%s rate=%.9f sampled_rate=%.9f saved=%s evaluations=%d total=%d reduced=%d elapsed=%.3f\n',
-                        snapshot.day, snapshot.period, live_rate, job.rate, tostring(saved), job.evaluations,
-                        job.raw_total, job.total, os.clock() - view.started))
-                    return 'done'
-                end, traceback)
-                view.handling = false
-                if not ok then report(status); status = 'error' end
-                if status then
-                    view.job, view.snapshot, view.busy = nil, nil, false
-                    if Game.valid(view.button) then
-                        local shown, err = pcall(UI.result, view, status)
-                        if not shown then report(err) end
-                    end
-                end
-            end
-        end
-        return false
-    end)
-
+    -- Only widget discovery runs periodically. Search has no timer or progress UI.
     LoopInGameThreadWithDelay(500, function()
         if lifetime.stopped then return true end
         local ok, err = xpcall(function()
@@ -111,14 +58,10 @@ local function start()
                 end
             end
         end, traceback)
-        if not ok then
-            report(err)
-            -- A failed cleanup/temporary unavailable UI is retried before any
-            -- replacement widget can be created. No menu is saved by this loop.
-        else last_error = nil end
+        if not ok then report(err) end
         return false
     end)
-    print('[AutoMenu] START version=0.3.0-dev\n')
+    print('[AutoMenu] START version=0.4.0-dev\n')
 end
 
 local ok, err = xpcall(start, traceback)

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Auto Menu 0.4.0-dev uses a direct synchronous search: collect eligible dish IDs, call the native prediction for each combination, then apply the highest-rate menu once.
+- Remove search timers, progress/cancellation UI, forecast snapshots, repeated price/stock checks, equivalence grouping and warm-start state. Reuse one trial table and write only changed dish fields.
+- Include empty choices in every course and the completely empty menu. An empty winning menu follows native saving behavior and is deactivated by the game. Ties retain the eligible current menu; reaching the native ceiling can still end search early.
+- Restore the original menu if a trial fails. Keep host-only use, 14 languages and Lua hot reload. Synchronous enumeration may pause gameplay when many combinations exist; real game timing remains unverified.
+- Auto Menu 0.4.0-dev 改为直接同步搜索：取得可用菜品编号，逐个组合调用原生预测，最后应用预计选择率最高的菜单一次。
+- 移除搜索定时器、进度／取消界面、预测条件快照、重复价格与库存检查、等价分组和预搜索状态；复用试算表，只写入变化的菜品字段。
+- 每类都可留空，全空菜单也参与比较；全空结果按原生保存行为自动停用。同值保留符合条件的当前菜单，达到原生上限仍可提前完成。
+- 试算失败恢复原菜单，保留房主限制、14 种语言和 Lua 热重载。大量组合的同步枚举可能暂停游戏响应，实际游戏耗时待验证。
+
+## 0.3.0-dev
+
 - Auto Menu 0.3.0-dev explicitly filters available, enabled and staffed dishes before building the search space. Locked or disabled selector entries cannot re-enter it.
 - Collapse native-equivalent dishes into representative choices, preserving the native objective and optional courses. A short warm start can reach the proven ceiling early; otherwise every remaining representative combination is covered, without a local-optimum shortcut.
 - Protect and restore simulation state once per synchronous batch; use live silent ingredient checks instead of the page's stock cache. Log candidate counts, reduced combinations, evaluations and elapsed time.
