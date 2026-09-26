@@ -18,6 +18,12 @@ Enter your restaurant as host. Ordering starts automatically, with no key or set
 - Tables marked for player service and tables currently being ordered by a waiter are left to that interaction. Completed orders are not repeated.
 - Customers who have left, received their item or run out of enabled patience do not receive new orders.
 
+### In-game screenshot
+
+Food and drink order icons beside seated customers display green check marks.
+
+![In-game food and drink order icons showing green check marks beside seated customers](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
+
 ### Requirements
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
@@ -78,6 +84,12 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 - 仍须满足厨师、调酒师、设备和专长条件；烹饪、饮料制作、上菜、结账与耐心由游戏处理。
 - 玩家负责的餐桌，以及服务员正在点餐的餐桌，留给原有交互；已完成的订单不会重复提交。
 - 顾客已离开、已拿到餐品，或启用耐心且耐心耗尽后，不再下单。
+
+### 实机截图
+
+已入座顾客旁的餐品与饮料订单图标显示绿色勾选标记。
+
+![实机画面：已入座顾客旁的餐品与饮料订单图标显示绿色勾选标记](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/automatic-orders-gameplay.png?raw=1)
 
 ### 使用要求
 

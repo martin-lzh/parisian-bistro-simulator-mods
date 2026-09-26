@@ -6,6 +6,16 @@
 
 Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
 
+### In-game screenshot
+
+Provided by the maintainer on 2026-09-26 as a Scan to Order gameplay screenshot and preserved without further edits. The image records visible order indicators in the English UI. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
+
+| Image | Size | Visible scene |
+| --- | --- | --- |
+| [automatic-orders-gameplay.png](automatic-orders-gameplay.png) | 650 × 419 | Seated customers with Croque Monsieur, Green Tea, Pear Liqueur and Espresso order icons and green check marks |
+
+### Adding images
+
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
@@ -26,6 +36,16 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 ## 中文
 
 此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+
+### 实机截图
+
+维护者于 2026-09-26 提供的扫码点餐实机图，按原文件保存，未再编辑。图片记录英语界面中的可见订单标记；拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
+
+| 图片 | 尺寸 | 可见场景 |
+| --- | --- | --- |
+| [automatic-orders-gameplay.png](automatic-orders-gameplay.png) | 650 × 419 | 已入座顾客旁显示 Croque Monsieur、Green Tea、Pear Liqueur、Espresso 订单图标与绿色勾选标记 |
+
+### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add the maintainer-provided gameplay screenshot showing food and drink order indicators to both README languages, with image provenance and scene notes.
+- 将维护者提供的餐品与饮料订单状态实机图加入中英文 README，并记录图片来源及可见场景。
+
 - Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
 - 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
 
