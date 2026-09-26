@@ -22,10 +22,11 @@ function UI.create(owner, lifetime)
         view.button:SetIsToggleable(false)
         view.button:SetIsFocusable(true)
         view.button:SetShouldUseFallbackDefaultInputAction(false)
-        view.button.TextBlock:SetAutoWrapText(true)
+        view.button.TextBlock:SetAutoWrapText(false)
         local slot = parent:AddChildToHorizontalBox(view.button)
         slot:SetPadding({ Left = 12, Top = 0, Right = 0, Bottom = 0 })
-        slot:SetSize({ SizeRule = 1, Value = 1 })
+        -- Reserve the full single-line label width, including localized text.
+        slot:SetSize({ SizeRule = 0, Value = 1 })
         UI.update(view)
     end)
     if not ok then UI.destroy(view); error(err) end

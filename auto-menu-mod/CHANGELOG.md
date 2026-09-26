@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Keep the Auto-compose button label on one line and size the button to its localized text.
+- 自动组合按钮文字固定单行，按钮宽度随本地化文字自动调整。
+
 - Adopt **菜单巧配** as the Chinese display name in player guides and shared documentation.
 - 中文名称统一为 **菜单巧配**，同步玩家说明及公共文档。
 
