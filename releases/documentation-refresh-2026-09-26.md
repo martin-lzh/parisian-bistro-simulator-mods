@@ -22,7 +22,7 @@ Three subagents audit separate groups of guides against the original Mod source 
 
 Repackaging starts from the published ZIPs at runtime source `b52a4c008b4c7993614ea49f37b032a8e6b3a4e7`. Only `README.md` and `CHANGELOG.md` inside each ZIP may change. Every other entry, including Lua scripts, native DLLs, `enabled.txt`, developer documentation and the license, must retain exactly the same bytes. The versions, release IDs, tag names and tag targets remain unchanged. The original publication approval records continue to describe the original release source.
 
-Each replacement includes a new ZIP, `SHA256SUMS.txt` and `build-info.json`. The build record identifies the documentation commit separately from the unchanged runtime source and records the previous archive hash. Release descriptions link the updated guide at its documentation commit. Before replacement, the old attachments are backed up locally; after upload, all three new attachments are downloaded and compared with the prepared files. The repository remains private.
+Each replacement includes a new ZIP, `SHA256SUMS.txt` and `build-info.json`. The build record identifies the documentation commit separately from the unchanged runtime source and records the previous archive hash. Release descriptions link the updated guide at its documentation commit. Before replacement, the old attachments are backed up locally; after upload, all three new attachments are downloaded and compared with the prepared files. This documentation update does not change repository visibility.
 
 This update adds documentation, not new gameplay behavior or a new in-game test claim. The maintainer's prior in-game and multiplayer acceptance remains in the [validation record](validation.md#english).
 
@@ -46,6 +46,6 @@ This update adds documentation, not new gameplay behavior or a new in-game test 
 
 重新打包以运行源码 `b52a4c008b4c7993614ea49f37b032a8e6b3a4e7` 对应的已发布 ZIP 为基础，仅允许替换各包内的 `README.md` 和 `CHANGELOG.md`。其余条目，包括 Lua、原生 DLL、`enabled.txt`、开发说明及许可证，均须逐字节一致。版本、Release ID、标签名称及指向保持不变；原发布授权记录继续对应原始发布源码。
 
-每组替换附件包含新的 ZIP、`SHA256SUMS.txt` 和 `build-info.json`。构建记录分别记录文档提交与未改变的运行源码，并保存旧安装包哈希；Release 说明链接到新文档提交中的操作指南。替换前在本地备份旧附件，上传后下载全部 3 个新附件并与准备文件比较。仓库保持私密。
+每组替换附件包含新的 ZIP、`SHA256SUMS.txt` 和 `build-info.json`。构建记录分别记录文档提交与未改变的运行源码，并保存旧安装包哈希；Release 说明链接到新文档提交中的操作指南。替换前在本地备份旧附件，上传后下载全部 3 个新附件并与准备文件比较。该文档更新不更改仓库可见性。
 
 本次只完善文档，不增加玩法或新的实机验收结论。此前维护者确认的实机与联机验收仍见[验收记录](validation.md#中文)。

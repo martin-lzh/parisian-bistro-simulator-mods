@@ -4,6 +4,10 @@
 
 ## English
 
+### Cover artwork
+
+[cover.png](cover.png) is the AI-generated promotional artwork used on the [Nexus Mods page](https://www.nexusmods.com/mods/5?game_id=10352), created with the built-in image generator on 2026-09-26. The original PNG is preserved without further edits. It illustrates the Mod and is not an in-game screenshot or test result.
+
 Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
 
 ### In-game screenshots
@@ -35,6 +39,10 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 ```
 
 ## 中文
+
+### 宣传封面
+
+[cover.png](cover.png) 是 [Nexus Mods 页面](https://www.nexusmods.com/mods/5?game_id=10352)使用的 AI 宣传图，于 2026-09-26 使用内置图像生成工具制作；保留原始 PNG，未再编辑。此图用于介绍 Mod，并非实机截图或测试结果。
 
 此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
 

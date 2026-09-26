@@ -1,0 +1,8 @@
+Use case: ads-marketing.
+Asset type: wide hero cover at the top of the GitHub README for a Parisian Bistro Simulator mod collection.
+Primary request: Create the collection cover with exactly "LZH's MODS" and the full game name "PARISIAN BISTRO SIMULATOR".
+Style/medium: original illustrated French bistro scene, matching a series of warm walnut, antique brass, muted forest green, cream typography and charcoal Nexus Mods covers. Tasteful painterly editorial artwork, opaque background.
+Composition: very wide landscape banner, about 3:1 aspect ratio, target 2100 x 700. Large exquisitely readable cream serif lettering "LZH's MODS" centered prominently, with "PARISIAN BISTRO SIMULATOR" directly beneath in smaller well-spaced capitals. Keep both lines in a calm dark central area with generous margins, readable when displayed at 900 pixels wide. Bistro details around the edges: a warm kitchen serving pass and brass lamps, a small laid dining table, a menu, an espresso cup and a bartender notebook; the scene represents a collection of restaurant convenience mods without clutter.
+Lighting: cozy evening light, restrained gold highlights, deep green and walnut shadows.
+Text (verbatim, only these two lines): "LZH's MODS" / "PARISIAN BISTRO SIMULATOR".
+Constraints: preserve the exact apostrophe and spelling of LZH's MODS; no subtitle, extra labels, version, badge, logo, watermark or characters. No screenshot, game UI or claim of official affiliation. Make a single finished banner, no mockup frame or collage.

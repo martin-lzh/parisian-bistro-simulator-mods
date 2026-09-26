@@ -12,7 +12,7 @@ Bug reports, translations, documentation improvements and focused code changes a
 2. Search existing [issues](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues). For a substantial new feature, describe the player problem and proposed behavior before expanding the implementation.
 3. Work in an existing development checkout. Contributors with repository access can use a feature branch from `dev`; changes reach protected `main` through a pull request. Preserve unrelated local changes. Do not create temporary worktrees or push directly to `main`.
 
-The repository is private. Making this repository public or publishing a release requires explicit maintainer authorization; ordinary contributions do neither.
+The repository is public. Changing repository visibility or publishing a release requires explicit maintainer authorization; ordinary contributions do neither.
 
 ### What belongs in a change
 
@@ -41,7 +41,7 @@ Maintainers review changes before merging. GitHub releases use the separate [rel
 2. 先搜索已有 [Issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues)。较大的新功能应先说明要解决的玩家问题及预期行为，再扩大实现范围。
 3. 使用现有开发目录。有仓库权限的贡献者可从 `dev` 建立功能分支，通过 PR 合入受保护的 `main`。保留无关本地改动，不创建临时工作树，不直接推送 `main`。
 
-仓库目前私密；将本仓库改为公开或发布版本需要维护者明确授权，普通贡献不会执行这些操作。
+仓库已公开；更改仓库可见性或发布版本需要维护者明确授权，普通贡献不会执行这些操作。
 
 ### 改动要求
 
