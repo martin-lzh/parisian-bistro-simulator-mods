@@ -128,7 +128,7 @@ options[1], options[2] = options[2], options[1]
 assert(Game.unchanged(state.owner, snapshot), 'Array ordering must not cancel semantically identical inputs')
 state.prices[20] = 15
 local unchanged, reason = Game.unchanged(state.owner, snapshot)
-assert(not unchanged and reason:find('price', 1, true), 'Real changes need a specific diagnostic path')
+assert(not unchanged and reason:find('inputs.options.MainDish.', 1, true), 'Real changes need a specific diagnostic path')
 
 -- Failed projection restores all sampled properties even when their live values drifted.
 state = F.setup(); state.manager.DailyMenuInfluence = 0.9
@@ -152,4 +152,69 @@ assert(not pcall(Game.evaluate, state.owner, snapshot, candidate))
 assert(state.manager.DailyMenuInfluence == 0.9 and state.manager.DailyMenuInfluenceHalfLifeGameHours == 12
     and state.manager.Satisfaction == 0.25 and state.manager.LunchDailyMenu.MainDish == 0,
     'A partially failed sample write must restore every live property')
-print('Adapter: native rates, transactional rollback, one save, changed inputs, service isolation and native refusal passed')
+-- Stale selectors must never reintroduce locked, disabled or unstaffed dishes.
+state = F.setup()
+state.manager.AvailableDishes = F.array({10, 11, 20, 21})
+state.manager.UnlockedDailyDishes = F.array({30}) -- Does not activate a dish by itself.
+state.manager.DisabledDishes = F.array({11})
+state.manager.EmployeeRequirementDisabledDishes = F.array({21})
+snapshot = Game.snapshot(state.owner); job = assert(Planner.new(snapshot))
+assert(job.raw_total == 3 and job.candidates == 2)
+while not job:step(function(menu)
+    assert((menu.Starter == 0 or menu.Starter == 10) and (menu.MainDish == 0 or menu.MainDish == 20))
+    assert(menu.Dessert == 0 and menu.Aperitif == 0 and menu.EndDrink == 0)
+    return 0.1
+end, 100) do end
+state.manager.AvailableDishes = F.array({})
+assert(Planner.new(Game.snapshot(state.owner)) == nil)
+
+-- Native input equivalence preserves tag order, price boundaries and stock.
+state = F.setup()
+local starters = state.owner.WBP_DailyMenu_Starter.WBP_DailyMenu_DishSelector.DishOptions.entries
+starters[1].RecommendationTags = F.array({1, 3})
+starters[2].RecommendationTags = F.array({1, 3})
+state.prices[10], state.prices[11] = 8, 10 -- Same native food-price band.
+snapshot = Game.snapshot(state.owner)
+assert(snapshot.options.Starter[1].equivalence == snapshot.options.Starter[2].equivalence)
+state.prices[11] = 10.000001
+assert(Game.snapshot(state.owner).options.Starter[1].equivalence ~= Game.snapshot(state.owner).options.Starter[2].equivalence)
+state.prices[10], state.prices[11] = 15, 15.000001
+snapshot = Game.snapshot(state.owner)
+assert(snapshot.options.Starter[1].equivalence ~= snapshot.options.Starter[2].equivalence)
+state.prices[10], state.prices[11] = 10, 10
+state.missing = 11
+snapshot = Game.snapshot(state.owner)
+assert(snapshot.options.Starter[1].equivalence ~= snapshot.options.Starter[2].equivalence)
+state.missing = nil; starters[2].RecommendationTags = F.array({3, 1})
+snapshot = Game.snapshot(state.owner)
+assert(snapshot.options.Starter[1].equivalence ~= snapshot.options.Starter[2].equivalence)
+local drinks = state.owner.WBP_DailyMenu_Aperitif.WBP_DailyMenu_DishSelector.DishOptions.entries
+drinks[2].RecommendationTags = F.array({40}); state.prices[41] = 10000
+snapshot = Game.snapshot(state.owner)
+assert(snapshot.options.Aperitif[1].equivalence == snapshot.options.Aperitif[2].equivalence)
+
+-- One protected batch uses sampled values throughout and restores live state on
+-- success, budget yield, or an error after earlier successful projections.
+state = F.setup(); snapshot = Game.snapshot(state.owner)
+state.manager.Satisfaction = 0.25; state.manager.DailyMenuInfluence = 0.8
+local calls = 0
+state.oracle = function()
+    calls = calls + 1
+    assert(state.manager.Satisfaction == snapshot.sample.satisfaction)
+    assert(state.manager.DailyMenuInfluence == snapshot.sample.influence)
+    if calls == 3 then error('Synthetic later batch failure') end
+    return 0.4
+end
+assert(not pcall(Game.with_projection, state.owner, snapshot, function(oracle)
+    oracle(candidate); candidate.Starter = 11; oracle(candidate); oracle(candidate)
+end))
+assert(calls == 3 and state.saves == 0 and state.manager.LunchDailyMenu.MainDish == 0)
+assert(state.manager.Satisfaction == 0.25 and state.manager.DailyMenuInfluence == 0.8
+    and state.manager.DailyMenuInfluenceHalfLifeGameHours == 12)
+state.oracle = function() return 0.4 end
+job = assert(Planner.new(snapshot))
+Game.with_projection(state.owner, snapshot, function(oracle)
+    job:step(oracle, 128, function() return true end)
+end)
+assert(job.evaluations == 1 and state.manager.LunchDailyMenu.MainDish == 0 and state.manager.Satisfaction == 0.25)
+print('Adapter: eligibility, native input equivalence, protected batches, rollback and native apply passed')

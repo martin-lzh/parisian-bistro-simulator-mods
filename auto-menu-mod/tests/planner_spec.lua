@@ -66,4 +66,45 @@ assert(not pcall(solve, snapshot(), function() return 0/0 end))
 s = snapshot(); s.options.MainDish[1].kind = 5; assert(not pcall(Planner.new, s))
 s = snapshot(); s.options.MainDish[1].id = 10; assert(not pcall(Planner.new, s))
 s = snapshot(); s.ceiling = 0/0; assert(not pcall(Planner.new, s))
-print('Planner: exhaustive native-objective search, joint optimum, optional courses, unrounded rates, ties and budgets passed')
+-- Equivalence removes redundant combinations, not distinct scores. Compare
+-- reduced search to a full oracle search over many joint (non-additive) cases.
+for trial = 1, 30 do
+    s = snapshot()
+    for index, course in ipairs(Planner.courses) do
+        s.options[course.field][2].equivalence = 'same'
+        s.options[course.field][1].equivalence = 'same'
+        if (trial + index) % 3 == 0 then s.options[course.field][2].equivalence = nil end
+    end
+    local function rate(menu)
+        local hash = trial
+        for index, course in ipairs(Planner.courses) do
+            local id = menu[course.field]
+            if id ~= 0 and (trial + index) % 3 ~= 0 then id = index * 10 end
+            hash = (hash * 113 + id * 17) % 997
+        end
+        return hash / 1100
+    end
+    local reduced = solve(s, rate)
+    for _, options in pairs(s.options) do for _, dish in ipairs(options) do dish.equivalence = nil end end
+    local full = solve(s, rate)
+    assert(reduced.rate == full.rate and reduced.total < full.total)
+    assert(reduced.evaluations == reduced.total and reduced.checked == reduced.total)
+end
+
+s = snapshot(); s.current.MainDish = 21
+for _, course in ipairs(Planner.courses) do
+    for _, dish in ipairs(s.options[course.field]) do dish.equivalence = 'same' end
+end
+job = solve(s, function() return 0.4 end)
+assert(job.best.MainDish == 21 and job.best.Starter == 0 and job.evaluations == 31,
+    'Keep an eligible existing tied menu and never repeat its equivalence class')
+
+-- A useful incumbent reaches the proven ceiling without traversing the product.
+s = snapshot(); s.ceiling = 0.9
+job = solve(s, function(menu)
+    local count = 0
+    for index, course in ipairs(Planner.courses) do if menu[course.field] == index * 10 + 1 then count = count + 1 end end
+    return count == 5 and 0.9 or count / 10
+end)
+assert(job.rate == 0.9 and job.evaluations < 30 and job.total == 242)
+print('Planner: exhaustive certification, equivalence versus brute force, ceiling warm start, ties and budgets passed')

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Auto Menu 0.3.0-dev explicitly filters available, enabled and staffed dishes before building the search space. Locked or disabled selector entries cannot re-enter it.
+- Collapse native-equivalent dishes into representative choices, preserving the native objective and optional courses. A short warm start can reach the proven ceiling early; otherwise every remaining representative combination is covered, without a local-optimum shortcut.
+- Protect and restore simulation state once per synchronous batch; use live silent ingredient checks instead of the page's stock cache. Log candidate counts, reduced combinations, evaluations and elapsed time.
+- Add brute-force comparisons, price-boundary and stock-isolation cases, batch rollback and a synthetic performance workload. In-game performance and bridge acceptance remain pending.
+- Auto Menu 0.3.0-dev 在生成组合前过滤实际可用、启用且满足员工条件的菜品，排除选择器残留的锁定或停用项目。
+- 将原生选择率等价的菜品合并为代表候选，保留原生目标与类别留空。先快速找候选，达到原生上限即可结束；否则覆盖全部代表组合，不把局部最优当成完成。
+- 每个同步批次统一保护和恢复状态，使用实时静默库存检查，新增候选数量、压缩前后组合数、试算次数及耗时日志。
+- 新增完整枚举对照、价格边界、库存差异、批次异常恢复和合成性能测试；实际游戏性能与桥接仍待验收。
+
+## 0.2.1-dev
+
 - Auto Menu 0.2.1-dev fixes false cancellation during ordinary native influence decay and satisfaction updates. Search samples these values once, uses native projection for every candidate and restores live properties after each query.
 - Compare canonical native list contents instead of their order. Log the changed field for genuine cancellations.
 - Recheck live native rates before saving; retain a better existing menu if rankings changed. Add regression coverage for drift, reordering and sampled-state restoration failures.

@@ -1,25 +1,24 @@
-# Development and validation / 开发与验收
+# Auto Menu Development / 每日菜单组合开发
 
 [English](#english) · [中文](#中文)
 
 ## English
 
-**0.2.1-dev; in-game acceptance pending.** Auto Menu is an independent Lua Mod without a native helper or another Mod dependency.
+**0.3.0-dev, pending in-game acceptance.** Auto Menu is an independent Lua Mod without a native helper DLL or other Mod dependency. The native contract was checked against Steam Build 25532071 / ProjectVersion 1.0.1.44eb; original implementation is distributed, local analysis remains in ignored `work/`.
 
-### Implementation
+### Search and engine access
 
-- `game.lua` gets eligible candidates from the native page's persistent selectors. Its objective is exclusively `GetDailyMenuProjection(period).EstimatedAdoptionRate`, the unrounded value behind the game's estimated selection rate. No adoption formula or preference weights are reproduced.
-- The native projection accepts a service period. For each query, the adapter temporarily assigns the candidate definition to that service's manager property, checks the native menu binding, reads the pure projection, and restores the original menu and sampled properties in protected cleanup. Search trials use click-time native influence and satisfaction: the native influence getter is supplied the sampled value with its no-decay half-life setting during the call, and all three live scalar properties are restored afterward. Game time and the influence timestamp are never changed. This synchronous transaction stays on the game thread and never saves, broadcasts, sends an RPC or yields. Projection errors and partial assignment errors run the same restoration path. Only the scalar rate is retained; no temporary struct-array wrappers survive the call.
-- `planner.lua` enumerates the Cartesian product of enabled native options plus an empty choice per course, excluding the wholly empty menu. This compares complete combinations, including interactions between courses. It finishes after visiting every combination or reaching `GetDailyMenuMaximumPromotedAdoptionChance()`, the native projection's upper bound. Rates are compared without rounding or an epsilon. An eligible existing menu is evaluated first and retained on a tie; subsequent order prefers stocked options and then stable identifiers. There is no search-size truncation or local-optimum completion.
-- `main.lua` runs search slices on the game thread every 16 ms, at most 128 evaluations or a 4 ms clock budget per view per slice. A native call cannot be preempted; this is a scheduling budget, not a frame-time guarantee. UI discovery and progress refresh run every 500 ms. The button remains clickable to cancel, with reentrant callbacks blocked during a slice/save.
-- Before each slice and before applying, guards compare authority, world/manager identity, service, original menu, daily forecast/context, native ceiling/bonus, tier/difficulty, dish eligibility arrays, selector candidates, prices and ingredient availability. Actual changes cancel without saving and log the changed field. Native arrays are sorted before comparison so order changes alone do not cancel. Normal influence decay and satisfaction updates do not invalidate the search: every trial uses the same sampled native context. The winner is rechecked under that sample, then both it and the current menu are projected with live values. A better existing menu is retained without saving; otherwise one normal native save, readback check and page refresh apply the winner. The exhaustive optimum is for the sampled influence/satisfaction, not a guarantee of the optimum at a later time.
-- `ui.lua` creates the native button at runtime beside Print menu. Text wraps and follows all 14 game languages, including progress, cancellation and changed-condition states. `reload.lua` transfers only widget identity strings; unload stops callbacks without engine access, and the next state removes old buttons on the game thread. Pending searches are discarded.
+- `game.lua` copies selector primitives, intersects candidates with `AvailableDishes`, and excludes disabled, employee-disabled and selector-disabled entries. `UnlockedDailyDishes` alone does not make an item available. Ineligible entries need no stock or price queries. Live `StorageManager:HasEnoughIngredients` uses the silent policy; the page's cached missing-stock list is not used for pruning. No whole dish return value or soft asset reference is converted.
+- The adapter builds sufficient native-equivalence signatures from course, ordered recommendation tags, live ingredient availability and native price-response class. Tag order is preserved for float accumulation. Food price response is classified using the native single-precision ratio and boundaries; aperitif/end-drink prices do not enter that score. These signatures do not assign preference weights or approximate adoption. Stock differences remain distinct, and no out-of-stock item is simply replaced by an empty course. This optimization depends on the checked native contract and must be revalidated after game changes.
+- `planner.lua` keeps a representative for each equivalent choice and includes an empty choice per course, excluding an entirely empty menu. Representatives prefer the existing selection, then stocked choices, then stable identifiers. It evaluates an eligible existing menu first and retains it on ties. On larger searches, two coordinate sweeps find an incumbent; they do not certify a local optimum. Completion requires the native ceiling or coverage of every representative combination. Only warm-start queries are memoized; memory does not grow with the full Cartesian product. Rates are never rounded or compared with an epsilon.
+- All objective values still come from `GetDailyMenuProjection(period).EstimatedAdoptionRate`. A synchronous batch protects the original menu and current influence/half-life/satisfaction, supplies the click-time sample, checks native menu binding, and evaluates several candidates. It never yields, saves, broadcasts or sends RPCs. Cleanup restores and verifies every property, including after partial writes or an exception in a later query. A menu-field fallback handles a failed reflected table restoration. Only primitives leave the batch.
+- `main.lua` runs slices every 16 ms, with at most 128 planner operations or a 4 ms clock budget. A native call cannot be preempted; capture/cleanup and UI work are additional overhead. This is not a frame-time guarantee. Discovery and progress refresh run every 500 ms. SEARCH/COMPOSED logs record eligible/representative counts, original/reduced combination counts, query count and elapsed time.
+- Before a slice and before applying, guards compare authority, world/manager/storage, service, original menu, native forecast/context, ceiling/bonus, tier/difficulty, eligibility arrays, candidates, tags, prices, costs and live ingredient availability. Real changes cancel without saving. Normal influence/satisfaction drift and semantic list reordering do not cancel. The winner is rechecked with the original sample, then projected alongside the current menu with live values. A better existing menu is retained; otherwise one native save/readback/page refresh applies the winner. The certified maximum is for sampled conditions, not an arbitrary later time.
+- `ui.lua` and `reload.lua` retain one localized button, progress/cancellation, host-only use and reload cleanup. Searches are discarded on reload. Opening a page, changing days and reloading never compose automatically. The active flag and other service are preserved; no pricing, purchasing or printing is performed.
 
-The active flag and the other service are preserved. There is no automatic run on opening, changing days or reloading. No pricing, purchasing or printing is performed. Native calls and Lua property conversion were checked against the local game/loader references. All local analysis stays in ignored `work/`; the package contains original Mod code only.
+Equivalence compresses the search without removing distinct native outcomes. With no equivalent candidates and no ceiling hit, worst-case work is still exponential. No heuristic ranking, time limit or candidate-count cap is reported as a global optimum.
 
-### Offline validation
-
-From the repository root:
+### Offline checks
 
 ```powershell
 uv run --with lupa==2.6 python auto-menu-mod/tests/run.py
@@ -30,45 +29,50 @@ python -m unittest discover -s tools/tests -v
 git diff --check
 ```
 
-Tests use invented dishes and synthetic native predictions. They cover exhaustive combination coverage, a joint optimum with empty courses, improvements smaller than display precision, native upper-bound termination, time/evaluation budgets, ties, disabled dishes, non-finite results, restoration after failed queries/partial writes, changed inputs, native refusal, one-save completion, cancellation, other/reentrant buttons, service isolation, ordinary influence/satisfaction drift, semantically identical reordered arrays, live ranking reversal, sampled-property cleanup failures, languages and reload cleanup. These tests do not validate real UE4SS bridging, native performance, rendering or multiplayer behavior.
+Six suites cover brute-force agreement on non-additive objectives, optional courses, sub-display improvements, existing-menu ties, eligibility, equivalence boundaries, stock/tag-order isolation, ceiling warm start, time budgets, batch cleanup, partial writes, genuine context changes, normal drift, live ranking reversal, native refusal, one-save completion, UI/reload lifecycle and 14 languages.
 
-`build.py` writes `outputs/auto-menu/AutoMenu-0.2.1-dev.zip` and its SHA-256. The fixed allowlist includes six Lua modules, README, DEVELOPMENT, CHANGELOG and the activation marker. Tests, references, tools, game content and loader files are excluded. Common CI checks verify source bytes and archive contents. This development version has no release authorization.
+The synthetic performance workload has eight active dishes per course with two equivalence classes: 59,048 full combinations become 242 native predictions (244× fewer). The reduced and full searches find the same maximum; five batches replace per-query sample setup in that test. Restricting availability to three dishes in three courses yields seven combinations despite the larger selector catalogue. These are deterministic synthetic work counts, not measured game speed or validation of real engine bridging.
+
+`build.py` produces `outputs/auto-menu/AutoMenu-0.3.0-dev.zip` and its SHA-256. The fixed allowlist contains six Lua modules, README, DEVELOPMENT, CHANGELOG and the activation marker. No tests, tools, references, game content or loader are packaged. There is no release authorization.
 
 ### In-game checklist
 
-1. Check one button beside Print menu across screen sizes and all 14 languages. Verify mouse, keyboard/controller focus and activation, progress and cancellation.
-2. For a small unlocked menu, manually compare all combinations using the native displayed prediction. Verify the winning selection rate, optional courses, unchanged active state and other service. The UI rounds its percentage; logs record a more precise rate.
-3. Confirm that trials leave the saved menu unchanged between ticks and on cancellation/errors. Verify one final native save and host/guest replication, without intermediate notifications or saves.
-4. Test different forecasts, weather/events, prices, missing ingredients and promotion influence. Change conditions during a search, switch service, close/rebuild the page and lose host authority: no stale result should apply.
-5. Measure actual search cost with many unlocked dishes and a rate below the native ceiling. Confirm responsive cancellation and completion despite ordinary influence decay/satisfaction updates. Check live menu/influence/half-life/satisfaction restoration after each slice, including errors, and retention of a better existing menu if live rankings reverse.
-6. Reload repeatedly with a search in progress: one working button, no old search completion, no automatic composition and no sustained errors.
+1. Check one working button, 14 languages, focus, progress and cancellation; repeat hot reload during a search.
+2. With few active dishes, compare every native combination to the result. Test different forecasts/weather/events, price boundaries, low stock, missing ingredients, optional courses and promotion influence.
+3. Check that locked, disabled and unstaffed dishes never appear. Compare SEARCH counts with the active selection, and re-enable a dish to ensure it returns.
+4. Compare equivalent replacements under native predictions, including price-band boundaries, tag order and different live stock. Revalidate the equivalence contract after game updates.
+5. Confirm original menu and live properties are restored between slices and after cancellation/errors. Check one final save, unchanged active state/other service, and host/guest replication.
+6. Change prices, availability, service, page or authority during a search; no stale result may apply. Normal time/satisfaction changes should not cancel. Measure completion and frame impact with both many equivalent choices and many distinct choices below the ceiling.
 
 ## 中文
 
-**0.2.1-dev，待游戏内验收。** Auto Menu 是独立 Lua Mod，无原生辅助 DLL 或其他 Mod 依赖。
+**0.3.0-dev，待游戏内验收。** 独立 Lua Mod，无原生辅助 DLL 或其他 Mod 依赖。原生契约根据 Steam Build 25532071 / ProjectVersion 1.0.1.44eb 核对；只分发原创实现，分析资料留在忽略的 `work/`。
 
-### 实现
+### 搜索与引擎访问
 
-- `game.lua` 从原生页面持有的选择器读取候选，唯一优化目标是 `GetDailyMenuProjection(period).EstimatedAdoptionRate`，即页面预计选择率背后的未取整数值。不复刻采用率公式或顾客偏好权重。
-- 原生预测接口只接受餐段。每次试算暂时将候选写入管理器对应餐段字段，验证原生菜单绑定，读取纯预测接口，然后在受保护的清理路径中恢复原菜单及试算属性。搜索使用点击时原生影响力和满意度；单次调用期间给原生影响力读取器提供采样值及其不衰减的半衰期设置，随后恢复三个实时标量属性，不更改游戏时间或影响力时间戳。全过程在游戏线程同步完成，不保存、不广播、不发送 RPC，也不中途让出执行。预测异常和部分写入异常同样恢复；仅保留选择率标量，不保留临时结构数组包装。
-- `planner.lua` 枚举各类别启用候选与留空选项的笛卡尔积，排除全空菜单，因此比较的是完整组合及类别间相互影响。遍历全部组合，或达到原生 `GetDailyMenuMaximumPromotedAdoptionChance()` 上限后结束。比较不取整、不设误差容限。优先试算符合条件的当前菜单，同值保留；其余候选按食材齐全、固定编号排序。不截断组合数量，不把局部最优视为搜索完成。
-- `main.lua` 每 16 毫秒在游戏线程运行一个搜索批次，每个界面每批最多 128 次试算或 4 毫秒时钟预算。无法抢占单次原生调用，因此这是调度预算，不是帧耗时保证。每 500 毫秒扫描界面并刷新进度，搜索时按钮仍可点击取消；试算和保存期间阻止重入。
-- 每批及最终保存前比较权限、世界与管理器身份、餐段、原菜单、当天预测与条件、原生上限及加成、餐厅等级与难度、菜品资格数组、候选、价格和食材可用性。真实变化时取消且不保存，日志记录变化字段。原生数组比较前按标识排序，避免仅排列变化误触发。正常影响力衰减及满意度更新不取消，各候选统一使用同一组原生采样条件。最终方案先按采样条件复核，再用实时原生数值比较候选与现有菜单。现有菜单更好时保留且不保存，否则原生保存一次、读回并刷新。完整搜索的最优范围是采样时的影响力与满意度，不承诺后续时刻仍为全局最优。
-- `ui.lua` 在打印按钮旁运行时创建原生按钮，文字换行并支持游戏 14 种语言，包括搜索进度、取消和条件变化。`reload.lua` 跨状态只传递按钮身份字符串；卸载时停止回调且不访问引擎，新状态在游戏线程清除旧按钮，未完成搜索直接丢弃。
+- 从原生选择器复制基础数据，与 `AvailableDishes` 取交集，再剔除停用、员工条件不满足及选择器禁用项目。仅存在于 `UnlockedDailyDishes` 不等于已可用。无效候选不查询价格或库存。库存使用 `StorageManager:HasEnoughIngredients` 的实时静默检查，不依赖页面缺料缓存；不转换包含软资源引用的完整菜品返回值。
+- 按类别、有序推荐标签、实时食材可用性及原生价格响应类别建立等价分组。保留标签顺序，避免改变浮点累加结果；食物价格分类采用原生单精度比例与边界，开胃酒和餐后饮品价格不参与该评分。分组不设置偏好权重、不近似选择率。缺料状态不同的菜品不合并，也不直接将缺料菜品替换为空类别。分组规则依赖已核对的原生契约，游戏更新后需要重新验证。
+- 每组保留一个代表，优先现有选择、食材齐全、固定编号；各类别仍可留空，排除全空菜单。符合条件的当前菜单先计算，同值保留。较大搜索先做两轮逐类别改进，只用于尽早找到较好的方案；达到原生上限或覆盖所有代表组合才算完成。仅缓存预搜索记录，不为整个笛卡尔积建立缓存；比较不取整、不设误差容限。
+- 所有目标值仍来自 `GetDailyMenuProjection(period).EstimatedAdoptionRate`。每个同步批次保护原菜单和实时影响力／半衰期／满意度，使用点击时采样值，验证原生菜单绑定后连续试算。批次内不让出执行、不保存、不广播、不发送 RPC；返回前恢复并检查所有属性。中途失败、部分写入、后续试算异常也走清理路径，菜单整表恢复失败时逐字段恢复；只保留基础数值，不持有临时结构数组。
+- 每 16 毫秒运行一批，最多 128 次规划操作或 4 毫秒时钟预算。单次原生调用不能抢占，条件采集、清理和 UI 还有额外开销，因此不保证帧耗时。每 500 毫秒发现界面和刷新进度。日志记录有效候选、代表候选、压缩前后组合数、试算次数及耗时。
+- 每批和保存前比较权限、世界／管理器／库存管理器、餐段、原菜单、预测条件、上限和加成、等级／难度、资格列表、候选、标签、价格、成本及实时食材状态。真实变化取消，正常影响力／满意度变化和等价列表重排不取消。最终方案按采样条件复核后，再与现有菜单比较实时选择率；现有菜单更好则保留，否则原生保存一次、读回并刷新。全局最优针对采样条件，不承诺任意后续时刻。
+- 保留原有单按钮、14 种语言、进度／取消、房主限制和热重载清理。重载丢弃未完成搜索；打开界面、切换日期或重载不会自动组合。保留启用状态和另一餐段，不调价、不采购、不打印。
 
-保留启用状态及另一餐段；打开页面、切换日期、重载不自动配餐。不改价、不采购、不打印。原生调用与 Lua 属性转换已根据本机游戏及加载器参考核对；分析资料全部留在忽略的 `work/`，安装包只包含原创 Mod 代码。
+等价压缩保留所有不同的原生选择率结果。若没有等价候选且未达上限，最坏情况仍是指数级搜索；不会将启发式结果、超时或候选数量截断冒充全局最优。
 
 ### 离线验证
 
-在仓库根目录执行英文部分命令。虚构菜品和原生预测替身覆盖完整组合、包含留空类别的联合最优、低于显示精度的提升、原生上限提前结束、分批预算、同值处理、禁用菜、非有限数值、试算和部分写入失败后的恢复、输入变化、原生拒绝、单次保存、取消、其他按钮及重入、餐段隔离、影响力与满意度正常变化、等价数组重排、实时排名反转、采样属性失败恢复、语言和热重载。
+执行英文部分命令。六组测试覆盖非加性目标与完整枚举对照、类别留空、微小提升、同值保留、资格过滤、价格边界、库存及标签顺序隔离、预搜索达到上限、分批预算、批次异常恢复、部分写入、真实变化与正常数值变化、实时排名反转、原生拒绝、单次保存、生命周期及多语言。
 
-这些测试不等于真实 UE4SS 桥接、性能、渲染或联机验证。构建输出 `outputs/auto-menu/AutoMenu-0.2.1-dev.zip` 及 SHA-256；白名单包含六个 Lua 模块、README、DEVELOPMENT、CHANGELOG 和启用标记，不包含测试、参考、工具、游戏内容或加载器。统一 CI 校验源码字节及包内容；此开发版没有发布授权。
+合成性能场景每类 8 道启用菜、2 组等价候选：完整 59,048 个组合压缩为 242 次原生试算，调用次数减少约 244 倍，最优值与完整枚举一致；该测试分为 5 批，只在批次内设置采样属性。将实际可用范围限制为三个类别各一道菜时，即使选择器目录很大，也只有 7 个组合。以上是可重复的合成工作量，不代表实际游戏速度或真实引擎桥接验收。
+
+构建生成 `outputs/auto-menu/AutoMenu-0.3.0-dev.zip` 和 SHA-256，只含六个 Lua 模块、README、DEVELOPMENT、CHANGELOG 及启用标记，无游戏内容或参考资料。此开发版无发布授权。
 
 ### 实机待验收
 
-1. 检查不同分辨率、14 种语言下只有一个按钮，验证鼠标及键盘/手柄焦点、进度、取消。
-2. 用少量解锁菜品手动对比各组合的原生预计选择率，检查最终结果、可选类别、启用状态和另一餐段。页面百分比会取整，日志记录更精确的值。
-3. 验证试算之间及取消、异常后原菜单恢复；只有最终方案保存并同步给访客，不产生中间通知或保存。
-4. 检查不同客流、天气、活动、价格、缺料和推广影响力；搜索中改变条件、切换餐段、关闭或重建页面、失去房主权限，均不得应用过期方案。
-5. 大量解锁菜品且未达原生上限时实测耗时、取消响应，确认影响力衰减和满意度更新不会中断。检查每批及异常后菜单、影响力、半衰期、满意度均恢复；实时排名反转时保留更好的现有菜单。
-6. 搜索中反复热重载，确认只有一个可用按钮，旧搜索不会完成，不自动配餐，无持续错误。
+1. 检查单按钮、14 种语言、焦点、进度、取消以及搜索中反复热重载。
+2. 用少量启用菜手动比较全部原生组合；覆盖客流、天气、活动、价格边界、缺料、类别留空和推广影响力。
+3. 确认未解锁、停用和员工条件不满足的菜品不参与；核对日志候选数量，重新启用后应重新纳入。
+4. 比较等价替换的原生预测，包括价格边界、标签顺序、不同实时库存；游戏更新后重新核对分组契约。
+5. 确认每批返回及取消／异常后原菜单和实时属性恢复，最终只保存一次，保留启用状态和另一餐段，检查联机同步。
+6. 搜索中改变价格、资格、餐段、页面或权限不得应用旧结果；正常时间／满意度变化不取消。分别实测大量等价候选及大量不同候选且低于上限时的耗时与帧影响。

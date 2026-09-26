@@ -33,6 +33,9 @@ local function start()
             local job, reason = Planner.new(snapshot)
             if not job then return reason end
             view.job, view.snapshot, view.busy = job, snapshot, true
+            view.started = os.clock()
+            print(string.format('[AutoMenu] SEARCH eligible=%d representatives=%d combinations=%d reduced=%d\n',
+                job.candidates, job.representatives, job.raw_total, job.total))
             UI.update(view)
         end, traceback)
         view.handling = false
@@ -63,12 +66,14 @@ local function start()
                         return 'changed'
                     end
                     local deadline = os.clock() + 0.004
-                    local done = job:step(function(menu) return Game.evaluate(view.owner, snapshot, menu) end,
-                        128, function() return os.clock() >= deadline end)
+                    local done = Game.with_projection(view.owner, snapshot, function(oracle)
+                        return job:step(oracle, 128, function() return os.clock() >= deadline end)
+                    end)
                     if not done then return end
                     local live_rate, saved = Game.apply(view.owner, snapshot, job.best, job.rate)
-                    print(string.format('[AutoMenu] COMPOSED version=0.2.1-dev day=%s period=%s rate=%.9f sampled_rate=%.9f saved=%s evaluations=%d\n',
-                        snapshot.day, snapshot.period, live_rate, job.rate, tostring(saved), job.evaluations))
+                    print(string.format('[AutoMenu] COMPOSED version=0.3.0-dev day=%s period=%s rate=%.9f sampled_rate=%.9f saved=%s evaluations=%d total=%d reduced=%d elapsed=%.3f\n',
+                        snapshot.day, snapshot.period, live_rate, job.rate, tostring(saved), job.evaluations,
+                        job.raw_total, job.total, os.clock() - view.started))
                     return 'done'
                 end, traceback)
                 view.handling = false
@@ -113,7 +118,7 @@ local function start()
         else last_error = nil end
         return false
     end)
-    print('[AutoMenu] START version=0.2.1-dev\n')
+    print('[AutoMenu] START version=0.3.0-dev\n')
 end
 
 local ok, err = xpcall(start, traceback)

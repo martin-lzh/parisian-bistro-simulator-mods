@@ -71,6 +71,23 @@ local function distribution(values, field)
     return result
 end
 
+local function membership(values)
+    local result = {}; for _, id in ipairs(values) do result[id] = true end
+    return result
+end
+
+-- A signature is a sufficient condition for identical native adoption inputs,
+-- not a replacement score. Keep tag order: native float accumulation uses it.
+local function signature(option, tags, cost)
+    local band = 0
+    if option.kind ~= 2 and option.kind ~= 6 then
+        local floor = string.unpack('f', string.pack('f', 0.01))
+        local ratio = string.unpack('f', string.pack('f', option.price / math.max(cost, floor)))
+        band = ratio <= 2 and 1 or (ratio <= 3 and 2 or 3)
+    end
+    return table.concat({ option.kind, tostring(option.stock), band, table.concat(tags, ',') }, ':')
+end
+
 local function capture(owner)
     local manager, period = owner.BoundDailyMenuBrasserieManager, owner.SelectedDailyMenuPeriod
     local data = manager.DailyCustomerContext
@@ -94,17 +111,40 @@ local function capture(owner)
         result.inputs[name] = array(manager[name], function(value) return value end)
         table.sort(result.inputs[name])
     end
+    local available = membership(result.inputs.AvailableDishes)
+    local disabled = membership(result.inputs.DisabledDishes)
+    local employee_disabled = membership(result.inputs.EmployeeRequirementDisabledDishes)
+    local dishes = manager.DishGameInstanceSubsystem
+    local subsystem = manager.WorldGameInstanceSubsystem
+    assert(Game.valid(dishes) and Game.valid(subsystem), 'Menu subsystems unavailable')
+    local storage = subsystem:GetStorageManager()
+    assert(Game.valid(storage) and storage:HasAuthority() and not storage:IsActorBeingDestroyed()
+        and Game.same(storage:GetWorld(), owner:GetWorld()), 'Storage manager unavailable')
+    result.inputs.storage = Game.identity(storage)
     for _, course in ipairs(Planner.courses) do
         local row = owner['WBP_DailyMenu_' .. course.field]
         assert(Game.valid(row) and Game.valid(row.WBP_DailyMenu_DishSelector), 'Course selector unavailable')
         local options = array(row.WBP_DailyMenu_DishSelector.DishOptions, function(dish)
-            return { id = dish.Key, kind = dish.DishType, enabled = dish.bEnabled }
+            local option = { id = dish.Key, kind = dish.DishType,
+                enabled = dish.bEnabled and available[dish.Key] == true
+                    and not disabled[dish.Key] and not employee_disabled[dish.Key], stock = false }
+            if option.enabled then
+                local ingredients = array(dish.Ingredients, function(entry)
+                    return { Ingredient = entry.Ingredient, Amount = entry.Amount }
+                end)
+                -- Query the live, silent native stock predicate used by the
+                -- projection; the page's MissingIngredientsDishes is only a cache.
+                option.stock = storage:HasEnoughIngredients(ingredients, 0)
+                assert(type(option.stock) == 'boolean', 'Native ingredient availability unavailable')
+                option.price = manager:GetDishPrice(option.id)
+                assert(Planner.finite(option.price) and option.price >= 0, 'Dish price unavailable')
+                option.tags = array(dish.RecommendationTags, function(tag) return tag end)
+                option.cost = dishes:GetDishCostPrice(option.id)
+                assert(Planner.finite(option.cost) and option.cost >= 0, 'Dish cost unavailable')
+                option.equivalence = signature(option, option.tags, option.cost)
+            end
+            return option
         end)
-        for _, option in ipairs(options) do
-            option.stock = not owner:IsDishMissingIngredients(option.id)
-            option.price = manager:GetDishPrice(option.id)
-            assert(Planner.finite(option.price), 'Dish price unavailable')
-        end
         table.sort(options, function(a, b) return a.id < b.id end)
         result.options[course.field] = options
     end
@@ -133,11 +173,10 @@ local function nonempty(menu)
     return false
 end
 
-function Game.evaluate(owner, snapshot, menu, live)
+function Game.with_projection(owner, snapshot, callback, live)
     local manager, name = owner.BoundDailyMenuBrasserieManager, property(snapshot.period)
     local original = current(owner, snapshot.period)
     assert(equal(original, snapshot.current), 'Menu changed before projection')
-    assert(menu.Period == snapshot.period and menu.bIsActive == original.bIsActive, 'Invalid candidate menu')
     local restore = { { name = name, value = original, menu = true } }
     if not live then
         for _, field in ipairs({ 'DailyMenuInfluence', 'DailyMenuInfluenceHalfLifeGameHours', 'Satisfaction' }) do
@@ -149,8 +188,7 @@ function Game.evaluate(owner, snapshot, menu, live)
     -- The native pure projection accepts a period, not a candidate. Substitute
     -- the seven-field definition only for this synchronous call, without events,
     -- RPCs, saves or yields. Restore even if assignment or projection throws.
-    local ok, rate = pcall(function()
-        manager[name] = menu
+    local ok, result = pcall(function()
         if not live then
             manager.DailyMenuInfluence = snapshot.sample.influence
             -- The native getter accepts zero half-life as no decay. Use the
@@ -160,11 +198,23 @@ function Game.evaluate(owner, snapshot, menu, live)
             assert(manager:GetDailyMenuInfluence() == snapshot.sample.influence
                 and manager:GetSatisfaction() == snapshot.sample.satisfaction, 'Native sampled context mismatch')
         end
-        assert(equal(menu, menu_copy(owner:GetDailyMenu(snapshot.period))), 'Native menu binding changed')
-        local projection = owner:GetDailyMenuProjection(snapshot.period)
-        assert(projection.Period == snapshot.period and projection.bConfigured == nonempty(menu),
-            'Native projection unavailable')
-        return projection.EstimatedAdoptionRate
+        local binding_checked = false
+        return callback(function(menu)
+            assert(menu.Period == snapshot.period and menu.bIsActive == original.bIsActive, 'Invalid candidate menu')
+            manager[name] = menu
+            -- The synchronous batch cannot change world/owner bindings between
+            -- queries; validate the reflected setter and binding on its first trial.
+            if not binding_checked then
+                assert(equal(menu, menu_copy(owner:GetDailyMenu(snapshot.period))), 'Native menu binding changed')
+                binding_checked = true
+            end
+            local projection = owner:GetDailyMenuProjection(snapshot.period)
+            assert(projection.Period == snapshot.period and projection.bConfigured == nonempty(menu),
+                'Native projection unavailable')
+            local rate = projection.EstimatedAdoptionRate
+            assert(Planner.finite(rate) and rate >= 0 and rate <= snapshot.ceiling, 'Invalid native adoption rate')
+            return rate
+        end)
     end)
     local restore_error
     -- Each property gets its own cleanup attempt: one setter failure must not
@@ -184,9 +234,12 @@ function Game.evaluate(owner, snapshot, menu, live)
         if not restored or not verified or not matches then restore_error = entry.name .. ': ' .. tostring(err) end
     end
     assert(not restore_error, 'Failed to restore projection state: ' .. tostring(restore_error))
-    if not ok then error(rate) end
-    assert(Planner.finite(rate) and rate >= 0 and rate <= snapshot.ceiling, 'Invalid native adoption rate')
-    return rate
+    if not ok then error(result) end
+    return result
+end
+
+function Game.evaluate(owner, snapshot, menu, live)
+    return Game.with_projection(owner, snapshot, function(oracle) return oracle(menu) end, live)
 end
 
 function Game.apply(owner, snapshot, menu, expected_rate)

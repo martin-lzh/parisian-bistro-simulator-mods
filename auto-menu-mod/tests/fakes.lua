@@ -59,6 +59,18 @@ function F.setup()
         for _, course in ipairs(Planner.courses) do manager[name][course.field] = 0 end
     end
     state.manager = manager
+    local dishes = object('DishGameInstanceSubsystem')
+    dishes.GetDishCostPrice = function(_, id) return state.costs and state.costs[id] or 5 end
+    manager.DishGameInstanceSubsystem = dishes
+    local storage, subsystem = object('StorageManager'), object('WorldGameInstanceSubsystem')
+    storage.HasAuthority = function() return state.client ~= true end
+    storage.IsActorBeingDestroyed = function() return false end
+    storage.HasEnoughIngredients = function(_, ingredients, policy)
+        assert(policy == 0)
+        return ingredients[1].Ingredient ~= state.missing
+    end
+    subsystem.GetStorageManager = function() return storage end
+    manager.WorldGameInstanceSubsystem = subsystem
     local owner = object('WBP_MenuApp_C')
     state.owner = owner
     owner.BoundDailyMenuBrasserieManager = manager
@@ -99,11 +111,15 @@ function F.setup()
         local row = object('DailyMenu')
         local selector = object('DishSelector')
         selector.DishOptions = F.array({
-            { Key = index * 10, DishType = course.kind, bEnabled = true },
-            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true },
+            { Key = index * 10, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({index * 10}),
+                Ingredients = F.array({{Ingredient = index * 10, Amount = 1}}) },
+            { Key = index * 10 + 1, DishType = course.kind, bEnabled = true, RecommendationTags = F.array({index * 10 + 1}),
+                Ingredients = F.array({{Ingredient = index * 10 + 1, Amount = 1}}) },
         })
         row.WBP_DailyMenu_DishSelector = selector
         owner['WBP_DailyMenu_' .. course.field] = row
+        table.insert(manager.AvailableDishes.entries, index * 10)
+        table.insert(manager.AvailableDishes.entries, index * 10 + 1)
     end
     local footer = object('HorizontalBox')
     footer.children = {}

@@ -4,7 +4,7 @@
 
 ## English
 
-Auto Menu **0.2.1-dev** maximizes the native estimated selection rate through cancellable, batched combination search. Version 0.2.1-dev fixes cancellations caused by ordinary influence/satisfaction drift and equivalent reordered lists, adds changed-field diagnostics and checks live rankings before saving. Offline objective/search, drift/rollback, projection rollback, changed-input, one-save, lifecycle and language tests pass. Actual button rendering, UE4SS projection bridging/restoration, search performance and native saving/replication remain unverified; see its [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
+Auto Menu **0.3.0-dev** adds explicit eligibility filtering, native-equivalent candidate reduction, a ceiling-only warm-start shortcut and protected projection batches. Six offline suites pass, including brute-force agreement and a synthetic 59,048-to-242 prediction reduction. These work counts do not establish real game speed. Native grouping, live stock checks, rendering, save/replication and performance remain pending; see the [checklist](../auto-menu-mod/DEVELOPMENT.md#english).
 
 Scan to Order **0.1.1-dev** avoids full dish return conversion through Lua while retaining host/single-player automatic food and drink ordering with restock recovery. Local references were checked against Steam Build **25532071** / **1.0.1.44eb**. Offline catalog-reference, scalar-ingredient, stock-contention, customer-state, authority, native acceptance and reload tests pass; real engine calls, replenishment, staffing and multiplayer replication remain pending in-game acceptance.
 
@@ -56,7 +56,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-Auto Menu **0.2.1-dev** 通过可取消的分批组合搜索，最大化原生预计选择率。0.2.1-dev 修复影响力与满意度正常变化、等价列表重排导致的误取消，记录具体变化字段，并在保存前复核实时排名。离线目标与搜索、正常变化与恢复、试算恢复、条件变化、单次保存、生命周期及多语言测试已通过；实际按钮显示、UE4SS 原生试算与恢复、搜索性能及原生保存与同步仍未验证，见[验收清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
+Auto Menu **0.3.0-dev** 新增显式资格过滤、原生等价候选压缩、仅达到上限才提前完成的预搜索及受保护的批量试算。六组离线测试通过，包含与完整枚举的最优值对照、合成场景从 59,048 次压缩至 242 次预测；该工作量不代表实机速度。原生分组、实时库存检查、显示、保存与联机同步及性能仍待实机验收，见[清单](../auto-menu-mod/DEVELOPMENT.md#中文)。
 
 Scan to Order（扫码点餐）**0.1.1-dev** 避免在 Lua 中转换完整菜品返回值，保留仅房主／单人自动提交食物和饮料订单、补货后续单。本机参考核对基于 Steam Build **25532071** / **1.0.1.44eb**。菜品表引用、独立食材记录、库存争用、顾客状态、权限、原生受理结果及热重载离线测试通过；真实引擎调用、补货、人员条件和联机同步仍待实机验收。
 
