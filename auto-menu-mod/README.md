@@ -18,6 +18,16 @@ The chosen menu is saved; the other service is unchanged. No ingredients are bou
 
 **A large dish selection can pause gameplay while the search finishes.** There is no progress display. The Mod runs only when you click the button, not automatically each day.
 
+### In-game screenshots
+
+The **Auto-compose** button sits beside **Print menu** on the daily-menu page, with its tooltip visible here.
+
+![Daily-menu page with the Auto-compose button beside Print menu and its tooltip visible](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
+
+The captured menu forecast shows **86% estimated adoption**, compatibility by customer profile and **68 menus available** from current stock.
+
+![Menu forecast showing 86 percent estimated adoption, customer-profile compatibility and 68 menus available](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
+
 ### Requirements
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately. The ready-to-use Mod ZIP includes its helper; no compiling is needed.
@@ -79,6 +89,16 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 选中的菜单会保存，另一餐段保持原样。不自动采购、调价或打印；当前菜单符合条件且与最高值持平时会保留。类别可以留空，也可能得到全空菜单；全空菜单由游戏自动停用。
 
 **可选菜品较多时，游戏可能会等待计算完成。** 没有进度条；只在点击按钮时运行，不会每天自动组合。
+
+### 实机截图
+
+每日菜单页面的 **Print menu（打印菜单）** 旁显示 **Auto-compose（自动组合）** 按钮，图中同时展示了按钮的悬浮说明。
+
+![实机画面：每日菜单页面中的自动组合按钮位于打印菜单旁，并显示悬浮说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/auto-compose-gameplay.png?raw=1)
+
+图中菜单预测显示 **86% 的预计选择率**、各类顾客的适配度，以及现有库存可提供的 **68 份菜单**。
+
+![实机画面：菜单预测显示86%的预计选择率、顾客适配度及现有库存可提供的68份菜单](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/menu-forecast-gameplay.png?raw=1)
 
 ### 使用要求
 

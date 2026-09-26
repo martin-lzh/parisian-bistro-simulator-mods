@@ -6,6 +6,17 @@
 
 Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
 
+### In-game screenshots
+
+Provided by the maintainer on 2026-09-26 as Auto Menu gameplay screenshots and preserved without further edits. Both show the English UI. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied. The forecast figures describe the captured menu.
+
+| Image | Size | Visible scene |
+| --- | --- | --- |
+| [auto-compose-gameplay.png](auto-compose-gameplay.png) | 2534 × 1574 | Daily-menu page with the **Auto-compose** button beside **Print menu** and its tooltip visible |
+| [menu-forecast-gameplay.png](menu-forecast-gameplay.png) | 2061 × 1048 | Menu forecast with **86% estimated adoption**, customer-profile compatibility, **68 menus available** and menu bonuses |
+
+### Adding images
+
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
@@ -26,6 +37,17 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 ## 中文
 
 此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+
+### 实机截图
+
+维护者于 2026-09-26 提供的菜单巧配实机图，按原文件保存，未再编辑。两张图均为英语界面；拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。预测数值仅描述截图中的菜单。
+
+| 图片 | 尺寸 | 可见场景 |
+| --- | --- | --- |
+| [auto-compose-gameplay.png](auto-compose-gameplay.png) | 2534 × 1574 | 每日菜单页面中的 **Auto-compose（自动组合）** 按钮位于 **Print menu（打印菜单）** 旁，并显示悬浮说明 |
+| [menu-forecast-gameplay.png](menu-forecast-gameplay.png) | 2061 × 1048 | 菜单预测显示 **86% 预计选择率**、顾客适配度、现有库存可提供的 **68 份菜单** 及菜单加成 |
+
+### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |
