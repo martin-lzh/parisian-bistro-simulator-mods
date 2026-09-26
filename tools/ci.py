@@ -63,7 +63,7 @@ def validate_config(mod: dict) -> None:
         path = PurePosixPath(name)
         if (path.is_absolute() or ".." in path.parts or "\\" in name
                 or not ((len(path.parts) == 2 and path.parts[0] == "Scripts" and path.suffix == ".lua")
-                        or name in {"README.md", "DEVELOPMENT.md", "CHANGELOG.md"})):
+                        or name in {"README.md", "DEVELOPMENT.md", "CHANGELOG.md", "LICENSE"})):
             raise ValueError(f"Disallowed package input: {name}")
         original = source / name
         if (original.is_symlink() or not original.is_file()
@@ -71,9 +71,15 @@ def validate_config(mod: dict) -> None:
                 or original.relative_to(ROOT).as_posix() not in tracked):
             raise ValueError(f"Missing, linked or untracked package input: {name}")
     required = {p.relative_to(source).as_posix() for p in (source / "Scripts").glob("*.lua")}
-    required.update({"README.md", "DEVELOPMENT.md", "CHANGELOG.md"})
+    required.update({"README.md", "DEVELOPMENT.md", "CHANGELOG.md", "LICENSE"})
     if set(files) != required:
-        raise ValueError(f"{mod['slug']}: package allowlist must cover all Lua modules and user docs")
+        raise ValueError(f"{mod['slug']}: package allowlist must cover all Lua modules, user docs and LICENSE")
+    license_path = ROOT / "LICENSE"
+    if license_path.is_symlink() or not license_path.is_file() or "LICENSE" not in tracked:
+        raise ValueError("Repository LICENSE must be a tracked regular file")
+    license_text = license_path.read_bytes().replace(b"\r\n", b"\n")
+    if (source / "LICENSE").read_bytes().replace(b"\r\n", b"\n") != license_text:
+        raise ValueError(f"{mod['slug']}: LICENSE must match the repository MIT license")
     generated = mod.get("generated", {})
     if mod["slug"] in NATIVE and not generated:
         raise ValueError("Native helper must be included in the package")

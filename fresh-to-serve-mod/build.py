@@ -10,7 +10,7 @@ SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "fresh-to-serve"
 FILES = (
     "Scripts/main.lua", "Scripts/game.lua", "Scripts/drinks.lua", "Scripts/remake.lua", "Scripts/reload.lua",
-    "README.md", "DEVELOPMENT.md", "CHANGELOG.md",
+    "README.md", "DEVELOPMENT.md", "CHANGELOG.md", "LICENSE",
 )
 
 

@@ -8,7 +8,7 @@ VERSION = "0.1.4-dev"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs/smart-delivery"
 FILES = ("Scripts/main.lua", "Scripts/reload.lua", "Scripts/ui.lua", "Scripts/bridge.lua", "Scripts/settings.lua",
-         "Scripts/localization.lua", "README.md", "DEVELOPMENT.md", "CHANGELOG.md")
+         "Scripts/localization.lua", "README.md", "DEVELOPMENT.md", "CHANGELOG.md", "LICENSE")
 GENERATED_FILES = {"Scripts/delivery_bridge.dll": OUTPUT / "native/delivery_bridge.dll"}
 
 

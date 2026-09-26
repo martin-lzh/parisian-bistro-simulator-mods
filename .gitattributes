@@ -1,4 +1,6 @@
 * text=auto
+LICENSE text eol=lf
+.editorconfig text eol=lf
 *.md text eol=lf
 *.py text eol=lf
 *.lua text eol=lf

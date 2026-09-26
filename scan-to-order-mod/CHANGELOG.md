@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+
 - 0.1.1-dev avoids converting complete dish return values through Lua. Read catalog row references and let the engine copy complete order data, without accessing dish icons.
 - Copy ingredient identifiers and quantities into plain Lua records for the silent stock check. Add regression coverage for asset conversion, invalid catalog rows and multi-ingredient replenishment. Gameplay verification remains pending.
 - 0.1.1-dev 避免通过 Lua 展开完整菜品返回值：读取菜品表记录引用，由引擎复制完整下单数据，不访问菜品图标。

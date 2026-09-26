@@ -4,6 +4,8 @@
 
 ### English
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+
 - 0.1.4-dev: support experimental UE4SS Lua hot reload. Persist primitive AI recovery records and per-transaction cooldowns/retry budgets across instances, and restore inherited AI changes on the game thread before continuing.
 - Save recovery plans before engine-array writes and attempts before dispatch. Retire old callbacks without touching UObjects or scheduling work during unload; preserve failed recovery records for another reload and reject malformed handoff data without executing it.
 - Add 12 offline reload checks covering both schedulers, AI recovery failures, notifications, retry limits, temporary controller loss and storage errors. Upgrade from earlier versions and permanently remove the Mod with the game closed; real loader and in-game reload acceptance is pending.
@@ -13,6 +15,7 @@
 
 ### 中文
 
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
 - 0.1.4-dev：支持 UE4SS 实验版 Lua 热重载；跨实例保留普通值形式的 AI 恢复记录、每笔交易冷却时间及重试预算，新实例先在游戏线程恢复旧 AI 改动，再继续运行。
 - 改写引擎数组和发送请求前先保存恢复方案与尝试次数；卸载时停用旧回调，不访问 UObject、不排队，并保留失败恢复记录供下次重载重试；异常交接内容被校验拒绝，不作为代码执行。
 - 新增 12 项离线重载检查，覆盖两个调度器、AI 恢复失败、通知、重试上限、控制器暂失及存储错误。从旧版首次升级或永久卸载需关闭游戏；加载器与游戏内热重载仍待实机验收。

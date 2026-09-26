@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+
 - Fresh to Serve 0.1.2-dev retains pending food/drink remakes across manual UE4SS script reload, preserving original ticket age, retry counts and cooldowns. Re-resolve customers and queues on the game thread; old callbacks stop on unload.
 - Preserve safety stops after uncertain operations across reload. Checkpoint a stop marker before mutations, validate the fixed scalar-only shared-state format, and clear old tickets/stops only after a different session is observed. Initial upgrades from older code require a closed-game installation.
 - Add real-adapter reload tests for waiting/rejected/accepted orders, food/drink coexistence, retry and expiration bounds, live patience, failed checkpoint writes and off-thread unload. In-game acceptance remains pending.

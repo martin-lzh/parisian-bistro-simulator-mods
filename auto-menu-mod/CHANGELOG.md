@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+
 - Auto Menu 0.5.0-dev adds an original Windows x64 helper that enumerates menus and caches original single-dish scores for one synchronous search. Every combination still uses the full native projection; empty courses, exact rates, stable ties and the native ceiling are preserved.
 - Remove per-candidate Lua property writes and projection-table conversion. Compare every candidate in domains of at most 243 combinations with caching disabled; larger domains compare the first 32, and every search checks its winner. Restore the original menu before the existing one-save path, including failures.
 - Add native search/cache metrics, native calling-convention discovery and ownership tests, and a generated-DLL package allowlist. DLL updates require restarting the game. In-game speed and native integration acceptance remain pending.

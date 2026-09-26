@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+
 - Fall back to English when the game language cannot be read, keeping pickup active and restoring the selected language on a later successful refresh. Add failure and recovery regression coverage; this change has not been tested in-game.
 - 游戏语言读取失败时回退英语，保持取餐功能运行，后续成功刷新后恢复所选语言。增加失败与恢复回归验证；本次改动尚未实机测试。
 

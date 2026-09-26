@@ -20,6 +20,7 @@ FILES = (
     "README.md",
     "DEVELOPMENT.md",
     "CHANGELOG.md",
+    "LICENSE",
 )
 GENERATED_FILES = {"Scripts/auto_menu_bridge.dll": OUTPUT / "native/auto_menu_bridge.dll"}
 

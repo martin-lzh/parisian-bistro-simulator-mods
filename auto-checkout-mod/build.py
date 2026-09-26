@@ -19,6 +19,7 @@ FILES = (
     "README.md",
     "DEVELOPMENT.md",
     "CHANGELOG.md",
+    "LICENSE",
 )
 
 

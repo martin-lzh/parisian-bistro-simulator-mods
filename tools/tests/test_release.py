@@ -18,6 +18,9 @@ import ci
 import release
 
 
+MIT_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
+
+
 class FakeGitHub:
     def __init__(self):
         self.records = []
@@ -81,7 +84,7 @@ class ReleaseTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.mod = {"slug": "sample", "name": "Sample", "version": "1.1.0",
                     "source": self.root / "sample-mod", "output": self.root / "outputs/sample",
-                    "files": ("Scripts/main.lua", "README.md", "DEVELOPMENT.md", "CHANGELOG.md")}
+                    "files": ("Scripts/main.lua", "README.md", "DEVELOPMENT.md", "CHANGELOG.md", "LICENSE")}
         for target, attribute, value in ((release, "ROOT", self.root), (ci, "ROOT", self.root),
                                          (ci, "MODS", {"sample": "Sample"})):
             mock = patch.object(target, attribute, value)
@@ -92,6 +95,8 @@ class ReleaseTests(unittest.TestCase):
         self.addCleanup(mock.stop)
         self.git("init", "--quiet")
         self.write(".gitignore", "/outputs/\n")
+        self.write("LICENSE", MIT_LICENSE)
+        self.write("sample-mod/LICENSE", MIT_LICENSE)
         self.write("sample-mod/Scripts/main.lua", "return {}\n")
         self.write("sample-mod/README.md", "Sample 1.1.0\n")
         self.write("sample-mod/DEVELOPMENT.md", "Original development notes\n")

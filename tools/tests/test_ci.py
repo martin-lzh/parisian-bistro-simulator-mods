@@ -12,6 +12,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import ci
 
 
+MIT_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
+
+
 class PackageChecks(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -22,7 +25,9 @@ class PackageChecks(unittest.TestCase):
         content = {"Scripts/main.lua": "return {}\n",
                    "README.md": "Example 1.0.0\n",
                    "DEVELOPMENT.md": "Development\n",
-                   "CHANGELOG.md": "## Unreleased\n\n## 1.0.0 - 2026-09-24\n\n- Release\n"}
+                   "CHANGELOG.md": "## Unreleased\n\n## 1.0.0 - 2026-09-24\n\n- Release\n",
+                   "LICENSE": MIT_LICENSE}
+        (self.root / "LICENSE").write_text(MIT_LICENSE, encoding="utf-8")
         for name, text in content.items():
             (source / name).write_text(text, encoding="utf-8")
         self.mod = {"slug": "example", "name": "Example", "version": "1.0.0",
@@ -45,7 +50,7 @@ class PackageChecks(unittest.TestCase):
             encoding="utf-8")
 
     def validate(self):
-        tracked = "\0".join(f"example-mod/{name}" for name in self.mod["files"]).encode()
+        tracked = "\0".join(["LICENSE"] + [f"example-mod/{name}" for name in self.mod["files"]]).encode()
         with patch.object(ci, "ROOT", self.root), patch.object(ci.subprocess, "check_output", return_value=tracked):
             ci.validate_config(self.mod)
 
@@ -53,6 +58,44 @@ class PackageChecks(unittest.TestCase):
         self.validate()
         self.write_package()
         ci.verify_package(self.mod, self.archive)
+
+    def test_package_allowlist_must_include_license(self):
+        self.mod["files"] = tuple(name for name in self.mod["files"] if name != "LICENSE")
+        with self.assertRaisesRegex(ValueError, "allowlist.*LICENSE"):
+            self.validate()
+
+    def test_missing_source_license_is_rejected(self):
+        (self.mod["source"] / "LICENSE").unlink()
+        with self.assertRaisesRegex(ValueError, "Missing.*LICENSE"):
+            self.validate()
+
+    def test_source_license_must_match_repository_license(self):
+        for text in ("MIT License\n", MIT_LICENSE.replace("Zhaohan Liu", "Unrelated Author")):
+            with self.subTest(license=text):
+                (self.mod["source"] / "LICENSE").write_text(text, encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "LICENSE must match"):
+                    self.validate()
+
+    def test_missing_repository_license_is_rejected(self):
+        (self.root / "LICENSE").unlink()
+        with self.assertRaisesRegex(ValueError, "Repository LICENSE"):
+            self.validate()
+
+    def test_license_line_endings_are_normalized(self):
+        (self.mod["source"] / "LICENSE").write_bytes(MIT_LICENSE.replace("\n", "\r\n").encode())
+        self.validate()
+        self.write_package()
+        ci.verify_package(self.mod, self.archive)
+
+    def test_missing_packaged_license_is_rejected(self):
+        self.write_package({name: data for name, data in self.payload.items() if name != "Example/LICENSE"})
+        with self.assertRaisesRegex(ValueError, "package entries"):
+            ci.verify_package(self.mod, self.archive)
+
+    def test_changed_packaged_license_is_rejected_even_with_matching_checksum(self):
+        self.write_package(self.payload | {"Example/LICENSE": b"MIT License\n"})
+        with self.assertRaisesRegex(ValueError, "differs from source.*LICENSE"):
+            ci.verify_package(self.mod, self.archive)
 
     def test_unlisted_files_and_path_traversal_are_rejected(self):
         for name in ("Example/game.dll", "../outside.lua", "Example/tests/spec.lua"):
@@ -106,7 +149,7 @@ class PackageChecks(unittest.TestCase):
             file = source / path
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_text("original test fixture\n", encoding="utf-8")
-        tracked = "\0".join(f"example-mod/{path}" for path in set(self.mod["files"]) | inputs).encode()
+        tracked = "\0".join(["LICENSE"] + [f"example-mod/{path}" for path in set(self.mod["files"]) | inputs]).encode()
         helper = self.root / "outputs/auto-menu/native/auto_menu_bridge.dll"
         with patch.object(ci, "ROOT", self.root), patch.object(ci.subprocess, "check_output", return_value=tracked):
             self.mod["generated"] = {name: helper}

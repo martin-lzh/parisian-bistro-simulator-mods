@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
+- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+
 - Fall back to English when language lookup fails without stopping delivery selection or losing an unsaved choice. Resume localized text when reading recovers; add UI and runtime regressions. This change has not been tested in-game.
 - 语言读取失败时回退英语，不停止配送选择，也不丢失未保存选项；读取恢复后重新显示本地化文案，增加界面与主流程回归测试。本次改动尚未实机测试。
 
