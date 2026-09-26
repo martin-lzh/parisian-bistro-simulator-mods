@@ -69,7 +69,7 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 
 ### 选择 Mod
 
-> **Nexus 状态 · 2026-09-26：**七个页面均已提交，正在等待 Nexus 审核新游戏分类。审核完成前，下方 Nexus 页面可能无法公开访问。**目前可直接从 GitHub Releases 下载正式版。**
+> **Nexus 状态 · 2026-09-26：** 七个页面均已提交，正在等待 Nexus 审核新游戏分类。审核完成前，下方 Nexus 页面可能无法公开访问。**目前可直接从 GitHub Releases 下载正式版。**
 
 | Mod | 功能 | GitHub 下载 | Nexus |
 | --- | --- | --- | --- |
