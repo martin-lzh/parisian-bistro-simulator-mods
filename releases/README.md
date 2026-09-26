@@ -20,6 +20,8 @@ On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-ga
 
 The historical Bartender's Note 0.1.0 and Auto Checkout 0.1.1/0.1.2 acceptance records remain in the validation history. Current builds use the stable versions above; building current source does not reproduce those historical packages.
 
+The maintainer separately authorized a [gameplay-guide update](documentation-refresh-2026-09-26.md#english) for these seven existing Releases. That update replaces only the ZIP documentation and associated checksums/build records; runtime files, versions and tag targets remain unchanged. The normal workflow below still skips published versions.
+
 Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english); the repository remains private. Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
 
 CI runs all seven independent build entry points and all Lua offline tests, then checks package allowlists, every file's source content and SHA-256. The `mod-packages` artifact contains the seven current ZIPs, their `.zip.sha256` files and `build-info.json` with the source commit, versions and attachment hashes. Artifacts are retained for 14 days. GitHub source downloads are not installable Mod packages.
@@ -75,6 +77,8 @@ This command reads the private repository using `GH_TOKEN` and requires a commit
 | Scan to Order（扫码点餐） | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
 
 调饮手记 0.1.0、收银管家 0.1.1／0.1.2 的历史验收仍保留在验收记录中。当前构建使用上表正式版本，不会重新生成历史版本安装包。
+
+维护者另行授权对这 7 个现有 Release 进行[游戏操作说明更新](documentation-refresh-2026-09-26.md#中文)，仅替换 ZIP 内文档及对应校验／构建记录；运行文件、版本及标签指向不变。下述常规工作流仍跳过已发布版本。
 
 每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)，仓库保持私密。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
 

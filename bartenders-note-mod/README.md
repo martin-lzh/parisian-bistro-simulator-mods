@@ -10,11 +10,20 @@ See your claimed, unfinished drinks below the restaurant name. Repeated orders a
 
 ### How to use
 
-1. Claim drink orders on the tablet.
-2. Close the tablet to see the list below the restaurant name.
-3. Make the drinks. Finished drinks leave the list immediately; canceled claims and orders also update it.
+1. Enter your restaurant and open the game's tablet using its on-screen prompt or your configured control.
+2. Open the drink order list and use the game's existing claim action on the drinks you intend to make. Orders must be claimed by **you**; unclaimed orders and another player's claims do not appear in your note.
+3. Close the tablet. The note appears automatically below the restaurant name when you have at least one unfinished claimed drink. It adds no button, shortcut or settings menu.
+4. Prepare those drinks using the game's normal equipment and interactions. Both waiting and currently preparing drinks count. A drink leaves the note when preparation finishes, even if it is still on the counter waiting to be collected or served.
+5. To change what you are working on, return to the tablet's order list and use the existing claim or unclaim controls. The note also updates when the game cancels an order; it hides after the last matching drink is finished, unclaimed or canceled.
 
-The list hides when empty. It uses up to two lines; “... + N more” counts hidden drink types, not cups. Long names may be included in that count. The display follows the game language and window size and does not take control of your mouse, keyboard or controller.
+### Reading the note
+
+- Repeated drinks share one count: `Espresso x 10` means ten unfinished claimed orders of that drink. It is not an ingredient or prepared-stock count.
+- The note uses at most two lines. “... + N more” counts hidden **drink types**, not cups; a name that is too long to fit may also be included. Reopen the tablet to inspect the full order list.
+- The note follows the visibility of the restaurant name bar. If a tablet or other full-screen interface hides that bar, close the interface to see the note again. Language and window-size changes update the layout automatically.
+- The note is a display only: it does not claim orders, make drinks, collect them or deliver them. Its text does not take mouse, keyboard or controller input. Use the game's normal controls for those actions.
+
+In multiplayer, each installed copy reads that player's own claims. The host does not need the Mod for a guest to use their own display, and installing it only on the host does not give guests a note. To stop using the display, remove the Mod with the game closed as described below; there is no in-game toggle.
 
 ### Requirements
 
@@ -55,7 +64,7 @@ Follows the game language automatically, with no separate setting or language pa
 
 Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-If the list is missing, first claim an unfinished drink and close any screen that hides the restaurant name bar. Widen an unusually narrow game window. If the problem remains, use the help link below and include relevant `[Bartender's Note]` lines from `UE4SS.log`.
+If the note is missing, confirm the drink is still waiting or preparing and is claimed by your own player, then close any screen that hides the restaurant name bar. Allow a short refresh after changing an order; a completed drink is correctly absent even before delivery. Widen an unusually narrow game window. During loading or a temporarily unavailable order list, the note hides old counts and returns when current data is available. If it stays missing, use the help link below and include relevant `[Bartender's Note]` lines from `UE4SS.log`.
 
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#english) describes its scope.
 
@@ -69,11 +78,20 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 怎么使用
 
-1. 在平板中认领饮料订单。
-2. 关闭平板，在餐厅名称下查看清单。
-3. 制作饮料。制作完成后立即从清单移除；取消认领或订单也会更新数量。
+1. 进入餐厅，按游戏屏幕上的提示或自己设置的操作键打开平板。
+2. 进入饮料订单列表，使用游戏原有的认领操作，认领准备制作的饮料。必须是**自己认领**的订单；未认领的订单和其他玩家认领的订单不会出现在自己的手记中。
+3. 关闭平板。只要有尚未做完的认领饮料，手记就会自动出现在餐厅名称下，无需额外按钮、快捷键或设置。
+4. 按游戏原有操作使用设备制作饮料。等待制作和正在制作的饮料都会计入；制作完成后便从手记中移除，即使成品仍在台面上、尚未拿取或送给顾客。
+5. 需要调整负责的饮料时，回到平板订单列表使用原有的认领或取消认领操作。订单被游戏取消时，手记也会自动更新；最后一份符合条件的饮料完成、取消认领或被取消后，清单自动隐藏。
 
-清单为空时隐藏，最多显示两行；“另有 N 种”表示隐藏的饮料种类，不是杯数。过长的名称也可能计入隐藏数量。显示跟随游戏语言和窗口尺寸，不影响鼠标、键盘或手柄操作。
+### 怎么看手记
+
+- 同种饮料合并数量：“浓缩咖啡 x 10”表示自己认领且尚未做完的十份浓缩咖啡订单，不是原料库存或已做好的成品数量。
+- 最多显示两行。“另有 N 种”表示隐藏的**饮料种类**，不是杯数；名称过长而无法放入的饮料也可能计入。需要查看完整订单时重新打开平板。
+- 手记跟随餐厅名称条显示。平板或其他全屏界面隐藏名称条时，关闭对应界面即可再次查看；切换游戏语言或窗口尺寸后会自动调整布局。
+- 手记只负责显示，不会自动认领、制作、拿取或配送饮料。文字区域不接收鼠标、键盘或手柄输入，实际操作继续使用游戏原有控件。
+
+联机时，每位安装玩家只读取自己的认领清单。客机使用自己的手记不要求房主安装；只在房主安装也不会让客机看到手记。没有游戏内开关，需要停用时按下方说明关闭游戏并卸载。
 
 ### 使用要求
 
@@ -114,7 +132,7 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
-清单未出现时，先确认已认领尚未做完的饮料，并关闭会遮住餐厅名称条的界面。游戏窗口过窄时请加宽。仍有问题时，按下方反馈说明提供 `UE4SS.log` 中相关的 `[Bartender's Note]` 日志。
+手记未出现时，先确认饮料仍在等待或制作中，且由自己的角色认领，再关闭会隐藏餐厅名称条的界面。改变订单后等待短暂刷新；饮料已经做完时，即使还没送出，也应从手记移除。游戏窗口过窄时请加宽。加载中或订单数据暂时不可用时会隐藏旧数量，数据恢复后自动重新显示。仍未恢复时，按下方反馈说明提供 `UE4SS.log` 中相关的 `[Bartender's Note]` 日志。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#中文)。
 

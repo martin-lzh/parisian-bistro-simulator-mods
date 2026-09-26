@@ -10,13 +10,45 @@ Clear spoiled cooked meals and finished drinks from kitchen passes, drink output
 
 ### How to use
 
-Enter your restaurant as host. Cleanup starts automatically, with no hotkey or settings to change. Finished cocktails are included.
+1. Enter your restaurant in single player or as the multiplayer host. The Mod starts automatically and waits while the game is paused. There is no Mod menu, button, hotkey or setting to enable in the restaurant.
+2. Take customer orders and run the kitchen/bar normally. Keep the ingredients, preparation equipment and staff needed for those orders available. Tables assigned to player service are excluded from this automation.
+3. When the game classifies an eligible finished item as bad or very bad quality, the Mod removes it from its output position, freeing the slot. You do not need to aim at it, hold a tray or interact with a bin.
+4. The Mod then checks the original customer, existing supply and remaining patience. If a remake qualifies, it adds a normal order for the kitchen or bar. Staff prepare and serve it through the usual game systems; you can also handle the resulting item normally.
 
-- Replacements still need the normal ingredients, equipment and staff. Patience is never reset; a busy kitchen or bar may leave too little time to remake an item.
-- If the customer has left or a timely replacement cannot be confirmed, the spoiled item is removed without a replacement.
-- Good-quality items, dirty dishes, served or carried items, unfinished drinks, drinks still being poured and player-service tables are left alone. Bakery trays are outside this version's scope.
-- Player-claimed unfinished drinks delay automatic drink remakes. The assigned floor needs a working bartender who is allowed to make that drink.
-- Discarding removes the spoiled item and its plate or glass; it does not return dishes to the sink, refund ingredients or add trash to a bin. Staff and delivery delays can still prevent timely service.
+Cleanup and replacement are separate: a spoiled item can disappear even when no replacement can be ordered. The Mod never restores freshness to the old item or resets the customer's patience.
+
+### Cleanup coverage
+
+| Item and location | What happens |
+| --- | --- |
+| Bad/very bad cooked meal waiting at a kitchen pass or in a registered elevator food-serving slot | Removes the meal and its plate; checks whether the original customer still needs a replacement. |
+| Bad/very bad full, finished drink at a drink output area or in an elevator's dedicated drink slot | Removes the drink and its glass. Dispenser drinks, bottled drinks and completed cocktails are included. |
+| Normal-quality item, dirty dish, already served or consumed item, or item being picked up/carried | Leaves it alone. This includes items already on a tray or food trolley. |
+| Part-filled drink, active filling or cocktail pouring, or glass still at preparation equipment | Leaves it alone until it is a finished item in a supported output position. |
+| Item belonging to a player-service table | Leaves it alone so that table remains under player control. |
+| Bakery tray | Outside this version's cleanup coverage. |
+
+Cleanup covers eligible output positions in the host's restaurant, including other floors; you do not have to stand next to them. Discarding also consumes the plate or glass: it does not return dirty dishes to the sink, refund ingredients or add trash to a bin. A replacement consumes the normal ingredients again.
+
+### When a replacement is made
+
+- The same customer must still be seated, waiting for that item from the same order round, and not already served or ready to check out. Leftovers from a previous seating or course do not create orders for new customers.
+- Existing preparation orders and unserved items already available for that table count toward its demand, including items being carried to it. If enough supply already exists, no extra replacement is added. Different customers ordering the same item are handled separately.
+- Food needs an available chef plus the game's normal ingredients and equipment requirements. Drinks need compatible equipment and a **working bartender on the customer's floor** whose task settings allow the required drink or cocktail preparation.
+- While the bar queue contains player-claimed unfinished drinks, automatic drink remakes wait. The Mod keeps those claims intact; finish the claimed work so it can reassess the queue.
+- The customer must have **more remaining patience than the estimated total time**. The estimate includes the new item's full preparation time, all unfinished work in that kitchen/bar queue, five seconds per queued item, and thirty seconds for dispatch and service. It does not assume multiple staff will work in parallel or subtract time already spent preparing queued items. Drinks also include equipment filling/interaction time and ten seconds for glass/ingredient handling.
+
+For example, a meal taking 20 seconds with queued work of 10 and 30 seconds needs more than **100 seconds** of remaining patience: `20 + 10 + 30 + (2 × 5) + 30`. Exactly 100 seconds is insufficient. When the game's patience setting is disabled, the patience comparison is skipped, but the customer, demand and preparation requirements still apply. Unknown preparation timing or unavailable active patience prevents a replacement.
+
+### When a replacement waits or stops
+
+If staff, stock or equipment are temporarily unavailable, the pending replacement waits and rechecks. Rejected order requests are tried at most three times, at least ten seconds apart; pending replacements expire after 120 seconds of game time. Departure, a changed order, enough existing supply or insufficient patience ends that replacement attempt. Resolving the shortage after the attempt has ended does not recreate it automatically.
+
+These estimates do not guarantee delivery: later staff changes, walking distance and other game delays may still prevent timely service. Accepted orders remain normal game orders even if the Mod is removed.
+
+### Multiplayer
+
+Only the host needs to install the Mod. Its cleanup and replacement orders use the host's restaurant state and are synchronized by the game. Guests can observe and handle the resulting items normally; installing only on a guest does not start cleanup or replacement ordering.
 
 ### Requirements
 
@@ -59,7 +91,7 @@ Adds no in-game text. Dish names, drink names and order messages remain in the g
 
 Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-If an item is not remade, check customer patience, stock, staff and equipment first. A cleanup does not guarantee a replacement or delivery. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report.
+If cleanup does not occur, check the host role, quality level, output location and player-service assignment first. If an item disappears without a remake, check customer patience, existing supply, stock, staff, equipment and unfinished player claims. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report: `DISCARDED` means removed, `REQUEUED` means a replacement order was accepted, and `SKIPPED`/`DEFERRED` explain canceled or waiting attempts. `REQUEUED` does not mean the item has been served.
 
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope.
 
@@ -73,13 +105,45 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 怎么使用
 
-以房主身份进入餐厅后自动清理，无需快捷键或设置，成品鸡尾酒也包括在内。
+1. 以单人玩家或联机房主身份进入餐厅。Mod 自动开始运行，游戏暂停期间等待；餐厅内没有需要另外启用的 Mod 菜单、按钮、快捷键或设置。
+2. 照常给顾客点单并经营厨房／吧台，准备订单需要的原料、设备与员工。分配为玩家服务的餐桌不参与此自动流程。
+3. 适用的成品被游戏判定为差或很差的品质后，Mod 将其从出品位置清理，释放该空位。无需对准餐品、拿托盘或操作垃圾桶。
+4. 随后检查原顾客、已有供给及剩余耐心；符合重做条件时，给厨房或吧台追加正常订单。员工按游戏原有流程制作和送餐，玩家也可以照常处理新做出的餐品。
 
-- 重做仍需正常消耗原料，并满足设备和员工条件。不会重置耐心；厨房或吧台积压过多时可能来不及补单。
-- 顾客已离开，或无法确认有足够时间重做时，只清理低劣成品，不补单。
-- 不处理正常成品、脏餐具、已上桌或搬运中的餐品、未完成或正在灌装的饮料，以及玩家负责的餐桌。本版也不处理烘焙托盘。
-- 玩家已认领且尚未做完的饮料会延后自动重做；目标楼层须有正在工作并允许制作该饮料的调酒师。
-- 清理会连同餐盘或杯子一起移除，不返还脏餐具、不退原料，也不增加垃圾桶内的垃圾；员工和送餐延迟仍可能导致来不及上桌。
+清理和补单是两个步骤：低劣成品即使无法补单也可能被移除。Mod 不会给旧成品恢复新鲜度，也不会重置顾客耐心。
+
+### 清理范围
+
+| 餐品与位置 | 处理方式 |
+| --- | --- |
+| 厨房出餐口或已登记升降机食物出餐位中的低劣熟食 | 连同餐盘一起移除，再检查原顾客是否仍需重做。 |
+| 饮料出品区或升降机专用饮料位中的低劣满杯成品 | 连同杯子一起移除，涵盖饮料机饮料、瓶装饮料和完成的鸡尾酒。 |
+| 正常品质成品、脏餐具、已上桌／正在食用或正在被拿取／搬运的餐品 | 不处理，已在托盘或送餐餐车上的餐品也保留。 |
+| 未满杯、正在灌装／倒入鸡尾酒配料的饮料，或仍在制作设备上的杯子 | 不处理，须成为支持出品位置中的完整成品后才纳入检查。 |
+| 属于玩家服务餐桌的餐品 | 不处理，继续由玩家负责。 |
+| 烘焙托盘 | 不在本版清理范围内。 |
+
+清理涵盖房主餐厅内的适用出品位，包括其他楼层，无需玩家站在旁边。餐盘或杯子会随成品一并消失，不返还脏餐具、不退原料，也不增加垃圾桶内的垃圾；重做还会照常再次消耗原料。
+
+### 什么情况下会重做
+
+- 原顾客仍坐在该桌，等待同一轮订单中的对应餐品，尚未收到餐品，也未进入可结账状态。上一批顾客或上一轮点餐遗留的餐品不会给新顾客生成订单。
+- 已有制作订单及该桌尚未上桌的成品都计入供给，包括正在被搬运过去的餐品。已有数量足够时不再补单；多位顾客点同款餐品时按各自需求处理。
+- 食物需要可用厨师及游戏原本要求的原料、设备。饮料需要适配设备，以及**顾客所在楼层正在工作的调酒师**，其任务设置须允许对应的饮料或鸡尾酒制作。
+- 吧台队列中存在玩家已认领、尚未完成的饮料时，自动饮料重做会等待；不会取消玩家认领，完成已认领工作后才会重新评估队列。
+- 顾客**剩余耐心须大于预计总耗时**。估算包含新餐品的完整制作时间、该厨房／吧台队列全部未完成工作、每份前序餐品五秒，以及调度和送餐三十秒；不假设多员工并行，也不扣除队列餐品已经制作的时间。饮料另计设备灌装／交互耗时及十秒取杯取料时间。
+
+例如，重做一道菜需要二十秒，前面两份订单分别需要十秒和三十秒，则剩余耐心须**超过一百秒**：`20 + 10 + 30 + (2 × 5) + 30`，恰好一百秒也不补单。游戏中关闭耐心机制时跳过耐心比较，但仍须满足顾客、需求和制作条件；制作耗时不明或启用耐心后无法取得有效等待计时，也不会补单。
+
+### 何时等待或停止补单
+
+员工、库存或设备暂不可用时，待补单会等待并重新检查。游戏拒绝的补单请求最多尝试三次，两次至少间隔十秒；待补单在一百二十秒游戏时间后到期。顾客离开、订单变化、已有供给足够或耐心不足时，会结束该次补单；结束后才解决缺货等问题，不会自动重新创建这次补单。
+
+估算不保证送达：后续员工变化、行走距离及其他游戏延迟仍可能导致来不及上桌。游戏已接受的补单会继续作为正常订单存在，即使随后卸载 Mod。
+
+### 联机使用
+
+只需房主安装。清理及补单依据房主餐厅状态运行，并由游戏同步结果；客机可以照常观察和处理新成品。只有客机安装时，不会执行清理或重做下单。
 
 ### 使用要求
 
@@ -122,7 +186,7 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
-没有重做时，先检查顾客耐心、库存、员工及设备。清理成功不代表一定补单或送达。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志。
+没有清理时，先检查房主身份、品质等级、出品位置和餐桌是否交给玩家服务。餐品被清理却没有重做时，检查顾客耐心、已有供给、库存、员工、设备及玩家未完成的认领。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志：`DISCARDED` 表示已清理，`REQUEUED` 表示补单已被接受，`SKIPPED`／`DEFERRED` 说明取消或等待原因；`REQUEUED` 不代表已经上桌。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。
 
