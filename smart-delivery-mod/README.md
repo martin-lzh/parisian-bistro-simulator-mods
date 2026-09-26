@@ -10,15 +10,40 @@ Choose Free service, Budget delivery or Premium delivery for automatic smart ord
 
 ### How to use
 
-1. Open the restaurant computer's **automatic smart-order settings**.
-2. Choose a **Delivery method**.
-3. Click the game's **Save** button. **Cancel** discards your unsaved change.
+1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app. Click the game's **Automatic Smart Order** button to open its settings window.
+2. Check **Enable automatic ordering** if you want the game to replenish supplies automatically. Set **Minimum order value (€)** and **Order immediately when out of stock** as described below.
+3. At the bottom of this window, above **Save** and **Cancel**, open **Delivery method** and select **Free service**, **Budget delivery** or **Premium delivery**.
+4. Click **Save** to apply both the game's automatic-order settings and the Mod's delivery choice. Selecting an item in the dropdown alone does not apply it. If an order is already eligible when you save, the game can place it immediately using the saved delivery method.
+5. Reopen **Automatic Smart Order** to check the saved selection. Once saved, you can close the computer and continue playing; future automatic orders use this choice without another click.
 
-**Premium delivery is the initial preference.** Free service has no unloading staff, Budget has one worker, and Premium has four. The game's service fees and night surcharges still apply.
+Click **Cancel** to discard the unsaved settings and delivery selection. Reopening the window restores the last saved delivery choice. To stop automatic ordering, uncheck **Enable automatic ordering** and click **Save**; the delivery preference remains available for when you enable it again. The Mod adds no gameplay hotkey or separate settings window.
 
-Automatic ordering must already be enabled in the game. The Mod does not place extra orders or change manual ingredient/furniture deliveries. Stock rules, the purchase minimum and money checks remain controlled by the game.
+### Settings and delivery choices
 
-Your saved choice survives restarts and is shared by this installation's restaurants. It is stored in `SmartDelivery/Scripts/delivery-preference.txt`; keep that file when updating. The Mod folder must be writable.
+The first three controls belong to the game. The Mod adds only **Delivery method**.
+
+| Setting | What it does |
+| --- | --- |
+| Enable automatic ordering | Lets the game monitor stock and place supply orders automatically. Choosing a delivery method does not enable this option for you. |
+| Minimum order value (€) | Holds an automatic order until its item subtotal reaches the specified amount. This is a purchase threshold, not a limit on shipping fees or total spending. |
+| Order immediately when out of stock | Allows a stockout to trigger an order below that purchase threshold. It does not bypass the game's other ordering conditions or money checks. |
+| Delivery method | Selects the service used when the game actually places an automatic smart order. |
+
+| Delivery method | Unloading staff |
+| --- | --- |
+| Free service | No unloading worker; handle the delivery yourself. |
+| Budget delivery | 1 unloading worker. |
+| Premium delivery | 4 unloading workers. This is the initial preference if no preference has been saved. |
+
+Service fees, difficulty adjustments and night surcharges use the game's rules. Choosing Free service does not make the supplies free. The selected method applies to both small and large automatic orders; the Mod does not choose a different service based on order size.
+
+### What changes and what stays under your control
+
+Automatic smart ordering is already a game feature. This Mod changes its delivery choice; it does not create an additional ordering system. Stock calculations, order quantities, purchase thresholds, available funds and delivery availability remain controlled by the game. If no automatic order is due, saving a delivery method alone does not buy supplies.
+
+Manual ingredient orders and furniture deliveries keep their own delivery choices. An order already placed is not changed by selecting another method. The dropdown follows the game's settings lock and cannot be edited while the game locks automatic-order settings; it does not unlock unavailable game features.
+
+Only the host's installation controls the preference in multiplayer. Guests do not need the Mod and cannot change this setting, even if they install it. Your saved choice survives restarts and is shared by this installation's restaurants, rather than being stored separately in each game save. It is stored in `SmartDelivery/Scripts/delivery-preference.txt`; keep that file when updating. The Mod folder must be writable.
 
 ### In-game screenshots
 
@@ -60,7 +85,7 @@ The included `enabled.txt` enables the Mod. Keep the whole Mod folder together; 
 
 **Update:** close the game and back up `SmartDelivery/Scripts/delivery-preference.txt`. Download and extract the new Mod ZIP, copy its complete `SmartDelivery` folder into the same `Mods` folder and replace matching files. Keep or restore your preference file, then start the game again.
 
-**Remove:** close the game and delete only `Mods/SmartDelivery`. Leave UE4SS and other Mods in place. The game returns to its normal automatic delivery selection. To disable the Mod while retaining its preference, remove only `SmartDelivery/enabled.txt` with the game closed; restoring that empty file enables it again. Deleting the whole folder also deletes the saved Mod preference. Game saves need no conversion.
+**Remove:** close the game and delete only `Mods/SmartDelivery`. Leave UE4SS and other Mods in place. The game returns to its normal automatic delivery selection. Deleting the whole folder also deletes the saved Mod preference, so back up the preference file first if you want to reuse it later. Game saves need no conversion.
 
 Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
 
@@ -84,15 +109,40 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 怎么使用
 
-1. 打开餐厅电脑的 **自动智能订购设置**。
-2. 选择 **配送方式**。
-3. 点击游戏原有的 **保存**。点击 **取消** 会放弃未保存的修改。
+1. 在单人游戏中，或以联机房主身份打开餐厅电脑的 **菜单（Menu）** 应用，点击游戏原有的 **自动智能订购（Automatic Smart Order）** 按钮，进入设置窗口。
+2. 如需让游戏自动补货，勾选 **启用自动订购（Enable automatic ordering）**，再按下方说明设置 **最低订购金额（Minimum order value）** 与 **缺货时立即订购（Order immediately when out of stock）**。
+3. 在窗口底部、**保存（Save）** 与 **取消（Cancel）** 上方展开 **配送方式（Delivery method）**，选择 **免费服务**、**经济型配送** 或 **高级配送**。
+4. 点击 **保存**，应用游戏的自动订购设置和 Mod 的配送选择。只改变下拉框、尚未保存时不会生效。如果此时已经满足下单条件，游戏可能立即使用刚保存的配送方式下单。
+5. 重新打开 **自动智能订购**，即可核对已保存的选择。保存后可以关闭电脑继续经营，之后的自动订单会沿用该配送方式，无需每次点击。
 
-**首次使用默认为高级配送。** 免费服务没有卸货员，经济型配送有 1 人，高级配送有 4 人；游戏原有服务费和夜间附加费仍然有效。
+点击 **取消** 会放弃未保存的设置与配送选择；再次打开窗口时恢复上次保存的配送方式。如需停止自动订购，取消勾选 **启用自动订购** 后点击 **保存**；配送偏好仍会保留，供再次启用时使用。Mod 没有额外的游戏操作快捷键或独立设置窗口。
 
-须先在游戏中启用自动订购。Mod 不会额外下单，也不改变手动购买食材或家具的配送方式；库存规则、采购金额下限及余额检查仍由游戏处理。
+### 设置项与配送选择
 
-已保存的选择在重启后保留，同一安装下的各餐厅共用，保存在 `SmartDelivery/Scripts/delivery-preference.txt`。更新时请保留此文件，Mod 文件夹需允许写入。
+前三项为游戏自带设置，Mod 只新增 **配送方式**。
+
+| 设置 | 实际作用 |
+| --- | --- |
+| 启用自动订购 | 允许游戏监测库存并自动采购。选择配送方式不会替你勾选此项。 |
+| 最低订购金额 | 待采购商品的小计达到设定金额才自动下单。这是采购门槛，不是配送费或总花费上限。 |
+| 缺货时立即订购 | 缺货时允许低于上述采购门槛下单，但不会跳过游戏的其他下单条件或余额检查。 |
+| 配送方式 | 决定游戏实际发出自动智能订单时采用哪种配送服务。 |
+
+| 配送方式 | 卸货人员 |
+| --- | --- |
+| 免费服务（Free service） | 没有卸货员，需要自行处理到货。 |
+| 经济型配送（Budget delivery） | 1 名卸货员。 |
+| 高级配送（Premium delivery） | 4 名卸货员；尚未保存过偏好时默认使用此项。 |
+
+服务费、难度调整和夜间附加费仍按游戏规则计算；免费服务不代表商品免费。大小自动订单都使用所选方式，Mod 不会再按订单规模切换配送服务。
+
+### 功能范围与联机行为
+
+自动智能订购原本就是游戏功能，Mod 为它增加配送选择，并未另外建立一套下单机制。库存计算、采购数量、金额门槛、可用余额和配送可用性仍由游戏控制；未满足自动下单条件时，只保存配送方式不会购买商品。
+
+手动购买食材和家具时，仍使用各自的配送选项。改变配送方式不会修改已经发出的订单。原版自动订购设置被锁定时，下拉框也会禁用；Mod 不会解锁尚不可用的游戏功能。
+
+联机只需房主安装，客机无需安装；即使客机安装也不能改变此设置。配送选择在重启后保留，同一安装下的各餐厅共用，并非每个游戏存档单独保存。偏好文件为 `SmartDelivery/Scripts/delivery-preference.txt`，更新时请保留；Mod 文件夹需允许写入。
 
 ### 实机截图
 
@@ -134,7 +184,7 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 **更新：** 关闭游戏，先备份 `SmartDelivery/Scripts/delivery-preference.txt`。下载并解压新版 Mod ZIP，把完整的 `SmartDelivery` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件；保留或放回偏好文件，再启动游戏。
 
-**卸载：** 关闭游戏，只删除 `Mods/SmartDelivery`，保留 UE4SS 和其他 Mod。卸载后恢复游戏原有的自动配送选择。若只想停用并保留偏好，关闭游戏后仅删除 `SmartDelivery/enabled.txt`；重新放回这个空文件即可启用。删除整个文件夹也会删除 Mod 保存的配送偏好，游戏存档无需转换。
+**卸载：** 关闭游戏，只删除 `Mods/SmartDelivery`，保留 UE4SS 和其他 Mod。卸载后恢复游戏原有的自动配送选择。删除整个文件夹也会删除 Mod 保存的配送偏好，之后还想复用时请先备份偏好文件。游戏存档无需转换。
 
 可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
 

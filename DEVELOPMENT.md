@@ -100,7 +100,7 @@ These checks establish offline behavior and package integrity, not rendering, re
 
 ### Adding or changing a Mod
 
-Create an independent `<feature>-mod/` only when there is an actual feature to implement. Maintain a bilingual `README.md` for players, bilingual `DEVELOPMENT.md` for implementation and validation, and `CHANGELOG.md` with pending changes under `Unreleased`. Add meaningful tests for behavior that can be verified offline. Keep package allowlists explicit and update version/diagnostic checks together when a version advances.
+Create an independent `<feature>-mod/` only when there is an actual feature to implement. Keep every README in English and Chinese, including player guides, image-directory guides and documentation indexes. Use `DEVELOPMENT.md` for implementation and validation and `CHANGELOG.md` for pending changes under `Unreleased`; documents other than READMEs may be English-only. Add meaningful tests for behavior that can be verified offline. Keep package allowlists explicit and update version/diagnostic checks together when a version advances.
 
 Keep a copy of the root `LICENSE` in each Mod and include it in `build.py`'s allowlist. Bundled documentation may use relative links to files in the same Mod, such as `CHANGELOG.md` or `LICENSE`. For root documentation, shared guides or another Mod, use a full GitHub URL for the matching branch or tag, such as [the development branch's support guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md). A `../docs/` or `../SUPPORT.md` link does not resolve inside an extracted individual ZIP.
 
@@ -221,7 +221,7 @@ git diff --check
 
 ### 新增与维护 Mod
 
-有实际功能要实现时才创建独立 `<feature>-mod/`。维护面向玩家的双语 `README.md`、面向实现与验收的双语 `DEVELOPMENT.md`，以及将待发布内容放在 `Unreleased` 的 `CHANGELOG.md`。仅为适合离线验证的行为添加有意义的测试。打包使用固定白名单；推进版本时同步更新版本与诊断检查。
+有实际功能要实现时才创建独立 `<feature>-mod/`。所有 README 均须中英双语，包括玩家说明、图片目录说明和文档索引。`DEVELOPMENT.md` 记录实现与验收，`CHANGELOG.md` 将待发布内容放在 `Unreleased`；README 以外的文档可以仅使用英语。仅为适合离线验证的行为添加有意义的测试。打包使用固定白名单；推进版本时同步更新版本与诊断检查。
 
 每个 Mod 保存根 `LICENSE` 的副本，并纳入 `build.py` 白名单。随包文档链接同一 Mod 内文件时，可以使用 `CHANGELOG.md`、`LICENSE` 等相对路径；链接根文档、公共说明或其他 Mod 时，应使用对应分支或标签的完整 GitHub URL，例如[开发分支帮助说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md)。单个 ZIP 解压后，`../docs/` 或 `../SUPPORT.md` 之类链接无法找到仓库内目标。
 

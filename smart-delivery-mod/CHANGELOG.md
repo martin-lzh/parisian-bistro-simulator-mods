@@ -4,6 +4,11 @@
 
 ## 0.1.5 - 2026-09-26
 
+### Documentation update / 文档更新 — 2026-09-26
+
+- Expand the English/Chinese player guide after a source-based subagent audit of in-game controls, feature behavior, multiplayer requirements and waiting/recovery conditions. Refresh the existing Release package documentation; the version and runtime files are unchanged.
+- 经 subagent 对照源码审计，补全中英文游戏内操作、功能行为、联机要求及等待／恢复条件。更新现有 Release 包内文档，版本与运行文件保持不变。
+
 ### English
 
 - Promote 0.1.5-dev to 0.1.5 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.

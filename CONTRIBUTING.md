@@ -17,9 +17,9 @@ The repository is private. Making this repository public or publishing a release
 ### What belongs in a change
 
 - Keep each `<feature>-mod/` independent and include only implemented features and necessary tests.
-- Write README content for players: download, install, use, update, remove and get help. Put architecture, API details, build commands and debugging in DEVELOPMENT. Maintain both English and Chinese sections.
+- Keep every README in English and Chinese, including repository, Mod, image-directory and documentation-index READMEs. Mod player guides cover download, installation, gameplay, updates, removal and help. Put architecture, API details, build commands and debugging in DEVELOPMENT; documents other than READMEs may be English-only.
 - Keep runtime text aligned with all 14 supported game languages. Prefer native text, translate only Mod-owned wording, and test English fallback and recovery after language-read failures. See [localization](docs/localization.md#english).
-- Preserve the current version unless the maintainer explicitly requests a version change. Add changes to the Mod's bilingual `Unreleased` notes; do not rewrite historical numbered entries or infer release approval from a successful test.
+- Preserve the current version unless the maintainer explicitly requests a version change. Add changes to the Mod's `Unreleased` notes; do not rewrite historical numbered entries or infer release approval from a successful test.
 - Keep the root and per-Mod MIT licenses consistent, and include the license in every package. Contributions must be original or have compatible terms and appropriate attribution. Do not assume a game's assets or an external tool are covered by this project's MIT license.
 - Keep all game files, extracted material, analysis, third-party research tools and related scripts in ignored `work/`. Do not attach them to commits, issues or PRs. Game installations are read-only; builds do not install Mods or modify saves.
 
@@ -46,9 +46,9 @@ Maintainers review changes before merging. GitHub releases use the separate [rel
 ### 改动要求
 
 - 每个 `<feature>-mod/` 独立维护，只加入实际实现及必要测试。
-- README 面向玩家，说明下载、安装、使用、更新、卸载和求助。架构、API、构建命令及调试内容放入 DEVELOPMENT，中英文同步维护。
+- 所有 README 均须中英双语，包括仓库、各 Mod、图片目录和文档索引的 README。Mod 玩家说明涵盖下载、安装、游戏内操作、更新、卸载和求助。架构、API、构建命令及调试内容放入 DEVELOPMENT；README 以外的文档可以仅使用英语。
 - 新增文案覆盖游戏支持的 14 种语言；优先复用原生文案，只翻译 Mod 自有内容。测试语言读取失败时的英语回退及恢复，见[多语言适配](docs/localization.md#中文)。
-- 维护者未明确要求升级时，保留现有版本，将改动记入 Mod 的双语 `Unreleased` 条目。不改写已有编号历史，不将测试通过视为发布授权。
+- 维护者未明确要求升级时，保留现有版本，将改动记入 Mod 的 `Unreleased` 条目。不改写已有编号历史，不将测试通过视为发布授权。
 - 根目录与各 Mod 的 MIT 许可证保持一致，每个安装包都附许可全文。贡献内容须为原创或具有兼容条款及必要署名；游戏资产和外部工具不自动适用本项目的 MIT 许可。
 - 游戏文件、提取资料、分析、第三方研究工具及相关脚本全部留在被忽略的 `work/`，不提交，也不附到 Issue 或 PR。游戏安装目录只读；构建不自动安装 Mod 或修改存档。
 

@@ -10,14 +10,23 @@ Automatically accept customers' cash or cards at the counter and finish the regi
 
 ### How to use
 
-Enter your restaurant as host. Checkout starts automatically, with no key, toggle or settings to change. You can carry items, make drinks, open the tablet or work away from the counter.
+1. Enter your restaurant in single player or as the multiplayer host. The Mod starts automatically; there is no new key, button, toggle or settings screen.
+2. Let customers dine and come to an available checkout counter as usual. Automation waits for a bill and the customer's cash or card to be ready at the register. You do not need to click the customer-arrival notification or stand beside the counter.
+3. For **cash**, the Mod accepts the offered money, waits for the drawer movement to finish, then performs the register interaction that closes the drawer and finishes checkout.
+4. For a **card**, it accepts the card and waits for the terminal to finish processing and payment to succeed before finishing the open-drawer interaction. Do not treat the normal card-processing delay as a failure.
+5. The game clears the completed bill and handles customer departure; the Mod then processes the next transaction. All eligible registers in the current restaurant are checked automatically, with no register selection required.
+
+You can carry items, make drinks, open the tablet, place furniture or work away from the counter while it runs. Those activities do not pause automation; an actual game pause does, and processing continues after unpausing.
+
+### What it handles
 
 - Bills, tips, income and customer departure follow the game's normal rules.
-- It waits during a real pause, card processing, drawer movement or an employee's current checkout.
-- Employees stop taking new counter-checkout jobs while the Mod runs; existing jobs may finish. Their other work is unchanged.
-- Table checkout, cash declarations, withdrawals and cash bags are outside its scope.
+- It waits while the drawer moves, a card is processing or an employee already owns that checkout. It also waits if the customer's bill or payment is not ready yet.
+- Employees stop taking new **counter-checkout** jobs while the Mod runs. Already claimed jobs can finish; drink preparation, table checkout and their other work remain available.
+- It does not take orders, serve meals, perform table checkout, make cash declarations, withdraw money or move cash bags. Continue using the game's own interactions for these tasks.
+- You can still intervene manually. If you accept payment or finish the drawer first, the Mod reads the new state before its next action. It can also finish a valid transaction whose payment was already accepted manually.
 
-If one transaction repeatedly fails, finish it manually; later customers can still be processed. If an error stops all checkout, check the help section before re-entering the restaurant.
+In multiplayer, only the host installs the Mod to provide automatic checkout for the session. Guests can continue playing normally; a guest's installation alone cannot activate it. There is no in-game off switch. To return to normal employee counter checkout, close the game and remove the Mod as described below.
 
 ### In-game screenshot
 
@@ -64,7 +73,11 @@ The game's payment prompts and notifications keep their normal translations. The
 
 Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-If checkout does not start, confirm you are the host and the Mod folder is in the correct place. For a stuck transaction, try finishing it manually. If a warning says employee jobs or interaction settings could not be restored, leave and reload the restaurant. Include relevant `[AutoCheckout]` lines from `UE4SS.log` with a problem report.
+If checkout does not start, confirm you are the host, the Mod folder is in the correct place, and the customer has reached a register with a bill and cash or a card ready. Allow the normal card/drawer animation and any employee's existing checkout to finish. Opening the tablet alone is not a reason for automation to stop.
+
+For each of the two actions, the Mod makes at most three attempts, at least three seconds apart. After three attempts without progress it leaves that action for you: approach the counter, follow the game's normal cash/card interaction prompts, and finish the drawer interaction when payment is ready. Other registers and later customers can still be processed. Script reload does not reset the exhausted retry allowance for the same transaction.
+
+If an error stops all automation, or a warning says employee jobs or interaction settings could not be restored, leave and reload the restaurant. Include relevant `[AutoCheckout]` lines from `UE4SS.log` with a problem report.
 
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english) describes its scope.
 
@@ -78,14 +91,23 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 怎么使用
 
-以房主身份进入餐厅即可自动结账，无需按键、开关或额外设置。可以同时搬运物品、制作饮料、打开平板或离开柜台做其他工作。
+1. 以单人玩家或联机房主身份进入餐厅，Mod 自动运行，不需要新增按键、按钮、开关或设置界面。
+2. 正常接待顾客用餐，等待顾客前往可用的收银柜台。收银机有账单、顾客的现金或银行卡准备好后才开始处理；不需要点击顾客到达收银台的通知，也不需要站在柜台旁。
+3. **现金付款：**自动接收顾客递出的现金，等待钱柜动画结束，再执行收银机交互，关闭钱柜并完成结账。
+4. **银行卡付款：**自动接收银行卡，等待终端处理结束且付款成功后，再完成打开的钱柜交互。正常刷卡等待期间无需干预。
+5. 游戏清空已完成账单并处理顾客离店，Mod 随后处理下一笔交易。当前餐厅内符合条件的收银机都会自动检查，不需要逐台选择。
+
+运行时可以继续搬运物品、制作饮料、打开平板、摆放家具或离开柜台做其他工作。这些操作不会暂停自动结账；游戏实际暂停时才等待，恢复游戏后继续。
+
+### 功能范围
 
 - 账单、小费、收入及顾客离店按游戏原有规则处理。
-- 游戏实际暂停、刷卡中、钱柜移动中或员工正在处理该笔结账时会等待。
-- Mod 运行时，员工不再领取新的柜台收银任务；已领取的任务可以完成，其他工作照常进行。
-- 不处理餐桌结账、现金申报、取钱或现金袋。
+- 钱柜移动中、刷卡处理中或该笔结账已被员工接手时会等待；顾客账单或付款尚未准备好时也不会抢先操作。
+- Mod 运行时，员工不再领取新的**柜台收银**任务，已经领取的任务可以完成；调饮、餐桌结账和其他工作仍可正常进行。
+- 不负责点餐、上菜、餐桌结账、现金申报、取钱或搬运现金袋，这些操作继续使用游戏原有交互。
+- 仍可手动介入。玩家先收款或先完成钱柜交互时，Mod 会在下一步前重新读取状态；手动收款后，只要交易状态允许，也可由 Mod 接着完成收尾。
 
-某笔交易多次未成功时，请手动完成，后续顾客仍可自动处理。若异常导致全部自动结账停止，请先查看下方帮助，再重新进入餐厅。
+联机时只需房主安装，即可为当前房间自动结账；客机照常游玩。仅在客机安装不能启用自动结账。没有游戏内停用开关；需要恢复员工正常柜台收银时，按下方说明关闭游戏并卸载。
 
 ### 实机截图
 
@@ -132,7 +154,11 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
-未自动结账时，先确认自己是房主，且 Mod 文件夹位置正确。单笔交易卡住可先手动完成。若警告提示员工任务或交互设置恢复失败，请退出餐厅后重新载入。反馈时附上 `UE4SS.log` 中相关的 `[AutoCheckout]` 日志。
+未自动结账时，先确认自己是房主、Mod 文件夹位置正确，且顾客已到收银台，收银机有账单和准备好的现金或银行卡。等待正常的刷卡、钱柜动画或员工已接手的交易结束；单纯打开平板不会阻止自动结账。
+
+收款和钱柜收尾两步各最多尝试三次，同一步至少间隔三秒。三次仍无进展后，该步会留给玩家：走到柜台，按游戏现有的现金／银行卡提示处理，付款就绪后完成钱柜交互。其他收银机及后续顾客仍可继续自动处理；重新加载脚本不会重置同一交易已耗尽的重试次数。
+
+异常导致全部自动化停止，或警告提示员工任务、交互设置恢复失败时，请退出餐厅后重新载入。反馈时附上 `UE4SS.log` 中相关的 `[AutoCheckout]` 日志。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
 

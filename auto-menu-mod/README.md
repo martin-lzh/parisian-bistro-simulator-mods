@@ -10,13 +10,30 @@ Add an **Auto-compose** button beside **Print menu** on the computer's daily-men
 
 ### How to use
 
-1. Open the computer's daily-menu page and choose lunch or dinner.
-2. Click **Auto-compose**. It compares combinations of available, enabled and staffed dishes using the game's estimated selection rate.
-3. Review the result, then edit, activate or print it with the game's existing controls.
+1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app and select **Daily menu** in the sidebar.
+2. Select **Lunch** or **Dinner** at the top. The selected service is the only menu that this click will change. Review the day's customer forecast, weather and event, and make any desired dish availability or price changes before composing.
+3. Click **Auto-compose**, beside **Print menu**. Wait for the page to refresh. The Mod compares eligible menu combinations using the game's estimated selection rate and saves the winning menu immediately.
+4. Inspect the chosen dishes and scroll to **Menu forecast**. Check **Estimated adoption**, customer-profile compatibility, **Menus available from current stock** and the displayed menu bonuses. These are the game's forecast for the selected result, not guaranteed sales.
+5. If needed, use the original **Select a dish** and **Clear dish** controls to adjust individual courses. Check the service's **Enabled / Disabled** status and use the game's status control to activate the menu when you want to serve it. Use **Print menu** yourself when you want a printed menu.
+6. Switch to the other service and click **Auto-compose** separately if you also want to compose that menu. Click again after changing the day's conditions or your available dishes whenever you want a new calculation.
 
-The chosen menu is saved; the other service is unchanged. No ingredients are bought, prices changed or menus printed automatically. If your current eligible menu ties for the best rate, it is retained. Categories may be empty, including a completely empty menu; the game deactivates an empty menu.
+**Auto-compose saves the result immediately.** There is no additional Save/Cancel confirmation and no Mod undo button. To replace an unwanted result, edit the menu with the game's normal controls or compose again after changing the available choices. A nonempty result keeps the menu's existing active/inactive state; the game deactivates a completely empty result. The other service is unchanged.
 
-**A large dish selection can pause gameplay while the search finishes.** There is no progress display. The Mod runs only when you click the button, not automatically each day.
+### What the button chooses
+
+The Mod chooses up to one item in each of five categories: **aperitif, starter, main course, dessert and after-dinner drink**. It considers the game's currently available, enabled choices that meet staffing requirements and belong to the appropriate course. It does not unlock dishes, enable disabled dishes or hire staff to make more choices available.
+
+Every category can be left empty, including the main course, and a completely empty menu is a valid candidate. If no eligible dishes remain, the result is empty and the game disables that service's menu. The Mod does not force a full five-course meal. If your current eligible menu ties for the highest rate, it is retained.
+
+The target is the game's **estimated selection rate**, using its current forecast, prices, weather, events and other native menu calculations. The Mod compares whole menu combinations. It does not optimize profit, preparation time or the number of portions in stock as separate targets, and it does not guarantee 100% adoption or 100% compatibility for every customer profile. Check the forecast and stock before serving the result.
+
+### When it runs and multiplayer behavior
+
+Composition runs only when you click **Auto-compose**. It does not schedule tomorrow's menu, automatically run every day, buy ingredients, change prices or print menus. No separate configuration file or gameplay hotkey is needed. The game saves the chosen menu normally; removing the Mod does not restore the previous choices.
+
+**A large dish selection can pause gameplay while the search finishes.** There is no progress display or cancel control during the search. Wait for it to finish before another action; in multiplayer, the host's search can also interrupt the session's normal flow.
+
+Only the host needs to install the Mod. Guests do not receive the button, and installing it on a guest does not grant permission to compose the shared restaurant's menu. The button is available only on the **Daily menu** page with **Lunch** or **Dinner** selected; it does not compose breakfast or edit other menu categories.
 
 ### In-game screenshots
 
@@ -68,7 +85,7 @@ The button follows the game's selected language, with no separate setting or lan
 
 Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-If the button is missing, confirm you are host and the complete Mod folder, including its helper, is installed. If composition fails, keep the existing menu and report relevant `[AutoMenu]` lines from `UE4SS.log` with what you clicked.
+If the button is missing or disabled, confirm you are the host, the **Daily menu** page is open with **Lunch** or **Dinner** selected, and the complete Mod folder, including its helper, is installed. A failed search restores the previous selection without submitting its trial menus. If no result appears or saving is refused, check the displayed menu and report relevant `[AutoMenu]` lines from `UE4SS.log` with what you clicked. The Mod has no in-game error popup or progress indicator.
 
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#english) describes its scope.
 
@@ -82,13 +99,30 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 怎么使用
 
-1. 打开电脑的每日菜单页面，选择午餐或晚餐。
-2. 点击 **自动组合**，对可用、启用且满足员工条件的菜品进行组合，比较游戏的预计选择率。
-3. 查看结果，再通过游戏原有按钮编辑、启用或打印。
+1. 在单人游戏中，或以联机房主身份打开餐厅电脑的 **菜单（Menu）** 应用，在侧栏选择 **每日菜单（Daily menu）**。
+2. 在页面顶部选择 **午餐（Lunch）** 或 **晚餐（Dinner）**。本次点击只会修改选中的餐段。先查看当天客流预测、天气和活动；需要调整菜品可用状态或价格时，先完成调整。
+3. 点击 **打印菜单（Print menu）** 旁的 **自动组合（Auto-compose）**，等待页面刷新。Mod 按游戏的预计选择率比较符合条件的菜单组合，并立即保存最优结果。
+4. 查看选中的菜品，向下滚动到 **菜单预测（Menu forecast）**，核对 **预计选择率（Estimated adoption）**、各类顾客适配度、**当前库存可提供的菜单份数（Menus available from current stock）** 及菜单加成。这些是游戏对当前结果的预测，不是实际销量保证。
+5. 如需调整某一类菜品，使用原版 **选择菜品（Select a dish）** 与 **清除菜品（Clear dish）**。查看该餐段的 **启用／停用（Enabled / Disabled）** 状态，需要供应时再用原版状态按钮启用；需要纸质菜单时自行点击 **打印菜单**。
+6. 如需组合另一个餐段，切换餐段后单独点击 **自动组合**。当天条件或可用菜品改变后，可再次点击重新计算。
 
-选中的菜单会保存，另一餐段保持原样。不自动采购、调价或打印；当前菜单符合条件且与最高值持平时会保留。类别可以留空，也可能得到全空菜单；全空菜单由游戏自动停用。
+**点击自动组合后会直接保存。** 没有额外的保存／取消确认，也没有 Mod 撤销按钮。不满意时，可用原版控件改回需要的菜品，或调整可用选项后重新组合。非空结果保留此前的启用／停用状态；全空结果由游戏自动停用。另一个餐段不受影响。
 
-**可选菜品较多时，游戏可能会等待计算完成。** 没有进度条；只在点击按钮时运行，不会每天自动组合。
+### 自动组合会选择什么
+
+Mod 在 **开胃酒、前菜、主菜、甜点、餐后饮品** 五类中各选择最多一项。候选须为游戏当前可用、已启用、满足员工条件且属于对应分类的菜品；不会解锁菜品、启用被禁用的菜品或替你雇佣员工。
+
+每类都可以留空，主菜也不例外；全空菜单同样会参与比较。如果没有任何合格菜品，结果为空，由游戏停用该餐段菜单。Mod 不会强制凑齐五道菜。当前菜单仍符合条件且与最优结果选择率相同时，会保留当前菜单。
+
+优化目标是游戏的 **预计选择率**，沿用当前客流预测、价格、天气、活动及其他原版菜单计算，比较的是整份菜单组合。利润、备餐速度或现有库存可供应的份数并不是独立优化目标；不保证选择率或所有顾客类型的适配度达到 100%。供应前仍应查看预测与库存。
+
+### 触发时机与联机行为
+
+只有点击 **自动组合** 才会运行；不会排定明日菜单、每天自动组合、采购食材、修改价格或打印菜单。无需单独配置文件或游戏操作快捷键。结果由游戏正常保存，卸载 Mod 不会恢复此前的菜品选择。
+
+**可选菜品很多时，游戏可能会停顿，直到搜索结束。** 搜索期间没有进度显示或取消按钮，请等计算结束再进行其他操作；联机时房主的搜索也可能让会话暂时停顿。
+
+联机只需房主安装。客机不会获得按钮，安装 Mod 也不能取得修改共享餐厅菜单的权限。按钮仅在 **每日菜单** 页面选中 **午餐** 或 **晚餐** 时可用，不会组合早餐或编辑其他菜单分类。
 
 ### 实机截图
 
@@ -140,7 +174,7 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
-按钮未出现时，先确认自己是房主，并已安装包含辅助文件的完整 Mod 文件夹。组合失败时保留当前菜单，反馈点击过程及 `UE4SS.log` 中相关的 `[AutoMenu]` 日志。
+按钮未出现或不可点击时，先确认自己是房主，已打开 **每日菜单** 并选中 **午餐** 或 **晚餐**，且安装了包含辅助文件的完整 Mod 文件夹。试算失败会恢复此前的选择，不提交试算中的菜单。没有出现结果或保存被拒绝时，请核对页面上的菜单，再反馈点击过程及 `UE4SS.log` 中相关的 `[AutoMenu]` 日志。Mod 没有游戏内错误弹窗或进度提示。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#中文)。
 
