@@ -25,7 +25,7 @@ Tray pickup at the kitchen pass, shown in a 4.48-second gameplay recording.
 
 ![Gameplay animation of tray pickup at the kitchen pass](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
-[Open animation (GIF, 81 MiB)](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+[Open animation (GIF, 5.13 MiB)](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
 With a tray at the kitchen pass, the hold hint appears above **Take the dish**.
 
@@ -105,7 +105,7 @@ In-game testing was reported on 2026-09-26; the [validation record](https://gith
 
 ![实机动图：持托盘在厨房出餐口取餐](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
-[打开动图（GIF，81 MiB）](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
+[打开动图（GIF，5.13 MiB）](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/first-to-serve-mod/assets/kitchen-pass-gameplay.gif?raw=1)
 
 持托盘对准厨房出餐口，**Take the dish（拿取菜品）** 上方显示长按优先拿取最早成品的提示。
 

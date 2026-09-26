@@ -8,9 +8,9 @@ Store this Mod's in-game test screenshots and promotional artwork here, followin
 
 ### Gameplay animation
 
-[claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) was provided by the maintainer on 2026-09-26 as a Bartender's Note gameplay recording. The original file is stored unchanged using Git LFS: 174,083,577 bytes. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
+[claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) is a compressed copy of the Bartender's Note gameplay recording provided by the maintainer on 2026-09-26. It is stored using Git LFS: 960 × 600, 84 frames at approximately 6.25 fps, a 96-color palette, 13.28 seconds and continuous looping; 12,605,213 bytes (12.02 MiB), down 92.76% from 174,083,577 bytes. The complete recording duration, first and last frames, and full scene framing are retained; the local source recording is unchanged. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
 
-With Git LFS installed, retrieve the original from the repository root using `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"`.
+With Git LFS installed, retrieve this animation from the repository root using `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"`.
 
 ### Adding images
 
@@ -38,9 +38,9 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 
 ### 实机动图
 
-维护者于 2026-09-26 提供调饮手记实机录制 [claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif)。原文件通过 Git LFS 原样保存，大小为 174,083,577 字节；拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
+实机动图 [claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) 由维护者于 2026-09-26 提供的调饮手记录制压缩而来，通过 Git LFS 保存：960 × 600、84 帧、约 6.25 帧/秒、96 色、13.28 秒、循环播放；大小为 12,605,213 字节（12.02 MiB），较原始 174,083,577 字节减少 92.76%。保留完整录制时长、首尾画面及全画面范围，本地原始录制保持不变。拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
 
-安装 Git LFS 后，在仓库根目录运行 `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"` 即可取回原文件。
+安装 Git LFS 后，在仓库根目录运行 `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"` 即可取回此动图。
 
 ### 添加图片
 

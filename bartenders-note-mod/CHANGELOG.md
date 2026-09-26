@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Compress the gameplay GIF from 166.02 MiB to 12.02 MiB using 960 × 600 frames, approximately 6.25 fps and a 96-color palette; retain the full 13.28-second recording and loop.
+- 将实机 GIF 从 166.02 MiB 压缩为 12.02 MiB，采用 960 × 600、约 6.25 帧/秒及 96 色，保留完整 13.28 秒录制与循环播放。
+
 - Store the maintainer-provided gameplay GIF in assets using Git LFS, preserving the original file.
 - 将维护者提供的实机 GIF 通过 Git LFS 存入 assets，保留原文件。
 

@@ -17,7 +17,7 @@ Provided by the maintainer on 2026-09-26 and preserved without further edits. Bo
 
 ### Gameplay animation
 
-The maintainer provided [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif) on 2026-09-26 as a First to Serve gameplay recording. The original GIF is preserved without resizing, recompression or frame changes: 2560 × 1600, 56 frames, 4.48 seconds, continuous looping, 84,990,750 bytes (81.05 MiB). It shows the kitchen pass with a tray and the English pickup hints. Mod/UE4SS versions and host/guest role were not supplied.
+The maintainer provided [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif) on 2026-09-26 as a First to Serve gameplay recording. The repository copy is compressed to 960 × 600, 29 frames at approximately 6.25 fps and a 96-color palette; 5,383,363 bytes (5.13 MiB), down 93.67% from 84,990,750 bytes. The complete 4.48-second duration, continuous loop, first and last frames, and full scene framing are retained; the local source recording is unchanged. It shows the kitchen pass with a tray and the English pickup hints. Mod/UE4SS versions and host/guest role were not supplied.
 
 ### Adding images
 
@@ -54,7 +54,7 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 
 ### 实机动图
 
-维护者于 2026-09-26 提供出餐有序实机录制 [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif)。按原 GIF 保存，未缩放、重压缩或修改帧：2560 × 1600、56 帧、4.48 秒、循环播放，大小 84,990,750 字节（81.05 MiB）。画面展示持托盘时的厨房出餐口及英语拿取提示；Mod／UE4SS 版本与房主／客机身份未提供。
+维护者于 2026-09-26 提供出餐有序实机录制 [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif)。仓库内版本压缩为 960 × 600、29 帧、约 6.25 帧/秒、96 色，大小 5,383,363 字节（5.13 MiB），较原始 84,990,750 字节减少 93.67%。保留完整 4.48 秒时长、循环播放、首尾画面及全画面范围，本地原始录制保持不变。画面展示持托盘时的厨房出餐口及英语拿取提示；Mod／UE4SS 版本与房主／客机身份未提供。
 
 ### 添加图片
 

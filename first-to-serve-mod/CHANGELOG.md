@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Compress the gameplay GIF from 81.05 MiB to 5.13 MiB using 960 × 600 frames, approximately 6.25 fps and a 96-color palette; retain the full 4.48-second recording and loop.
+- 将实机 GIF 从 81.05 MiB 压缩为 5.13 MiB，采用 960 × 600、约 6.25 帧/秒及 96 色，保留完整 4.48 秒录制与循环播放。
+
 - Add the maintainer-provided kitchen-pass gameplay GIF to both README languages, preserving the original animation and recording its dimensions, duration and frame count.
 - 将维护者提供的厨房出餐口实机 GIF 加入中英文 README，保留原始动画并记录尺寸、时长与帧数。
 
