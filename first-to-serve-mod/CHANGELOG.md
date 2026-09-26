@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fall back to English when the game language cannot be read, keeping pickup active and restoring the selected language on a later successful refresh. Add failure and recovery regression coverage; this change has not been tested in-game.
+- 游戏语言读取失败时回退英语，保持取餐功能运行，后续成功刷新后恢复所选语言。增加失败与恢复回归验证；本次改动尚未实机测试。
+
 - Update to 0.1.7-dev: start oldest-first pickup on the drink output surface without aiming at a cup. Keep the same source while panning, pick only eligible full drinks into the held tray or food trolley, and preserve native short-click deposit. Add area isolation, rejection, three-cup sequencing and cancellation regressions; in-game acceptance remains pending.
 - 更新至 0.1.7-dev：可直接对准饮料出品台面启动最早优先长按，无需瞄准某一杯；准星在同一台面内移动时继续，只将合适的成品饮料拿到当前托盘或餐车，保留原生短按放回饮料。增加区域隔离、拒绝条件、连续三杯及取消回归测试；实机验收仍待完成。
 

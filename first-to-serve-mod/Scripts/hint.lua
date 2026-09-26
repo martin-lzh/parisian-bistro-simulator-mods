@@ -12,6 +12,17 @@ local function valid(object) return object ~= nil and object:IsValid() end
 local function same(a, b) return valid(a) and valid(b) and a:GetAddress() == b:GetAddress() end
 local function identity(widget) return widget:GetFullName() .. '@' .. tostring(widget:GetAddress()) end
 
+local function current_language()
+    -- A temporary language failure must not stop pickup or retain a stale locale.
+    local ok, value = pcall(function()
+        local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
+        if not valid(library) then return 'en' end
+        local language = library:GetCurrentLanguage()
+        return type(language) == 'string' and language or language:ToString()
+    end)
+    return ok and type(value) == 'string' and value or 'en'
+end
+
 local function visible(widget)
     -- A row's own visibility can stay unchanged while its parent is hidden.
     while valid(widget) do
@@ -173,10 +184,7 @@ function Hint:update(session, show)
         self.wrapper:SetContent(self.widget)
     end
     place_below(panel, anchor, self.wrapper)
-    local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
-    local language = valid(library) and library:GetCurrentLanguage() or 'en'
-    if type(language) ~= 'string' then language = language:ToString() end
-    local text = Localization.hint(language)
+    local text = Localization.hint(current_language())
     if self.text ~= text then
         self.widget:SetAction(FName(KEY), FText(text), CENTER)
         self.text = text

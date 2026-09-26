@@ -5,6 +5,17 @@ local Settings = require('settings')
 function UI.valid(object) return object ~= nil and object:IsValid() end
 local function same(a, b) return UI.valid(a) and UI.valid(b) and a:GetAddress() == b:GetAddress() end
 
+local function current_language()
+    -- Language lookup is optional; retry on the next update after an English fallback.
+    local ok, value = pcall(function()
+        local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
+        if not UI.valid(library) then return 'en' end
+        local language = library:GetCurrentLanguage()
+        return type(language) == 'string' and language or language:ToString()
+    end)
+    return ok and type(value) == 'string' and value or 'en'
+end
+
 function UI.host(owner)
     if not UI.valid(owner) or owner:HasAnyFlags(0x10 | 0x20)
         or not owner:IsA('/Game/UI/Computer/Apps/Menu/WBP_MenuApp.WBP_MenuApp_C') then return false end
@@ -79,9 +90,7 @@ function UI.update(view, saved, force_reset)
     local owner = view.owner
     assert(UI.valid(view.combo) and UI.valid(view.row), 'Delivery selector was destroyed')
     local visible = owner.OrderAutomationOverlay:IsVisible()
-    local library = StaticFindObject('/Script/Engine.Default__KismetInternationalizationLibrary')
-    local language = UI.valid(library) and library:GetCurrentLanguage() or 'en'
-    if type(language) ~= 'string' then language = language:ToString() end
+    local language = current_language()
     local texts = {}
     for _, name in ipairs({ 'FreeServiceDeliveryButton', 'EconomicalDeliveryButton', 'PremiumDeliveryButton' }) do
         texts[#texts + 1] = owner[name].DeliveryName:ToString()

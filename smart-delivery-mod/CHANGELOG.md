@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fall back to English when language lookup fails without stopping delivery selection or losing an unsaved choice. Resume localized text when reading recovers; add UI and runtime regressions. This change has not been tested in-game.
+- 语言读取失败时回退英语，不停止配送选择，也不丢失未保存选项；读取恢复后重新显示本地化文案，增加界面与主流程回归测试。本次改动尚未实机测试。
+
 - Add Lua reload support in 0.1.4-dev: stop old callbacks, remove old selector rows on the next game-thread startup, and restore the saved preference. The native helper atomically suspends custom delivery during unload and reuses its pinned patch after checking for conflicts. A DLL update still requires a game restart. In-game acceptance is pending.
 - 0.1.4-dev 新增 Lua 热重载：停止旧回调，新状态在游戏线程清理旧选择框并恢复保存偏好；原生辅助模块在卸载回调中原子暂停自定义配送，重新初始化时检查冲突并复用驻留补丁。更新 DLL 仍需重启游戏，热重载待实机验收。
 

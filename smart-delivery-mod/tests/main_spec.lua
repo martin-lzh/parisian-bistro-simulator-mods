@@ -29,6 +29,22 @@ local combo = owner.panel.children[2].children[2]
 local save = hooks['/Script/BrasserieSimulator.MenuAppWidget:SaveAutomaticSmartOrderSettings'].pre
 local reset = hooks['/Script/BrasserieSimulator.MenuAppWidget:ResetAutomaticSmartOrderSettings'].post
 local context = { get = function() return owner end }
+-- A language API exception must never disable delivery or terminate its callbacks.
+local find_object, previous_calls = StaticFindObject, #calls
+StaticFindObject = function(path)
+    local object = find_object(path)
+    if path:find('KismetInternationalizationLibrary', 1, true) then
+        object.GetCurrentLanguage = function() error('Language reader unavailable') end
+    end
+    return object
+end
+combo:SetSelectedIndex(0)
+assert(timer() == false and #calls == previous_calls and next(hooks) ~= nil)
+assert(owner.panel.children[2].children[1].text == 'Delivery method' and combo:GetSelectedIndex() == 0)
+StaticFindObject, F.language = find_object, 'fr'
+assert(timer() == false and #calls == previous_calls)
+assert(owner.panel.children[2].children[1].text == 'Mode de livraison' and combo:GetSelectedIndex() == 0)
+print('Runtime locale recovery: reader errors keep the bridge, hooks, timer and draft selection active')
 combo:SetSelectedIndex(0); timer()
 assert(current == 'premium' and writes == 0)
 reset(context); assert(combo:GetSelectedIndex() == 2)

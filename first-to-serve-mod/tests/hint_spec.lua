@@ -138,6 +138,35 @@ assert(creations == 1 and #actions == 1, 'No widget recreation or repeated text 
 assert(panel.additions == additions, 'Stable hints must not reattach any rows')
 language = 'fr-FR'; hint:update(session, true)
 assert(#actions == 2 and actions[2] == Localization.hint('fr'))
+-- Locale failures only change wording; the native hint and pickup context survive.
+local active_hint, read_language, find_object = hint.widget, culture.GetCurrentLanguage, StaticFindObject
+local function fallback_then_recover()
+    hint:update(session, true)
+    assert(hint.text == Localization.hint('en') and hint.widget == active_hint)
+    assert(hint.wrapper:GetParent() == panel and native.visibility == 1)
+    assert(#panel.children == 4 and panel.children[2] == click)
+    StaticFindObject, culture.GetCurrentLanguage, culture.invalid = find_object, read_language, false
+    language = FName('ja')
+    hint:update(session, true)
+    assert(hint.text == Localization.hint('ja') and hint.widget == active_hint)
+end
+culture.GetCurrentLanguage = function() error('Language reader unavailable') end
+fallback_then_recover()
+for _, value in ipairs({ false, {}, { ToString = function() return {} end },
+    { ToString = function() error('Language conversion unavailable') end } }) do
+    language = value
+    fallback_then_recover()
+end
+language = nil
+fallback_then_recover()
+culture.invalid = true
+fallback_then_recover()
+StaticFindObject = function(path)
+    if path:find('KismetInternationalizationLibrary', 1, true) then return nil end
+    return find_object(path)
+end
+fallback_then_recover()
+print('Hint locale recovery: reader errors, invalid values and unavailable libraries preserve the native hint')
 -- Native refresh removes and appends the click row; follow its new position.
 click:RemoveFromParent(); panel:AddChild(click)
 hint:update(session, true)

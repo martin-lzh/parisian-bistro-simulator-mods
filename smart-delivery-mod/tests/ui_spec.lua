@@ -14,6 +14,34 @@ F.language = 'zh-Hans'; owner.FreeServiceDeliveryButton.DeliveryName = F.text('�
 UI.update(view, 'premium')
 assert(view.title.text == '配送方式' and UI.choice(view) == 'free')
 assert(view.combo.options[1] == '免费服务')
+-- A failed locale read must keep the native options and the player's unsaved choice.
+local find_object = StaticFindObject
+local function fallback_then_recover()
+    UI.update(view, 'premium')
+    assert(view.title.text == 'Delivery method' and UI.choice(view) == 'free')
+    assert(view.combo.options[1] == '免费服务' and view.row:GetParent() == owner.panel)
+    StaticFindObject, F.language = find_object, F.text('ja')
+    UI.update(view, 'premium')
+    assert(view.title.text == '配送方法' and UI.choice(view) == 'free')
+end
+for _, value in ipairs({ false, {}, F.text({}),
+    { ToString = function() error('Language conversion unavailable') end } }) do
+    F.language = value
+    fallback_then_recover()
+end
+F.language = nil
+fallback_then_recover()
+for _, invalid in ipairs({ false, true }) do
+    StaticFindObject = function(path)
+        if path:find('KismetInternationalizationLibrary', 1, true) then
+            if not invalid then return nil end
+            local library = F.object('language'); library.destroyed = true; return library
+        end
+        return find_object(path)
+    end
+    fallback_then_recover()
+end
+print('UI locale recovery: invalid values and unavailable libraries preserve native options and draft selection')
 UI.update(view, 'premium', true)
 assert(UI.choice(view) == 'premium') -- native reset discards draft
 view.combo:SetSelectedIndex(1)
