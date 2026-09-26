@@ -12,6 +12,7 @@ Players can start with the [Mod list and downloads](../README.md#english) or [he
 | Installation problems and feedback | [Support](../SUPPORT.md#english) |
 | Changes, translations and pull requests | [Contributing](../CONTRIBUTING.md#english) |
 | Build, repository boundaries and CI | [Development](../DEVELOPMENT.md#english) |
+| Official game updates and compatibility alerts | [Steam build monitor](game-build-monitor.md) |
 | Vulnerability reports | [Security](../SECURITY.md#english) |
 | Participation and moderation | [Community guidelines](../CODE_OF_CONDUCT.md#english) |
 | Original code and documentation terms | [MIT License](../LICENSE) |
@@ -39,6 +40,7 @@ These pages describe original Mod behavior, development decisions and validation
 | 安装排查与反馈 | [帮助](../SUPPORT.md#中文) |
 | 改动、翻译与 PR | [参与贡献](../CONTRIBUTING.md#中文) |
 | 构建、仓库边界与 CI | [开发说明](../DEVELOPMENT.md#中文) |
+| 官方游戏更新与兼容性提醒 | [Steam 构建监控](game-build-monitor.md) |
 | 漏洞反馈 | [安全反馈](../SECURITY.md#中文) |
 | 参与及管理规则 | [社区规范](../CODE_OF_CONDUCT.md#中文) |
 | 原创代码和文档许可 | [MIT 许可证](../LICENSE) |

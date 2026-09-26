@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "appid": "3058360",
+  "name": "Parisian Bistro Simulator",
+  "branch": "public",
+  "repository": "martin-lzh/parisian-bistro-simulator-mods",
+  "observedOn": "2026-09-26",
+  "source": "Valve SteamCMD anonymous app_info_print 3058360",
+  "initialBuild": {
+    "buildid": "25532071",
+    "timeupdated": "1790351175"
+  }
+}

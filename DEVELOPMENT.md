@@ -6,6 +6,8 @@
 
 Start with [Contributing](CONTRIBUTING.md#english) for the change process and the [documentation index](docs/README.md#english) for player guides, implementation notes and test records. Installation and gameplay help belong in [Support](SUPPORT.md#english).
 
+The [Steam build monitor](docs/game-build-monitor.md) checks the public game build every six hours and creates a compatibility Issue when it changes.
+
 ### Development environment
 
 - Install Git, Python 3.12 and uv; make `git`, `python` and `uv` available in PowerShell. CI uses Python 3.12 and uv 0.10.7. Check `python --version` and `uv --version` before running the commands below.
