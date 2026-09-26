@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add the maintainer-provided kitchen-pass gameplay GIF to both README languages, preserving the original animation and recording its dimensions, duration and frame count.
+- 将维护者提供的厨房出餐口实机 GIF 加入中英文 README，保留原始动画并记录尺寸、时长与帧数。
+
 - Add maintainer-provided tray screenshots at the kitchen pass and drink output area to both README languages, with image provenance and visible-scene notes.
 - 将维护者提供的托盘出餐口、饮料出品台实机图加入中英文 README，并记录图片来源及可见场景。
 

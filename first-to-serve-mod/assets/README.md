@@ -15,15 +15,20 @@ Provided by the maintainer on 2026-09-26 and preserved without further edits. Bo
 | [kitchen-pass-gameplay.png](kitchen-pass-gameplay.png) | 832 × 474 | Tray at a kitchen pass, with **Hold: take oldest first** above **Take the dish** |
 | [drink-output-gameplay.png](drink-output-gameplay.png) | 721 × 375 | Tray at a highlighted drink output area, with **Hold: take oldest first** above **Take drinks** |
 
+### Gameplay animation
+
+The maintainer provided [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif) on 2026-09-26 as a First to Serve gameplay recording. The original GIF is preserved without resizing, recompression or frame changes: 2560 × 1600, 56 frames, 4.48 seconds, continuous looping, 84,990,750 bytes (81.05 MiB). It shows the kitchen pass with a tray and the English pickup hints. Mod/UE4SS versions and host/guest role were not supplied.
+
 ### Adding images
 
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
 | `<scene>-gameplay.png` | Actual in-game test capture, for example `kitchen-pass-gameplay.png` |
+| `<scene>-gameplay.gif` | Animated gameplay recording, for example `kitchen-pass-gameplay.gif` |
 | `<scene>-promo.png` | Additional promotional artwork |
 
-Use PNG, JPG or WebP; use lowercase filenames with hyphens. Add image embeds only after the referenced files exist. Place the cover below the README title and gameplay images beside the relevant usage text in both languages.
+Use PNG, JPG or WebP for still images and GIF for animations; use lowercase filenames with hyphens. Add image embeds only after the referenced files exist. Place the cover below the README title and gameplay images beside the relevant usage text in both languages.
 
 For each test capture, record its date, Mod/game/UE4SS versions, host or guest role, and observed result in this file. Identify generated or edited promotional artwork as such; it does not establish in-game acceptance. Keep extracted game assets and reverse-engineering material in ignored `work/`.
 
@@ -47,15 +52,20 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 | [kitchen-pass-gameplay.png](kitchen-pass-gameplay.png) | 832 × 474 | 持托盘对准厨房出餐口，**Take the dish** 上方显示 **Hold: take oldest first** |
 | [drink-output-gameplay.png](drink-output-gameplay.png) | 721 × 375 | 持托盘对准高亮的饮料出品台，**Take drinks** 上方显示 **Hold: take oldest first** |
 
+### 实机动图
+
+维护者于 2026-09-26 提供出餐有序实机录制 [kitchen-pass-gameplay.gif](kitchen-pass-gameplay.gif)。按原 GIF 保存，未缩放、重压缩或修改帧：2560 × 1600、56 帧、4.48 秒、循环播放，大小 84,990,750 字节（81.05 MiB）。画面展示持托盘时的厨房出餐口及英语拿取提示；Mod／UE4SS 版本与房主／客机身份未提供。
+
 ### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |
 | `cover.png` | README 或 Mod 页面使用的宣传封面 |
 | `<scene>-gameplay.png` | 真实实机测试截图，例如 `kitchen-pass-gameplay.png` |
+| `<scene>-gameplay.gif` | 实机录制动图，例如 `kitchen-pass-gameplay.gif` |
 | `<scene>-promo.png` | 其他宣传图 |
 
-可使用 PNG、JPG 或 WebP，文件名使用小写英文和连字符。图片实际加入后再启用引用：封面放在 README 标题下，实机图放在中英文对应的使用说明附近。
+静态图片可使用 PNG、JPG 或 WebP，动图使用 GIF；文件名使用小写英文和连字符。图片实际加入后再启用引用：封面放在 README 标题下，实机图放在中英文对应的使用说明附近。
 
 每张测试图在本文件中记录拍摄日期、Mod／游戏／UE4SS 版本、房主或客机身份及观察结果。生成或编辑过的宣传图应注明来源，不能作为实机验收依据。提取的游戏资源和反编译资料仍放在被忽略的 `work/`。
 
