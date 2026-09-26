@@ -1,5 +1,7 @@
 # Parisian Bistro Simulator Mods
 
+![LZH's MODS — Parisian Bistro Simulator; AI-generated cover / AI 宣传封面](assets/cover.png)
+
 [English](#english) · [中文](#中文)
 
 ## English
@@ -22,13 +24,13 @@ These stable versions follow the maintainer's confirmation that all seven Mods p
 
 ### Download and install
 
-1. Sign in to a GitHub account with access to this repository. Open [Mod Releases](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases), or use the version-specific release link in each Mod guide.
+1. Open [Mod Releases](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases), or use the version-specific release link in each Mod guide.
 2. Download the Mod ZIP and `SHA256SUMS.txt` under **Assets**, then extract the ZIP. GitHub's **Source code** archive is not an installable Mod.
 3. Close the game. In Steam, right-click **Parisian Bistro Simulator → Manage → Browse local files**. Install **UE4SS experimental** using its [installation guide](https://docs.ue4ss.com/dev/installation-guide.html). The checked loader version is `v3.0.1-1140-gf58e8f84`; old stable UE4SS 3.0.1 is not supported. Use the loader package's own folder layout.
 4. Put the extracted Mod folder inside the loader's existing `Mods` folder. The usual location is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods` inside the game folder. For example, Bartender's Note should contain `Mods/BartendersNote/Scripts/main.lua` and `Mods/BartendersNote/enabled.txt`, with no extra nested `BartendersNote` folder.
 5. Start the game and follow the Mod's usage steps. Install only the Mods you want. The loader is not included; no compilation is needed to use a Mod ZIP.
 
-The repository is currently private, so downloads require access. Updates and removal should be done with the game closed; each Mod's guide names the folder to replace or remove. Keep the loader and other Mods in place.
+The repository and Release downloads are public; no GitHub sign-in is required. Updates and removal should be done with the game closed; each Mod's guide names the folder to replace or remove. Keep the loader and other Mods in place.
 
 ### Languages and help
 
@@ -60,13 +62,13 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 
 ### 下载与安装
 
-1. 登录有权访问本仓库的 GitHub 账号，打开 [Mod 正式版本](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases)，或使用各 Mod 说明中的对应版本下载链接。
+1. 打开 [Mod 正式版本](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases)，或使用各 Mod 说明中的对应版本下载链接。
 2. 在 **Assets** 中下载 Mod ZIP 和 `SHA256SUMS.txt`，再解压 ZIP。GitHub 的 **Source code** 是源码，不能当作 Mod 安装。
 3. 关闭游戏。在 Steam 中右键点击**法式小馆儿模拟器 → 管理 → 浏览本地文件**。按[官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)安装 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；请保留加载器压缩包自身的目录结构。
 4. 将解压出的 Mod 文件夹整体放入加载器已有的 `Mods` 文件夹。常见位置是游戏目录中的 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods`。例如 Bartender's Note 安装后应有 `Mods/BartendersNote/Scripts/main.lua` 和 `Mods/BartendersNote/enabled.txt`，不要多套一层同名文件夹。
 5. 启动游戏，按对应 Mod 的操作说明使用。可以只安装需要的 Mod；安装包不含加载器，使用 Mod ZIP 无需自行编译。
 
-仓库目前为私密，下载需要访问权限。更新和卸载均应先关闭游戏；各 Mod 说明列出应替换或移除的文件夹，请保留加载器及其他 Mod。
+仓库及 Release 附件均已公开，无需登录 GitHub 即可下载。更新和卸载均应先关闭游戏；各 Mod 说明列出应替换或移除的文件夹，请保留加载器及其他 Mod。
 
 ### 语言与帮助
 

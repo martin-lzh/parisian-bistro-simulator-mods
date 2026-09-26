@@ -13,7 +13,7 @@ Start with [Contributing](CONTRIBUTING.md#english) for the change process and th
 - The native build scripts locate the C++ installation with `vswhere` and initialize `VsDevCmd.bat` themselves; use an ordinary PowerShell terminal at the repository root. The Lua-only Mods do not need the native compiler.
 - Offline tests and packaging need no game installation, UE4SS, extracted SDK or local game references. The Lua test command uses uv to obtain the pinned `lupa==2.6` dependency; the first run may download it. Actual gameplay checks require the game and the loader described in the Mod's player guide.
 
-For a first checkout only, use an account with access to the private repository:
+For a first checkout, clone the public repository:
 
 ```powershell
 git clone --branch dev https://github.com/martin-lzh/parisian-bistro-simulator-mods.git
@@ -50,7 +50,7 @@ See [languages](docs/localization.md#english), [validation](releases/validation.
 
 Read [AGENTS.md](AGENTS.md) before making changes. Local reference locations are documented in `work/reference/README.md`; a Git clone does not include them. Game installations are read-only during development. Builds never install a Mod, edit a save, or start or close the game.
 
-All reverse-engineering material belongs in ignored `work/`, including game files, assets, mappings, blueprints, native analysis, SDK/header exports, memory snapshots, logs, third-party tools, extraction scripts and research notes. Do not copy it into tracked directories or force-add ignored files, even in this private repository. Packages contain original Mod files and necessary notices only.
+All reverse-engineering material belongs in ignored `work/`, including game files, assets, mappings, blueprints, native analysis, SDK/header exports, memory snapshots, logs, third-party tools, extraction scripts and research notes. Do not copy it into tracked directories or force-add ignored files. Packages contain original Mod files and necessary notices only.
 
 Each Mod owns its runtime and build inputs:
 
@@ -70,7 +70,7 @@ Each Mod owns its runtime and build inputs:
 
 Each Mod has an `assets/README.md` with naming and embedding examples. Following Old Market Simulator Mods, use `assets/cover.png` for the cover, `assets/<scene>-gameplay.png` for actual in-game captures, and `assets/<scene>-promo.png` for other promotional artwork. Keep test context with the images and distinguish artwork from gameplay evidence. Add embeds only after the images exist; the directory guide itself keeps the folder in Git until then.
 
-Repository-only documents can use relative image paths. Player READMEs also ship in Mod ZIPs, which exclude `assets/`, so use a full GitHub image URL with `?raw=1` when embedding images there. Match the documentation's branch or tag; access to this private repository is still required. For example, after adding the actual file:
+Repository-only documents can use relative image paths. Player READMEs also ship in Mod ZIPs, which exclude `assets/`, so use a full GitHub image URL with `?raw=1` when embedding images there. Use a branch or tag that contains the image; public images do not require repository access. For example, after adding the actual file:
 
 ```markdown
 ![Bartender's Note cover artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
@@ -121,7 +121,7 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 - The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
 - A successful **main push** can run the release job for explicitly authorized new numbered versions. Only that job receives `contents: write`; development versions do not become releases automatically. See [release management](releases/README.md#english).
 
-`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. Editing the JSON does not apply remote settings. Maintainers must explicitly apply and read back repository rules through the API; CI has no repository administration credentials. The repository remains private.
+`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. Editing the JSON does not apply remote settings. Maintainers must explicitly apply and read back repository rules through the API; CI has no repository administration credentials. The repository is public.
 
 ## 中文
 
@@ -134,7 +134,7 @@ The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `d
 - 原生构建脚本通过 `vswhere` 查找 C++ 工具，再自行初始化 `VsDevCmd.bat` 环境，可在仓库根目录使用普通 PowerShell 执行。纯 Lua Mod 不需要原生编译器。
 - 离线测试与打包不需要安装游戏、UE4SS、提取 SDK 或准备本机游戏参考。Lua 测试通过 uv 获取固定的 `lupa==2.6` 依赖，首次运行可能需要下载。实际游戏测试才需要各 Mod 玩家说明中指定的游戏与加载器。
 
-仅在首次获取仓库时，使用有权访问私密仓库的账号：
+首次获取仓库时，克隆公开仓库：
 
 ```powershell
 git clone --branch dev https://github.com/martin-lzh/parisian-bistro-simulator-mods.git
@@ -171,7 +171,7 @@ cd parisian-bistro-simulator-mods
 
 改动前阅读 [AGENTS.md](AGENTS.md)。本机参考入口是 `work/reference/README.md`，不会随 Git 克隆同步。开发期间游戏安装目录只读；构建不安装 Mod、不改存档，也不启动或关闭游戏。
 
-所有反编译相关内容均放在被忽略的 `work/`，包括游戏文件、资产、映射、蓝图、原生分析、SDK/头文件导出、内存快照、日志、第三方工具、提取脚本和研究笔记。即使仓库私密，也不得复制到跟踪目录或强制加入 Git。安装包只含原创 Mod 文件和必要声明。
+所有反编译相关内容均放在被忽略的 `work/`，包括游戏文件、资产、映射、蓝图、原生分析、SDK/头文件导出、内存快照、日志、第三方工具、提取脚本和研究笔记。不得复制到跟踪目录或强制加入 Git。安装包只含原创 Mod 文件和必要声明。
 
 各 Mod 独立维护运行时和构建输入：
 
@@ -191,7 +191,7 @@ cd parisian-bistro-simulator-mods
 
 每个 Mod 的 `assets/README.md` 提供命名与引用示例。沿用菜市场模拟器 Mods 的约定：`assets/cover.png` 存放封面，`assets/<scene>-gameplay.png` 存放真实实机图，`assets/<scene>-promo.png` 存放其他宣传图。测试图附上测试环境与结果，宣传图与实机证据明确区分。实际加入图片后再启用引用；在此之前，目录说明文件使图片目录也能随 Git 同步。
 
-仅供仓库阅读的文档可以使用相对路径。玩家 README 同时进入 Mod ZIP，而 `assets/` 不打包，因此其中展示图片时使用带 `?raw=1` 的完整 GitHub 图片地址。分支或标签与文档一致，查看图片仍需私密仓库访问权限。实际添加图片后，可按以下示例引用：
+仅供仓库阅读的文档可以使用相对路径。玩家 README 同时进入 Mod ZIP，而 `assets/` 不打包，因此其中展示图片时使用带 `?raw=1` 的完整 GitHub 图片地址。使用包含该图片的分支或标签，公开图片无需仓库访问权限。实际添加图片后，可按以下示例引用：
 
 ```markdown
 ![调饮手记宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
@@ -242,4 +242,4 @@ git diff --check
 - **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
 - **main 推送**通过检查后，可以为已明确授权的新编号版本运行发布任务。仅该任务拥有 `contents: write`；开发版不会自动转为正式版。详见[版本管理](releases/README.md#中文)。
 
-`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改 JSON 不会自动应用到远端。维护者须通过 API 显式应用并回读核对；CI 不持有仓库管理凭据。仓库持续保持私密。
+`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改 JSON 不会自动应用到远端。维护者须通过 API 显式应用并回读核对；CI 不持有仓库管理凭据。仓库已公开。

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
+- 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
+
 ## 0.1.4 - 2026-09-26
 
 ### Documentation update / 文档更新 — 2026-09-26

@@ -22,7 +22,7 @@ The historical Bartender's Note 0.1.0 and Auto Checkout 0.1.1/0.1.2 acceptance r
 
 The maintainer separately authorized a [gameplay-guide update](documentation-refresh-2026-09-26.md#english) for these seven existing Releases. That update replaces only the ZIP documentation and associated checksums/build records; runtime files, versions and tag targets remain unchanged. The normal workflow below still skips published versions.
 
-Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english); the repository remains private. Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
+Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english). Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
 
 CI runs all seven independent build entry points and all Lua offline tests, then checks package allowlists, every file's source content and SHA-256. The `mod-packages` artifact contains the seven current ZIPs, their `.zip.sha256` files and `build-info.json` with the source commit, versions and attachment hashes. Artifacts are retained for 14 days. GitHub source downloads are not installable Mod packages.
 
@@ -58,7 +58,7 @@ Read-only check:
 python tools/release.py check --repository martin-lzh/parisian-bistro-simulator-mods
 ```
 
-This command reads the private repository using `GH_TOKEN` and requires a committed working tree. Offline tests simulate GitHub creation, resumption, skipping, corruption and conflicts; these are not acceptance tests of a real Release publication.
+This command queries the repository's GitHub API using `GH_TOKEN` and requires a committed working tree. Offline tests simulate GitHub creation, resumption, skipping, corruption and conflicts; these are not acceptance tests of a real Release publication.
 
 ## 中文
 
@@ -80,7 +80,7 @@ This command reads the private repository using `GH_TOKEN` and requires a commit
 
 维护者另行授权对这 7 个现有 Release 进行[游戏操作说明更新](documentation-refresh-2026-09-26.md#中文)，仅替换 ZIP 内文档及对应校验／构建记录；运行文件、版本及标签指向不变。下述常规工作流仍跳过已发布版本。
 
-每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)，仓库保持私密。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
+每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
 
 CI 使用全部 7 个 Mod 的独立构建入口，运行全部 Lua 离线测试，并核对包白名单、逐文件源码内容与 SHA-256。`mod-packages` artifact 包含当前 7 个 ZIP、对应的 `.zip.sha256` 及 `build-info.json`（源码提交、版本和附件哈希），保留 14 天。GitHub 源码下载不等于可安装 Mod 包。
 
@@ -116,4 +116,4 @@ CI 使用全部 7 个 Mod 的独立构建入口，运行全部 Lua 离线测试�
 python tools/release.py check --repository martin-lzh/parisian-bistro-simulator-mods
 ```
 
-命令通过 `GH_TOKEN` 读取私密仓库，工作区须已提交。离线测试模拟 GitHub 的创建、续传、跳过、损坏和冲突，不代表真实 Release 发布验收。
+命令通过 `GH_TOKEN` 查询仓库的 GitHub API，工作区须已提交。离线测试模拟 GitHub 的创建、续传、跳过、损坏和冲突，不代表真实 Release 发布验收。
