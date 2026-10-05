@@ -9,6 +9,7 @@ Players can start with the [Mod list and downloads](../README.md#english) or [he
 | Topic | Guide |
 | --- | --- |
 | Features and installation | [Project overview](../README.md#english) |
+| Vortex collection and game support | [Nexus collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) · [Extension guide](../vortex-extension/README.md#english) |
 | Installation problems and feedback | [Support](../SUPPORT.md#english) |
 | Changes, translations and pull requests | [Contributing](../CONTRIBUTING.md#english) |
 | Build, repository boundaries and CI | [Development](../DEVELOPMENT.md#english) |
@@ -37,6 +38,7 @@ These pages describe original Mod behavior, development decisions and validation
 | 主题 | 文档 |
 | --- | --- |
 | 功能与安装 | [项目介绍](../README.md#中文) |
+| Vortex 合集与游戏支持 | [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) · [扩展说明](../vortex-extension/README.md#中文) |
 | 安装排查与反馈 | [帮助](../SUPPORT.md#中文) |
 | 改动、翻译与 PR | [参与贡献](../CONTRIBUTING.md#中文) |
 | 构建、仓库边界与 CI | [开发说明](../DEVELOPMENT.md#中文) |
