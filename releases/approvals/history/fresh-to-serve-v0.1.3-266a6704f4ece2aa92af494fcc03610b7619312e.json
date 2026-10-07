@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "mod": "fresh-to-serve",
+  "version": "0.1.3",
+  "prerelease": false,
+  "sourceCommit": "266a6704f4ece2aa92af494fcc03610b7619312e",
+  "inputsSha256": "ac69ca32b572667b02248892cd878c0689bc7a25af20588be8cfcc7eceae058d",
+  "authorization": "2026-10-07: After confirming in-game acceptance of game 1.0.2.44eb / Steam Build 25759268, the maintainer explicitly requested completing the missing release approval records and merging them to publish Fresh to Serve 0.1.3 and Scan to Order 0.1.2. This record authorizes Fresh to Serve 0.1.3 as a stable GitHub Release. Original instruction: ok，补一下合入，另外其他的mod可能也需要重新发布，因为其文档内容可能也发生了变化。"
+}

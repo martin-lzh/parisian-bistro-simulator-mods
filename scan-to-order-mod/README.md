@@ -8,7 +8,7 @@
 
 Automatically place seated customers' food and drink orders without a waiter or player taking them. No QR image or phone interaction is required.
 
-**Source version: 0.1.2 (not yet published).** Supports the game through **Steam Build 25759268 / 1.0.2.44eb**, including the table compatibility fix with the prior build's spelling retained. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. Single player or multiplayer host only. Install it on the host; guests never send orders.
+**Version: 0.1.2.** Supports the game through **Steam Build 25759268 / 1.0.2.44eb**, including the table compatibility fix with the prior build's spelling retained. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. Single player or multiplayer host only. Install it on the host; guests never send orders.
 
 ### How to use
 
@@ -43,12 +43,10 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-The published downloads below are **0.1.1** and do not contain the Build 25759268 compatibility fix. The unreleased **0.1.2** package comes from this update's PR/CI build: download the successful run's `mod-packages` artifact and select `ScanToOrder-0.1.2.zip`. Follow the installation steps below for that Mod ZIP. There is no 0.1.2 release download yet.
+Download **0.1.2** for the Build 25759268 compatibility fix. Version 0.1.1 does not contain this fix. Choose one source:
 
-For the previously published **0.1.1**, choose **one** source:
-
-- **GitHub (no account needed):** open [Scan to Order 0.1.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1), scroll to **Assets**, expand it if needed and click **ScanToOrder-0.1.1.zip**. `SHA256SUMS.txt` is an optional checksum file, not something to install. Do not choose **Source code**.
-- **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/7), sign in or register a free account, select **Files → Main files → Manual download** for version **0.1.1**. Continue through the requirements notice if shown, select **Slow download** for a free account and wait for the ZIP. Keep the ZIP in your **Downloads** folder until the extraction step below.
+- **GitHub (no account needed):** open [Scan to Order 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2), scroll to **Assets**, expand it if needed and click **ScanToOrder-0.1.2.zip**. `SHA256SUMS.txt` is an optional checksum file, not something to install. Do not choose **Source code**.
+- **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/7), sign in or register a free account, and check **Files → Main files** for version **0.1.2**. If the listed version differs, use the GitHub download above. Select **Manual download**, continue through the requirements notice if shown, then select **Slow download** for a free account. Keep the ZIP in your **Downloads** folder until the extraction step below.
 
 ### Install
 
@@ -98,7 +96,7 @@ The maintainer reported in-game and multiplayer testing passed for **0.1.1** on 
 
 自动为已入座顾客提交食物和饮料订单，无需服务员或玩家点餐，也不需要实际二维码或手机交互。
 
-**源码版本：0.1.2（尚未发布）。** 支持至 **Steam Build 25759268 / 1.0.2.44eb**，包含餐桌兼容修复，并保留旧构建的餐桌拼写兼容。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
+**版本：0.1.2。** 支持至 **Steam Build 25759268 / 1.0.2.44eb**，包含餐桌兼容修复，并保留旧构建的餐桌拼写兼容。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
 
 ### 怎么使用
 
@@ -133,12 +131,10 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-下方已发布下载为 **0.1.1**，不含 Build 25759268 兼容修复。尚未发布的 **0.1.2** 安装包来自本次更新的 PR／CI 构建：下载成功运行的 `mod-packages` 产物，取出 `ScanToOrder-0.1.2.zip` 后按下方步骤安装。目前没有 0.1.2 的正式发布下载。
+请下载 **0.1.2**，其中包含 Build 25759268 兼容修复；0.1.1 不含此修复。以下来源二选一：
 
-如需此前已发布的 **0.1.1**，以下来源**二选一**：
-
-- **GitHub（无需账号）：**打开 [扫码点餐 0.1.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1)，向下找到并展开 **Assets（附件）**，点击 **ScanToOrder-0.1.1.zip**。`SHA256SUMS.txt` 是可选的校验文件，无需安装；不要下载 **Source code（源码）**。
-- **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/7)，登录或注册免费账号，在 **Files（文件）→ Main files（主要文件）** 找到 **0.1.1**，点击 **Manual download（手动下载）**。如出现前置要求提示，继续到下载页；免费账号选择 **Slow download（慢速下载）**，等待 ZIP 下载完成。先把 ZIP 保存在**下载**文件夹，下面再解压。
+- **GitHub（无需账号）：**打开 [扫码点餐 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2)，向下找到并展开 **Assets（附件）**，点击 **ScanToOrder-0.1.2.zip**。`SHA256SUMS.txt` 是可选的校验文件，无需安装；不要下载 **Source code（源码）**。
+- **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/7)，登录或注册免费账号，在 **Files（文件）→ Main files（主要文件）** 核对版本为 **0.1.2**；若页面版本不同，请使用上方 GitHub 下载。点击 **Manual download（手动下载）**，如出现前置要求提示，继续到下载页；免费账号选择 **Slow download（慢速下载）**。先把 ZIP 保存在**下载**文件夹，下面再解压。
 
 ### 安装
 

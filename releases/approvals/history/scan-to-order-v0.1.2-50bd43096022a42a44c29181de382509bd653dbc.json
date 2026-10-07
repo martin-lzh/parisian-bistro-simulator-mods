@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "mod": "scan-to-order",
+  "version": "0.1.2",
+  "prerelease": false,
+  "sourceCommit": "50bd43096022a42a44c29181de382509bd653dbc",
+  "inputsSha256": "9d63176d0579a5429de2b9b6c22481fd8ad978d2bd6db45dcd9f825463b5ac67",
+  "authorization": "2026-10-07: After confirming in-game acceptance of game 1.0.2.44eb / Steam Build 25759268, the maintainer explicitly requested completing the missing release approval records and merging them to publish Fresh to Serve 0.1.3 and Scan to Order 0.1.2. This record authorizes Scan to Order 0.1.2 as a stable GitHub Release. Original instruction: ok，补一下合入，另外其他的mod可能也需要重新发布，因为其文档内容可能也发生了变化。"
+}

@@ -4,7 +4,7 @@
 
 ## English
 
-Current source version: **0.1.3**, an unpublished compatibility update supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. `python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`; the version has not been published.
+Current version: **0.1.3**, a compatibility update supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. `python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`.
 
 The adapter uses locally checked reflected game/engine APIs. No executable patches, native addresses, custom memory layouts or game assets are distributed. Research stays in ignored `work/`; implementation, fixtures and documentation are original.
 
@@ -72,7 +72,7 @@ If the old adapter stopped at startup because a table API was missing, install t
 
 ## 中文
 
-当前源码版本为 **0.1.3**，是支持至 **Steam Build 25759268 / 1.0.2.44eb** 的未发布兼容更新。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包，此版本尚未正式发布。
+当前版本为 **0.1.3**，是支持至 **Steam Build 25759268 / 1.0.2.44eb** 的兼容更新。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包。
 
 适配器使用本机核对过的游戏及引擎反射接口，不分发可执行补丁、原生地址、自定义内存布局或游戏资产。研究仅放在被忽略的 `work/`；实现、合成夹具及文档为原创。
 

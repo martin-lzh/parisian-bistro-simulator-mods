@@ -280,8 +280,9 @@ def publish(repository: str, commit: str, api=None) -> None:
     if not selected:
         print("No authorized new versions to publish.")
         return
-    if api.request("")["private"] is not True:
-        raise ValueError("This workflow is configured for a private repository")
+    target = api.request("").get("full_name")
+    if not isinstance(target, str) or target.casefold() != repository.casefold():
+        raise ValueError("GitHub repository identity does not match the requested target")
     # Validate the complete artifact and every candidate before the first write.
     verify_artifacts(commit)
     prepared = []

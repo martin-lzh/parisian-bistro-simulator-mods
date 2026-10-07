@@ -32,6 +32,7 @@ class FakeGitHub:
         self.corrupt_upload = False
         self.fail_upload = None
         self.private = True
+        self.full_name = "example/mods"
 
     def pages(self, path):
         if path == "/releases":
@@ -42,7 +43,7 @@ class FakeGitHub:
         if method != "GET":
             self.writes.append((path, method, payload))
         if path == "":
-            return {"private": self.private}
+            return {"private": self.private, "full_name": self.full_name}
         if path.startswith("/git/ref/tags/"):
             obj = self.tags.get(path.removeprefix("/git/ref/tags/"))
             return {"object": obj} if obj else None
@@ -358,19 +359,48 @@ class ReleaseTests(unittest.TestCase):
             self.publish()
         self.assertEqual(self.api.writes, [])
 
-    def test_public_repository_is_not_published(self):
+    def test_public_repository_publishes_verified_authorized_assets(self):
         self.ready()
         self.api.private = False
-        with self.assertRaisesRegex(ValueError, "private repository"):
+        self.publish()
+        record = self.api.records[0]
+        self.assertFalse(record["draft"])
+        self.assertEqual(self.api.tags["sample-v1.1.0"]["sha"], self.head)
+        self.assertEqual({a["name"] for a in record["assets"]},
+                         {"Sample-1.1.0.zip", "build-info.json", "SHA256SUMS.txt"})
+        self.assertEqual(len(self.api.downloaded), 3)
+
+    def test_repository_identity_mismatch_stops_before_writes(self):
+        self.ready()
+        self.api.private = False
+        for target in ("other/mods", "example/other", None):
+            with self.subTest(target=target):
+                self.api.full_name = target
+                with self.assertRaisesRegex(ValueError, "repository identity"):
+                    self.publish()
+                self.assertEqual(self.api.writes, [])
+
+    def test_repository_identity_is_case_insensitive(self):
+        self.ready()
+        self.api.private = False
+        self.api.full_name = "Example/Mods"
+        self.publish()
+        self.assertFalse(self.api.records[0]["draft"])
+
+    def test_public_repository_rejects_invalid_build_evidence(self):
+        self.ready()
+        self.api.private = False
+        self.write("outputs/ci/build-info.json", "{}")
+        with self.assertRaisesRegex(ValueError, "CI build evidence"):
             self.publish()
         self.assertEqual(self.api.writes, [])
 
     def test_public_repository_with_published_versions_is_a_noop(self):
         self.ready()
+        self.api.private = False
         self.publish()
         original = copy.deepcopy(self.api.records)
         self.api.writes.clear()
-        self.api.private = False
         self.publish()
         self.assertEqual(self.api.records, original)
         self.assertEqual(self.api.writes, [])
