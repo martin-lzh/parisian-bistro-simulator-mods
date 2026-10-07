@@ -10,6 +10,8 @@ Add an **Auto-compose** button beside **Print menu** on the computer's daily-men
 
 **Version: 0.5.0.** Single player or multiplayer host only. Only the host needs to install it; guests do not get the button.
 
+**Game compatibility: through 1.0.2.44eb (Steam Build 25759268).** The maintainer confirmed in-game testing passed on 2026-10-07.
+
 ### How to use
 
 1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app and select **Daily menu** in the sidebar.
@@ -94,7 +96,7 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If the button is missing or disabled, confirm you are the host, the **Daily menu** page is open with **Lunch** or **Dinner** selected, and the complete Mod folder, including its helper, is installed. A failed search restores the previous selection without submitting its trial menus. If no result appears or saving is refused, check the displayed menu and report relevant `[AutoMenu]` lines from `UE4SS.log` with what you clicked. The Mod has no in-game error popup or progress indicator.
 
-In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#english) describes its scope.
+The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 25759268 on 2026-10-07. The earlier in-game and multiplayer confirmation dates to 2026-09-26; multiplayer was not separately reconfirmed for this update. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for both reports.
 
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
@@ -103,6 +105,8 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 在电脑每日菜单页面的“打印菜单”旁增加 **自动组合** 按钮，按游戏的预计选择率选择菜单组合。
 
 **版本：0.5.0。** 仅单人或联机房主可用，只需房主安装，客机不显示该按钮。
+
+**游戏兼容性：支持至 1.0.2.44eb（Steam Build 25759268）。** 维护者于 2026-10-07 确认新版实机测试通过。
 
 ### 怎么使用
 
@@ -188,6 +192,6 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 
 按钮未出现或不可点击时，先确认自己是房主，已打开 **每日菜单** 并选中 **午餐** 或 **晚餐**，且安装了包含辅助文件的完整 Mod 文件夹。试算失败会恢复此前的选择，不提交试算中的菜单。没有出现结果或保存被拒绝时，请核对页面上的菜单，再反馈点击过程及 `UE4SS.log` 中相关的 `[AutoMenu]` 日志。Mod 没有游戏内错误弹窗或进度提示。
 
-维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#中文)。
+维护者于 2026-10-07 确认 1.0.2.44eb / Steam Build 25759268 实机测试通过。此前实机及联机测试通过并授权正式发布的记录为 2026-09-26，本次更新未单独确认新版联机复测；两次反馈见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 [实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-menu-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

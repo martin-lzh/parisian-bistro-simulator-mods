@@ -37,7 +37,7 @@
 
 These stable versions follow the maintainer's confirmation that all seven Mods passed in-game and multiplayer testing on 2026-09-26. Check each guide for host/guest requirements and gameplay limits; see the [validation record](releases/validation.md#english).
 
-For game **1.0.2.44eb / Steam Build 25759268**, current source advances **Fresh to Serve to 0.1.3** and **Scan to Order to 0.1.2** to fix table lookup failures. These patches are pending publication and updated-game acceptance; the download links above still point to the earlier published packages without this fix.
+All seven Mods support up to **game 1.0.2.44eb / Steam Build 25759268**, following the maintainer's in-game acceptance on **2026-10-07**. This requires **Fresh to Serve 0.1.3** and **Scan to Order 0.1.2**, which fix table lookup failures; the other five Mods keep their listed versions. These two patches are pending publication, so their download links above still point to earlier packages without this fix. See the [current validation record](releases/validation.md#english) for supported versions and testing scope.
 
 ### Manual download and installation
 
@@ -118,7 +118,7 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 
 维护者于 2026-09-26 确认全部 7 个 Mod 实机及联机测试通过，当前提供对应正式版。房主／客机要求及玩法限制见各 Mod 说明，测试反馈见[验收记录](releases/validation.md#中文)。
 
-为适配游戏 **1.0.2.44eb／Steam Build 25759268**，当前源码将**焕鲜上桌升级为 0.1.3**、**扫码点餐升级为 0.1.2**，修复餐桌查询失败。这两个补丁尚待发布和新版实机验收；上表下载链接仍指向不含此次修复的旧版正式包。
+维护者于 **2026-10-07** 确认新版实机测试通过，全部七款 Mod 标注支持至**游戏 1.0.2.44eb／Steam Build 25759268**。其中须使用修复餐桌查询失败的**焕鲜上桌 0.1.3** 和**扫码点餐 0.1.2**，另外五款沿用表中版本。这两个补丁尚待发布，上表对应下载链接仍指向不含此次修复的旧包。支持版本及测试范围见[当前验收记录](releases/validation.md#中文)。
 
 ### 手动下载与安装
 

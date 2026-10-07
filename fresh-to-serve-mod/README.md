@@ -10,7 +10,7 @@ Clear spoiled cooked meals and finished drinks from kitchen passes, drink output
 
 **Source version: 0.1.3 (unpublished).** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
 
-0.1.3 adds compatibility for **Steam Build 25759268 / 1.0.2.44eb**, fixing the table lookup that stopped automation at startup while retaining support for the earlier table spelling. Offline checks pass; in-game and multiplayer acceptance on this build is pending.
+0.1.3 supports the game through **Steam Build 25759268 / 1.0.2.44eb**, fixing the table lookup that stopped automation at startup while retaining support for the earlier table spelling. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported.
 
 ### How to use
 
@@ -105,7 +105,7 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If cleanup does not occur, check the host role, quality level, output location and player-service assignment first. If an item disappears without a remake, check customer patience, existing supply, stock, staff, equipment and unfinished player claims. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report: `DISCARDED` means removed, `REQUEUED` means a replacement order was accepted, and `SKIPPED`/`DEFERRED` explain canceled or waiting attempts. `REQUEUED` does not mean the item has been served.
 
-Version 0.1.2 passed in-game and multiplayer testing as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope. This does not establish acceptance of 0.1.3 on the new game build.
+Version 0.1.2 passed in-game and multiplayer testing as reported by the maintainer on 2026-09-26; the [historical validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes that earlier scope.
 
 If startup logs report `Missing Fresh to Serve` followed by `automation-stopped`, install a compatible update with the game closed and restart the game. Ctrl+R preserves the safety stop from that failure.
 
@@ -117,7 +117,7 @@ If startup logs report `Missing Fresh to Serve` followed by `automation-stopped`
 
 **源码版本：0.1.3（尚未发布）。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
 
-0.1.3 新增 **Steam Build 25759268 / 1.0.2.44eb** 兼容，修复餐桌查询导致自动化在启动时停止的问题，同时保留此前餐桌拼写的支持。离线检查通过；此游戏版本的实机与联机验收仍待完成。
+0.1.3 支持至 **Steam Build 25759268 / 1.0.2.44eb**，修复餐桌查询导致自动化在启动时停止的问题，同时保留此前餐桌拼写的支持。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。
 
 ### 怎么使用
 
@@ -212,7 +212,7 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 
 没有清理时，先检查房主身份、品质等级、出品位置和餐桌是否交给玩家服务。餐品被清理却没有重做时，检查顾客耐心、已有供给、库存、员工、设备及玩家未完成的认领。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志：`DISCARDED` 表示已清理，`REQUEUED` 表示补单已被接受，`SKIPPED`／`DEFERRED` 说明取消或等待原因；`REQUEUED` 不代表已经上桌。
 
-维护者于 2026-09-26 确认 0.1.2 实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。这不代表 0.1.3 已通过新版游戏验收。
+维护者于 2026-09-26 确认 0.1.2 实机及联机测试全部通过并授权正式发布，该次范围见[历史验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。
 
 若启动日志出现 `Missing Fresh to Serve`，随后输出 `automation-stopped`，请关闭游戏后安装兼容更新，再完整重启游戏。Ctrl+R 会保留此前失败的安全停止状态。
 

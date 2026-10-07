@@ -7,6 +7,11 @@
 
 ## 0.5.0 - 2026-09-26
 
+### Compatibility documentation / 兼容性说明 — 2026-10-07
+
+- Record support through game 1.0.2.44eb / Steam Build 25759268 after the maintainer confirmed in-game testing passed on 2026-10-07. Version 0.5.0 and runtime files are unchanged; the 2026-09-26 multiplayer confirmation remains a separate historical record.
+- 维护者于 2026-10-07 确认新版实机测试通过，更新兼容性说明，支持至游戏 1.0.2.44eb / Steam Build 25759268。版本 0.5.0 与运行文件保持不变；2026-09-26 的联机测试反馈保留为独立历史记录。
+
 ### Documentation update / 文档更新 — 2026-09-26
 
 - Expand the English/Chinese player guide after a source-based subagent audit of in-game controls, feature behavior, multiplayer requirements and waiting/recovery conditions. Refresh the existing Release package documentation; the version and runtime files are unchanged.

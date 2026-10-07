@@ -10,6 +10,8 @@ Choose Free service, Budget delivery or Premium delivery for automatic smart ord
 
 **Version: 0.1.5.** Single player or multiplayer host only. Only the host needs to install it; guests cannot edit the Mod's delivery choice.
 
+**Game compatibility: through 1.0.2.44eb (Steam Build 25759268).** The maintainer confirmed in-game testing passed on 2026-10-07.
+
 ### How to use
 
 1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app. Click the game's **Automatic Smart Order** button to open its settings window.
@@ -104,7 +106,7 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If the selector is missing, confirm you are host and installed the complete folder, including the bundled helper. If the saved choice is not retained, check that the folder can be written to. For a problem report, include relevant `[SmartDelivery]` lines from `UE4SS.log` and `SmartDelivery/Scripts/bridge-status.txt` if it exists.
 
-In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/smart-delivery-v0.1.5/releases/validation.md#english) describes its scope.
+The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 25759268 on 2026-10-07. The earlier in-game and multiplayer confirmation dates to 2026-09-26; multiplayer was not separately reconfirmed for this update. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for both reports.
 
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
@@ -113,6 +115,8 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 在餐厅电脑的自动智能订购设置中，选择免费服务、经济型配送或高级配送。
 
 **版本：0.1.5。** 仅单人或联机房主可设置，只需房主安装；客机不能修改 Mod 配送选项。
+
+**游戏兼容性：支持至 1.0.2.44eb（Steam Build 25759268）。** 维护者于 2026-10-07 确认新版实机测试通过。
 
 ### 怎么使用
 
@@ -208,6 +212,6 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 
 选择框未出现时，先确认自己是房主，且已复制完整文件夹，包括包内辅助文件。选择无法保留时，请检查文件夹是否允许写入。反馈时附上 `UE4SS.log` 中相关的 `[SmartDelivery]` 日志，以及存在时的 `SmartDelivery/Scripts/bridge-status.txt`。
 
-维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/smart-delivery-v0.1.5/releases/validation.md#中文)。
+维护者于 2026-10-07 确认 1.0.2.44eb / Steam Build 25759268 实机测试通过。此前实机及联机测试通过并授权正式发布的记录为 2026-09-26，本次更新未单独确认新版联机复测；两次反馈见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 [实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

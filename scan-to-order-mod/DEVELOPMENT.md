@@ -4,7 +4,7 @@
 
 ## English
 
-Current source version: **0.1.2**, prepared for Steam Build 25759268 / 1.0.2.44eb. It is not yet published; this update has offline coverage and still requires in-game and multiplayer acceptance. The historical 0.1.1 acceptance below remains separate.
+Current source version: **0.1.2**, supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. It is not yet published. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. The historical 0.1.1 acceptance below remains separate.
 
 The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.1 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
 
@@ -20,7 +20,7 @@ Only a scalar stop marker is shared across reload. It is persisted before dispat
 
 Local API and native AI routing checks used Steam Build 25532071 / 1.0.1.44eb and the locally available UE4SS experimental source. All analysis and reference material remains under ignored `work/`. That evidence and the offline tests do not establish real engine bridging or gameplay acceptance.
 
-The 2026-10-07 compatibility follow-up covers Build 25759268 / 1.0.2.44eb: initialization resolves the actual game UClass from the observed `Table` and `table` paths, merges aliases only when their addresses match, and validates its type and full name. Required methods and short-name enumeration use that class's reflected name; candidate discovery and dispatch reacquisition also check `IsA` against the resolved class. Missing, invalid or ambiguous classes and missing methods stop automation. Both spellings, alias resolution, rejected lookups, stock-aware dispatch and reload stops have offline coverage; the updated runtime still needs new-build host/client gameplay acceptance.
+The 2026-10-07 compatibility follow-up covers Build 25759268 / 1.0.2.44eb: initialization resolves the actual game UClass from the observed `Table` and `table` paths, merges aliases only when their addresses match, and validates its type and full name. Required methods and short-name enumeration use that class's reflected name; candidate discovery and dispatch reacquisition also check `IsA` against the resolved class. Missing, invalid or ambiguous classes and missing methods stop automation. Both spellings, alias resolution, rejected lookups, stock-aware dispatch and reload stops have offline coverage. New-build in-game acceptance is based on the maintainer's 2026-10-07 confirmation, independently of these offline checks.
 
 ### Offline checks
 
@@ -67,7 +67,7 @@ A startup failure such as a missing API leaves a stop marker that also applies t
 
 ## 中文
 
-当前源码版本为 **0.1.2**，针对 Steam Build 25759268 / 1.0.2.44eb 准备更新，尚未发布。本次更新已有离线验证，仍需实机及联机验收；与下方 0.1.1 的历史验收分别记录。
+当前源码版本为 **0.1.2**，支持至 **Steam Build 25759268 / 1.0.2.44eb**，尚未发布。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。下方 0.1.1 的历史验收继续分别记录。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.1，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 
@@ -83,7 +83,7 @@ A startup failure such as a missing API leaves a stop marker that also applies t
 
 本地 API 和原生 AI 路径核对基于 Steam Build 25532071 / 1.0.1.44eb，以及本机 UE4SS experimental 源码。所有分析和参考资料保留在被忽略的 `work/` 中。源码核对和离线测试不等同于真实引擎桥接及实机验收。
 
-2026-10-07 的兼容修复核对覆盖 Build 25759268 / 1.0.2.44eb：初始化从已观察到的 `Table` 和 `table` 路径解析真实游戏 UClass，仅将地址相同的结果视作同一类别名，并校验类型和完整名称。所需方法及短名枚举使用该类的真实反射名称，候选发现和派发前重新查找还通过 `IsA` 核对对象类型。类缺失、无效、冲突或方法缺失时停止自动化。离线验证覆盖两种拼写、别名、查询拒绝、库存感知下单及重载停止；更新后的运行逻辑仍待新版房主／客机实机验收。
+2026-10-07 的兼容修复核对覆盖 Build 25759268 / 1.0.2.44eb：初始化从已观察到的 `Table` 和 `table` 路径解析真实游戏 UClass，仅将地址相同的结果视作同一类别名，并校验类型和完整名称。所需方法及短名枚举使用该类的真实反射名称，候选发现和派发前重新查找还通过 `IsA` 核对对象类型。类缺失、无效、冲突或方法缺失时停止自动化。离线验证覆盖两种拼写、别名、查询拒绝、库存感知下单及重载停止。新版实机验收以维护者 2026-10-07 的确认作为依据，与这些离线检查分别记录。
 
 ### 离线验证
 

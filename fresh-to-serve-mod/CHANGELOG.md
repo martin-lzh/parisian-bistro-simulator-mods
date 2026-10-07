@@ -8,9 +8,9 @@
 ## 0.1.3
 
 - Unpublished compatibility update for Steam Build **25759268 / 1.0.2.44eb**. Fix the startup table-API failure by resolving the live `Table`/`table` class before checking methods and reacquiring pending food/drink remakes. Retain support for the earlier spelling, reject missing classes/methods or ambiguous classes, and preserve safety stops across script reload.
-- Add offline regression coverage for both spellings, live food/drink rebinding and startup failure recovery. In-game and multiplayer acceptance on the new build remains pending; the package is available through PR/CI builds, not a published release.
+- Add offline regression coverage for both spellings, live food/drink rebinding and startup failure recovery. On 2026-10-07, the maintainer confirmed in-game testing passed; support is recorded through Steam Build 25759268 / 1.0.2.44eb in the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). New-build multiplayer retesting was not separately reported. The package remains available through PR/CI builds, not a published release.
 - 尚未发布的 Steam Build **25759268 / 1.0.2.44eb** 兼容更新。检查方法及重新定位食物／饮料待重做订单前，解析实际 `Table`／`table` 类，修复餐桌接口查询导致的启动失败；保留旧拼写兼容，类或方法缺失、类歧义时停止，安全停止状态继续跨脚本重载保留。
-- 增加两种拼写、食物／饮料实时重新绑定及启动失败恢复的离线回归验证。新版游戏实机与联机验收仍待完成，安装包通过 PR/CI 构建提供，尚未正式发布。
+- 增加两种拼写、食物／饮料实时重新绑定及启动失败恢复的离线回归验证。维护者于 2026-10-07 确认实机测试通过，支持至 Steam Build 25759268 / 1.0.2.44eb，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈新版联机复测结果。安装包仍通过 PR/CI 构建提供，尚未正式发布。
 
 ## 0.1.2 - 2026-09-26
 

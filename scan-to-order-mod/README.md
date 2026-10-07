@@ -8,7 +8,7 @@
 
 Automatically place seated customers' food and drink orders without a waiter or player taking them. No QR image or phone interaction is required.
 
-**Source version: 0.1.2 (not yet published).** Includes the table compatibility fix for Steam Build 25759268 / 1.0.2.44eb, with the prior build's table spelling retained. Offline checks pass; in-game and multiplayer acceptance of this update remain pending. Single player or multiplayer host only. Install it on the host; guests never send orders.
+**Source version: 0.1.2 (not yet published).** Supports the game through **Steam Build 25759268 / 1.0.2.44eb**, including the table compatibility fix with the prior build's spelling retained. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. Single player or multiplayer host only. Install it on the host; guests never send orders.
 
 ### How to use
 
@@ -90,7 +90,7 @@ An unexpected error can stop automatic ordering for the current restaurant to av
 
 If the log reports a missing API during startup, fully close the game before updating the Mod and start it again afterward. Reloading with Ctrl+R or re-entering the restaurant does not clear a startup stop.
 
-The maintainer reported in-game and multiplayer testing passed for **0.1.1** on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english) describes that historical scope. It does not establish acceptance of 0.1.2 on Build 25759268.
+The maintainer reported in-game and multiplayer testing passed for **0.1.1** on 2026-09-26; the [historical validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english) describes that earlier scope.
 
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
@@ -98,7 +98,7 @@ The maintainer reported in-game and multiplayer testing passed for **0.1.1** on 
 
 自动为已入座顾客提交食物和饮料订单，无需服务员或玩家点餐，也不需要实际二维码或手机交互。
 
-**源码版本：0.1.2（尚未发布）。** 包含 Steam Build 25759268 / 1.0.2.44eb 的餐桌兼容修复，并保留旧构建的餐桌拼写兼容。离线检查通过，此次更新的实机及联机验收仍待进行。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
+**源码版本：0.1.2（尚未发布）。** 支持至 **Steam Build 25759268 / 1.0.2.44eb**，包含餐桌兼容修复，并保留旧构建的餐桌拼写兼容。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
 
 ### 怎么使用
 
@@ -180,6 +180,6 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 
 如果日志显示启动时缺失 API，请完整退出游戏后更新 Mod，再重新启动游戏。按 Ctrl+R 重载或重新进入餐厅均不会解除启动时的停止状态。
 
-维护者于 2026-09-26 确认 **0.1.1** 实机及联机测试全部通过并授权正式发布，历史范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。该记录不代表 0.1.2 已在 Build 25759268 完成验收。
+维护者于 2026-09-26 确认 **0.1.1** 实机及联机测试全部通过并授权正式发布，该次范围见[历史验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。
 
 [实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

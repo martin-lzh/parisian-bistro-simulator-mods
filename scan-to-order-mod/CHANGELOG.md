@@ -7,9 +7,9 @@
 
 ## 0.1.2
 
-- Prepare the compatibility update for Steam Build 25759268 / 1.0.2.44eb. This version is not yet published; in-game and multiplayer acceptance remain pending.
+- Support the game through Steam Build 25759268 / 1.0.2.44eb. The maintainer confirmed in-game testing passed on 2026-10-07; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). New-build multiplayer retesting was not separately reported. This version is not yet published.
 - Resolve the game's actual `Table`/`table` class for API checks, table discovery and order dispatch, retaining support for the prior spelling. Missing or conflicting classes and missing methods stop automation. Add offline regression coverage for both spellings, order dispatch and startup safety.
-- 为 Steam Build 25759268 / 1.0.2.44eb 准备兼容更新。此版本尚未发布，实机及联机验收仍待进行。
+- 支持至 Steam Build 25759268 / 1.0.2.44eb。维护者于 2026-10-07 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈新版联机复测结果。此版本尚未发布。
 - 解析游戏实际的 `Table`／`table` 类，统一接口检查、餐桌发现和订单派发，兼容旧拼写。类缺失、类冲突或方法缺失时停止自动化；新增两种拼写、订单派发及启动安全行为的离线回归验证。
 
 ## 0.1.1 - 2026-09-26
