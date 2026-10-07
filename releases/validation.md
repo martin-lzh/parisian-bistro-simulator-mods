@@ -4,11 +4,11 @@
 
 ## English
 
-### 2026-10-07: unreleased table lookup compatibility fix
+### 2026-10-07: table lookup patches for game 1.0.2.44eb
 
-Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. The changes remain under `Unreleased`; the published versions and the 2026-09-26 acceptance record are unchanged.
+Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. At the maintainer's request, Fresh to Serve advances from 0.1.2 to 0.1.3 and Scan to Order from 0.1.1 to 0.1.2 in the compatibility PR. These patches are pending publication; the published packages and the 2026-09-26 acceptance record are unchanged.
 
-Offline regressions cover both spellings, consistent instance discovery and reacquisition, and refusal of missing or conflicting class/API results. Actual startup, cleanup/remake behavior, stock-aware ordering and host/guest behavior on the updated game still require in-game acceptance. No Mod was installed and no game session or save was modified for this fix. After installing the updated scripts, fully restart the game: reloading scripts preserves an earlier safety-stop marker.
+Offline regressions cover both spellings, consistent instance discovery and reacquisition, and refusal of missing or conflicting class/API results. Actual startup, cleanup/remake behavior, stock-aware ordering and host/guest behavior on the updated game still require in-game acceptance. Installation and file verification do not establish gameplay acceptance. After installing the updated scripts, fully restart the game: reloading scripts preserves an earlier safety-stop marker.
 
 ### 2026-09-26: stable release authorization after in-game and multiplayer testing
 
@@ -106,11 +106,11 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-### 2026-10-07：待发布的餐桌查询兼容性修复
+### 2026-10-07：适配游戏 1.0.2.44eb 的餐桌查询补丁
 
-焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。改动记入 `Unreleased`；已发布版本与 2026-09-26 的验收记录保持不变。
+焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。按维护者要求，本次兼容 PR 将焕鲜上桌从 0.1.2 升至 0.1.3、扫码点餐从 0.1.1 升至 0.1.2。两个补丁尚待发布；已发布安装包与 2026-09-26 的验收记录保持不变。
 
-离线回归覆盖两种拼写、实例发现与重新获取的一致性，以及类或接口缺失、冲突时停止执行。新版游戏的真实启动、清理与重做、缺货等待及补货下单、房主／客机行为仍需实机验收。本次修复没有安装 Mod，也没有修改游戏会话或存档。安装更新脚本后应完整重启游戏：脚本重载会保留先前的安全停止标记。
+离线回归覆盖两种拼写、实例发现与重新获取的一致性，以及类或接口缺失、冲突时停止执行。新版游戏的真实启动、清理与重做、缺货等待及补货下单、房主／客机行为仍需实机验收。安装与文件校验不代表实机验收通过。安装更新脚本后应完整重启游戏：脚本重载会保留先前的安全停止标记。
 
 ### 2026-09-26：实机与联机测试通过，授权正式发布
 

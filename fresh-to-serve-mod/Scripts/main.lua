@@ -73,7 +73,7 @@ local function start()
             return false
         end)
     end
-    log('START', 'version=0.1.2 host-only=true interval=1s reload-state=true stopped=' .. tostring(failed))
+    log('START', 'version=0.1.3 host-only=true interval=1s reload-state=true stopped=' .. tostring(failed))
     if restore_error then log('ERROR', 'reload-state-invalid ' .. restore_error) end
 end
 

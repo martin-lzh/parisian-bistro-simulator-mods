@@ -2,10 +2,15 @@
 
 ## Unreleased
 
-- Resolve the live `Table`/`table` class before checking table methods and reacquiring pending food/drink remakes. Support both observed spellings, reject missing classes/methods or ambiguous classes, and retain safety stops across script reload. Add offline regression coverage; new-build gameplay acceptance is pending.
-- 检查餐桌方法及重新定位食物／饮料待重做订单前，解析实际 `Table`／`table` 类；兼容两种已观察拼写，类或方法缺失、类歧义时停止，并保留跨脚本重载的安全停止状态。增加离线回归验证，新游戏版本实机验收仍待完成。
 - Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
 - 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
+
+## 0.1.3
+
+- Unpublished compatibility update for Steam Build **25759268 / 1.0.2.44eb**. Fix the startup table-API failure by resolving the live `Table`/`table` class before checking methods and reacquiring pending food/drink remakes. Retain support for the earlier spelling, reject missing classes/methods or ambiguous classes, and preserve safety stops across script reload.
+- Add offline regression coverage for both spellings, live food/drink rebinding and startup failure recovery. In-game and multiplayer acceptance on the new build remains pending; the package is available through PR/CI builds, not a published release.
+- 尚未发布的 Steam Build **25759268 / 1.0.2.44eb** 兼容更新。检查方法及重新定位食物／饮料待重做订单前，解析实际 `Table`／`table` 类，修复餐桌接口查询导致的启动失败；保留旧拼写兼容，类或方法缺失、类歧义时停止，安全停止状态继续跨脚本重载保留。
+- 增加两种拼写、食物／饮料实时重新绑定及启动失败恢复的离线回归验证。新版游戏实机与联机验收仍待完成，安装包通过 PR/CI 构建提供，尚未正式发布。
 
 ## 0.1.2 - 2026-09-26
 

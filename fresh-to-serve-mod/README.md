@@ -8,7 +8,9 @@
 
 Clear spoiled cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. If the original customer is still waiting and has enough patience, request a replacement for the game's staff to prepare and serve.
 
-**Version: 0.1.2.** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
+**Source version: 0.1.3 (unpublished).** Single player or multiplayer host only. Only the host needs to install it; guests do not remove items or place replacement orders.
+
+0.1.3 adds compatibility for **Steam Build 25759268 / 1.0.2.44eb**, fixing the table lookup that stopped automation at startup while retaining support for the earlier table spelling. Offline checks pass; in-game and multiplayer acceptance on this build is pending.
 
 ### How to use
 
@@ -58,7 +60,9 @@ Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked lo
 
 ### Download
 
-Choose **one** download source; both provide the same Mod:
+The published downloads below are **0.1.2** and **do not contain the new-build compatibility fix**. For 0.1.3, use `FreshToServe-0.1.3.zip` from the `mod-packages` artifact of a successful PR/CI build. 0.1.3 has not been published to GitHub Releases or Nexus.
+
+Choose **one** download source for the published version; both provide the same Mod:
 
 - **GitHub (no account needed):** open [Fresh to Serve 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2), scroll to **Assets**, expand it if needed and click **FreshToServe-0.1.2.zip**. `SHA256SUMS.txt` is an optional checksum file, not something to install. Do not choose **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/3), sign in or register a free account, select **Files → Main files → Manual download** for version **0.1.2**. Continue through the requirements notice if shown, select **Slow download** for a free account and wait for the ZIP. Keep the ZIP in your **Downloads** folder until the extraction step below.
@@ -101,7 +105,7 @@ Game languages: English, French, Simplified Chinese, Italian, Spanish, German, R
 
 If cleanup does not occur, check the host role, quality level, output location and player-service assignment first. If an item disappears without a remake, check customer patience, existing supply, stock, staff, equipment and unfinished player claims. After an error stops automation, leave and re-enter the restaurant. Include relevant `[FreshToServe]` lines from `UE4SS.log` with a problem report: `DISCARDED` means removed, `REQUEUED` means a replacement order was accepted, and `SKIPPED`/`DEFERRED` explain canceled or waiting attempts. `REQUEUED` does not mean the item has been served.
 
-In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope.
+Version 0.1.2 passed in-game and multiplayer testing as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope. This does not establish acceptance of 0.1.3 on the new game build.
 
 If startup logs report `Missing Fresh to Serve` followed by `automation-stopped`, install a compatible update with the game closed and restart the game. Ctrl+R preserves the safety stop from that failure.
 
@@ -111,7 +115,9 @@ If startup logs report `Missing Fresh to Serve` followed by `automation-stopped`
 
 自动清理厨房出餐台、饮料出品区及升降机出餐位上的低劣熟食和成品饮料；原顾客仍在等待且耐心足够时补单，由游戏原有员工制作并送达。
 
-**版本：0.1.2。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
+**源码版本：0.1.3（尚未发布）。** 仅单人或联机房主运行，只需房主安装，客机不执行清理或补单。
+
+0.1.3 新增 **Steam Build 25759268 / 1.0.2.44eb** 兼容，修复餐桌查询导致自动化在启动时停止的问题，同时保留此前餐桌拼写的支持。离线检查通过；此游戏版本的实机与联机验收仍待完成。
 
 ### 怎么使用
 
@@ -161,7 +167,9 @@ Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已�
 
 ### 下载
 
-以下来源**二选一**即可，提供的是同一个 Mod：
+下方已发布下载均为 **0.1.2**，**不含新版游戏兼容修复**。0.1.3 请使用成功的 PR/CI 构建中 `mod-packages` 附件里的 `FreshToServe-0.1.3.zip`，目前尚未发布到 GitHub Releases 或 Nexus。
+
+下载已发布版本时，以下来源**二选一**即可，提供的是同一个 Mod：
 
 - **GitHub（无需账号）：**打开 [焕鲜上桌 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2)，向下找到并展开 **Assets（附件）**，点击 **FreshToServe-0.1.2.zip**。`SHA256SUMS.txt` 是可选的校验文件，无需安装；不要下载 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/3)，登录或注册免费账号，在 **Files（文件）→ Main files（主要文件）** 找到 **0.1.2**，点击 **Manual download（手动下载）**。如出现前置要求提示，继续到下载页；免费账号选择 **Slow download（慢速下载）**，等待 ZIP 下载完成。先把 ZIP 保存在**下载**文件夹，下面再解压。
@@ -204,7 +212,7 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 
 没有清理时，先检查房主身份、品质等级、出品位置和餐桌是否交给玩家服务。餐品被清理却没有重做时，检查顾客耐心、已有供给、库存、员工、设备及玩家未完成的认领。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志：`DISCARDED` 表示已清理，`REQUEUED` 表示补单已被接受，`SKIPPED`／`DEFERRED` 说明取消或等待原因；`REQUEUED` 不代表已经上桌。
 
-维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。
+维护者于 2026-09-26 确认 0.1.2 实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。这不代表 0.1.3 已通过新版游戏验收。
 
 若启动日志出现 `Missing Fresh to Serve`，随后输出 `automation-stopped`，请关闭游戏后安装兼容更新，再完整重启游戏。Ctrl+R 会保留此前失败的安全停止状态。
 

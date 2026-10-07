@@ -4,6 +4,8 @@
 
 ## English
 
+Current source version: **0.1.2**, prepared for Steam Build 25759268 / 1.0.2.44eb. It is not yet published; this update has offline coverage and still requires in-game and multiplayer acceptance. The historical 0.1.1 acceptance below remains separate.
+
 The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.1 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
 
 The independent Lua Mod polls on the game thread once per second. It requires an authoritative local controller and possessed player in one world. Table, customer, producer and service objects must belong to that world. A client, paused game or missing possession never dispatches an order.
@@ -51,7 +53,7 @@ Keep the game installation read-only during development. Gameplay acceptance mus
 
 ### Loader, output and diagnostics
 
-The checked loader API is UE4SS experimental `v3.0.1-1140-gf58e8f84`, for the Windows / Unreal Engine 5.4 baseline above. Old stable UE4SS 3.0.1 is not the target. Build output is `outputs/scan-to-order/ScanToOrder-0.1.1.zip` and its SHA-256 file.
+The checked loader API is UE4SS experimental `v3.0.1-1140-gf58e8f84`, for the Windows / Unreal Engine 5.4 baseline above. Old stable UE4SS 3.0.1 is not the target. Build output is `outputs/scan-to-order/ScanToOrder-0.1.2.zip` and its SHA-256 file.
 
 No in-game wording is added; native order text remains localized by the game. Technical log prefix `[ScanToOrder]` includes `START`, confirmed `ORDER` and `ERROR`. An order event is logged only after native queue binding confirms acceptance.
 
@@ -64,6 +66,8 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 A startup failure such as a missing API leaves a stop marker that also applies to later worlds. After updating the scripts, fully restart the game; Ctrl+R or re-entering the restaurant does not clear that startup marker.
 
 ## 中文
+
+当前源码版本为 **0.1.2**，针对 Steam Build 25759268 / 1.0.2.44eb 准备更新，尚未发布。本次更新已有离线验证，仍需实机及联机验收；与下方 0.1.1 的历史验收分别记录。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.1，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 
@@ -100,7 +104,7 @@ A startup failure such as a missing API leaves a stop marker that also applies t
 
 ### 加载器、产物与诊断
 
-核对的加载器 API 为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，适用于上文 Windows / Unreal Engine 5.4 参考基线；不以旧稳定版 UE4SS 3.0.1 为目标。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.1.zip` 及 SHA-256 文件。
+核对的加载器 API 为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，适用于上文 Windows / Unreal Engine 5.4 参考基线；不以旧稳定版 UE4SS 3.0.1 为目标。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.2.zip` 及 SHA-256 文件。
 
 不新增游戏内文案，订单文字沿用游戏本地化。技术日志前缀 `[ScanToOrder]` 包含 `START`、已确认的 `ORDER` 和 `ERROR`；只有原生队列绑定确认接受后才记录成功订单。
 

@@ -4,6 +4,8 @@
 
 ## English
 
+Current source version: **0.1.3**, an unpublished compatibility update for **Steam Build 25759268 / 1.0.2.44eb**. `python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`; no release publication or new-build gameplay acceptance is implied.
+
 The adapter uses locally checked reflected game/engine APIs. No executable patches, native addresses, custom memory layouts or game assets are distributed. Research stays in ignored `work/`; implementation, fixtures and documentation are original.
 
 `game.lua` scans current-world authoritative kitchen pickup queues and registered elevator serving slots. After rechecking quality and pickup/consumption state, native pickup bookkeeping releases the slot and wakes chefs. The adapter verifies and removes only the temporary taken-out entry this call added, preserving existing reservations, then destroys the spoiled actor. Fixed pass indices and capacity are retained. Normal preparation FastArray entries are never edited directly. Cleanup removes the plate too, without reproducing trash animation, bin filling or dirty-plate recovery.
@@ -56,7 +58,7 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. Authoritative cleanup polls once per second. Rejected replacement requests have at most three attempts, separated by at least 10 seconds; pending tickets expire after 120 seconds. Customer and patience checks run again before each request.
 
-The unreleased adapter also handles the table-class spelling observed in Steam Build 25759268 while retaining the earlier spelling. It resolves both known paths as UClasses, deduplicates aliases by address, and uses the selected class's actual name for method checks and instance scans. Missing classes/methods, unexpected class identity or distinct candidates stop initialization. Reacquired tables must pass `IsA` before actor access. Synthetic tests exercise both spellings through food/drink cleanup, rejected remakes and fresh-wrapper notification rebinding; they do not establish new-build gameplay acceptance.
+The 0.1.3 adapter also handles the table-class spelling observed in Steam Build 25759268 / 1.0.2.44eb while retaining the earlier spelling. It resolves both known paths as UClasses, deduplicates aliases by address, and uses the selected class's actual name for method checks and instance scans. Missing classes/methods, unexpected class identity or distinct candidates stop initialization. Reacquired tables must pass `IsA` before actor access. Synthetic tests exercise both spellings through food/drink cleanup, rejected remakes and fresh-wrapper notification rebinding; they do not establish new-build gameplay acceptance.
 
 No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED` and `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not completed delivery. Include game/loader versions and host/client role when interpreting a report.
 
@@ -69,6 +71,8 @@ The checkpoint implementation above defines preserved pending work and safety st
 If the old adapter stopped at startup because a table API was missing, install the compatible scripts with the game closed and restart the game. Ctrl+R preserves the shared safety-stop marker and does not clear that earlier failure.
 
 ## 中文
+
+当前源码版本为 **0.1.3**，是针对 **Steam Build 25759268 / 1.0.2.44eb** 的未发布兼容更新。`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包；这不代表已正式发布或通过新版游戏实机验收。
 
 适配器使用本机核对过的游戏及引擎反射接口，不分发可执行补丁、原生地址、自定义内存布局或游戏资产。研究仅放在被忽略的 `work/`；实现、合成夹具及文档为原创。
 
@@ -110,7 +114,7 @@ If the old adapter stopped at startup because a table API was missing, install t
 
 本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。房主每秒检查清理一次。被拒绝的补单最多尝试 3 次、至少间隔 10 秒，待处理凭据 120 秒后到期；每次请求重新核对顾客与耐心。
 
-未发布适配同时支持 Steam Build 25759268 中观察到的餐桌类拼写及此前拼写。查询两种已知路径并确认 UClass，按地址合并别名，以实际类名统一检查方法和枚举实例。类／方法缺失、类身份不符或出现不同候选类时停止初始化；重查餐桌先通过 `IsA` 再访问 Actor 接口。合成测试对两种拼写执行食物／饮料清理、拒绝补单及新对象包装下的通知重新绑定，不代表新版本实机验收通过。
+0.1.3 适配同时支持 Steam Build 25759268 / 1.0.2.44eb 中观察到的餐桌类拼写及此前拼写。查询两种已知路径并确认 UClass，按地址合并别名，以实际类名统一检查方法和枚举实例。类／方法缺失、类身份不符或出现不同候选类时停止初始化；重查餐桌先通过 `IsA` 再访问 Actor 接口。合成测试对两种拼写执行食物／饮料清理、拒绝补单及新对象包装下的通知重新绑定，不代表新版本实机验收通过。
 
 本 Mod 不自行添加玩家界面文案。诊断前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）及 `ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达；分析反馈时需同时记录游戏/加载器版本及房主/客机身份。
 

@@ -37,6 +37,8 @@
 
 These stable versions follow the maintainer's confirmation that all seven Mods passed in-game and multiplayer testing on 2026-09-26. Check each guide for host/guest requirements and gameplay limits; see the [validation record](releases/validation.md#english).
 
+For game **1.0.2.44eb / Steam Build 25759268**, current source advances **Fresh to Serve to 0.1.3** and **Scan to Order to 0.1.2** to fix table lookup failures. These patches are pending publication and updated-game acceptance; the download links above still point to the earlier published packages without this fix.
+
 ### Manual download and installation
 
 These instructions start with only the Windows game installed. **Manual installation is free and does not require Vortex or a Nexus Premium subscription.** A web browser and Windows File Explorer are enough; Windows can extract ZIP files without WinRAR or 7-Zip. You do not need Git, Python, Visual Studio or Unreal Engine.
@@ -115,6 +117,8 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 | [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | [0.1.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
 
 维护者于 2026-09-26 确认全部 7 个 Mod 实机及联机测试通过，当前提供对应正式版。房主／客机要求及玩法限制见各 Mod 说明，测试反馈见[验收记录](releases/validation.md#中文)。
+
+为适配游戏 **1.0.2.44eb／Steam Build 25759268**，当前源码将**焕鲜上桌升级为 0.1.3**、**扫码点餐升级为 0.1.2**，修复餐桌查询失败。这两个补丁尚待发布和新版实机验收；上表下载链接仍指向不含此次修复的旧版正式包。
 
 ### 手动下载与安装
 

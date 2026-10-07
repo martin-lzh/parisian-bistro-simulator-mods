@@ -6,7 +6,7 @@
 
 ### Accepted versions and current source
 
-On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-game and multiplayer testing and explicitly authorized removing the development suffix and publishing stable Releases. The [validation record](validation.md#english) ties this acceptance to source `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`. Current source and approved stable package versions are:
+On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-game and multiplayer testing and explicitly authorized removing the development suffix and publishing stable Releases. The [validation record](validation.md#english) ties this acceptance to source `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`. The approved stable packages from that test report are:
 
 | Mod | Stable version | In-game and multiplayer confirmation | Package |
 | --- | --- | --- | --- |
@@ -18,7 +18,7 @@ On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-ga
 | Auto Menu | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
 | Scan to Order | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
 
-The historical Bartender's Note 0.1.0 and Auto Checkout 0.1.1/0.1.2 acceptance records remain in the validation history. Current builds use the stable versions above; building current source does not reproduce those historical packages.
+Current source advances **Fresh to Serve 0.1.2 → 0.1.3** and **Scan to Order 0.1.1 → 0.1.2** for **game 1.0.2.44eb / Steam Build 25759268**. These patches fix table-class lookup and retain the earlier spelling. The maintainer requested the version bumps and a PR; publication and updated-game acceptance remain pending. Other Mod versions are unchanged. The historical acceptance records remain in the validation history; building current source does not reproduce those historical packages.
 
 The maintainer separately authorized a [gameplay-guide update](documentation-refresh-2026-09-26.md#english) for these seven existing Releases. That update replaces only the ZIP documentation and associated checksums/build records; runtime files, versions and tag targets remain unchanged. The normal workflow below still skips published versions.
 
@@ -64,7 +64,7 @@ This command queries the repository's GitHub API using `GH_TOKEN` and requires a
 
 ### 已验收版本与当前源码
 
-2026-09-26，维护者确认全部 7 个当前 Mod 实机及联机测试通过，明确要求去掉开发版后缀并发布正式 Release。[验收记录](validation.md#中文)将本次确认关联源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`。当前源码与获准正式包版本如下：
+2026-09-26，维护者确认全部 7 个当前 Mod 实机及联机测试通过，明确要求去掉开发版后缀并发布正式 Release。[验收记录](validation.md#中文)将本次确认关联源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`。该次验收对应的获准正式包版本如下：
 
 | Mod | 正式版本 | 实机与联机确认日期 | 安装包 |
 | --- | --- | --- | --- |
@@ -76,7 +76,7 @@ This command queries the repository's GitHub API using `GH_TOKEN` and requires a
 | Auto Menu（菜单巧配） | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
 | Scan to Order（扫码点餐） | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
 
-调饮手记 0.1.0、收银管家 0.1.1／0.1.2 的历史验收仍保留在验收记录中。当前构建使用上表正式版本，不会重新生成历史版本安装包。
+当前源码为适配**游戏 1.0.2.44eb／Steam Build 25759268**，将**焕鲜上桌 0.1.2 → 0.1.3**、**扫码点餐 0.1.1 → 0.1.2**，修复餐桌类查询并兼容旧拼写。维护者已要求提升补丁版本并开 PR；发布及新版实机验收仍待完成。其他 Mod 版本不变。历史验收继续保留；当前源码构建不会重新生成历史版本安装包。
 
 维护者另行授权对这 7 个现有 Release 进行[游戏操作说明更新](documentation-refresh-2026-09-26.md#中文)，仅替换 ZIP 内文档及对应校验／构建记录；运行文件、版本及标签指向不变。下述常规工作流仍跳过已发布版本。
 

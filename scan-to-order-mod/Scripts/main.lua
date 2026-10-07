@@ -63,7 +63,7 @@ local function start()
             return false
         end)
     end
-    print('[ScanToOrder] START version=0.1.1 host-only=true interval=1s\n')
+    print('[ScanToOrder] START version=0.1.2 host-only=true interval=1s\n')
 end
 
 local ok, err = xpcall(start, traceback)
