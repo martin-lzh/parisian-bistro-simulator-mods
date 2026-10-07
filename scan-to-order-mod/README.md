@@ -86,6 +86,8 @@ If an order waits, first confirm you are the host and the game is unpaused, then
 
 An unexpected error can stop automatic ordering for the current restaurant to avoid repeating an order whose result is unclear. Check the game's existing queue before taking the order manually. Leave and re-enter the restaurant to reset that stopped session; restarting scripts alone does not clear it. If the stop persists, restart the game and include relevant `[ScanToOrder]` lines from `UE4SS.log` with a problem report.
 
+If the log reports a missing API during startup, fully close the game before updating the Mod and start it again afterward. Reloading with Ctrl+R or re-entering the restaurant does not clear a startup stop.
+
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english) describes its scope.
 
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/scan-to-order-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
@@ -171,6 +173,8 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 订单未提交时，先确认自己是房主且游戏未暂停，再检查原料、员工、设备、顾客耐心，以及餐桌是否由玩家或服务员处理。缺货或游戏正常拒绝下单时会自动复查，无需重装或重启 Mod。同桌某项还在等待时，其他有货项可能已经下单。
 
 发生异常时，自动点餐可能停止处理当前餐厅，避免重复提交结果不明的订单。手动接手前先检查游戏现有队列；退出餐厅并重新进入后可重置这次会话的停止状态，仅重新加载脚本不会解除。仍然停止时请重启游戏，并在反馈中附上 `UE4SS.log` 中相关的 `[ScanToOrder]` 日志。
+
+如果日志显示启动时缺失 API，请完整退出游戏后更新 Mod，再重新启动游戏。按 Ctrl+R 重载或重新进入餐厅均不会解除启动时的停止状态。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。
 

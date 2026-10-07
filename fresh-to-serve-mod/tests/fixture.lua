@@ -46,14 +46,15 @@ return function()
     f.player.Controller = f.controller; f.controller.Pawn = f.player
     function f.controller:IsLocalController() return true end
     f.now = 20
-    f.api = { player = {}, dish = {}, none = 0, poor = 3, awful = 4, pending = 0, preparing = 1,
+    f.api = { player = {}, dish = {}, table_class = object('table-class'), table_name = 'table',
+        none = 0, poor = 3, awful = 4, pending = 0, preparing = 1,
         quality = { GetSatisfactionFromDishQuality = function(_, quality) return quality end },
         math = { Subtract_DateTimeDateTime = function(_, a, b) return a-b end,
             GetTotalSeconds = function(_, value) return value end },
         gameplay = { GetTimeSeconds = function() return f.now end,
             IsGamePaused = function() return f.paused == true end } }
     f.player.class = f.api.player
-    f.table = object('table'); f.table.AssignedCustomerGroupId = 5
+    f.table = object('table'); f.table.class = f.api.table_class; f.table.AssignedCustomerGroupId = 5
     f.table.NumberOfCustomersSit = 1; f.table.CustomerOrderTime = 10
     f.table.bGroupCanBeCashedOut = false; f.table.bTableHandledByPlayer = false
     function f.table:IsTableOccupied() return self.NumberOfCustomersSit > 0 end

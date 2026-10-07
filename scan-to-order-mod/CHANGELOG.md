@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Resolve the game's actual `Table`/`table` class for API checks, table discovery and order dispatch, retaining support for the prior spelling. Missing or conflicting classes and missing methods stop automation. Add offline regression coverage for both spellings and startup safety; Build 25759268 gameplay verification remains pending.
+- 解析游戏实际的 `Table`／`table` 类，统一接口检查、餐桌发现和订单派发，兼容旧拼写。类缺失、类冲突或方法缺失时停止自动化；新增两种拼写及启动安全行为的离线回归验证，Build 25759268 实机验收仍待进行。
+
 - Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
 - 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
 

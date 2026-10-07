@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Resolve the live `Table`/`table` class before checking table methods and reacquiring pending food/drink remakes. Support both observed spellings, reject missing classes/methods or ambiguous classes, and retain safety stops across script reload. Add offline regression coverage; new-build gameplay acceptance is pending.
+- 检查餐桌方法及重新定位食物／饮料待重做订单前，解析实际 `Table`／`table` 类；兼容两种已观察拼写，类或方法缺失、类歧义时停止，并保留跨脚本重载的安全停止状态。增加离线回归验证，新游戏版本实机验收仍待完成。
 - Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
 - 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
 

@@ -1,7 +1,7 @@
 local Game, fixture = require('game'), require('fixture')
 local f, shared, queued, runtime, off_thread, fail_write
-local original_session = Game.session
-Game.contract = function() assert(not off_thread); return f.api end
+local original_session, original_contract = Game.session, Game.contract
+Game.contract = function() assert(not off_thread); return original_contract() end
 Game.session = function(...) assert(not off_thread); return original_session(...) end
 local function reset()
     f, shared, queued, off_thread, fail_write = fixture(), {}, {}, false, false
@@ -28,6 +28,27 @@ local function boot(direct)
 end
 local function unload(r)
     off_thread = true; r.mod.OnUnload(); off_thread = false
+end
+
+-- Missing/ambiguous reflection stops before any order and keeps the safety
+-- marker across reload even if reflection becomes available in the meantime.
+for _, ambiguous in ipairs({ false, true }) do
+    reset()
+    if ambiguous then
+        local other = f.object('Class /Script/BrasserieSimulator.Table')
+        other.short_name, other.is_class = 'Table', true
+        f.reflection['/Script/BrasserieSimulator.Table'] = other
+    else
+        f.reflection['/Script/BrasserieSimulator.table'] = nil
+    end
+    runtime = boot(true); runtime.tick()
+    assert(#f.calls == 0 and shared['ScanToOrder.StopWorld'] == '*')
+    unload(runtime)
+    f.reflection['/Script/BrasserieSimulator.Table'] = nil
+    f.reflection['/Script/BrasserieSimulator.table'] = f.api.table_class
+    runtime = boot(true); runtime.tick()
+    assert(#f.calls == 0 and shared['ScanToOrder.StopWorld'] == '*')
+    unload(runtime)
 end
 
 reset(); f.stock[12] = 0

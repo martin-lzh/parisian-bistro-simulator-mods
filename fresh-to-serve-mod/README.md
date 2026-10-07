@@ -103,6 +103,8 @@ If cleanup does not occur, check the host role, quality level, output location a
 
 In-game and multiplayer testing passed as reported by the maintainer on 2026-09-26; the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#english) describes its scope.
 
+If startup logs report `Missing Fresh to Serve` followed by `automation-stopped`, install a compatible update with the game closed and restart the game. Ctrl+R preserves the safety stop from that failure.
+
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
 ## 中文
@@ -203,5 +205,7 @@ UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安
 没有清理时，先检查房主身份、品质等级、出品位置和餐桌是否交给玩家服务。餐品被清理却没有重做时，检查顾客耐心、已有供给、库存、员工、设备及玩家未完成的认领。异常导致自动流程停止后，可退出餐厅并重新进入。反馈时附上 `UE4SS.log` 中相关的 `[FreshToServe]` 日志：`DISCARDED` 表示已清理，`REQUEUED` 表示补单已被接受，`SKIPPED`／`DEFERRED` 说明取消或等待原因；`REQUEUED` 不代表已经上桌。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，具体范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/releases/validation.md#中文)。
+
+若启动日志出现 `Missing Fresh to Serve`，随后输出 `automation-stopped`，请关闭游戏后安装兼容更新，再完整重启游戏。Ctrl+R 会保留此前失败的安全停止状态。
 
 [实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

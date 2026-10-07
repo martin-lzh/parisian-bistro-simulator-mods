@@ -18,6 +18,8 @@ Only a scalar stop marker is shared across reload. It is persisted before dispat
 
 Local API and native AI routing checks used Steam Build 25532071 / 1.0.1.44eb and the locally available UE4SS experimental source. All analysis and reference material remains under ignored `work/`. That evidence and the offline tests do not establish real engine bridging or gameplay acceptance.
 
+The 2026-10-07 compatibility follow-up covers Build 25759268 / 1.0.2.44eb: initialization resolves the actual game UClass from the observed `Table` and `table` paths, merges aliases only when their addresses match, and validates its type and full name. Required methods and short-name enumeration use that class's reflected name; candidate discovery and dispatch reacquisition also check `IsA` against the resolved class. Missing, invalid or ambiguous classes and missing methods stop automation. Both spellings, alias resolution, rejected lookups, stock-aware dispatch and reload stops have offline coverage; the updated runtime still needs new-build host/client gameplay acceptance.
+
 ### Offline checks
 
 From the repository root:
@@ -59,6 +61,8 @@ After a closed-game initial installation, follow the [shared reload configuratio
 
 Confirmed orders remain in game state and outstanding orders are reread. The stop-marker lifecycle above prevents uncertain calls from replaying; script reload does not clear a current-world stop. Re-enter the session to reset that state. Removal requires closing the game.
 
+A startup failure such as a missing API leaves a stop marker that also applies to later worlds. After updating the scripts, fully restart the game; Ctrl+R or re-entering the restaurant does not clear that startup marker.
+
 ## 中文
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.1，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
@@ -74,6 +78,8 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 热重载仅交接标量停止标记：请求前持久化、成功后清除，避免中断或结果不明的订单被 Ctrl+R 重放。卸载时按加载器能力取消计时器，使旧回调失效，不访问游戏对象。暂时失去玩家控制不会解除停止，进入不同世界才重置。不写入存档额外数据，不需要原生 DLL。
 
 本地 API 和原生 AI 路径核对基于 Steam Build 25532071 / 1.0.1.44eb，以及本机 UE4SS experimental 源码。所有分析和参考资料保留在被忽略的 `work/` 中。源码核对和离线测试不等同于真实引擎桥接及实机验收。
+
+2026-10-07 的兼容修复核对覆盖 Build 25759268 / 1.0.2.44eb：初始化从已观察到的 `Table` 和 `table` 路径解析真实游戏 UClass，仅将地址相同的结果视作同一类别名，并校验类型和完整名称。所需方法及短名枚举使用该类的真实反射名称，候选发现和派发前重新查找还通过 `IsA` 核对对象类型。类缺失、无效、冲突或方法缺失时停止自动化。离线验证覆盖两种拼写、别名、查询拒绝、库存感知下单及重载停止；更新后的运行逻辑仍待新版房主／客机实机验收。
 
 ### 离线验证
 
@@ -103,3 +109,5 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 首次关闭游戏安装后，可按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/docs/hot-reload.md#中文)设置加载器。完整复制 `Scripts/main.lua` 和 `Scripts/game.lua` 后，再按 **Ctrl+R**。
 
 已确认订单保留在游戏状态中，未完成订单重新读取。上方停止标记机制防止结果不明的请求被重放；脚本重载不会清除当前世界的停止状态，重新进入会话后才重置。卸载须关闭游戏。
+
+缺失 API 等启动失败会留下跨世界生效的停止标记。更新脚本后需要完整重启游戏；Ctrl+R 或重新进入餐厅均不会清除此启动停止标记。

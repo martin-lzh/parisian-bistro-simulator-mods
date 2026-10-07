@@ -4,6 +4,12 @@
 
 ## English
 
+### 2026-10-07: unreleased table lookup compatibility fix
+
+Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. The changes remain under `Unreleased`; the published versions and the 2026-09-26 acceptance record are unchanged.
+
+Offline regressions cover both spellings, consistent instance discovery and reacquisition, and refusal of missing or conflicting class/API results. Actual startup, cleanup/remake behavior, stock-aware ordering and host/guest behavior on the updated game still require in-game acceptance. No Mod was installed and no game session or save was modified for this fix. After installing the updated scripts, fully restart the game: reloading scripts preserves an earlier safety-stop marker.
+
 ### 2026-09-26: stable release authorization after in-game and multiplayer testing
 
 The maintainer confirmed: “现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版” (“Remove the dev suffix from all current Mods; all passed in-game and multiplayer testing and may be released as stable versions.”). This feedback applies to the current source at `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`, including the later language-recovery and UI changes, and authorizes these stable releases:
@@ -99,6 +105,12 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-10-07：待发布的餐桌查询兼容性修复
+
+焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。改动记入 `Unreleased`；已发布版本与 2026-09-26 的验收记录保持不变。
+
+离线回归覆盖两种拼写、实例发现与重新获取的一致性，以及类或接口缺失、冲突时停止执行。新版游戏的真实启动、清理与重做、缺货等待及补货下单、房主／客机行为仍需实机验收。本次修复没有安装 Mod，也没有修改游戏会话或存档。安装更新脚本后应完整重启游戏：脚本重载会保留先前的安全停止标记。
 
 ### 2026-09-26：实机与联机测试通过，授权正式发布
 

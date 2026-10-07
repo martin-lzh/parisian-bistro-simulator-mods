@@ -56,6 +56,8 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. Authoritative cleanup polls once per second. Rejected replacement requests have at most three attempts, separated by at least 10 seconds; pending tickets expire after 120 seconds. Customer and patience checks run again before each request.
 
+The unreleased adapter also handles the table-class spelling observed in Steam Build 25759268 while retaining the earlier spelling. It resolves both known paths as UClasses, deduplicates aliases by address, and uses the selected class's actual name for method checks and instance scans. Missing classes/methods, unexpected class identity or distinct candidates stop initialization. Reacquired tables must pass `IsA` before actor access. Synthetic tests exercise both spellings through food/drink cleanup, rejected remakes and fresh-wrapper notification rebinding; they do not establish new-build gameplay acceptance.
+
 No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED` and `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not completed delivery. Include game/loader versions and host/client role when interpreting a report.
 
 ### Manual script reload
@@ -63,6 +65,8 @@ No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`:
 The first upgrade from pre-0.1.2 code requires a closed-game installation. In `UE4SS-settings.ini`, configure `[General]` with `EnableHotReloadSystem = 1`, `HotReloadKey = R` and `EnableAutoReloadingLuaMods = 0`; see the [shared reload guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/docs/hot-reload.md#english). Restart once after configuring. Copy every updated script before pressing **Ctrl+R**, which reloads all enabled Lua Mods.
 
 The checkpoint implementation above defines preserved pending work and safety stops; verify those invariants with the reload regression scenarios.
+
+If the old adapter stopped at startup because a table API was missing, install the compatible scripts with the game closed and restart the game. Ctrl+R preserves the shared safety-stop marker and does not clear that earlier failure.
 
 ## 中文
 
@@ -106,6 +110,8 @@ The checkpoint implementation above defines preserved pending work and safety st
 
 本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。房主每秒检查清理一次。被拒绝的补单最多尝试 3 次、至少间隔 10 秒，待处理凭据 120 秒后到期；每次请求重新核对顾客与耐心。
 
+未发布适配同时支持 Steam Build 25759268 中观察到的餐桌类拼写及此前拼写。查询两种已知路径并确认 UClass，按地址合并别名，以实际类名统一检查方法和枚举实例。类／方法缺失、类身份不符或出现不同候选类时停止初始化；重查餐桌先通过 `IsA` 再访问 Actor 接口。合成测试对两种拼写执行食物／饮料清理、拒绝补单及新对象包装下的通知重新绑定，不代表新版本实机验收通过。
+
 本 Mod 不自行添加玩家界面文案。诊断前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）及 `ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达；分析反馈时需同时记录游戏/加载器版本及房主/客机身份。
 
 ### 手动脚本重载
@@ -113,3 +119,5 @@ The checkpoint implementation above defines preserved pending work and safety st
 从 0.1.2 之前的代码首次升级须关闭游戏。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/docs/hot-reload.md#中文)，设置后重启一次。复制完全部更新脚本后再按 **Ctrl+R**；该操作会重载所有已启用 Lua Mod。
 
 上方检查点实现定义待处理工作与安全停止的保留规则，需按重载回归场景核对这些约束。
+
+若旧适配器因餐桌接口缺失在启动时停止，请关闭游戏后安装兼容脚本并完整重启游戏。Ctrl+R 会保留共享的安全停止标记，无法清除此前的启动失败。
