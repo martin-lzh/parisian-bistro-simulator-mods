@@ -4,10 +4,12 @@
 
 ## English
 
-Start with the [Mod list](README.md#english) and the installation guide for your Mod.
+Start with the [installation steps from a game-only setup](README.md#manual-download-and-installation) or the [Vortex setup guide](vortex-extension/README.md#english), then read your Mod's gameplay instructions.
 
 ### Download or installation problems
 
+- **Vortex asks for Premium when adding the collection:** one-click collection installation currently requires an active Nexus Premium membership. A free account can still download individual Mod ZIPs; install those manually or import them through Vortex's **Install From File**, enable them and deploy. GitHub downloads need no account. The game extension and UE4SS must be installed separately even with Premium.
+- **Windows reports a missing `VCRUNTIME140`, `MSVCP140` or related DLL:** install or repair [Microsoft Visual C++ v14 Redistributable X64](https://aka.ms/vc14/vc_redist.x64.exe), then restart if requested. Do not download loose DLLs from other sites.
 - **GitHub shows 404 or no download:** this repository is public and downloads do not require sign-in. Check the URL and open [Mod Releases](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases). Use the version link in the Mod guide, then download its ZIP under **Assets**. For missing files, contact the maintainer through an existing contact or an [issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues).
 - **The download contains more ZIPs:** CI artifacts contain an outer `mod-packages` archive; extract that first, then the individual Mod ZIP. Release attachments are individual Mod ZIPs. Do not install the Source code archive.
 - **The Mod does not appear:** check the folder layout. For example, use `Mods/AutoMenu/Scripts/main.lua` and `Mods/AutoMenu/enabled.txt`, not `Mods/AutoMenu/AutoMenu/Scripts/main.lua`. Keep every file from the package, including a DLL when present.
@@ -28,10 +30,12 @@ Review attachments for usernames, local paths, room codes and other private info
 
 ## 中文
 
-先查看 [Mod 列表](README.md#中文)及对应安装说明。
+先按[从仅有游戏开始的安装步骤](README.md#手动下载与安装)或 [Vortex 安装说明](vortex-extension/README.md#中文)操作，再阅读对应 Mod 的游戏内使用方法。
 
 ### 下载或安装遇到问题
 
+- **Vortex 添加合集时要求 Premium：**目前合集一键安装需要有效的 Nexus Premium 会员。免费账号仍可逐个下载 Mod ZIP，手动安装，或通过 Vortex 的 **Install From File（从文件安装）**导入，再启用并部署。GitHub 下载无需账号。即使有 Premium，也必须另行安装游戏扩展和 UE4SS。
+- **Windows 提示缺少 `VCRUNTIME140`、`MSVCP140` 等 DLL：**安装或修复 [Microsoft Visual C++ v14 Redistributable X64](https://aka.ms/vc14/vc_redist.x64.exe)，按提示重启电脑。不要从其他网站下载单个 DLL。
 - **GitHub 显示 404 或找不到下载：**仓库已公开，下载无需登录。请检查链接地址，打开 [Mod 正式版本](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases)，或使用 Mod 说明中的版本链接，在 **Assets** 下载 ZIP。文件缺失时，通过已有联系方式或 [Issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues)联系维护者。
 - **解压后还有 ZIP：**CI artifact 包含外层 `mod-packages` 压缩包，先解压外层，再解压单个 Mod ZIP。Release 附件直接提供各 Mod ZIP。不要安装 Source code 源码包。
 - **Mod 没有出现：**检查目录层级，例如应有 `Mods/AutoMenu/Scripts/main.lua` 和 `Mods/AutoMenu/enabled.txt`，不能多套成 `Mods/AutoMenu/AutoMenu/Scripts/main.lua`。保留安装包内全部文件，包含其中已有的 DLL。
