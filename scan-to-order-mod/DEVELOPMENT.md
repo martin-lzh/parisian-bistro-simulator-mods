@@ -4,7 +4,7 @@
 
 ## English
 
-Current source version: **0.1.2**, supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. It is not yet published. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. The historical 0.1.1 acceptance below remains separate.
+Current version: **0.1.2**, supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. The historical 0.1.1 acceptance below remains separate.
 
 The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.1 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
 
@@ -67,7 +67,7 @@ A startup failure such as a missing API leaves a stop marker that also applies t
 
 ## 中文
 
-当前源码版本为 **0.1.2**，支持至 **Steam Build 25759268 / 1.0.2.44eb**，尚未发布。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。下方 0.1.1 的历史验收继续分别记录。
+当前版本为 **0.1.2**，支持至 **Steam Build 25759268 / 1.0.2.44eb**。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。下方 0.1.1 的历史验收继续分别记录。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.1，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 

@@ -20,7 +20,7 @@ The maintainer confirmed in-game testing passed and requested that all seven Mod
 
 The maintainer's confirmation is the basis for this in-game pass and compatibility record. Individual regression scenarios and a new multiplayer retest were not reported separately; the 2026-09-26 multiplayer record remains historical evidence. Existing host/guest restrictions still apply. The other five Mods retain their versions and gameplay logic.
 
-Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. At the maintainer's request, Fresh to Serve advances from 0.1.2 to 0.1.3 and Scan to Order from 0.1.1 to 0.1.2 in the compatibility PR. These patches are pending publication; the published packages and the 2026-09-26 acceptance record are unchanged.
+Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. At the maintainer's request, Fresh to Serve advances from 0.1.2 to 0.1.3 and Scan to Order from 0.1.1 to 0.1.2 in the compatibility PR. The maintainer subsequently authorized publication of these two patch versions and a documentation refresh of the other five existing packages. The 2026-09-26 acceptance record remains historical.
 
 Offline regressions cover both spellings, consistent instance discovery and reacquisition, and refusal of missing or conflicting class/API results. These checks and installation verification are separate from the maintainer's in-game acceptance above. After installing the updated scripts, fully restart the game: reloading scripts preserves an earlier safety-stop marker.
 
@@ -136,7 +136,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 本次实机通过及兼容性记录以维护者确认为依据。未单独反馈各回归场景及新版联机复测结果；2026-09-26 的联机记录保留为历史证据，原有房主／客机限制继续适用。另外五款 Mod 保持原有版本及玩法逻辑。
 
-焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。按维护者要求，本次兼容 PR 将焕鲜上桌从 0.1.2 升至 0.1.3、扫码点餐从 0.1.1 升至 0.1.2。两个补丁尚待发布；已发布安装包与 2026-09-26 的验收记录保持不变。
+焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。按维护者要求，本次兼容 PR 将焕鲜上桌从 0.1.2 升至 0.1.3、扫码点餐从 0.1.1 升至 0.1.2。维护者随后授权发布这两个补丁，并更新另外五款现有安装包的文档；2026-09-26 的验收记录继续作为历史保留。
 
 离线回归覆盖两种拼写、实例发现与重新获取的一致性，以及类或接口缺失、冲突时停止执行。这些检查及安装校验与上方维护者确认的实机验收分别记录。安装更新脚本后应完整重启游戏：脚本重载会保留先前的安全停止标记。
 
