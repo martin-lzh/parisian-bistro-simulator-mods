@@ -5,6 +5,85 @@ local function tick(f)
     for _, ticket in ipairs(Game.candidates(f.api, session)) do Game.request(f.api, session, ticket) end
 end
 
+-- Literal reflection and short-name scans must agree with the actual UClass.
+-- Both supported builds must discover a table, reacquire it and bind orders.
+local prefix = '/Script/BrasserieSimulator.'
+for _, spelling in ipairs({ 'Table', 'table' }) do
+    local x = fixture(spelling)
+    local other = spelling == 'Table' and 'table' or 'Table'
+    x.api = Game.contract()
+    assert(x.api.table_name == spelling)
+    assert(x.api.table_class == x.reflection[prefix .. spelling])
+    local session = Game.session(x.api)
+    local tickets = Game.candidates(x.api, session)
+    assert(#tickets == 2)
+    assert(Game.request(x.api, session, tickets[1]))
+    assert(Game.request(x.api, session, tickets[2]))
+    tick(x)
+    assert(#x.calls == 2 and x.row.bDishOrdered and x.row.bDrinkOrdered)
+    local table_scans = 0
+    for _, name in ipairs(x.scans) do
+        assert(name ~= other, 'Must enumerate the resolved spelling')
+        if name == spelling then table_scans = table_scans + 1 end
+    end
+    assert(table_scans >= 4, 'Discovery and both requests must scan the resolved class')
+    for _, path in ipairs(x.lookups) do
+        assert(not path:find(prefix .. other .. ':', 1, true), 'Must validate the resolved methods')
+    end
+
+    -- Some lookup implementations accept both strings for the same UClass.
+    -- The class's actual spelling wins, even if the uppercase query found it.
+    x = fixture(spelling)
+    local alias = x.object('Class ' .. prefix .. spelling)
+    alias.address, alias.short_name, alias.is_class = x.api.table_class.address, spelling, true
+    x.reflection[prefix .. other] = alias
+    x.api = Game.contract(); tick(x)
+    assert(x.api.table_name == spelling and #x.calls == 2)
+
+    for _, method in ipairs({ 'IsTableOccupied', 'IsCustomerOrderWaitActive',
+        'GetCustomerWaitElapsedTime', 'GetCustomerWaitTime' }) do
+        for _, invalid in ipairs({ false, true }) do
+            x = fixture(spelling)
+            local path = prefix .. spelling .. ':' .. method
+            x.reflection[prefix .. other .. ':' .. method] = x.object('other-method')
+            if invalid then x.reflection[path].valid = false else x.reflection[path] = nil end
+            local ok, err = pcall(Game.contract)
+            assert(not ok and tostring(err):find(path, 1, true) and #x.calls == 0,
+                'A missing selected-class method cannot be borrowed from the other spelling')
+        end
+    end
+end
+
+for _, change in ipairs({
+    function(x) x.reflection[prefix .. 'table'] = nil end,
+    function(x) x.api.table_class.valid = false end,
+    function(x) x.api.table_class.is_class = false end,
+    function(x) x.api.table_class.name = 'Class /Script/Other.table' end,
+    function(x) x.api.table_class.short_name = 'TABLE' end,
+    function(x)
+        local conflicting = x.object('Class ' .. prefix .. 'Table')
+        conflicting.short_name, conflicting.is_class = 'Table', true
+        x.reflection[prefix .. 'Table'] = conflicting
+    end,
+}) do
+    local x = fixture(); change(x)
+    assert(not pcall(Game.contract) and #x.calls == 0)
+end
+
+-- A short-name collision must never reach table methods or native ordering.
+local x = fixture('Table'); x.api = Game.contract()
+local unrelated = x.object('unrelated'); unrelated.class = x.object('other-class')
+function unrelated:IsTableOccupied() error('Unrelated class cannot be read as a table') end
+function unrelated:IsActorBeingDestroyed() error('Unrelated class cannot be read as an actor') end
+x.objects.Table = { unrelated, x.table }
+local session = Game.session(x.api)
+local tickets = Game.candidates(x.api, session)
+assert(#tickets == 2)
+x.table.class = unrelated.class
+function x.table:IsActorBeingDestroyed() error('Changed class cannot be read as an actor') end
+assert(not Game.request(x.api, session, tickets[1]) and #x.calls == 0)
+assert(#Game.candidates(x.api, session) == 0)
+
 -- Independent items: a missing meal must not block an available drink; refill
 -- resumes the existing customer order and accepted orders cannot repeat.
 local f = fixture(); f.stock[12] = 0
@@ -104,4 +183,4 @@ for _, change in ipairs({
 }) do
     f = fixture(); change(f); assert(not pcall(tick, f) and #f.calls == 0)
 end
-print('game_spec: restocking, native orders, stock contention, customers, authority and uncertainty passed')
+print('game_spec: class resolution, table discovery, restocking, native orders, authority and uncertainty passed')

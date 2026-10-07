@@ -4,6 +4,8 @@
 
 ## English
 
+Current source version: **0.1.3**, an unpublished compatibility update supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. `python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`; the version has not been published.
+
 The adapter uses locally checked reflected game/engine APIs. No executable patches, native addresses, custom memory layouts or game assets are distributed. Research stays in ignored `work/`; implementation, fixtures and documentation are original.
 
 `game.lua` scans current-world authoritative kitchen pickup queues and registered elevator serving slots. After rechecking quality and pickup/consumption state, native pickup bookkeeping releases the slot and wakes chefs. The adapter verifies and removes only the temporary taken-out entry this call added, preserving existing reservations, then destroys the spoiled actor. Fixed pass indices and capacity are retained. Normal preparation FastArray entries are never edited directly. Cleanup removes the plate too, without reproducing trash animation, bin filling or dirty-plate recovery.
@@ -56,6 +58,8 @@ Builds never install, change saves or start/stop the game. A numbered release re
 
 The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. Authoritative cleanup polls once per second. Rejected replacement requests have at most three attempts, separated by at least 10 seconds; pending tickets expire after 120 seconds. Customer and patience checks run again before each request.
 
+The 0.1.3 adapter also handles the table-class spelling observed in Steam Build 25759268 / 1.0.2.44eb while retaining the earlier spelling. It resolves both known paths as UClasses, deduplicates aliases by address, and uses the selected class's actual name for method checks and instance scans. Missing classes/methods, unexpected class identity or distinct candidates stop initialization. Reacquired tables must pass `IsA` before actor access. Synthetic tests exercise both spellings through food/drink cleanup, rejected remakes and fresh-wrapper notification rebinding. New-build in-game acceptance is based on the maintainer's 2026-10-07 confirmation, independently of these offline checks.
+
 No player-facing text is authored by this Mod. Diagnostics use `[FreshToServe]`: `DISCARDED`, `REQUEUED`, `SKIPPED`, `DEFERRED` and `ERROR`. `REQUEUED` confirms a new kitchen/bar queue entry, not completed delivery. Include game/loader versions and host/client role when interpreting a report.
 
 ### Manual script reload
@@ -64,7 +68,11 @@ The first upgrade from pre-0.1.2 code requires a closed-game installation. In `U
 
 The checkpoint implementation above defines preserved pending work and safety stops; verify those invariants with the reload regression scenarios.
 
+If the old adapter stopped at startup because a table API was missing, install the compatible scripts with the game closed and restart the game. Ctrl+R preserves the shared safety-stop marker and does not clear that earlier failure.
+
 ## 中文
+
+当前源码版本为 **0.1.3**，是支持至 **Steam Build 25759268 / 1.0.2.44eb** 的未发布兼容更新。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包，此版本尚未正式发布。
 
 适配器使用本机核对过的游戏及引擎反射接口，不分发可执行补丁、原生地址、自定义内存布局或游戏资产。研究仅放在被忽略的 `work/`；实现、合成夹具及文档为原创。
 
@@ -106,6 +114,8 @@ The checkpoint implementation above defines preserved pending work and safety st
 
 本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。房主每秒检查清理一次。被拒绝的补单最多尝试 3 次、至少间隔 10 秒，待处理凭据 120 秒后到期；每次请求重新核对顾客与耐心。
 
+0.1.3 适配同时支持 Steam Build 25759268 / 1.0.2.44eb 中观察到的餐桌类拼写及此前拼写。查询两种已知路径并确认 UClass，按地址合并别名，以实际类名统一检查方法和枚举实例。类／方法缺失、类身份不符或出现不同候选类时停止初始化；重查餐桌先通过 `IsA` 再访问 Actor 接口。合成测试对两种拼写执行食物／饮料清理、拒绝补单及新对象包装下的通知重新绑定。新版实机验收以维护者 2026-10-07 的确认作为依据，与这些离线检查分别记录。
+
 本 Mod 不自行添加玩家界面文案。诊断前缀为 `[FreshToServe]`：`DISCARDED`（已清理）、`REQUEUED`（已入队）、`SKIPPED`（跳过）、`DEFERRED`（延后）及 `ERROR`。`REQUEUED` 仅确认新增厨房/吧台订单，不代表送达；分析反馈时需同时记录游戏/加载器版本及房主/客机身份。
 
 ### 手动脚本重载
@@ -113,3 +123,5 @@ The checkpoint implementation above defines preserved pending work and safety st
 从 0.1.2 之前的代码首次升级须关闭游戏。在 `UE4SS-settings.ini` 的 `[General]` 设置 `EnableHotReloadSystem = 1`、`HotReloadKey = R`、`EnableAutoReloadingLuaMods = 0`，参见[统一重载说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/fresh-to-serve-v0.1.2/docs/hot-reload.md#中文)，设置后重启一次。复制完全部更新脚本后再按 **Ctrl+R**；该操作会重载所有已启用 Lua Mod。
 
 上方检查点实现定义待处理工作与安全停止的保留规则，需按重载回归场景核对这些约束。
+
+若旧适配器因餐桌接口缺失在启动时停止，请关闭游戏后安装兼容脚本并完整重启游戏。Ctrl+R 会保留共享的安全停止标记，无法清除此前的启动失败。

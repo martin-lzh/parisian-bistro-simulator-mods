@@ -4,6 +4,26 @@
 
 ## English
 
+### 2026-10-07: in-game acceptance through game 1.0.2.44eb
+
+The maintainer confirmed in-game testing passed and requested that all seven Mods be marked as supporting up to **Steam Build 25759268 / game 1.0.2.44eb**. This confirmation follows local testing with Fresh to Serve 0.1.3 and Scan to Order 0.1.2 installed from source `577d93ad630dc75545d0fca15dd0cc47e8f3ad30`. The supported versions are:
+
+| Mod | Version supporting game 1.0.2.44eb / Build 25759268 |
+| --- | --- |
+| Bartender's Note | 0.1.2 |
+| Auto Checkout | 0.1.4 |
+| Fresh to Serve | 0.1.3 |
+| First to Serve | 0.1.7 |
+| Smart Delivery | 0.1.5 |
+| Auto Menu | 0.5.0 |
+| Scan to Order | 0.1.2 |
+
+The maintainer's confirmation is the basis for this in-game pass and compatibility record. Individual regression scenarios and a new multiplayer retest were not reported separately; the 2026-09-26 multiplayer record remains historical evidence. Existing host/guest restrictions still apply. The other five Mods retain their versions and gameplay logic.
+
+Fresh to Serve and Scan to Order now resolve the game's actual table class spelling before checking its methods or finding table instances. This addresses their startup failure on Steam Build 25759268 / 1.0.2.44eb while retaining the earlier lowercase spelling. At the maintainer's request, Fresh to Serve advances from 0.1.2 to 0.1.3 and Scan to Order from 0.1.1 to 0.1.2 in the compatibility PR. These patches are pending publication; the published packages and the 2026-09-26 acceptance record are unchanged.
+
+Offline regressions cover both spellings, consistent instance discovery and reacquisition, and refusal of missing or conflicting class/API results. These checks and installation verification are separate from the maintainer's in-game acceptance above. After installing the updated scripts, fully restart the game: reloading scripts preserves an earlier safety-stop marker.
+
 ### 2026-09-26: stable release authorization after in-game and multiplayer testing
 
 The maintainer confirmed: “现在的mod应该都可以去掉dev标签了，全部通过了实机/联机测试，可以发布正式版” (“Remove the dev suffix from all current Mods; all passed in-game and multiplayer testing and may be released as stable versions.”). This feedback applies to the current source at `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`, including the later language-recovery and UI changes, and authorizes these stable releases:
@@ -99,6 +119,26 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-10-07：支持至游戏 1.0.2.44eb，实机验收通过
+
+维护者确认：“ok，很好，实机测试可以记为通过。给其他的mod也标注为支持至该版本。”据此记录本轮实机验收通过，全部七款 Mod 支持至 **Steam Build 25759268／游戏 1.0.2.44eb**。本次确认发生在从源码 `577d93ad630dc75545d0fca15dd0cc47e8f3ad30` 安装焕鲜上桌 0.1.3 与扫码点餐 0.1.2 并开展本地测试之后。支持版本如下：
+
+| Mod | 支持游戏 1.0.2.44eb／Build 25759268 的版本 |
+| --- | --- |
+| Bartender's Note（调饮手记） | 0.1.2 |
+| Auto Checkout（收银管家） | 0.1.4 |
+| Fresh to Serve（焕鲜上桌） | 0.1.3 |
+| First to Serve（出餐有序） | 0.1.7 |
+| Smart Delivery（配送随心） | 0.1.5 |
+| Auto Menu（菜单巧配） | 0.5.0 |
+| Scan to Order（扫码点餐） | 0.1.2 |
+
+本次实机通过及兼容性记录以维护者确认为依据。未单独反馈各回归场景及新版联机复测结果；2026-09-26 的联机记录保留为历史证据，原有房主／客机限制继续适用。另外五款 Mod 保持原有版本及玩法逻辑。
+
+焕鲜上桌与扫码点餐现先解析游戏实际的餐桌类名，再检查方法和查找餐桌实例，修复 Steam Build 25759268 / 1.0.2.44eb 上的启动失败，同时保留旧版小写名称兼容。按维护者要求，本次兼容 PR 将焕鲜上桌从 0.1.2 升至 0.1.3、扫码点餐从 0.1.1 升至 0.1.2。两个补丁尚待发布；已发布安装包与 2026-09-26 的验收记录保持不变。
+
+离线回归覆盖两种拼写、实例发现与重新获取的一致性，以及类或接口缺失、冲突时停止执行。这些检查及安装校验与上方维护者确认的实机验收分别记录。安装更新脚本后应完整重启游戏：脚本重载会保留先前的安全停止标记。
 
 ### 2026-09-26：实机与联机测试通过，授权正式发布
 

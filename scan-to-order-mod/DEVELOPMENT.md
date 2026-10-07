@@ -4,6 +4,8 @@
 
 ## English
 
+Current source version: **0.1.2**, supporting the game through **Steam Build 25759268 / 1.0.2.44eb**. It is not yet published. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. The historical 0.1.1 acceptance below remains separate.
+
 The maintainer confirmed in-game and multiplayer testing passed and authorized 0.1.1 on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#english). The checklist remains a regression reference; individual results were not reported separately.
 
 The independent Lua Mod polls on the game thread once per second. It requires an authoritative local controller and possessed player in one world. Table, customer, producer and service objects must belong to that world. A client, paused game or missing possession never dispatches an order.
@@ -17,6 +19,8 @@ Catalog rows are read as references, with their schema, validity, mapping and un
 Only a scalar stop marker is shared across reload. It is persisted before dispatch and cleared after success, preventing an interrupted or uncertain request from replaying after Ctrl+R. Unload cancels the timer when supported and makes old callbacks inert without accessing game objects. Temporary loss of possession does not clear a stop; a different world does. There is no persistent save modification or native DLL.
 
 Local API and native AI routing checks used Steam Build 25532071 / 1.0.1.44eb and the locally available UE4SS experimental source. All analysis and reference material remains under ignored `work/`. That evidence and the offline tests do not establish real engine bridging or gameplay acceptance.
+
+The 2026-10-07 compatibility follow-up covers Build 25759268 / 1.0.2.44eb: initialization resolves the actual game UClass from the observed `Table` and `table` paths, merges aliases only when their addresses match, and validates its type and full name. Required methods and short-name enumeration use that class's reflected name; candidate discovery and dispatch reacquisition also check `IsA` against the resolved class. Missing, invalid or ambiguous classes and missing methods stop automation. Both spellings, alias resolution, rejected lookups, stock-aware dispatch and reload stops have offline coverage. New-build in-game acceptance is based on the maintainer's 2026-10-07 confirmation, independently of these offline checks.
 
 ### Offline checks
 
@@ -49,7 +53,7 @@ Keep the game installation read-only during development. Gameplay acceptance mus
 
 ### Loader, output and diagnostics
 
-The checked loader API is UE4SS experimental `v3.0.1-1140-gf58e8f84`, for the Windows / Unreal Engine 5.4 baseline above. Old stable UE4SS 3.0.1 is not the target. Build output is `outputs/scan-to-order/ScanToOrder-0.1.1.zip` and its SHA-256 file.
+The checked loader API is UE4SS experimental `v3.0.1-1140-gf58e8f84`, for the Windows / Unreal Engine 5.4 baseline above. Old stable UE4SS 3.0.1 is not the target. Build output is `outputs/scan-to-order/ScanToOrder-0.1.2.zip` and its SHA-256 file.
 
 No in-game wording is added; native order text remains localized by the game. Technical log prefix `[ScanToOrder]` includes `START`, confirmed `ORDER` and `ERROR`. An order event is logged only after native queue binding confirms acceptance.
 
@@ -59,7 +63,11 @@ After a closed-game initial installation, follow the [shared reload configuratio
 
 Confirmed orders remain in game state and outstanding orders are reread. The stop-marker lifecycle above prevents uncertain calls from replaying; script reload does not clear a current-world stop. Re-enter the session to reset that state. Removal requires closing the game.
 
+A startup failure such as a missing API leaves a stop marker that also applies to later worlds. After updating the scripts, fully restart the game; Ctrl+R or re-entering the restaurant does not clear that startup marker.
+
 ## 中文
+
+当前源码版本为 **0.1.2**，支持至 **Steam Build 25759268 / 1.0.2.44eb**，尚未发布。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。下方 0.1.1 的历史验收继续分别记录。
 
 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，正式版本为 0.1.1，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/releases/validation.md#中文)。清单保留作为回归参考，未单独反馈逐项结果。
 
@@ -74,6 +82,8 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 热重载仅交接标量停止标记：请求前持久化、成功后清除，避免中断或结果不明的订单被 Ctrl+R 重放。卸载时按加载器能力取消计时器，使旧回调失效，不访问游戏对象。暂时失去玩家控制不会解除停止，进入不同世界才重置。不写入存档额外数据，不需要原生 DLL。
 
 本地 API 和原生 AI 路径核对基于 Steam Build 25532071 / 1.0.1.44eb，以及本机 UE4SS experimental 源码。所有分析和参考资料保留在被忽略的 `work/` 中。源码核对和离线测试不等同于真实引擎桥接及实机验收。
+
+2026-10-07 的兼容修复核对覆盖 Build 25759268 / 1.0.2.44eb：初始化从已观察到的 `Table` 和 `table` 路径解析真实游戏 UClass，仅将地址相同的结果视作同一类别名，并校验类型和完整名称。所需方法及短名枚举使用该类的真实反射名称，候选发现和派发前重新查找还通过 `IsA` 核对对象类型。类缺失、无效、冲突或方法缺失时停止自动化。离线验证覆盖两种拼写、别名、查询拒绝、库存感知下单及重载停止。新版实机验收以维护者 2026-10-07 的确认作为依据，与这些离线检查分别记录。
 
 ### 离线验证
 
@@ -94,7 +104,7 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 
 ### 加载器、产物与诊断
 
-核对的加载器 API 为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，适用于上文 Windows / Unreal Engine 5.4 参考基线；不以旧稳定版 UE4SS 3.0.1 为目标。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.1.zip` 及 SHA-256 文件。
+核对的加载器 API 为 UE4SS experimental `v3.0.1-1140-gf58e8f84`，适用于上文 Windows / Unreal Engine 5.4 参考基线；不以旧稳定版 UE4SS 3.0.1 为目标。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.2.zip` 及 SHA-256 文件。
 
 不新增游戏内文案，订单文字沿用游戏本地化。技术日志前缀 `[ScanToOrder]` 包含 `START`、已确认的 `ORDER` 和 `ERROR`；只有原生队列绑定确认接受后才记录成功订单。
 
@@ -103,3 +113,5 @@ Confirmed orders remain in game state and outstanding orders are reread. The sto
 首次关闭游戏安装后，可按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/scan-to-order-v0.1.1/docs/hot-reload.md#中文)设置加载器。完整复制 `Scripts/main.lua` 和 `Scripts/game.lua` 后，再按 **Ctrl+R**。
 
 已确认订单保留在游戏状态中，未完成订单重新读取。上方停止标记机制防止结果不明的请求被重放；脚本重载不会清除当前世界的停止状态，重新进入会话后才重置。卸载须关闭游戏。
+
+缺失 API 等启动失败会留下跨世界生效的停止标记。更新脚本后需要完整重启游戏；Ctrl+R 或重新进入餐厅均不会清除此启动停止标记。

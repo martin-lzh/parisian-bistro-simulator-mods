@@ -43,6 +43,7 @@ See [languages](docs/localization.md#english), [validation](releases/validation.
 | Path | Purpose | Tracked |
 | --- | --- | --- |
 | `<feature>-mod/` | Independent original Mod source, build entry point and documentation | Yes |
+| `vortex-extension/` | Original Vortex game support, installer tests and packaging | Yes |
 | `docs/` | Original design, compatibility and documentation index | Yes |
 | `tools/` | Original build, packaging and repository checks | Yes |
 | `releases/` | Version, authorization and validation records | Yes |
@@ -67,6 +68,10 @@ Each Mod owns its runtime and build inputs:
 | `DEVELOPMENT.md` | Implementation details and test checklist |
 | `CHANGELOG.md` | Pending changes and version history |
 | `LICENSE` | Complete MIT text, identical to the root license |
+
+### Vortex game support
+
+The [Vortex extension](vortex-extension/README.md#english) is packaged separately from gameplay Mods and is not part of automatic GitHub Releases. With Node.js 24, run `node --test vortex-extension/tests/*.test.js`, then `python vortex-extension/build.py`. CI runs these checks and uploads the `vortex-extension` artifact. Native Vortex installation checks must use an isolated fixture; game directories remain read-only.
 
 ### Mod images
 
@@ -164,6 +169,7 @@ cd parisian-bistro-simulator-mods
 | 路径 | 用途 | Git 跟踪 |
 | --- | --- | --- |
 | `<feature>-mod/` | 独立原创 Mod 源码、构建入口和文档 | 是 |
+| `vortex-extension/` | 原创 Vortex 游戏支持、安装器测试与打包 | 是 |
 | `docs/` | 原创设计、兼容性与文档索引 | 是 |
 | `tools/` | 原创构建、打包与仓库检查脚本 | 是 |
 | `releases/` | 版本、授权与验收记录 | 是 |
@@ -188,6 +194,10 @@ cd parisian-bistro-simulator-mods
 | `DEVELOPMENT.md` | 实现细节及验收清单 |
 | `CHANGELOG.md` | 待发布改动及版本历史 |
 | `LICENSE` | 与根目录一致的完整 MIT 许可 |
+
+### Vortex 游戏支持
+
+[Vortex 扩展](vortex-extension/README.md#中文)与游戏功能 Mod 分开打包，不参与 GitHub 自动发布。使用 Node.js 24 运行 `node --test vortex-extension/tests/*.test.js`，再执行 `python vortex-extension/build.py`。CI 执行相同验证并上传 `vortex-extension` 产物。Vortex 安装验证须使用隔离目录，游戏安装目录保持只读。
 
 ### Mod 图片
 

@@ -63,7 +63,33 @@ local function enum(path, suffix)
     return number(result)
 end
 
+local function table_type()
+    local selected, name
+    local prefix = '/Script/BrasserieSimulator.'
+    for _, spelling in ipairs({ 'Table', 'table' }) do
+        local class = StaticFindObject(prefix .. spelling)
+        if Game.valid(class) then
+            assert(class:IsClass(), 'Invalid Fresh to Serve table class')
+            local actual = class:GetFName():ToString()
+            assert((actual == 'Table' or actual == 'table')
+                and class:GetFullName() == 'Class ' .. prefix .. actual,
+                'Unexpected Fresh to Serve table class')
+            -- Case aliases may resolve the same native object. Distinct classes
+            -- are ambiguous even if only one exposes the required methods.
+            assert(not selected or same(selected, class), 'Ambiguous Fresh to Serve table class')
+            selected, name = class, actual
+        end
+    end
+    assert(selected, 'Missing Fresh to Serve table class: Table/table')
+    return selected, name
+end
+
 function Game.contract()
+    local table_class, table_name = table_type()
+    for _, method in ipairs({ 'IsTableOccupied', 'GetCustomerWaitElapsedTime',
+        'GetCustomerWaitTime', 'IsCustomerOrderWaitActive', 'OnRep_OrderNotifications' }) do
+        required('/Script/BrasserieSimulator.' .. table_name .. ':' .. method)
+    end
     for _, path in ipairs({
         '/Script/Engine.Actor:K2_DestroyActor', '/Script/Engine.Actor:ForceNetUpdate',
         '/Script/BrasserieSimulator.GenericDish:GetDishQuality',
@@ -72,12 +98,9 @@ function Game.contract()
         '/Script/BrasserieSimulator.KitchenManager:TryOrderDish',
         '/Script/BrasserieSimulator.NetPlayerController:Server_RequestRemoveDishFromSpawnQueue',
         '/Script/BrasserieSimulator.DishGameInstanceSubsystem:GetDish',
-        '/Script/BrasserieSimulator.table:GetCustomerWaitElapsedTime',
-        '/Script/BrasserieSimulator.table:GetCustomerWaitTime',
-        '/Script/BrasserieSimulator.table:IsCustomerOrderWaitActive',
-        '/Script/BrasserieSimulator.table:OnRep_OrderNotifications',
     }) do required(path) end
     local api = {
+        table_class = table_class, table_name = table_name,
         player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish = required('/Script/BrasserieSimulator.Dish'),
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
@@ -283,15 +306,16 @@ function Game.discard(api, session, candidate)
     return true
 end
 
-local function find_actor(class, id, world)
+local function find_actor(class, id, world, expected_class)
     for _, object in ipairs(FindAllOf(class) or {}) do
-        if actor(object, world) and identity(object) == id then return object end
+        if (not expected_class or (Game.valid(object) and object:IsA(expected_class))) and actor(object, world)
+            and identity(object) == id then return object end
     end
 end
 
 local function inspect(api, session, ticket)
     local route = assert(routes[ticket.kind], 'Unknown replacement kind')
-    local linked = find_actor('table', ticket.table, session.world)
+    local linked = find_actor(api.table_name, ticket.table, session.world, api.table_class)
     local kitchen = find_actor(route.manager, ticket.producer, session.world)
     local snapshot = { present = false }
     if not linked or linked.AssignedCustomerGroupId ~= ticket.group then return snapshot end

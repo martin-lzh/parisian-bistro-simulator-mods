@@ -4,7 +4,9 @@
 
 ## English
 
-Version 0.1.5 styles each selector's `WidgetStyle` and `ItemStyle` before attaching it to the Slate tree. The popup's `TextColor` and `SelectedTextColor` must be set separately from `ForegroundColor`. The palette uses charcoal surfaces, soft white text and muted green selection, converts sRGB values to linear Slate colors, and gives keyboard focus an outlined brush. The native arrow, font and selection behavior are retained. This Lua-only change can use the existing 0.1.4-dev reload support; the maintainer subsequently confirmed in-game and multiplayer testing passed for the current source. Disabled rendering remains a regression checklist scenario.
+**0.1.5 supports through game 1.0.2.44eb / Steam Build 25759268.** The maintainer confirmed new-build in-game testing passed on 2026-10-07. This compatibility documentation update leaves the Mod version and runtime files unchanged. The earlier 2026-09-26 multiplayer result remains a separate historical record; this update does not add a new-build multiplayer result. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
+
+Version 0.1.5 styles each selector's `WidgetStyle` and `ItemStyle` before attaching it to the Slate tree. The popup's `TextColor` and `SelectedTextColor` must be set separately from `ForegroundColor`. The palette uses charcoal surfaces, soft white text and muted green selection, converts sRGB values to linear Slate colors, and gives keyboard focus an outlined brush. The native arrow, font and selection behavior are retained. This Lua-only change can use the existing 0.1.4-dev reload support; the maintainer confirmed in-game and multiplayer testing passed on 2026-09-26. Disabled rendering remains a regression checklist scenario.
 
 Smart Delivery adds one UMG selector to the existing automatic smart-order dialog. It reads the three native delivery labels at runtime, uses the dialog font and explicit white dropdown text, preserves the Save/Cancel footer and resets unsaved changes whenever the native settings are repopulated. Only a local authoritative owner can change the preference. The preference is installation-wide and lives outside game saves.
 
@@ -30,7 +32,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler warnings are errors. The native executable harness exercises the generated dispatch code for every delivery mode, default routing, order-size boundaries, difficulty factors and register preservation. Synthetic PE fixtures cover moved code/data, different image bases, unrelated file changes, duplicate targets, changed operands, malformed unwind records, code conflicts and live fee data. Dispatch tests include discovered quantity thresholds of 4 and 7. A separate process verifies that an unrelated executable with no delivery registrations is rejected. Native discovery was also checked read-only against the installed Steam Build 25532071; detailed evidence remains in `work/smart-delivery-research/build-25532071/`. Lua tests cover preference parsing, recovery, Save/Cancel, host isolation and UI behavior. CI compares source files byte-for-byte and verifies the explicitly allowed generated DLL against build hashes; release verification uses the commit-bound CI evidence.
+The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler warnings are errors. The native executable harness exercises the generated dispatch code for every delivery mode, default routing, order-size boundaries, difficulty factors and register preservation. Synthetic PE fixtures cover moved code/data, different image bases, unrelated file changes, duplicate targets, changed operands, malformed unwind records, code conflicts and live fee data. Dispatch tests include discovered quantity thresholds of 4 and 7. A separate process verifies that an unrelated executable with no delivery registrations is rejected. The historical read-only native discovery baseline was Steam Build 25532071 / game 1.0.1.44eb, separate from the current support and in-game report above; detailed evidence remains in `work/smart-delivery-research/build-25532071/`. Lua tests cover preference parsing, recovery, Save/Cancel, host isolation and UI behavior. CI compares source files byte-for-byte and verifies the explicitly allowed generated DLL against build hashes; release verification uses the commit-bound CI evidence.
 
 ### In-game regression checklist
 
@@ -60,7 +62,9 @@ The lifecycle above discards unsaved selector changes, removes the old selector 
 
 ## 中文
 
-0.1.5 在选择框挂入 Slate 树之前设置实例的 `WidgetStyle` 和 `ItemStyle`。弹出列表的 `TextColor`、`SelectedTextColor` 必须独立于 `ForegroundColor` 设置。配色采用炭灰背景、柔白文字和低饱和绿色选中项，将 sRGB 值转换为 Slate 线性色彩，并为键盘焦点设置描边。保留原生箭头、字体和选择行为。本次仅修改 Lua，可沿用 0.1.4-dev 的热重载支持；维护者随后确认当前源码实机及联机测试全部通过；禁用效果继续列为回归检查场景。
+**0.1.5 支持至游戏 1.0.2.44eb / Steam Build 25759268。** 维护者于 2026-10-07 确认新版实机测试通过。本次兼容性文档更新保留 Mod 版本与运行文件。此前 2026-09-26 的联机结果仍为独立历史记录，本次未新增新版联机复测结果，见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+
+0.1.5 在选择框挂入 Slate 树之前设置实例的 `WidgetStyle` 和 `ItemStyle`。弹出列表的 `TextColor`、`SelectedTextColor` 必须独立于 `ForegroundColor` 设置。配色采用炭灰背景、柔白文字和低饱和绿色选中项，将 sRGB 值转换为 Slate 线性色彩，并为键盘焦点设置描边。保留原生箭头、字体和选择行为。该版本仅修改 Lua，可沿用 0.1.4-dev 的热重载支持；维护者于 2026-09-26 确认实机及联机测试全部通过；禁用效果继续列为回归检查场景。
 
 在原有自动智能订购窗口中增加一个 UMG 配送选择框，运行时读取原生配送名称并沿用窗口字体，下拉框使用明确的白色文字，保留底部保存/取消按钮；每次重新填充原生设置时恢复已保存选择。仅本地房主能修改偏好；偏好由同一安装下的餐厅共用，保存在游戏存档之外。
 
@@ -76,7 +80,7 @@ Lua 通过 `package.loadlib` 加载具名 C 入口；入口无参数、无 Lua �
 
 ### 离线验证
 
-命令见上方。构建需要 Windows x64、MSVC C++/MASM 和 Windows SDK，编译警告按错误处理。原生测试程序直接执行生成的分派代码，覆盖配送方式、默认分支、订单数量边界、难度倍率及寄存器保留；合成 PE 用例覆盖代码与数据移动、不同映像基址、无关文件变化、目标重复、操作数变化、异常展开记录、代码冲突及实时费用数据；分派执行用例覆盖动态取得的 4 和 7 两种数量阈值。另用独立进程确认不含配送注册信息的程序被拒绝。已对本机 Steam Build 25532071 只读核对原生定位结果，详细证据保存在 `work/smart-delivery-research/build-25532071/`。Lua 测试覆盖偏好解析、恢复、保存/取消、房主范围及界面行为。CI 逐字节核对源码文件，并对显式允许的原创 DLL 核验构建哈希；发布校验使用绑定提交的 CI 证据。
+命令见上方。构建需要 Windows x64、MSVC C++/MASM 和 Windows SDK，编译警告按错误处理。原生测试程序直接执行生成的分派代码，覆盖配送方式、默认分支、订单数量边界、难度倍率及寄存器保留；合成 PE 用例覆盖代码与数据移动、不同映像基址、无关文件变化、目标重复、操作数变化、异常展开记录、代码冲突及实时费用数据；分派执行用例覆盖动态取得的 4 和 7 两种数量阈值。另用独立进程确认不含配送注册信息的程序被拒绝。历史原生定位只读核对基线为 Steam Build 25532071 / 游戏 1.0.1.44eb，与上方当前支持版本及实机反馈分别记录；详细证据保存在 `work/smart-delivery-research/build-25532071/`。Lua 测试覆盖偏好解析、恢复、保存/取消、房主范围及界面行为。CI 逐字节核对源码文件，并对显式允许的原创 DLL 核验构建哈希；发布校验使用绑定提交的 CI 证据。
 
 ### 实机回归清单
 

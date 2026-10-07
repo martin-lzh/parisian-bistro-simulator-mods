@@ -63,6 +63,21 @@ jobs:
         with:
           version: '0.10.7'
           enable-cache: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Test and package Vortex game support
+        run: |
+          node --test vortex-extension/tests/*.test.js
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python vortex-extension/build.py
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: vortex-extension
+          path: outputs/vortex-extension/
+          if-no-files-found: error
+          retention-days: 14
       - name: Validate versions and test package checks
         run: |
           python tools/ci.py validate

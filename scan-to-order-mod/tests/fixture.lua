@@ -1,17 +1,21 @@
 -- Synthetic objects and order transitions, without game data or SDK exports.
-return function()
-    local f, serial = { stock = { [12] = 10, [34] = 10 }, calls = {}, paused = false }, 0
+return function(table_name)
+    table_name = table_name or 'table'
+    local f, serial = { stock = { [12] = 10, [34] = 10 }, calls = {}, paused = false,
+        lookups = {}, scans = {} }, 0
     local function object(name)
         serial = serial + 1
         local o = { name = name, address = serial, valid = true, authority = true }
         function o:IsValid() return self.valid end
         function o:GetAddress() return self.address end
         function o:GetFullName() return self.name end
+        function o:GetFName() return { ToString = function() return self.short_name or self.name end } end
+        function o:IsClass() return self.is_class == true end
         function o:GetWorld() return self.world or f.world end
         function o:HasAuthority() return self.authority end
         function o:HasAnyFlags() return self.template == true end
         function o:IsActorBeingDestroyed() return self.destroyed == true end
-        function o:IsA(class) return self.class == class end
+        function o:IsA(class) return self.class ~= nil and self.class:GetAddress() == class:GetAddress() end
         return o
     end
     local function array(values)
@@ -22,12 +26,15 @@ return function()
     local function guid(value) return { A = value or 0, B = 0, C = 0, D = 0 } end
     f.object, f.array, f.guid = object, array, guid
     f.world, f.player, f.controller = object('world'), object('player'), object('controller')
-    f.api = { player = object('player-class'), dish_data = object('dish-data-type'),
+    f.api = { table_name = table_name, table_class = object('Class /Script/BrasserieSimulator.' .. table_name),
+        player = object('player-class'), dish_data = object('dish-data-type'),
         gameplay = object('gameplay'), none = 0, silent = 0 }
+    f.api.table_class.short_name, f.api.table_class.is_class = table_name, true
     f.player.class, f.player.Controller, f.controller.Pawn = f.api.player, f.controller, f.player
     function f.controller:IsLocalController() return not self.remote end
     function f.api.gameplay:IsGamePaused() return f.paused end
     f.table = object('table')
+    f.table.class = f.api.table_class
     f.table.NumberOfCustomersSit, f.table.AssignedCustomerGroupId = 1, 8
     f.table.bTableHandledByPlayer, f.table.bBeingOrdered, f.table.bGroupCanBeCashedOut = false, false, false
     f.table.RepCustomerActors, f.table.OrderNotifications = array(), array()
@@ -109,8 +116,34 @@ return function()
     end
     function f.kitchen:TryOrderDish(...) order(self, 'Dish', ...) end
     function f.drinks:TryOrderDrink(...) order(self, 'Drink', ...) end
-    f.objects = { NetPlayerController = { f.controller }, ['table'] = { f.table },
+    f.objects = { NetPlayerController = { f.controller }, [table_name] = { f.table },
         KitchenManager = { f.kitchen }, DrinkManager = { f.drinks } }
-    FindAllOf = function(class) return f.objects[class] or {} end
+    FindAllOf = function(class)
+        f.scans[#f.scans + 1] = class
+        return f.objects[class] or {}
+    end
+    f.reflection = {
+        ['/Script/BrasserieSimulator.' .. table_name] = f.api.table_class,
+        ['/Script/BrasserieSimulator.PlayerCharacter'] = f.api.player,
+        ['/Script/BrasserieSimulator.DishData'] = f.api.dish_data,
+        ['/Script/Engine.Default__GameplayStatics'] = f.api.gameplay,
+    }
+    for _, name in ipairs({ table_name .. ':IsTableOccupied', table_name .. ':IsCustomerOrderWaitActive',
+        table_name .. ':GetCustomerWaitElapsedTime', table_name .. ':GetCustomerWaitTime',
+        'KitchenManager:TryOrderDish', 'DrinkManager:TryOrderDrink',
+        'StorageManager:HasEnoughIngredients', 'BrasserieManager:AreDishRequirementsMet',
+        'CustomerActor:GetCustomerBehaviorComponent', 'WorldGameInstanceSubsystem:GetBrasserieManager',
+        'WorldGameInstanceSubsystem:GetStorageManager', 'BrasserieManager:GetPatienceState' }) do
+        f.reflection['/Script/BrasserieSimulator.' .. name] = object(name)
+    end
+    for name, suffix in pairs({ EDishes = 'EDH_Unknown', EMissingNotifyPolicy = 'None' }) do
+        local value = object(name)
+        function value:ForEachName(callback) callback({ ToString = function() return suffix end }, 0) end
+        f.reflection['/Script/BrasserieSimulator.' .. name] = value
+    end
+    StaticFindObject = function(path)
+        f.lookups[#f.lookups + 1] = path
+        return f.reflection[path]
+    end
     return f
 end

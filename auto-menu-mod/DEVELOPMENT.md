@@ -4,7 +4,9 @@
 
 ## English
 
-**0.5.0.** The maintainer confirmed in-game and multiplayer testing passed on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#english) for its scope. Independent Lua Mod with an original Windows x64 helper. Local interfaces were checked on Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. All game references and native analysis remain in ignored `work/`.
+**0.5.0 supports through game 1.0.2.44eb / Steam Build 25759268.** The maintainer confirmed new-build in-game testing passed on 2026-10-07. The earlier in-game and multiplayer confirmation remains dated 2026-09-26; this update does not add a separate new-build multiplayer result. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for both reports. The Mod version and runtime files are unchanged.
+
+Independent Lua Mod with an original Windows x64 helper. The historical local interface baseline was Steam Build 25532071 / ProjectVersion 1.0.1.44eb and UE4SS experimental `v3.0.1-1140-gf58e8f84`. That development baseline is separate from the current support and in-game report above. All game references and native analysis remain in ignored `work/`.
 
 ### Implementation
 
@@ -63,7 +65,9 @@ Lua reload cannot replace `Scripts/auto_menu_bridge.dll`; close and restart the 
 
 ## 中文
 
-**0.5.0。** 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-menu-v0.5.0/releases/validation.md#中文)。独立 Lua Mod，新增原创 Windows x64 辅助模块。本机接口核对版本为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`。游戏参考和原生分析全部留在被忽略的 `work/`。
+**0.5.0 支持至游戏 1.0.2.44eb / Steam Build 25759268。** 维护者于 2026-10-07 确认新版实机测试通过。此前实机及联机测试通过并授权正式发布的记录仍为 2026-09-26，本次更新未新增独立的新版联机复测结果；两次反馈见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。Mod 版本与运行文件保持不变。
+
+独立 Lua Mod，包含原创 Windows x64 辅助模块。历史本机接口核对基线为 Steam Build 25532071 / ProjectVersion 1.0.1.44eb、UE4SS experimental `v3.0.1-1140-gf58e8f84`；此开发基线与上方当前支持版本及实机反馈分别记录。游戏参考和原生分析全部留在被忽略的 `work/`。
 
 ### 实现
 

@@ -37,6 +37,25 @@ local function required(path)
     assert(Game.valid(value), 'Missing Scan to Order API: ' .. path)
     return value
 end
+local function table_type()
+    local result, name
+    -- Full-path lookup spelling can differ between builds. Derive every later
+    -- lookup from the resolved UClass, including FindAllOf's short class name.
+    for _, spelling in ipairs({ 'Table', 'table' }) do
+        local value = StaticFindObject('/Script/BrasserieSimulator.' .. spelling)
+        if Game.valid(value) then
+            assert(value:IsClass(), 'Unsupported Scan to Order table class')
+            local actual = value:GetFName():ToString()
+            assert((actual == 'Table' or actual == 'table')
+                and value:GetFullName() == 'Class /Script/BrasserieSimulator.' .. actual,
+                'Unsupported Scan to Order table class')
+            assert(not result or same(result, value), 'Ambiguous Scan to Order table class')
+            result, name = value, actual
+        end
+    end
+    assert(result, 'Missing Scan to Order table class')
+    return result, name
+end
 local function enum(name, suffix)
     local result
     required('/Script/BrasserieSimulator.' .. name):ForEachName(function(key, value)
@@ -50,16 +69,20 @@ local function enum(name, suffix)
 end
 
 function Game.contract()
+    local table_class, table_name = table_type()
+    for _, name in ipairs({ 'IsTableOccupied', 'IsCustomerOrderWaitActive',
+        'GetCustomerWaitElapsedTime', 'GetCustomerWaitTime' }) do
+        required('/Script/BrasserieSimulator.' .. table_name .. ':' .. name)
+    end
     for _, name in ipairs({ 'KitchenManager:TryOrderDish', 'DrinkManager:TryOrderDrink',
         'StorageManager:HasEnoughIngredients', 'BrasserieManager:AreDishRequirementsMet',
         'CustomerActor:GetCustomerBehaviorComponent',
         'WorldGameInstanceSubsystem:GetBrasserieManager', 'WorldGameInstanceSubsystem:GetStorageManager',
-        'table:IsTableOccupied', 'table:IsCustomerOrderWaitActive',
-        'table:GetCustomerWaitElapsedTime', 'table:GetCustomerWaitTime',
         'BrasserieManager:GetPatienceState' }) do
         required('/Script/BrasserieSimulator.' .. name)
     end
-    return { player = required('/Script/BrasserieSimulator.PlayerCharacter'),
+    return { table_class = table_class, table_name = table_name,
+        player = required('/Script/BrasserieSimulator.PlayerCharacter'),
         dish_data = required('/Script/BrasserieSimulator.DishData'),
         gameplay = required('/Script/Engine.Default__GameplayStatics'),
         none = enum('EDishes', 'EDH_Unknown'), silent = enum('EMissingNotifyPolicy', 'None') }
@@ -107,8 +130,8 @@ end
 
 function Game.candidates(api, session)
     local result = {}
-    for _, linked in ipairs(FindAllOf('table') or {}) do
-        if available(session, linked) then
+    for _, linked in ipairs(FindAllOf(api.table_name) or {}) do
+        if Game.valid(linked) and linked:IsA(api.table_class) and available(session, linked) then
             for index = 1, linked.OrderNotifications:GetArrayNum() do
                 local notice = linked.OrderNotifications[index]
                 for _, kind in ipairs({ 'food', 'drink' }) do
@@ -126,10 +149,11 @@ function Game.candidates(api, session)
     return result
 end
 
-local function find_actor(class, id, world)
+local function find_actor(class, id, world, expected_class)
     local result
     for _, value in ipairs(FindAllOf(class) or {}) do
-        if actor(value, world) and (not id or identity(value) == id) then
+        if Game.valid(value) and (not expected_class or value:IsA(expected_class))
+            and actor(value, world) and (not id or identity(value) == id) then
             assert(not result, 'Ambiguous order object: ' .. class)
             result = value
         end
@@ -180,7 +204,7 @@ function Game.request(api, previous, ticket)
     local session = Game.session(api)
     if not session or session.id ~= previous.id or session.paused then return false, 'session-changed' end
     local route = assert(routes[ticket.kind], 'Unknown order kind')
-    local linked = find_actor('table', ticket.linked, session.world)
+    local linked = find_actor(api.table_name, ticket.linked, session.world, api.table_class)
     if not linked or not available(session, linked) or linked.AssignedCustomerGroupId ~= ticket.group then
         return false, 'table-changed'
     end

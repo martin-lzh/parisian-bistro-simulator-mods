@@ -5,6 +5,13 @@
 - Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
 - 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
 
+## 0.1.2
+
+- Support the game through Steam Build 25759268 / 1.0.2.44eb. The maintainer confirmed in-game testing passed on 2026-10-07; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). New-build multiplayer retesting was not separately reported. This version is not yet published.
+- Resolve the game's actual `Table`/`table` class for API checks, table discovery and order dispatch, retaining support for the prior spelling. Missing or conflicting classes and missing methods stop automation. Add offline regression coverage for both spellings, order dispatch and startup safety.
+- 支持至 Steam Build 25759268 / 1.0.2.44eb。维护者于 2026-10-07 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈新版联机复测结果。此版本尚未发布。
+- 解析游戏实际的 `Table`／`table` 类，统一接口检查、餐桌发现和订单派发，兼容旧拼写。类缺失、类冲突或方法缺失时停止自动化；新增两种拼写、订单派发及启动安全行为的离线回归验证。
+
 ## 0.1.1 - 2026-09-26
 
 ### Documentation update / 文档更新 — 2026-09-26
