@@ -43,7 +43,7 @@ Offline results are not in-game acceptance. No game process, installation files 
 
 ### Runtime compatibility
 
-Version 0.1.7 is supported through Steam Build 25759268 / 1.0.2.44eb following the maintainer's 2026-10-07 confirmation that in-game testing passed. See the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). This documentation update keeps the runtime and Mod version unchanged. The 2026-09-26 multiplayer report and original implementation reference below remain historical; a multiplayer retest on the new build was not separately reported.
+Current version: **0.1.7**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 The pickup-area reference is Windows, Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not the target. Report `[FirstToServe]` log lines together with the exact versions, language, keyboard/controller, host/guest role and targeted surface.
 
@@ -82,7 +82,7 @@ First to Serve 是独立的原创 UE4SS Lua Mod。先读[仓库开发规则](htt
 
 ### 运行兼容性
 
-维护者于 2026-10-07 确认新版实机测试通过，0.1.7 支持至 Steam Build 25759268 / 1.0.2.44eb，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。此次仅更新兼容性文档，运行代码与 Mod 版本不变。2026-09-26 的联机报告与下方原始实现参考保留为历史记录；本次未单独反馈新版联机重测结果。
+当前版本为 **0.1.7**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 出餐区域参考为 Windows、Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不以旧稳定版 UE4SS 3.0.1 为目标。分析 `[FirstToServe]` 日志时同时记录完整版本、语言、键鼠/手柄、房主/客机身份及目标台面。
 

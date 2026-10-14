@@ -35,9 +35,9 @@
 | [Auto Menu](auto-menu-mod/README.md#english) | Choose a lunch or dinner menu with the highest estimated selection rate | [0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
 | [Scan to Order](scan-to-order-mod/README.md#english) | Take customer orders automatically, waiting for missing stock and continuing after replenishment | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
 
-The maintainer confirmed all seven Mods passed in-game and multiplayer testing on 2026-09-26, followed by the updated-game acceptance below. Check each guide for host/guest requirements and gameplay limits; see the [validation record](releases/validation.md#english).
+The maintainer confirmed all seven Mods passed in-game and multiplayer testing on 2026-09-26, with later game compatibility records below. Check each guide for host/guest requirements and gameplay limits; see the [validation record](releases/validation.md#english).
 
-All seven Mods support up to **game 1.0.2.44eb / Steam Build 25759268**, following the maintainer's in-game acceptance on **2026-10-07**. This requires **Fresh to Serve 0.1.3** and **Scan to Order 0.1.2**, which fix table lookup failures; the other five Mods keep their listed versions with refreshed compatibility documentation. Use the GitHub versions above; on Nexus, check the file version before downloading. See the [current validation record](releases/validation.md#english) for supported versions and testing scope.
+All seven Mods support up to **game 1.0.2.44eb / Steam Build 25822788**, following the 2026-10-14 compatibility review and maintainer instruction. Use **Fresh to Serve 0.1.3** and **Scan to Order 0.1.2** for the earlier table lookup fix; all seven Mod versions remain unchanged. In-game acceptance is recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. Use the GitHub versions above; on Nexus, check the file version before downloading. See the [validation record](releases/validation.md#english) for the current support table and scope.
 
 ### Manual download and installation
 
@@ -116,9 +116,9 @@ Original Mod code and documentation are by **Zhaohan Liu**, under the [MIT Licen
 | [Auto Menu（菜单巧配）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | [0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
 | [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
 
-维护者于 2026-09-26 确认全部 7 个 Mod 实机及联机测试通过，之后追加下方新版游戏验收。房主／客机要求及玩法限制见各 Mod 说明，测试反馈见[验收记录](releases/validation.md#中文)。
+维护者于 2026-09-26 确认全部 7 个 Mod 实机及联机测试通过，之后追加下方游戏兼容记录。房主／客机要求及玩法限制见各 Mod 说明，测试反馈见[验收记录](releases/validation.md#中文)。
 
-维护者于 **2026-10-07** 确认新版实机测试通过，全部七款 Mod 标注支持至**游戏 1.0.2.44eb／Steam Build 25759268**。其中须使用修复餐桌查询失败的**焕鲜上桌 0.1.3** 和**扫码点餐 0.1.2**，另外五款沿用表中版本并更新兼容性文档。请使用上表 GitHub 版本；从 Nexus 下载时先核对文件版本。支持版本及测试范围见[当前验收记录](releases/validation.md#中文)。
+经 **2026-10-14** 兼容核对并按维护者要求，全部七款 Mod 标注支持至**游戏 1.0.2.44eb／Steam Build 25822788**。请使用含此前餐桌查询修复的**焕鲜上桌 0.1.3** 和**扫码点餐 0.1.2**；七款 Mod 版本均不变。实机验收仍对应 2026-10-07 的 Build 25759268，本次仅更新文档，运行代码不变，实机及联机测试跳过。请使用上表 GitHub 版本；从 Nexus 下载时先核对文件版本。支持版本及验证范围见[验证记录](releases/validation.md#中文)。
 
 ### 手动下载与安装
 

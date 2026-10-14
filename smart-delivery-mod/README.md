@@ -10,7 +10,7 @@ Choose Free service, Budget delivery or Premium delivery for automatic smart ord
 
 **Version: 0.1.5.** Single player or multiplayer host only. Only the host needs to install it; guests cannot edit the Mod's delivery choice.
 
-**Game compatibility: through 1.0.2.44eb (Steam Build 25759268).** The maintainer confirmed in-game testing passed on 2026-10-07.
+**Game support: through Steam Build 25822788 / 1.0.2.44eb.** Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 ### How to use
 
@@ -116,7 +116,7 @@ The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 2575
 
 **版本：0.1.5。** 仅单人或联机房主可设置，只需房主安装；客机不能修改 Mod 配送选项。
 
-**游戏兼容性：支持至 1.0.2.44eb（Steam Build 25759268）。** 维护者于 2026-10-07 确认新版实机测试通过。
+**游戏支持至 Steam Build 25822788 / 1.0.2.44eb。** 2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 ### 怎么使用
 

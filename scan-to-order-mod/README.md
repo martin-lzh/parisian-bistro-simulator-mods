@@ -8,7 +8,7 @@
 
 Automatically place seated customers' food and drink orders without a waiter or player taking them. No QR image or phone interaction is required.
 
-**Version: 0.1.2.** Supports the game through **Steam Build 25759268 / 1.0.2.44eb**, including the table compatibility fix with the prior build's spelling retained. The maintainer confirmed in-game testing passed on **2026-10-07**; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Multiplayer retesting on this build was not separately reported. Single player or multiplayer host only. Install it on the host; guests never send orders.
+**Version: 0.1.2.** **Game support: through Steam Build 25822788 / 1.0.2.44eb.** Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). Single player or multiplayer host only. Install it on the host; guests never send orders.
 
 ### How to use
 
@@ -96,7 +96,7 @@ The maintainer reported in-game and multiplayer testing passed for **0.1.1** on 
 
 自动为已入座顾客提交食物和饮料订单，无需服务员或玩家点餐，也不需要实际二维码或手机交互。
 
-**版本：0.1.2。** 支持至 **Steam Build 25759268 / 1.0.2.44eb**，包含餐桌兼容修复，并保留旧构建的餐桌拼写兼容。维护者于 **2026-10-07** 确认实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈此游戏版本的联机复测结果。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
+**版本：0.1.2。** **游戏支持至 Steam Build 25822788 / 1.0.2.44eb。** 2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。仅单人或联机房主运行，只需房主安装，客机不会提交订单。
 
 ### 怎么使用
 
