@@ -4,7 +4,7 @@
 
 ## English
 
-Current version: **0.1.5**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; gameplay and multiplayer acceptance on Build 25822788 have not been reported. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
+Current version: **0.1.5**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 Version 0.1.5 styles each selector's `WidgetStyle` and `ItemStyle` before attaching it to the Slate tree. The popup's `TextColor` and `SelectedTextColor` must be set separately from `ForegroundColor`. The palette uses charcoal surfaces, soft white text and muted green selection, converts sRGB values to linear Slate colors, and gives keyboard focus an outlined brush. The native arrow, font and selection behavior are retained. This Lua-only change can use the existing 0.1.4-dev reload support; the maintainer confirmed in-game and multiplayer testing passed on 2026-09-26. Disabled rendering remains a regression checklist scenario.
 
@@ -62,7 +62,7 @@ The lifecycle above discards unsaved selector changes, removes the old selector 
 
 ## 中文
 
-当前版本为 **0.1.5**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；Build 25822788 尚未报告玩法或联机验收。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+当前版本为 **0.1.5**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 0.1.5 在选择框挂入 Slate 树之前设置实例的 `WidgetStyle` 和 `ItemStyle`。弹出列表的 `TextColor`、`SelectedTextColor` 必须独立于 `ForegroundColor` 设置。配色采用炭灰背景、柔白文字和低饱和绿色选中项，将 sRGB 值转换为 Slate 线性色彩，并为键盘焦点设置描边。保留原生箭头、字体和选择行为。该版本仅修改 Lua，可沿用 0.1.4-dev 的热重载支持；维护者于 2026-09-26 确认实机及联机测试全部通过；禁用效果继续列为回归检查场景。
 

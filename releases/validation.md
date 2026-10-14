@@ -20,7 +20,7 @@ The maintainer requested extending all seven Mods' documented support to **Steam
 
 Source-correlated reflection and asset checks found no changes to the Mods' reviewed dependencies. All seven Lua suites passed; both native helpers' tests and discovery against the installed executable passed. Reviewed native instruction shapes matched the previous build after address normalization. The captured startup log showed no Mod API lookup failure or automation stop. These checks do not prove unchanged native behavior or gameplay.
 
-New-build gameplay and multiplayer acceptance have not been reported. The attempted live-code comparison did not complete after the game exited. The 2026-10-07 in-game acceptance and 2026-09-26 multiplayer confirmation remain tied to their historical builds. No Mod version change or release publication is authorized by this support update. Local extraction, mappings, disassembly, logs and research remain in ignored work/ and are not distributed.
+In-game and multiplayer testing for this documentation update is skipped at the maintainer’s request because runtime code is unchanged. The attempted live-code comparison did not complete after the game exited. The 2026-10-07 in-game acceptance and 2026-09-26 multiplayer confirmation remain tied to their historical builds. No Mod version change or release publication is authorized by this support update. Local extraction, mappings, disassembly, logs and research remain in ignored work/ and are not distributed.
 
 ### 2026-10-07: in-game acceptance through game 1.0.2.44eb
 
@@ -154,7 +154,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 按当前源码核对反射与资产，未发现所检查依赖发生变化；全部七套 Lua 测试通过，两个原生辅助模块的测试及本机新版 EXE 定位通过。检查范围内的原生指令形状在地址归一化后与此前一致；采集的启动日志未见 Mod 接口查询失败或自动化停止。这些检查不能证明原生行为或玩法完全相同。
 
-尚未报告新版玩法或联机验收。额外运行中代码比较未完成，随后确认游戏已退出。2026-10-07 的实机验收与 2026-09-26 的联机确认仍对应各自历史构建。本次支持标注不包含 Mod 版本变更或发布授权。提取、映射、反汇编、日志及研究资料仅在被忽略的 work/，不分发。
+按维护者要求，本次仅更新文档且运行代码不变，实机及联机测试跳过。额外运行中代码比较未完成，随后确认游戏已退出。2026-10-07 的实机验收与 2026-09-26 的联机确认仍对应各自历史构建。本次支持标注不包含 Mod 版本变更或发布授权。提取、映射、反汇编、日志及研究资料仅在被忽略的 work/，不分发。
 
 ### 2026-10-07：支持至游戏 1.0.2.44eb，实机验收通过
 
