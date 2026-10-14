@@ -38,7 +38,7 @@ A customer stands at the checkout counter, with the bill displayed on the regist
 
 ### Requirements
 
-**Game support: through Steam Build 25759268 / 1.0.2.44eb.** The maintainer confirmed in-game testing passed on 2026-10-07; see the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). The 2026-09-26 multiplayer confirmation remains historical; a multiplayer retest on the new build was not separately reported.
+**Game support: through Steam Build 25822788 / 1.0.2.44eb.** Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; gameplay and multiplayer acceptance on Build 25822788 have not been reported. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately.
 
@@ -127,7 +127,7 @@ In-game and multiplayer testing passed as reported by the maintainer on 2026-09-
 
 ### 使用要求
 
-**游戏支持至 Steam Build 25759268 / 1.0.2.44eb。** 维护者于 2026-10-07 确认新版实机测试通过，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。2026-09-26 的联机确认保留为历史记录，本次未单独反馈新版联机重测结果。
+**游戏支持至 Steam Build 25822788 / 1.0.2.44eb。** 2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；Build 25822788 尚未报告玩法或联机验收。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。
 

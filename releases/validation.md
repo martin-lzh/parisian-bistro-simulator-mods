@@ -4,6 +4,24 @@
 
 ## English
 
+### 2026-10-14: support through Steam Build 25822788
+
+The maintainer requested extending all seven Mods' documented support to **Steam Build 25822788 / game 1.0.2.44eb** after the compatibility review found no required source changes. Current supported versions are:
+
+| Mod | Version supporting Build 25822788 |
+| --- | --- |
+| Bartender's Note | 0.1.2 |
+| Auto Checkout | 0.1.4 |
+| Fresh to Serve | 0.1.3 |
+| First to Serve | 0.1.7 |
+| Smart Delivery | 0.1.5 |
+| Auto Menu | 0.5.0 |
+| Scan to Order | 0.1.2 |
+
+Source-correlated reflection and asset checks found no changes to the Mods' reviewed dependencies. All seven Lua suites passed; both native helpers' tests and discovery against the installed executable passed. Reviewed native instruction shapes matched the previous build after address normalization. The captured startup log showed no Mod API lookup failure or automation stop. These checks do not prove unchanged native behavior or gameplay.
+
+New-build gameplay and multiplayer acceptance have not been reported. The attempted live-code comparison did not complete after the game exited. The 2026-10-07 in-game acceptance and 2026-09-26 multiplayer confirmation remain tied to their historical builds. No Mod version change or release publication is authorized by this support update. Local extraction, mappings, disassembly, logs and research remain in ignored work/ and are not distributed.
+
 ### 2026-10-07: in-game acceptance through game 1.0.2.44eb
 
 The maintainer confirmed in-game testing passed and requested that all seven Mods be marked as supporting up to **Steam Build 25759268 / game 1.0.2.44eb**. This confirmation follows local testing with Fresh to Serve 0.1.3 and Scan to Order 0.1.2 installed from source `577d93ad630dc75545d0fca15dd0cc47e8f3ad30`. The supported versions are:
@@ -119,6 +137,24 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-10-14：支持至 Steam Build 25822788
+
+兼容核对未发现需要修改源码的变化后，维护者要求全部七款 Mod 的支持标注提高至 **Steam Build 25822788／游戏 1.0.2.44eb**。当前支持版本如下：
+
+| Mod | 支持 Build 25822788 的版本 |
+| --- | --- |
+| 调饮手记 | 0.1.2 |
+| 收银管家 | 0.1.4 |
+| 焕鲜上桌 | 0.1.3 |
+| 出餐有序 | 0.1.7 |
+| 配送随心 | 0.1.5 |
+| 菜单巧配 | 0.5.0 |
+| 扫码点餐 | 0.1.2 |
+
+按当前源码核对反射与资产，未发现所检查依赖发生变化；全部七套 Lua 测试通过，两个原生辅助模块的测试及本机新版 EXE 定位通过。检查范围内的原生指令形状在地址归一化后与此前一致；采集的启动日志未见 Mod 接口查询失败或自动化停止。这些检查不能证明原生行为或玩法完全相同。
+
+尚未报告新版玩法或联机验收。额外运行中代码比较未完成，随后确认游戏已退出。2026-10-07 的实机验收与 2026-09-26 的联机确认仍对应各自历史构建。本次支持标注不包含 Mod 版本变更或发布授权。提取、映射、反汇编、日志及研究资料仅在被忽略的 work/，不分发。
 
 ### 2026-10-07：支持至游戏 1.0.2.44eb，实机验收通过
 

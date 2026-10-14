@@ -68,7 +68,7 @@ The following remains a regression checklist, not a list of completed tests:
 
 ### Runtime compatibility
 
-Version 0.1.2 is supported through Steam Build 25759268 / 1.0.2.44eb following the maintainer's 2026-10-07 confirmation that in-game testing passed. See the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). This documentation update keeps the runtime and Mod version unchanged. The 2026-09-26 multiplayer report and original implementation reference below remain historical; a multiplayer retest on the new build was not separately reported.
+Current version: **0.1.2**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; gameplay and multiplayer acceptance on Build 25822788 have not been reported. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. The checked UE4SS experimental API is `v3.0.1-1140-gf58e8f84`; `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required. Missing required APIs stop the Mod and produce a `[Bartender's Note]` log entry. Old stable UE4SS 3.0.1 is not the target.
 
@@ -143,7 +143,7 @@ git diff --check
 
 ### 运行兼容性
 
-维护者于 2026-10-07 确认新版实机测试通过，0.1.2 支持至 Steam Build 25759268 / 1.0.2.44eb，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。此次仅更新兼容性文档，运行代码与 Mod 版本不变。2026-09-26 的联机报告与下方原始实现参考保留为历史记录；本次未单独反馈新版联机重测结果。
+当前版本为 **0.1.2**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；Build 25822788 尚未报告玩法或联机验收。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。已核对的 UE4SS experimental API 为 `v3.0.1-1140-gf58e8f84`，需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`。缺少必需接口时停止 Mod，并记录 `[Bartender's Note]` 日志；不以旧稳定版 UE4SS 3.0.1 为目标。
 

@@ -130,7 +130,7 @@ Repeat the appropriate checks after game or loader interface changes. A passing 
 
 ### Runtime compatibility and retry timing
 
-Version 0.1.4 is supported through Steam Build 25759268 / 1.0.2.44eb following the maintainer's 2026-10-07 confirmation that in-game testing passed. See the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). This documentation update keeps the runtime and Mod version unchanged. The 2026-09-26 multiplayer report and original implementation reference below remain historical; a multiplayer retest on the new build was not separately reported.
+Current version: **0.1.4**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; gameplay and multiplayer acceptance on Build 25822788 have not been reported. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 
 The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. In each transaction stage, sent requests are at least three seconds apart and limited to three attempts. Exhaustion stops only that stage; later transactions can still proceed. Polling includes all current-world registers, including other floors, even when no arrival notification is received.
 
@@ -262,7 +262,7 @@ git diff --check
 
 ### 运行兼容性与重试时序
 
-维护者于 2026-10-07 确认新版实机测试通过，0.1.4 支持至 Steam Build 25759268 / 1.0.2.44eb，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。此次仅更新兼容性文档，运行代码与 Mod 版本不变。2026-09-26 的联机报告与下方原始实现参考保留为历史记录；本次未单独反馈新版联机重测结果。
+当前版本为 **0.1.4**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；Build 25822788 尚未报告玩法或联机验收。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 
 本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。同一交易阶段发送请求至少间隔 3 秒，最多尝试 3 次；耗尽后仅停止该阶段，后续交易仍可处理。即使未收到顾客到达通知，也轮询当前世界全部收银机，包括其他楼层。
 

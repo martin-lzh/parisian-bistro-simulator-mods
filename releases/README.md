@@ -6,6 +6,8 @@
 
 ### Accepted versions and current source
 
+On **2026-10-14**, the maintainer requested documenting support through **Steam Build 25822788 / game 1.0.2.44eb** after the compatibility review. All seven current Mod versions are unchanged; new-build gameplay and multiplayer acceptance remain unreported. See the [current support table and validation scope](validation.md#english).
+
 On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-game and multiplayer testing and explicitly authorized removing the development suffix and publishing stable Releases. The [validation record](validation.md#english) ties this acceptance to source `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`. The approved stable packages from that test report are:
 
 | Mod | Stable version | In-game and multiplayer confirmation | Package |
@@ -63,6 +65,8 @@ This command queries the repository's GitHub API using `GH_TOKEN` and requires a
 ## 中文
 
 ### 已验收版本与当前源码
+
+**2026-10-14**，兼容核对后维护者要求将游戏支持标注提高至 **Steam Build 25822788／游戏 1.0.2.44eb**。当前七款 Mod 版本不变，新构建尚未报告玩法或联机验收。见[当前支持表及验证范围](validation.md#中文)。
 
 2026-09-26，维护者确认全部 7 个当前 Mod 实机及联机测试通过，明确要求去掉开发版后缀并发布正式 Release。[验收记录](validation.md#中文)将本次确认关联源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`。该次验收对应的获准正式包版本如下：
 

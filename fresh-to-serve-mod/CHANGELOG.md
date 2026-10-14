@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Extend documented game support to Steam Build 25822788 / 1.0.2.44eb following the 2026-10-14 compatibility review and maintainer instruction. Keep the Mod version and runtime unchanged; new-build gameplay and multiplayer acceptance remain unreported.
+- 按 2026-10-14 兼容核对及维护者要求，将游戏支持标注提高至 Steam Build 25822788 / 1.0.2.44eb；Mod 版本与运行代码不变，新构建尚未报告玩法或联机验收。
+
 ## 0.1.3 - 2026-10-07
 
 - Compatibility update for Steam Build **25759268 / 1.0.2.44eb**. Fix the startup table-API failure by resolving the live `Table`/`table` class before checking methods and reacquiring pending food/drink remakes. Retain support for the earlier spelling, reject missing classes/methods or ambiguous classes, and preserve safety stops across script reload.

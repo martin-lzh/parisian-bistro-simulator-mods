@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Extend documented game support to Steam Build 25822788 / 1.0.2.44eb following the 2026-10-14 compatibility review and maintainer instruction. Keep the Mod version and runtime unchanged; new-build gameplay and multiplayer acceptance remain unreported.
+- 按 2026-10-14 兼容核对及维护者要求，将游戏支持标注提高至 Steam Build 25822788 / 1.0.2.44eb；Mod 版本与运行代码不变，新构建尚未报告玩法或联机验收。
+
 - Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
 - 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
 
