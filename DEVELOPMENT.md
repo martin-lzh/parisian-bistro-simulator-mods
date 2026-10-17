@@ -117,16 +117,16 @@ Follow [.editorconfig](.editorconfig) for encoding, indentation and line endings
 
 ### Commits, CI and branch protection
 
-Use the current working directory without creating temporary worktrees. The current development branch is `dev`; use it, an existing `development` branch, or a feature branch, and merge to protected `main` through a PR. A PR from `development` targets `main`. Do not bypass branch protection. Commit and push task-related changes at the end of each task unless explicitly told not to; preserve unrelated user changes.
+Use the current working directory without creating worktrees. Work on `dev` and commit and push task-related changes at the end of each task, preserving unrelated changes. Changes reach protected `main` only through a PR that the maintainer merges; merging publishes new versions (see [releases](releases/README.md#how-a-version-ships)).
 
 Selectively stage intended files, run `python tools/check_repository.py`, review `git diff --staged`, and check `git diff --check` and `git status --short` before committing. The repository checker examines tracked and staged paths, so stage new intended files before the final check. Ignored `work/` and `outputs/` can stay.
 
-The `.github/workflows/mods.yml` workflow runs on pushes to `main`, `dev` and `development`, PRs targeting `main`, and manual dispatch:
+The `.github/workflows/mods.yml` workflow runs on pushes to `main` and `dev`, PRs targeting `main`, and manual dispatch:
 
 - **Script, data and workflow syntax:** repository boundaries, Python/JSON syntax, whitespace and actionlint. The actionlint download uses a pinned version and SHA-256.
-- **Lua tests and packages:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only release preflight.
+- **Lua tests and packages:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only **Release plan** table in the job summary.
 - The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
-- A successful **main push** can run the release job for explicitly authorized new numbered versions. Only that job receives `contents: write`; development versions do not become releases automatically. See [release management](releases/README.md#english).
+- A successful **main push** runs the release job: it publishes new numbered versions and promotes betas. Only that job receives `contents: write`; `-dev` versions are never released. See [releases](releases/README.md).
 
 `.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. To change the live rules, the maintainer applies this file through the GitHub API and reads it back; CI has no admin credentials.
 
@@ -243,15 +243,15 @@ git diff --check
 
 ### 提交、CI 与分支保护
 
-直接使用当前工作目录，不创建临时工作树。当前开发分支为 `dev`，可使用该分支、已有的 `development` 分支或功能分支，通过 PR 合入受保护的 `main`；从 `development` 开 PR 时，目标为 `main`。不得绕过保护。每次任务结束提交并推送任务相关改动，除非用户明确要求不推送；保留无关用户改动。
+直接使用当前工作目录，不创建工作树。在 `dev` 上开发，每次任务结束提交并推送相关改动，保留无关改动。改动只能通过维护者合并的 PR 进入受保护的 `main`；合并即发布新版本（见[发布说明](releases/README.md#how-a-version-ships)）。
 
 选择性暂存目标文件，执行 `python tools/check_repository.py`，审查 `git diff --staged`，并在提交前检查 `git diff --check` 和 `git status --short`。仓库检查器审查已跟踪及暂存路径，因此新增目标文件应先暂存再做最终检查。被忽略的 `work/` 和 `outputs/` 可以保留。
 
-`.github/workflows/mods.yml` 在 `main`、`dev`、`development` 推送，目标为 `main` 的 PR，以及手动运行时执行：
+`.github/workflows/mods.yml` 在 `main`、`dev` 推送，目标为 `main` 的 PR，以及手动运行时执行：
 
 - **Script, data and workflow syntax：**检查仓库边界、Python/JSON 语法、空白和 actionlint。actionlint 下载固定版本并校验 SHA-256。
-- **Lua tests and packages：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后只读预检发布条件。
+- **Lua tests and packages：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后在任务摘要中显示只读的 **Release plan** 表。
 - **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
-- **main 推送**通过检查后，可以为已明确授权的新编号版本运行发布任务。仅该任务拥有 `contents: write`；开发版不会自动转为正式版。详见[版本管理](releases/README.md#中文)。
+- **main 推送**通过检查后运行发布任务：发布新的编号版本，并把已改为正式的测试版转正。仅该任务拥有 `contents: write`；`-dev` 版本不会发布。详见[发布说明](releases/README.md)。
 
 `.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改远端规则时，由维护者通过 GitHub API 应用此文件并回读核对；CI 不持有仓库管理凭据。
