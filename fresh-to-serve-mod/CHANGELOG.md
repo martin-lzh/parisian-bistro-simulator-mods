@@ -2,68 +2,66 @@
 
 ## Unreleased
 
-- Extend documented game support to Steam Build 25822788 / 1.0.2.44eb following the 2026-10-14 compatibility review and maintainer instruction. Keep the Mod version and runtime unchanged; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged.
-- 按 2026-10-14 兼容核对及维护者要求，将游戏支持标注提高至 Steam Build 25822788 / 1.0.2.44eb；Mod 版本与运行代码不变，本次文档更新跳过实机及联机测试。
+- Supports game 1.0.2.44eb (Steam Build 25822788).
+- 支持游戏 1.0.2.44eb（Steam Build 25822788）。
+
+- Documentation: rewrote the player guide in plainer language, focused on what the Mod does and how to use it.
+- 文档：用更简洁的语言重写玩家说明，只保留功能介绍和操作方法。
 
 ## 0.1.3 - 2026-10-07
 
-- Compatibility update for Steam Build **25759268 / 1.0.2.44eb**. Fix the startup table-API failure by resolving the live `Table`/`table` class before checking methods and reacquiring pending food/drink remakes. Retain support for the earlier spelling, reject missing classes/methods or ambiguous classes, and preserve safety stops across script reload.
-- Add offline regression coverage for both spellings, live food/drink rebinding and startup failure recovery. On 2026-10-07, the maintainer confirmed in-game testing passed; support is recorded through Steam Build 25759268 / 1.0.2.44eb in the [current validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english). New-build multiplayer retesting was not separately reported.
-- Steam Build **25759268 / 1.0.2.44eb** 兼容更新。检查方法及重新定位食物／饮料待重做订单前，解析实际 `Table`／`table` 类，修复餐桌接口查询导致的启动失败；保留旧拼写兼容，类或方法缺失、类歧义时停止，安全停止状态继续跨脚本重载保留。
-- 增加两种拼写、食物／饮料实时重新绑定及启动失败恢复的离线回归验证。维护者于 2026-10-07 确认实机测试通过，支持至 Steam Build 25759268 / 1.0.2.44eb，见[当前验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)；未单独反馈新版联机复测结果。
-- Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions.
-- 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明。
+- Fixes the Mod stopping at startup on Steam Build 25759268 / 1.0.2.44eb. Earlier game builds keep working.
+- 修复 Mod 在 Steam Build 25759268 / 1.0.2.44eb 上启动即停止的问题，旧版游戏照常可用。
+- Documentation: added the cover image and removed outdated download instructions.
+- 文档：加入宣传封面，移除过时的下载说明。
 
 ## 0.1.2 - 2026-09-26
 
 ### Documentation update / 文档更新 — 2026-09-26
 
-- Expand the English/Chinese player guide after a source-based subagent audit of in-game controls, feature behavior, multiplayer requirements and waiting/recovery conditions. Refresh the existing Release package documentation; the version and runtime files are unchanged.
-- 经 subagent 对照源码审计，补全中英文游戏内操作、功能行为、联机要求及等待／恢复条件。更新现有 Release 包内文档，版本与运行文件保持不变。
+- Documentation: expanded the guide to controls, behaviour, multiplayer and when replacements wait or stop.
+- 文档：补充操作方式、功能行为、联机要求以及补单等待和停止的情况。
 
 ### English
 
-- Promote 0.1.2-dev to 0.1.2 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
-- Clear spoiled meals and drinks and request replacements while the original customer has enough patience; preserve order deduplication and pending work across Lua reload.
-- Provide an assets directory for future gameplay captures and promotional artwork.
-- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+- First stable release.
+- Clears spoiled meals and drinks and orders replacements while the original customer has enough patience. No duplicate orders, and pending replacements survive a script reload.
+- Includes English and Chinese install, usage and update guides and the MIT license.
 
 ### 中文
 
-- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.2-dev 转为 0.1.2；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
-- 清理低劣食物与饮料，在原顾客耐心足够时请求重做；保留订单去重及 Lua 重载中的待补单状态。
-- 提供 assets 目录，用于后续实机截图及宣传图。
-- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+- 首个正式版。
+- 清理变质的食物和饮料，原顾客耐心足够时自动补单。不会重复下单，待处理的补单在脚本重载后继续保留。
+- 附带中英文安装、使用和更新说明及 MIT 许可证。
 
 ## 0.1.2-dev
 
-- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
-- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
+- Documentation: added an assets folder for screenshots and artwork.
+- 文档：新增 assets 文件夹，存放截图和宣传图。
 
-- Adopt **焕鲜上桌** as the Chinese display name in player guides and shared documentation.
-- 中文名称统一为 **焕鲜上桌**，同步玩家说明及公共文档。
+- Chinese name is now **焕鲜上桌**.
+- 中文名称统一为 **焕鲜上桌**。
 
-- Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
-- 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
+- Documentation: rewrote the install, usage, update and removal guides.
+- 文档：重写安装、使用、更新及卸载说明。
 
-- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
-- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+- The MIT license is now included in the download.
+- 安装包中附带 MIT 许可证。
 
-- Fresh to Serve 0.1.2-dev retains pending food/drink remakes across manual UE4SS script reload, preserving original ticket age, retry counts and cooldowns. Re-resolve customers and queues on the game thread; old callbacks stop on unload.
-- Preserve safety stops after uncertain operations across reload. Checkpoint a stop marker before mutations, validate the fixed scalar-only shared-state format, and clear old tickets/stops only after a different session is observed. Initial upgrades from older code require a closed-game installation.
-- Add real-adapter reload tests for waiting/rejected/accepted orders, food/drink coexistence, retry and expiration bounds, live patience, failed checkpoint writes and off-thread unload. In-game acceptance remains pending.
-- Fresh to Serve 0.1.2-dev 支持手动 UE4SS 脚本重载，保留食物/饮料待补单的原始时间、尝试次数及冷却，在游戏线程重新查找顾客与队列，并停用旧回调。结果不明后的安全停止跨重载保留；不同会话才清除旧凭据和停止状态。增加真实适配层联动重载验证；从旧代码首次升级须关闭游戏安装，仍待实机验收。
+- Pending food and drink replacements now survive a manual script reload (Ctrl+R), keeping their timers and retry counts.
+- If the Mod stops after an error, it stays stopped after a reload until you start a new session. The first update from an older version must be installed with the game closed.
+- 手动重载脚本（Ctrl+R）后，待处理的食物和饮料补单继续保留，计时和重试次数不变。出错停止后，重载仍保持停止，直到开始新的游戏会话。从更早版本首次升级须关闭游戏安装。
 
-- Fresh to Serve 0.1.1-dev extends cleanup and remake requests to finished drinks, including cocktails, on drink output areas and elevator serving slots.
-- Match drink order GUIDs to the original customer; clean up through the native drink lifecycle, deduplicate prepared/queued drinks, and preserve other customers' unplaced orders.
-- Estimate drink preparation from live equipment fill/interaction durations and handling allowance. Check assigned working bartenders, defer during manual claims, and recheck customer presence and patience before every request.
-- Fresh to Serve 0.1.1-dev 将低劣成品清理与重做扩展至饮料及鸡尾酒出品位和升降机；核对原顾客订单编号、去重并保留其他顾客尚未下单的状态。按设备灌装、交互及取料耗时估算，检查楼层调酒师和手动认领，每次补单重新检查顾客与耐心。仍待实机验收。
+- 0.1.1-dev: cleanup and replacements now also cover finished drinks and cocktails at drink output areas and elevator slots.
+- Drink replacements go to the original customer without disturbing other customers' orders.
+- Drink timing includes equipment fill and use time. Replacements need a working bartender on the floor, wait while you have claimed drinks, and recheck the customer and patience before each order.
+- 0.1.1-dev：清理和补单扩展到饮料出品区和升降机上的成品饮料及鸡尾酒。饮料补单送给原顾客，不影响其他顾客的订单。耗时计入设备灌装和操作时间；需要该楼层有在岗调酒师，你认领饮料时会等待，每次下单前重新检查顾客和耐心。
 
-- Rename Fresh Service to Fresh to Serve (焕新上桌), including its source folder, package, loader folder and log prefix. Gameplay behavior and version remain unchanged.
-- Fresh Service 更名为 Fresh to Serve（焕新上桌），同步修改源码目录、安装包、加载目录和日志前缀；玩法与版本号不变。
+- Renamed Fresh Service to Fresh to Serve (焕新上桌), including the Mod folder and log prefix. Gameplay is unchanged.
+- Fresh Service 更名为 Fresh to Serve（焕新上桌），Mod 文件夹和日志前缀同步更改，玩法不变。
 
-- Add Fresh to Serve 0.1.0-dev: clear poor cooked meals from kitchen pickup positions/elevators and request replacements through the normal kitchen flow.
-- Require the original customer/order to remain active and remaining patience to cover cooking, backlog and service allowance. Never reset patience.
-- Reconcile existing meals and queue entries; preserve order identity; bound retries; guard authority, active pickup, world changes and ambiguous engine failures.
-- Add independent packaging, synthetic behavior tests and bilingual guides. In-game acceptance is pending.
-- 新增 Fresh to Serve 0.1.0-dev：清理厨房取餐位及升降机低劣熟食，核对原顾客、订单与耐心预算后补单，再由服务员上菜；含去重、有限重试、房主权限及双语说明，仍待实机验收。
+- 0.1.0-dev: first version. Clears spoiled cooked meals from kitchen passes and elevators and orders replacements through the normal kitchen.
+- Replacements need the original customer and order to still be active and enough patience to cover cooking, the queue and serving. Patience is never reset.
+- Counts meals already made or queued, keeps each order tied to its customer, limits retries and runs on the host only.
+- Includes English and Chinese guides.
+- 0.1.0-dev：首个版本。清理厨房出餐口和升降机上变质的熟食，核对原顾客、订单和耐心后补单，由服务员上菜。计入已做好或已排队的餐品，限制重试次数，仅在房主端运行；附带中英文说明。

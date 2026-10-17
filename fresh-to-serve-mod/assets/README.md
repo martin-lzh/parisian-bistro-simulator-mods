@@ -6,48 +6,54 @@
 
 ### Cover artwork
 
-[cover.png](cover.png) is the AI-generated promotional artwork used on the [Nexus Mods page](https://www.nexusmods.com/mods/3?game_id=10352), created with the built-in image generator on 2026-09-26. The original PNG is preserved without further edits. It illustrates the Mod and is not an in-game screenshot or test result.
+[cover.png](cover.png) is the AI-generated cover used on the [Nexus Mods page](https://www.nexusmods.com/mods/3?game_id=10352), made on 2026-09-26.
 
-Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
+### Adding images
+
+Store this Mod's in-game screenshots and promotional artwork here, following the Old Market Simulator Mods folder layout.
 
 | Filename | Content |
 | --- | --- |
-| `cover.png` | Mod cover artwork for the README or a Mod listing |
-| `<scene>-gameplay.png` | Actual in-game test capture, for example `meal-replacement-gameplay.png` |
+| `cover.png` | Mod cover for the README or a Mod listing |
+| `<scene>-gameplay.png` | In-game screenshot, for example `meal-replacement-gameplay.png` |
 | `<scene>-promo.png` | Additional promotional artwork |
 
-Use PNG, JPG or WebP; use lowercase filenames with hyphens. Add image embeds only after the referenced files exist. Place the cover below the README title and gameplay images beside the relevant usage text in both languages.
+- Use PNG, JPG or WebP with lowercase, hyphenated filenames.
+- Add an image link only after the file exists. Put the cover under the README title and screenshots next to the matching usage text in both languages.
+- For each screenshot, note its date, Mod/game/UE4SS versions, host or guest role and what it shows. Label generated or edited artwork as such.
+- Extracted game assets and reverse-engineering material belong in ignored `work/`.
 
-For each test capture, record its date, Mod/game/UE4SS versions, host or guest role, and observed result in this file. Identify generated or edited promotional artwork as such; it does not establish in-game acceptance. Keep extracted game assets and reverse-engineering material in ignored `work/`.
-
-These images are repository documentation and stay outside Mod ZIPs. See the [shared image guidance](../../DEVELOPMENT.md#mod-images) for links that also work from an extracted package. Repository-only README example (paths relative to this Mod's README):
+These images are repository documentation and are not included in Mod ZIPs. See the [shared image guidance](../../DEVELOPMENT.md#mod-images) for links that also work from an extracted package. Repository-only README example (paths relative to this Mod's README):
 
 ```markdown
 ![Fresh to Serve cover artwork](assets/cover.png)
-![Fresh to Serve in-game test](assets/meal-replacement-gameplay.png)
+![Fresh to Serve in-game screenshot](assets/meal-replacement-gameplay.png)
 ```
 
 ## 中文
 
 ### 宣传封面
 
-[cover.png](cover.png) 是 [Nexus Mods 页面](https://www.nexusmods.com/mods/3?game_id=10352)使用的 AI 宣传图，于 2026-09-26 使用内置图像生成工具制作；保留原始 PNG，未再编辑。此图用于介绍 Mod，并非实机截图或测试结果。
+[cover.png](cover.png) 是 [Nexus Mods 页面](https://www.nexusmods.com/mods/3?game_id=10352)使用的 AI 宣传封面，制作于 2026-09-26。
 
-此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+### 添加图片
+
+此目录存放本 Mod 的实机截图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
 
 | 文件名 | 内容 |
 | --- | --- |
 | `cover.png` | README 或 Mod 页面使用的宣传封面 |
-| `<scene>-gameplay.png` | 真实实机测试截图，例如 `meal-replacement-gameplay.png` |
+| `<scene>-gameplay.png` | 实机截图，例如 `meal-replacement-gameplay.png` |
 | `<scene>-promo.png` | 其他宣传图 |
 
-可使用 PNG、JPG 或 WebP，文件名使用小写英文和连字符。图片实际加入后再启用引用：封面放在 README 标题下，实机图放在中英文对应的使用说明附近。
+- 使用 PNG、JPG 或 WebP，文件名用小写英文和连字符。
+- 图片文件加入后再添加引用：封面放在 README 标题下，实机图放在中英文对应的使用说明旁。
+- 每张截图记录拍摄日期、Mod／游戏／UE4SS 版本、房主或客机身份及画面内容。生成或编辑过的宣传图应注明。
+- 提取的游戏资源和反编译资料放在被忽略的 `work/`。
 
-每张测试图在本文件中记录拍摄日期、Mod／游戏／UE4SS 版本、房主或客机身份及观察结果。生成或编辑过的宣传图应注明来源，不能作为实机验收依据。提取的游戏资源和反编译资料仍放在被忽略的 `work/`。
-
-图片用于仓库文档，不进入 Mod ZIP。解压后的说明如何引用图片，见[公共图片说明](../../DEVELOPMENT.md#mod-图片)。仅在仓库中使用的 README 示例（路径相对于本 Mod 的 README）：
+图片仅用于仓库文档，不进入 Mod ZIP。解压后的说明如何引用图片，见[公共图片说明](../../DEVELOPMENT.md#mod-图片)。仅在仓库中使用的 README 示例（路径相对于本 Mod 的 README）：
 
 ```markdown
 ![焕鲜上桌宣传封面](assets/cover.png)
-![焕鲜上桌实机测试](assets/meal-replacement-gameplay.png)
+![焕鲜上桌实机截图](assets/meal-replacement-gameplay.png)
 ```

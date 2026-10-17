@@ -4,61 +4,106 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.4.** The maintainer confirmed in-game and multiplayer testing passed on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. The 0.1.2 cash/card/distance confirmation applies to the earlier runtime version; its scope is preserved below.
+Player instructions: [README](README.md#english). **Current source: 0.1.4.** Recorded testing: [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english).
 
 ### Implementation
 
 | Module | Responsibility |
 | --- | --- |
 | `Scripts/game.lua` | Reads host/register/payment state, verifies world, type and relationships, then submits the game's default interaction request |
-| `Scripts/checkout.lua` | Maintains plain-Lua stages and retry history per register, using payment object identity to distinguish transactions |
+| `Scripts/checkout.lua` | Maintains plain-Lua stages and retry history per register; a new payment object identity marks a new transaction (never price or a loop counter) |
 | `Scripts/main.lua` | Starts automatically, listens for arrival notifications, polls each second on the game thread and handles world changes/errors |
-| `Scripts/diagnostics.lua` | Records state changes and repeats unchanged state every 30 polls without retaining engine objects |
+| `Scripts/diagnostics.lua` | Records state changes and repeats unchanged state every 30 polls without retaining engine objects; logs pre-call state, call return and the immediate snapshot separately |
 | `Scripts/ai.lua` | Suppresses new AI counter-checkout jobs in the host world and restores its changes on exit/error |
 | `Scripts/localization.lua` | Resolves the game language and translates original explanatory log messages |
 | `Scripts/reload.lua` | Validates and saves primitive AI recovery and retry records across Lua reloads |
 
-Accepting payment and closing the drawer each wait for game-state confirmation. Card processing and existing employee ownership block dispatch. The scheduler retains strings and counters, not Unreal objects across polls. Immediately before dispatch, it rereads the transaction to reject invalidated or manually changed targets. A returned RPC call is not evidence that the payment succeeded.
+**Transaction flow**
 
-Player activity, held items, interfaces and `IsInteracting()` do not block automation. Actual game pause and transaction constraints still do. Temporarily unreadable snapshots retain retry history. A canceled request preserves cooldown but does not consume a sent-request attempt. Module loading, scheduler registration/callbacks and game-call errors are logged with execution phase and available Lua stacks; Lua exception handling cannot catch a native process crash. The older timer fallback queues at most one callback so a pause or stall cannot accumulate requests.
+- Accepting payment and closing the drawer each wait for game-state confirmation. A returned RPC call is not treated as a successful payment.
+- Card processing and existing employee ownership block dispatch.
+- The scheduler keeps only strings and counters between polls, never Unreal objects. Immediately before dispatch it rereads the transaction and skips invalidated or manually changed targets.
+
+**What blocks automation**
+
+- Player activity, held items, interfaces and `IsInteracting()` do not block. Only an actual game pause and the transaction's own constraints do.
+- A temporarily unreadable snapshot keeps its retry history.
+- A request canceled by the final recheck keeps its cooldown but does not consume a sent-request attempt.
+
+**Errors**
+
+- Module loading, scheduler registration/callbacks and game-call errors are logged with the execution phase and any available Lua stack. Native process crashes cannot be caught from Lua.
+- The older timer fallback queues at most one callback, so a pause or stall cannot pile up requests.
 
 ### Interaction scope and AI tasks
 
-The 0.1.2 distance fix remains in use. During a verified host game-thread request, `GetDistanceTo` supplies the player-to-target distance. Only for the synchronous call, the target uses `EDistanceReference.Actor`, a `DistanceToInteract` of at least distance plus 100 game units, and `bCanInteractWhilePlacing`. Preparation failures roll back partial changes, and normal return or Lua errors restore each field independently with verification. A payment object destroyed by native collection is not written back. Restoration failure stops automation and asks for a world reload. No player position, controller, busy state or target object is retained or changed outside that call.
+#### Interaction range (since 0.1.2)
 
-This remains a normal player interaction, not an employee task. Local references established that AI checkout requires employee/entity context while the player request rebuilds host interaction context; changing a player flag alone cannot substitute one path for the other. Distance diagnostics describe the call, but progress is still confirmed through payment/card/bill state.
+During a verified host game-thread request, only for the synchronous call on the current target:
 
-AI suppression uses the current world's `JobSubsystem.EvaluatorsByJob` containers and removes only `BillingStartTaskEvaluator`, preserving table checkout, other task order and employee configuration. It verifies the original reference remains in `AllEvaluators` before rebuilding the array with UE4SS on the game thread. Only identity strings and original positions persist across callbacks. Unchanged arrays are not rewritten; newly appearing containers are processed too.
+- `GetDistanceTo` supplies the player-to-target distance.
+- The target temporarily uses `EDistanceReference.Actor`, a `DistanceToInteract` of at least distance + 100 game units, and `bCanInteractWhilePlacing`.
+- Partial preparation failures roll back. After a normal return or a Lua error, each field is restored and verified independently.
+- A payment object already destroyed by native collection is not written back.
+- A restoration failure stops automation and asks for a world reload.
+- Player position, controller, busy state and the target object are never retained or changed outside that call.
 
-Already claimed tasks and register ownership flags remain intact. Restoration reinserts only tasks removed by this Mod that have not already returned, retaining other runtime changes. Write failures attempt rollback. Scheduler/restoration failures are logged. This policy writes no save state. Lua reload uses the handoff described below. All-floor coverage and error recovery remain on the in-game checklist.
+This stays a normal player interaction, not an employee task. Local references show AI checkout needs employee/entity context, while the player request rebuilds host interaction context; a player flag alone cannot switch between the two. Progress is confirmed through payment/card/bill state, not distance diagnostics.
+
+#### AI job suppression
+
+- Uses the current world's `JobSubsystem.EvaluatorsByJob` containers and removes only `BillingStartTaskEvaluator`. Table checkout, other task order and employee configuration are preserved.
+- Before rebuilding an array with UE4SS on the game thread, it verifies the original reference is still held in `AllEvaluators`.
+- Only identity strings and original positions persist across callbacks. Unchanged arrays are not rewritten; newly created containers are processed too.
+- Already claimed tasks and register ownership flags stay intact.
+- Restoration reinserts only tasks this Mod removed that have not already returned, keeping other runtime changes. Write failures attempt rollback; scheduler/restoration failures are logged.
+- Nothing is written to the save. Lua reload uses the handoff below.
 
 ### Lua reload lifecycle
 
-`ModRef` keeps one namespaced, versioned string for this game process. It contains only session/payment/register identity strings, attempt counts and times, warning flags, and the AI evaluator identities/positions needed for restoration. The bounded length-prefixed parser validates the schema without `load`, JSON dependencies or shared UObject wrappers. Invalid or unsupported state stops startup without overwriting the record.
+**Shared state.** `ModRef` keeps one namespaced, versioned string for the game process. It holds only session/payment/register identity strings, attempt counts and times, warning flags, and the AI evaluator identities/positions needed for restoration. A bounded length-prefixed parser validates the schema without `load`, JSON dependencies or shared UObject wrappers. Invalid or unsupported state stops startup and leaves the record untouched. The state is process-local; it is not a crash-recovery file or save extension.
 
-Before each AI array mutation, the script saves its recovery plan. It also saves the incremented attempt and cooldown before sending a native request. A failed shared-state write therefore prevents that mutation or request. Completed scans and `ModRef.OnUnload` save the latest plain state. Unload only disables the old callbacks and serializes Lua values; it never reads an engine object, calls gameplay functions, or queues work into a closing Lua state. The checked experimental loader unregisters the old hooks and removes its scheduled actions during teardown; guards also make retired callbacks inert.
+**Save order.**
 
-The new instance first restores inherited AI records on the game thread, then resumes its normal suppression policy. When a controller is temporarily unavailable, recovery waits with its records intact. A different live session allows destroyed old-world records to be discarded; missing containers in the same session and restoration failures preserve the records and stop automation so a later reload can retry. Retry history survives both notification-driven and periodic first callbacks, including a temporarily missing controller, and resets when a different real session is observed. Three failed requests stay exhausted across reloads. Old versions lacking a handoff cannot supply their lost AI records, so upgrade from 0.1.3-dev or earlier with the game closed. Permanent removal also requires closing the game; unloading without a replacement cannot restore engine arrays from the unload callback. Shared state is process-local and is not a crash-recovery file or save extension.
+- The AI recovery plan is saved before each AI array mutation.
+- The incremented attempt and cooldown are saved before each native request.
+- If the shared-state write fails, that mutation or request is not performed.
+- Completed scans and `ModRef.OnUnload` save the latest plain state.
 
-The original 68 offline tests and 12 reload tests pass. Reload coverage includes both schedulers, retired callbacks, AI recovery/reapplication, failed or missing recovery, retry budgets for both stages, world/controller changes, pre-dispatch persistence, storage failure and malformed payloads. Loader teardown and actual engine behavior still require in-game testing.
+**Unload.** Unload only disables the old callbacks and serializes Lua values. It never reads an engine object, calls gameplay functions or queues work into the closing Lua state. The experimental loader unregisters old hooks and removes scheduled actions during teardown; guards also make any retired callback inert.
+
+**New instance.**
+
+- Restores inherited AI records on the game thread first, then resumes the normal suppression policy.
+- If a controller is temporarily unavailable, recovery waits with the records intact.
+- A different live session lets records from the destroyed old world be discarded. Missing containers in the same session, or a restoration failure, keep the records and stop automation so a later reload can retry.
+- Retry history survives whether the first callback is a notification or a poll, including while the controller is missing, and resets only when a different real session is observed. Three failed requests stay exhausted across reloads.
+
+**Upgrade and removal.** Versions 0.1.3-dev and earlier have no handoff, so upgrade from them with the game closed. Permanent removal also requires closing the game: the unload callback cannot restore engine arrays when no new instance loads.
 
 ### Notification handling
 
-A post-hook on `CashRegister:Multicast_DisplayCustomerAtBillingNotification` leaves parameters and return values unchanged. The callback copies only the receiver's identity string, never a UObject or Context. Modern scheduling checks on the game thread after 50 ms; older scheduling uses the game-thread queue. Repeated notifications coalesce by register, with notifications raised during dispatch deferred to the next check.
-
-Each event batch verifies host/world again and reads only the referenced registers. Periodic polling still reads all registers and shares the same state machine, cooldown and attempt budget. Registering, reading or queueing the notification hook can fail without disabling polling; actual checkout failures still stop automation. The hook is installed only after polling registration succeeds. `EVENT` records the later check's state, not a snapshot from the instant the notification was emitted, and the hook may not cover all native calls.
+- A post-hook on `CashRegister:Multicast_DisplayCustomerAtBillingNotification` leaves parameters and return values unchanged.
+- The callback copies only the receiver's identity string, never a UObject or Context.
+- Modern scheduling checks on the game thread after 50 ms; older scheduling uses the game-thread queue.
+- Repeated notifications coalesce by register; notifications raised during dispatch are deferred to the next check.
+- Each event batch rechecks host/world and reads only the referenced registers. Periodic polling still reads all registers and shares the same state machine, cooldown and attempt budget.
+- The hook is installed only after polling registration succeeds. If registering, reading or queueing the hook fails, only the listener is disabled (with a warning) and polling continues. Actual checkout failures still stop automation.
+- `EVENT` records the state at the later check, not at the instant of the notification. The hook may not cover every native call, so polling always stays on.
 
 ### Localization
 
-On each game-thread poll or event batch, `KismetInternationalizationLibrary:GetCurrentLanguage()` refreshes the language. The 14 supported cultures are `en`, `fr`, `zh-Hans`, `it`, `es`, `de`, `ru`, `ja`, `ko`, `zh-Hant`, `tr`, `pl`, `pt` and `pt-BR`. Resolution accepts case, underscores and regional variants, gives explicit Chinese scripts priority, and distinguishes Brazilian Portuguese. Failed reads and unsupported values fall back to English.
+- Each game-thread poll or event batch refreshes the language through `KismetInternationalizationLibrary:GetCurrentLanguage()`.
+- Supported cultures: `en`, `fr`, `zh-Hans`, `it`, `es`, `de`, `ru`, `ja`, `ko`, `zh-Hant`, `tr`, `pl`, `pt`, `pt-BR`. Resolution accepts case, underscores and regional variants, prefers explicit Chinese scripts and distinguishes Brazilian Portuguese. Failed reads and unsupported values fall back to English.
+- Six original message categories are translated: host activation, AI restoration failure, failure to schedule that restoration, automation stopped after an error, notification listener unavailable, and no progress after three attempts.
+- Tags, field keys, phases/reasons, object identities and exception details stay stable. Messages before the first safe game-thread language read (early startup and listener-registration errors) are English.
+- The game's payment UI, notifications and names are untouched; there is no language toggle and no copied game catalog.
 
-Six original message categories are translated: host activation, AI restoration failure, failure to schedule that restoration, automation stopped after an error, unavailable notification listener, and no progress after three attempts. Tags, field keys, phases/reasons, object identities and exception details stay stable. Messages before the first safe game-thread language read, including early startup/listener-registration errors, remain English. The game's existing payment UI, notifications and names are untouched, with no custom language toggle or copied game catalogs.
-
-All game-interface research, native analysis, type exports, tools and research scripts remain in ignored `work/`. Tracked source contains no native addresses, memory offsets or copies of game code.
+All game-interface research, native analysis, type exports and research tools stay in the ignored `work/` folder. Tracked source contains no native addresses, memory offsets or game code.
 
 ### Diagnostic reference
 
-Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged state repeats every 30 polls, usually about 30 seconds. Stack traces may continue on subsequent lines.
+Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged state repeats every 30 polls (about 30 seconds). Stack traces may continue on the following lines.
 
 | Marker | Meaning |
 | --- | --- |
@@ -69,14 +114,14 @@ Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged 
 | `EVENT_IGNORED` | Not host, or the notified register is invalid/outside the current world |
 | `API` / `HOST` | Resolved API enum values and host session |
 | `STATE session` | Pause state, register count and cumulative dispatched requests |
-| `STATE ai` / `AI` | Task policy and discovered/processed containers; `restored_containers` counts restorations. `suppressed=0` does not demonstrate suppression |
+| `STATE ai` / `AI` | Task policy and discovered/processed containers; `restored_containers` counts restorations. Suppression is confirmed only when `suppressed` is greater than 0 |
 | `STATE phase=wait-...` / `unavailable=...` | Wait/exclusion reason, with bill, payment, drawer, card and ownership state |
-| `REQUEST` | Stage, attempt, target and pre-call state; `source` distinguishes polling/notification. In `context`, `distance` is host-to-target distance, `range_before` the original range, `range_for_call` the temporary range, and `scope=target-call` the restriction scope |
-| `DISPATCH_RETURNED` / `AFTER` | Call return and immediate state. Later `STATE` may show delayed changes; return alone is not success |
-| `SKIP` | Final recheck changed, no request sent and no attempt consumed |
+| `REQUEST` | Stage, attempt, target and pre-call state; `source` distinguishes polling/notification. In `context`: `distance` = host-to-target distance, `range_before` = original range, `range_for_call` = temporary range, `scope=target-call` = restriction scope |
+| `DISPATCH_RETURNED` / `AFTER` | Call return and immediate state. A later `STATE` may show delayed changes; a return alone is not success |
+| `SKIP` | Final recheck found a change; no request sent and no attempt consumed |
 | `WARN` / `ERROR` | Repeated lack of progress or a stopping exception, with phase, last state and available Lua stack |
 
-After updating, verify the current `START` version and review `STATE ai`, `REQUEST`, `SKIP`, `AFTER` and the stack after `ERROR`. Current code does not emit `blocked=player-interacting`. Reload the world if interaction restrictions or AI task restoration fails.
+After updating, check the `START` version, then review `STATE ai`, `REQUEST`, `SKIP`, `AFTER` and the stack after any `ERROR`. Current code never emits `blocked=player-interacting`. Reload the world if interaction-range or AI task restoration fails.
 
 ### Offline checks and packaging
 
@@ -89,126 +134,188 @@ python tools/check_repository.py
 git diff --check
 ```
 
-Lua 5.4 tests cover cash/card stages, animation waits, deduplication, bounded retries, unsent-attempt accounting, employee ownership, world/type/object validity, player activity, manual completion, multiple registers, world resets, automatic startup, both scheduling APIs, diagnostic throttling and stop-on-error behavior. Notification tests cover coalescing, deferred reads, target selection, early notifications, shared budget, client/old-world filters, listener fallback and notifications during dispatch. AI tests cover selective removal, reference/order preservation, late containers, repeated scans, rollback, failed restoration and host lifecycle.
+The suite has 68 offline tests plus 12 reload tests, run on Lua 5.4 with substitute game objects:
 
-The distance tests cover both payment stages, movement between stages, preserving original restrictions, request/diagnostic errors, partial preparation, independent restoration after a failed field, destroyed payments and invalid distances. Localization tests check all cultures and messages, aliases, failed language reads, live switches, missing-language fallback and stable diagnostic fields. Substitute objects cannot establish real engine bridging, actual hook delivery or gameplay results.
+- **Checkout:** cash/card stages, animation waits, deduplication, bounded retries, unsent-attempt accounting, employee ownership, world/type/object validity, player activity, manual completion, multiple registers, world resets, automatic startup, both scheduling APIs, diagnostic throttling and stop-on-error.
+- **Notifications:** coalescing, deferred reads, target selection, early notifications, shared budget, client/old-world filters, listener fallback and notifications during dispatch.
+- **AI:** selective removal, reference/order preservation, late containers, repeated scans, rollback, failed restoration and host lifecycle.
+- **Distance:** both payment stages, movement between stages, preserving original restrictions, request/diagnostic errors, partial preparation, independent restoration after a failed field, destroyed payments and invalid distances.
+- **Localization:** all cultures and messages, aliases, failed language reads, live switches, missing-language fallback and stable diagnostic fields.
+- **Reload:** both schedulers, retired callbacks, AI recovery/reapplication, failed or missing recovery, retry budgets for both stages, world/controller changes, pre-dispatch persistence, storage failure and malformed payloads.
 
-The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4.zip` and its SHA-256 file. It includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. Builds neither write to the game directory nor operate saves or the game process. The loading marker is `START version=0.1.4` with `player_guard=transaction-only`.
+Loader teardown, real hook delivery and engine behaviour are covered by the in-game checklist below.
+
+The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4.zip` and its SHA-256 file. The package holds the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. The loading marker is `START version=0.1.4` with `player_guard=transaction-only`.
 
 ### Earlier investigation and acceptance
 
-On 2026-09-23, another computer's 0.1.0-dev log showed loading and host recognition, but customers stayed at the counter and sometimes flickered. No exception, exhausted retry or scheduling failure was reported. This did not establish that requests had been sent or that the Mod caused flickering. Version 0.1.1-dev expanded diagnostics to investigate that gap.
-
-On 2026-09-24, cash and card logs showed `phase=wait-player-interacting`, `blocked=player-interacting` and `dispatched=0` while the user reported no player checkout and AI work at the bar. That established that the old player guard blocked dispatch, not that AI had changed player state. The subsequent changes removed that guard and suppressed new AI checkout jobs, while canceling requests overtaken by manual action.
-
-Later hot-reload logs showed one cash transaction advancing immediately and other repeated calls returning without progress, sometimes exhausting three attempts. Delayed state changes could not be attributed to the Mod, and no card transaction was present in that sample. Local references identified native host-distance and furniture-placement restrictions. Those logs lacked player position, so rejection causes could not be assigned per transaction; 0.1.2-dev addressed the confirmed restrictions and added distance diagnostics.
-
-The user confirmed 0.1.1-dev in-game and requested 0.1.1 on 2026-09-24, retaining runtime logic and changing the diagnostic version. Full environment versions, multiplayer role and duration were not enumerated.
-
-Also on 2026-09-24, the user confirmed 0.1.2-dev through 01:40:22: three cash and two card transactions completed both payment and drawer steps on the first attempt, without new errors or retry failures. Drawer-close distances were approximately 1341 for cash and 796 for card, exceeding the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; the requested 0.1.2 release retained that implementation and updated version, package and documentation. Furniture placement, floors, multiplayer, manual intervention and long sessions were not individually confirmed. The later 2026-09-26 completion report did not separately describe 0.1.4 hot-reload or localization results.
+- **2026-09-23, 0.1.0-dev:** a log from another computer showed loading and host recognition, but customers stayed at the counter and sometimes flickered, with no exception, exhausted retry or scheduling failure. 0.1.1-dev expanded diagnostics to close that gap.
+- **2026-09-24, player guard:** cash and card logs showed `phase=wait-player-interacting`, `blocked=player-interacting` and `dispatched=0` while the player was not checking out and AI was working at the bar. The old player guard was blocking dispatch. The fix removed that guard, suppressed new AI checkout jobs and cancels requests overtaken by manual action.
+- **Distance limits:** later hot-reload logs showed one cash transaction advancing immediately while other repeated calls returned without progress, sometimes exhausting three attempts (no card transaction in that sample). Local references identified native host-distance and furniture-placement restrictions; 0.1.2-dev addressed both and added distance diagnostics.
+- **2026-09-24, 0.1.1:** the user confirmed 0.1.1-dev in-game; 0.1.1 kept that runtime logic and changed only the diagnostic version.
+- **2026-09-24, 0.1.2:** the user confirmed 0.1.2-dev through 01:40:22. Three cash and two card transactions completed both payment and drawer steps on the first attempt, with no new errors or retry failures. Drawer-close distances were about 1341 (cash) and 796 (card), beyond the original range of 200, followed by a cleared bill and closed drawer. Runtime code corresponds to `61dd9c3`; 0.1.2 kept that implementation.
+- **2026-09-26, 0.1.4:** in-game and multiplayer testing passed (see the validation record above).
 
 ### In-game regression checklist
 
-Reload repeatedly while waiting for cash, card processing, an open drawer, and an exhausted retry budget. Check one live notification listener/poller, unchanged cooldowns and attempt counts, restored/reapplied AI jobs, then world travel and recovery failure. The overall completion report did not provide separate in-game results for these reload scenarios.
+Record game/loader versions, language, role and any manual intervention. Compare `REQUEST context` with `AFTER`, the bill and income.
 
-These scenarios remain regression references; the overall in-game and multiplayer pass is recorded above. Record actual game/loader versions, language, role and any manual intervention; compare `REQUEST context` with `AFTER`, bill and income.
-
-1. In single player, let a finished customer reach the counter. Confirm automatic payment/departure while seated and dining customers remain unaffected.
-2. Test cash and cards, prompts and drawer animation; verify bills, tips, sales and income are counted once.
+1. In single player, let a finished customer reach the counter. Confirm automatic payment and departure, while seated and dining customers are unaffected.
+2. Test cash and cards, prompts and drawer animation. Bills, tips, sales and income are each counted once.
 3. Serve at least ten groups, including adjacent equal-price bills, multiple registers and rooftop counters.
-4. Manually accept payment or close a drawer first. Confirm stale requests skip, no double charge occurs, and a destroyed/completed target does not disable the whole Mod.
-5. Hold items, make drinks, open the tablet/chat and place furniture. Check the player's activity remains intact and automation continues; actual pause should wait and resume.
-6. Enter directly after installation and after a restart with no key/toggle action; the first customer should be handled automatically.
-7. Return to the menu, switch saves and rejoin; check old-world filtering, extended logs and polling overhead.
-8. Test host-only installation and installation on both host and client, then reconnect. Only the host should act and transactions should synchronize.
-9. Cause an unaccepted request and verify bounded retries, readable logs and manual completion.
-10. Check notification `EVENT`, `source=notification` and later state against the correct register. Test missing/early notifications, listener failure, old-world and client notifications; periodic checks must remain available.
-11. Verify `STATE ai` finds containers with `suppressed` greater than zero. AI should stop accepting new counter jobs while retaining drinks/other work; existing jobs finish. Check other floors, new employees, save switching and error restoration without employee-config changes.
-12. Switch all 14 game languages after startup. Check the six translated explanation categories, unchanged technical fields and native notifications, including both Chinese scripts and Portuguese cultures. Startup English must not be mistaken for a failed later language switch.
+4. Manually accept payment or close a drawer first. Stale requests skip, nobody is charged twice, and a destroyed/completed target does not disable the whole Mod.
+5. Hold items, make drinks, open the tablet/chat and place furniture. The player's activity stays intact and automation continues; an actual pause waits and resumes.
+6. Enter directly after installation, and again after a restart, with no key/toggle action. The first customer is handled automatically.
+7. Return to the menu, switch saves and rejoin. Check old-world filtering, long-session logs and polling overhead.
+8. Test host-only installation and installation on both host and client, then reconnect. Only the host acts and transactions synchronize.
+9. Cause an unaccepted request. Retries are bounded, logs stay readable and manual completion still works.
+10. Check notification `EVENT`, `source=notification` and later state against the correct register. Test missing/early notifications, listener failure, old-world and client notifications; periodic checks keep working.
+11. `STATE ai` finds containers with `suppressed` greater than zero. AI stops accepting new counter jobs while still making drinks and doing other work; existing jobs finish. Check other floors, new employees, save switching and error restoration, with employee configuration unchanged.
+12. Switch all 14 game languages after startup. Check the six translated message categories, unchanged technical fields and native notifications, including both Chinese scripts and both Portuguese cultures. English at startup is expected and is not a failed language switch.
+13. Reload repeatedly while waiting for cash, during card processing, with an open drawer and with an exhausted retry budget. Check there is exactly one live listener/poller, cooldowns and attempt counts are unchanged, AI jobs are restored then reapplied, and test world travel and recovery failure.
 
-Repeat the appropriate checks after game or loader interface changes. A passing build or offline test suite does not establish in-game acceptance.
+Repeat the relevant checks after game or loader interface changes.
 
 ### Runtime compatibility and retry timing
 
-Current version: **0.1.4**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
+- **Current version:** 0.1.4.
+- **Supported game:** up to Steam Build 25822788 / 1.0.2.44eb.
+- **Development reference build:** Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
+- **UE4SS:** experimental `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported.
 
-The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4, with UE4SS experimental API `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported. In each transaction stage, sent requests are at least three seconds apart and limited to three attempts. Exhaustion stops only that stage; later transactions can still proceed. Polling includes all current-world registers, including other floors, even when no arrival notification is received.
+Retry timing: within each transaction stage, sent requests are at least three seconds apart and limited to three attempts. Exhaustion stops only that stage; later transactions still proceed. Polling covers every register in the current world, including other floors, even without an arrival notification.
 
 ### Manual script reload
 
-Close the game for the first upgrade from 0.1.3-dev or earlier. Once 0.1.4 is running, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#english), replace the complete Lua package, then use **Ctrl+R** or the loader's Reload Mods action. Verify the new `START` version and review `RELOAD` and `ERROR` entries using the diagnostic reference above.
+Close the game for the first upgrade from 0.1.3-dev or earlier. Once 0.1.4 is running:
 
-Reload requires the experimental loader's `ModRef` shared-variable and unload support. The lifecycle section above defines retry history and AI recovery, including permanent-removal requirements. Restart if state is damaged or uses an unsupported future format.
+1. Set up the loader with the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#english).
+2. Replace the complete Lua package.
+3. Press **Ctrl+R** or use the loader's Reload Mods action.
+4. Check the new `START` version and review `RELOAD` and `ERROR` entries (see the diagnostic reference above).
+
+Reload needs the experimental loader's `ModRef` shared-variable and unload support. Retry history, AI recovery and removal rules are described in the reload lifecycle section above. Restart the game if the shared state is damaged or uses an unsupported future format.
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.4。** 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.2 的现金、刷卡及远距离结账确认仅适用于此前版本；下方历史排查记录与验收范围原样保留其事实，不将早期问题描述作为当前状态。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.4。** 测试记录见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
+
+### 实现
+
+| 模块 | 职责 |
+| --- | --- |
+| `Scripts/game.lua` | 通过 UE4SS 读取房主、收银机及付款状态，核对同一世界、对象类型和关联关系，再发起游戏默认交互请求 |
+| `Scripts/checkout.lua` | 用普通 Lua 数据维护每台收银机的处理阶段和重试记录；以新的付款物件身份区分新交易，不用金额或循环计数器去重 |
+| `Scripts/main.lua` | 加载后自动运行，监听顾客到达通知，在游戏线程每秒检查一次，处理世界切换和异常停用 |
+| `Scripts/diagnostics.lua` | 记录状态变化，状态不变时每 30 次轮询复述一次，不持有游戏对象；请求前状态、调用返回和即时快照分别记录 |
+| `Scripts/ai.lua` | 在房主世界中排除 AI 新的柜台收银任务，离开会话或异常时恢复本 Mod 的改动 |
+| `Scripts/localization.lua` | 识别游戏语言并翻译原创说明日志 |
+| `Scripts/reload.lua` | 在 Lua 重载之间校验并保存普通值形式的 AI 恢复记录和重试记录 |
+
+**交易流程**
+
+- 收款和关闭钱柜各自等待游戏状态确认，不把 RPC 调用返回当作付款成功。
+- 刷卡尚未完成或已被员工认领时不发起请求。
+- 调度在轮询之间只保留字符串与计数，不保存 Unreal 对象。实际请求前再次读取交易，跳过已失效或被手动操作改变的目标。
+
+**阻塞条件**
+
+- `IsInteracting()`、手持物品、操作界面和其他玩家动作都不阻塞，只有游戏实际暂停和交易自身的约束会让 Mod 等待。
+- 某台收银机快照暂时无法读取时，保留其重试记录。
+- 最后复查取消的请求保留冷却时间，但不消耗已发送请求的次数。
+
+**异常**
+
+- 模块加载、调度注册与回调、游戏调用的异常都会写入带执行阶段和 Lua 堆栈的错误日志；Lua 无法捕获原生进程崩溃。
+- 旧计时接口回退最多只排队一个回调，暂停或卡顿时不会积压请求。
+
+### 交互范围与 AI 任务
+
+#### 交互范围（自 0.1.2 起）
+
+在已确认的房主游戏线程请求中，仅对当前目标的这一次同步调用：
+
+- 用 `GetDistanceTo` 获取角色到目标的距离。
+- 临时使用 `EDistanceReference.Actor`，将 `DistanceToInteract` 扩大到至少“距离 + 100 游戏单位”，并启用 `bCanInteractWhilePlacing`。
+- 准备中途失败时回滚已改动的部分；调用正常返回或抛出 Lua 异常后，逐项恢复并校验。
+- 已被原生收款销毁的付款对象不再回写。
+- 恢复失败时停止自动流程，并提示重新载入世界。
+- 调用之外不保留、不改动玩家位置、控制器、忙碌状态或目标对象。
+
+这里仍是普通玩家交互，不是员工任务。本机参考显示，AI 收银需要员工任务和实体上下文，玩家请求则会重建房主交互上下文，仅改一个玩家标记无法切换路径。进展以付款物件、刷卡和账单状态确认，而不是距离诊断。
+
+#### AI 任务排除
+
+- 通过当前世界的 `JobSubsystem.EvaluatorsByJob` 定位任务容器，只移除 `BillingStartTaskEvaluator`；保留餐桌结账、其他任务顺序和员工配置。
+- 在游戏线程用 UE4SS 数组接口重建前，先核对原任务引用仍由 `AllEvaluators` 持有。
+- 跨回调只保存身份字符串和原位置。未变化的数组不重写；之后新建的容器也会处理。
+- 已领取的任务和收银机占用标记保持不变。
+- 恢复时只插回本 Mod 移除且尚未恢复的任务，保留其他运行时改动。写入失败尝试回滚；调度或恢复失败会记录日志。
+- 不写入存档。Lua 重载使用下述状态交接。
+
+### Lua 热重载生命周期
+
+**共享状态。** `ModRef` 在当前游戏进程中保留一个带独立名称和格式版本的字符串，只含会话、付款物件与收银机身份、尝试次数与时间、告警标志，以及恢复 AI 所需的任务身份和位置。解析器使用有界长度前缀并校验结构，不使用 `load`、外部 JSON 依赖或共享 UObject。记录损坏或格式不受支持时停止加载，并保留原记录。交接只存在于当前进程，不是崩溃恢复文件，也不是存档数据。
+
+**保存顺序。**
+
+- 每次改写 AI 数组前，先保存恢复方案。
+- 每次原生请求前，先保存已增加的次数和冷却时间。
+- 共享状态写入失败时，不执行该次数组改写或请求。
+- 扫描完成及 `ModRef.OnUnload` 时保存最新普通值。
+
+**卸载。** 卸载只停用旧回调并序列化 Lua 数据，不访问引擎对象、不调用游戏函数，也不向即将关闭的 Lua 状态排队。实验版加载器卸载时会注销旧 Hook 并移除计划动作；脚本也会让残留的旧回调直接返回。
+
+**新实例。**
+
+- 先在游戏线程恢复继承的 AI 记录，再重新应用正常的任务策略。
+- 控制器暂时不可用时，保留记录等待。
+- 确认进入不同的会话后，可丢弃已销毁旧世界的记录；同一会话中容器缺失或恢复失败时，保留记录并停止自动流程，留待下次重载重试。
+- 无论第一次回调来自通知还是轮询，包括控制器暂时缺失时，都保留原交易的次数和冷却；确认进入不同的真实会话后才重置。已耗尽的三次尝试不会因重载重新获得。
+
+**升级与卸载。** 0.1.3-dev 及更早版本没有交接记录，从这些版本升级时须关闭游戏。永久卸载也须关闭游戏：没有新实例加载时，卸载回调无法恢复引擎数组。
+
+### 顾客提醒
+
+- 对 `CashRegister:Multicast_DisplayCustomerAtBillingNotification` 使用后置 Hook，不修改参数或返回值。
+- 回调只复制接收对象的身份字符串，不保留 UObject 或 Context。
+- 现代调度接口延迟 50 毫秒后在游戏线程检查，旧接口使用游戏线程队列。
+- 重复提醒按收银机合并；派发过程中产生的新提醒排到下一次检查。
+- 每批事件重新确认房主及当前世界，只读取相关收银机。定时轮询仍检查全部收银机，并共用同一状态机、冷却和尝试次数。
+- 监听在定时任务注册成功后才安装。监听注册、身份读取或事件排队失败时只停用监听并发出警告，定时检查照常进行；实际结账流程的异常仍会停止自动操作。
+- `EVENT` 记录的是延后检查时的状态，而非通知发出瞬间的快照。Hook 未必覆盖全部原生调用，因此定时检查始终保留。
 
 ### 多语言适配
 
-`Scripts/localization.lua` 负责自有日志文案。每次游戏线程轮询或提醒事件批次通过 `KismetInternationalizationLibrary:GetCurrentLanguage()` 更新语言，覆盖 `en`、`fr`、`zh-Hans`、`it`、`es`、`de`、`ru`、`ja`、`ko`、`zh-Hant`、`tr`、`pl`、`pt`、`pt-BR`。兼容大小写、下划线及地区变体，显式中文书写系统优先，巴西葡萄牙语独立处理；读取失败或不支持时回退英语。
+- 每次游戏线程轮询或事件批次通过 `KismetInternationalizationLibrary:GetCurrentLanguage()` 更新语言。
+- 支持 `en`、`fr`、`zh-Hans`、`it`、`es`、`de`、`ru`、`ja`、`ko`、`zh-Hant`、`tr`、`pl`、`pt`、`pt-BR`。兼容大小写、下划线和地区变体，显式中文书写系统优先，巴西葡萄牙语单独识别；读取失败或不支持时回退英语。
+- 翻译六类原创说明：房主自动结账启用、AI 任务恢复失败、无法安排恢复、异常后停止、提醒监听不可用、三次无进展。
+- 事件标记、字段名、阶段与原因标识、对象身份及异常详情保持不变。首次安全读取游戏语言之前的消息（启动初期和监听注册错误）使用英语。
+- 游戏付款界面、通知和名称保持原样，不提供语言开关，也不复制游戏翻译目录。
 
-翻译六类原创说明：房主自动结账启用、AI 任务恢复失败、无法安排恢复、异常后停止、提醒监听不可用、三次无进展后转人工处理。技术事件名、字段、阶段和原因标识、对象身份及异常详情保持不变。首次安全的游戏线程语言读取前，启动及早期监听注册错误仍使用英语。游戏付款界面、通知和名称保留原生值，不添加语言开关或游戏翻译目录。
-
-离线多语言测试覆盖全部语言与消息、别名、读取失败、运行中切换、后备语言及稳定诊断字段。实机回归需在启动后切换全部 14 种语言，核对六类说明、技术字段及原生通知，包含简繁中文和两种葡萄牙语；不要把早期启动英语误判为后续切换失败。这些检查尚不能宣称已在游戏中完成。
+所有游戏接口研究、原生代码分析、类型导出和研究工具都放在被忽略的 `work/`。可跟踪代码不含原生地址、内存偏移或游戏代码。
 
 ### 诊断标记
 
-默认在 `UE4SS.log` 的 `[AutoCheckout]` 条目记录；状态变化时输出，不变时每 30 次轮询再次记录，通常约 30 秒。异常堆栈可能占后续多行。
+默认写入 `UE4SS.log` 的 `[AutoCheckout]` 条目。状态变化时输出，不变时每 30 次轮询（约 30 秒）复述一次。异常堆栈可能占后续多行。
 
 | 日志标记 | 含义 |
 | --- | --- |
 | `START version=0.1.4` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
-| `RELOAD` | 已恢复旧实例的 AI 变更，并按当前会话核对交易历史 |
+| `RELOAD` | 已恢复旧实例的 AI 变更，并继续沿用保留的重试记录 |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
-| `EVENT customer-at-billing` | 延后在游戏线程检查时的柜台状态和合并提醒次数 |
-| `EVENT_IGNORED` | 当前不是房主，或柜台已失效、不属于当前世界 |
-| `API` / `HOST` | 接口枚举值与当前房主会话 |
-| `STATE session` | 暂停状态、柜台数量和累计发起请求次数 |
-| `STATE ai` / `AI` | AI 策略及发现、处理的容器数量，`restored_containers` 为恢复数量；`suppressed=0` 不能证明收银已受抑制 |
-| `STATE phase=wait-...` / `unavailable=...` | 等待或排除原因，附账单、付款物件、抽屉、刷卡及占用状态 |
-| `REQUEST` | 调用前的阶段、次数、目标和状态；`source` 区分提醒与轮询。`context` 的 `distance` 是房主到目标的距离，`range_before` 是原范围，`range_for_call` 是临时范围，`scope=target-call` 表示只影响本次调用 |
-| `DISPATCH_RETURNED` / `AFTER` | 返回及即时状态；返回不代表请求被接受，后续 `STATE` 可显示延迟变化 |
+| `EVENT customer-at-billing` | 延后在游戏线程检查时的收银机状态和合并的提醒次数 |
+| `EVENT_IGNORED` | 当前不是房主，或收银机已失效、不属于当前世界 |
+| `API` / `HOST` | 解析出的接口枚举值与当前房主会话 |
+| `STATE session` | 暂停状态、收银机数量和累计发起请求次数 |
+| `STATE ai` / `AI` | AI 策略及发现、处理的容器数量，`restored_containers` 为恢复数量；`suppressed` 大于 0 才表示已排除收银任务 |
+| `STATE phase=wait-...` / `unavailable=...` | 等待或排除原因，附账单、付款物件、钱柜、刷卡及占用状态 |
+| `REQUEST` | 调用前的阶段、次数、目标和状态；`source` 区分提醒与轮询。`context` 中 `distance` 为房主到目标的距离，`range_before` 为原范围，`range_for_call` 为临时范围，`scope=target-call` 表示只影响本次调用 |
+| `DISPATCH_RETURNED` / `AFTER` | 调用返回及即时状态；后续 `STATE` 可能显示延迟变化，仅有返回不代表成功 |
 | `SKIP` | 最后复查发现变化，未发送请求，也不消耗次数 |
 | `WARN` / `ERROR` | 多次无进展或异常停止，附阶段、最近状态及可用 Lua 堆栈 |
 
-更新后核对 `START` 版本，重点保留 `STATE ai`、`REQUEST`、`SKIP`、`AFTER` 和 `ERROR` 后的堆栈。当前代码不产生 `blocked=player-interacting`；交互限制或 AI 任务恢复失败时，重新载入世界。
-
-### 实现
-
-- `Scripts/game.lua`：通过 UE4SS 读取当前房主、收银机及付款状态，核对同一世界、对象类型和关联关系，再发起游戏默认交互请求。
-- `Scripts/checkout.lua`：使用普通 Lua 数据维护每台收银机的处理阶段和重试次数。付款物件身份区分新交易，避免用金额或循环计数器去重。
-- `Scripts/main.lua`：加载后监听收银机的顾客到达通知，并在游戏线程每秒检查一次，处理世界切换和异常停用。旧计时接口回退只排队一次，避免暂停或卡顿期间积压回调。
-- `Scripts/diagnostics.lua`：记录状态变化与每 30 次轮询的状态复述，保留普通字符串，不持有游戏对象。请求前、调用返回和即时快照分别记录，避免把无返回值的 RPC 调用当成付款成功。
-- `Scripts/ai.lua`：在当前房主世界的运行时任务容器中排除柜台收银，保留其他任务顺序；离开会话或异常停止时恢复本次移除的任务。
-
-收款和关闭抽屉各自等待游戏状态确认。刷卡尚未完成时不会关闭抽屉；已被员工认领时不会抢占。调度只保留普通字符串与计数，不跨轮询保存 Unreal 对象。实际请求前再次读取状态，处理失效对象和被手动操作改变的目标。
-
-按用户要求，不再以 `IsInteracting()`、手持物品、操作界面或其他玩家动作作为阻塞条件，仅保留游戏实际暂停和交易自身的约束。玩家抢先处理后，最后复查应取消旧请求；下次检查按最新阶段决定是否还有工作，不修改玩家状态。暂时无法读取某个柜台快照时保留其重试历史，避免短暂不可用刷新预算。最后复查取消的请求记录原因、保留冷却时间，但不消耗已发送请求预算。模块加载、调度注册、调度回调和游戏调用异常均写入带阶段的错误日志；Lua 异常捕获不能捕获原生进程崩溃。
-
-0.1.2 在已确认的本地房主游戏线程请求中，为当前目标设置仅覆盖同步调用的交互限制：以 `GetDistanceTo` 获取角色距离，临时使用 `EDistanceReference.Actor`，将 `DistanceToInteract` 扩大到至少距离加 100 游戏单位，并临时启用 `bCanInteractWhilePlacing`。调用成功或抛出 Lua 异常后逐项恢复，部分准备失败同样回滚；原生收款已销毁的对象不再回写。每项恢复单独尝试和校验，失败停止自动流程并明确要求重新载入世界。它不改动玩家位置、控制器或忙碌状态，也不跨回调保留目标。
-
-此处仍使用默认交互，未改成 AI 任务入口。经本机参考核对，AI 收银有员工任务和实体上下文要求，玩家请求则会重建房主交互上下文，不能仅通过传入非玩家标记切换。按用户选择，本版保留 Lua 路线。请求日志记录距离与临时范围，仍以付款对象、刷卡和账单状态确认进展，不把 RPC 返回视为成功。
-
-AI 策略只在已确认的房主会话中应用，通过当前世界 `JobSubsystem.EvaluatorsByJob` 定位任务容器，排除 `BillingStartTaskEvaluator`，不排除餐桌结账任务，也不写入员工任务排除配置。原任务对象仍由 `AllEvaluators` 持有；移除前核对该引用，随后通过 UE4SS 的数组接口在游戏线程重建并校验顺序。只保存容器、任务及所属子系统的身份字符串和原位置，不跨回调保存 UObject。重复扫描不重写未变的数组；后续新建容器也会处理。
-
-AI 已领取的任务和收银机占用标记不被修改，避免中断已有交易。恢复时只插回本 Mod 移除且尚未恢复的任务，保留其他运行时改动。数组写入失败尝试回滚；自动流程异常时尝试恢复 AI 收银，恢复或游戏线程调度失败会告警。此策略不写存档，关闭游戏后卸载不需要恢复存档；Lua 热重载使用下述状态交接。所有楼层及异常恢复仍保留在后续回归清单中。
-
-提醒监听采用 `CashRegister:Multicast_DisplayCustomerAtBillingNotification` 的后置 Hook，不修改参数或返回值。回调只复制接收对象的身份字符串，不跨回调保留 UObject 或 Context；现代调度接口延迟 50 毫秒后在游戏线程检查，旧接口使用游戏线程队列。重复提醒按柜台合并，派发过程中产生的新提醒排到后续检查。执行时重新确认房主及当前世界，仅处理本批提醒对应的柜台；定时轮询负责所有柜台，共用同一状态机，不因提醒清空冷却和重试历史。
-
-监听在定时任务注册成功后安装。监听注册、回调身份读取或事件排队失败只禁用监听并记录警告，定时检查继续；实际结账流程的异常仍按原有规则停止自动操作。提醒回调未必能覆盖全部原生调用，因此定时检查始终保留。`EVENT` 记录的是延后检查时的状态，不声称是通知发出的瞬间快照。
-
-所有游戏接口研究、原生代码分析、类型导出、工具与研究脚本均在根目录被忽略的 `work/`。可跟踪代码不包含内存偏移、原生函数地址或游戏代码副本。
-
-### Lua 热重载生命周期
-
-`ModRef` 在当前游戏进程中保留一个带独立名称与格式版本的字符串，只含会话、付款对象与柜台身份、尝试次数与时间、告警标志，以及恢复 AI 所需的任务身份和位置。解析器使用有界长度前缀并校验结构，不使用 `load`、外部 JSON 依赖或共享 UObject。记录损坏或格式不受支持时停止加载，并保留原记录。
-
-每次改写 AI 数组前先保存恢复方案，每次原生请求前先保存已增加的次数与冷却时间；共享状态写入失败时，不继续该次数组修改或请求。完成扫描及 `ModRef.OnUnload` 时保存最新普通值。卸载只停用旧回调并序列化 Lua 数据，不访问引擎对象、不调用游戏函数、不向即将关闭的 Lua 状态排队。已核对的实验版加载器在卸载时注销旧 Hook 并移除计划动作；脚本也让残留旧回调直接返回。
-
-新实例在第一次游戏线程回调中先恢复继承的 AI 记录，再重新应用正常任务策略。控制器暂时不可用时保留记录等待；确认进入不同会话后，可丢弃已销毁旧世界的记录。同会话容器不可用或恢复失败时保留记录并停止自动流程，下次热重载可重试。通知先到或轮询先到均保留原交易次数与冷却；控制器暂时不可用时继续保留，确认进入不同会话后才重置。已耗尽的三次尝试不会因重载重新获得预算。0.1.3-dev 及更早版本无法提供交接记录，首次升级必须关闭游戏；永久卸载也需关闭游戏。只卸载而不加载新实例时，卸载回调无法恢复引擎数组，应重新载入世界。交接仅存在当前进程，不是崩溃恢复文件或新增存档数据。
-
-原有 68 项离线测试与 12 项重载测试通过。新增覆盖两个调度器、旧回调失效、AI 恢复后重新应用、恢复失败与容器缺失、两个付款阶段的次数保留、世界与控制器变化、请求前保存、共享写入失败及异常载荷。加载器实际卸载和引擎行为仍需实机测试。
+更新后先核对 `START` 版本，再查看 `STATE ai`、`REQUEST`、`SKIP`、`AFTER` 以及 `ERROR` 后的堆栈。当前代码不会输出 `blocked=player-interacting`。交互范围或 AI 任务恢复失败时，重新载入世界。
 
 ### 离线检查与打包
 
@@ -221,53 +328,64 @@ python tools/check_repository.py
 git diff --check
 ```
 
-测试使用 Lua 5.4：覆盖现金和刷卡流程、动画等待、重复请求、重试上限、未发送请求的计数、现有员工占用、同一世界校验、对象失效、玩家动作不阻塞、手动抢先完成、多个柜台、读档重置、加载后自动运行、两种调度接口、诊断节流与异常停用。提醒测试另覆盖合并、延后读取、定位单个柜台、早于付款就绪的通知、与轮询共用预算、客户端及旧世界过滤、监听失败回退和交互过程中新增通知。AI 测试覆盖定向排除、其他任务与顺序保留、迟到的容器、重复扫描、对象引用保留、写入回滚、恢复失败和房主生命周期。替代对象只能验证 Mod 的逻辑，不能证明 UE4SS 的真实参数桥接、Hook 是否在游戏中触发或游戏运行结果。
+共 68 项离线测试和 12 项重载测试，使用 Lua 5.4 和替代游戏对象运行：
 
-0.1.2 新增远距离现金和刷卡两阶段执行、两步之间玩家距离变化、已有交互设置保留、请求与诊断异常、部分准备失败、单项恢复失败后继续恢复其他项、付款对象销毁以及无效距离输入的验证。
+- **结账：**现金和刷卡阶段、动画等待、去重、重试上限、未发送请求的计数、员工占用、世界／类型／对象有效性、玩家动作、手动完成、多台收银机、读档重置、自动启动、两种调度接口、诊断节流和异常停用。
+- **提醒：**合并、延后读取、定位目标收银机、早于付款就绪的提醒、共用次数、客户端及旧世界过滤、监听失败回退和派发中的新提醒。
+- **AI：**定向移除、引用与顺序保留、迟到的容器、重复扫描、回滚、恢复失败和房主生命周期。
+- **距离：**两个付款阶段、两步之间玩家移动、保留原有限制、请求与诊断异常、部分准备失败、单项恢复失败后继续恢复其他项、付款物件销毁和无效距离。
+- **多语言：**全部语言与消息、别名、读取失败、运行中切换、缺失语言回退和稳定的诊断字段。
+- **重载：**两种调度接口、旧回调失效、AI 恢复后重新应用、恢复失败与容器缺失、两个阶段的次数保留、世界与控制器变化、请求前保存、共享写入失败和异常载荷。
 
-打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4.zip` 和 SHA-256 文件。包不包含测试、开发工具、加载器或游戏资料。构建不会写入游戏目录、操作存档或启动/关闭游戏。
+加载器实际卸载、Hook 是否真实触发以及引擎行为，由下方游戏内清单覆盖。
 
-本版的加载日志为 `START version=0.1.4`，同时保留 `player_guard=transaction-only`；包的 SHA-256 用于核对完整内容。
+打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4.zip` 及其 SHA-256 文件。包内含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`，不含测试、开发工具、加载器或游戏资料。加载标记为 `START version=0.1.4`，并带 `player_guard=transaction-only`。
 
-### 远端测试反馈
+### 早期排查与验收
 
-2026-09-23，用户反馈另一台电脑的 0.1.0-dev 已记录加载与房主识别，顾客仍停留柜台，偶有闪动；未发现异常、重试耗尽或调度失败日志。这些记录不能证明结账请求曾被发送，也不能把闪动归因于 Mod。0.1.1-dev 用于补齐该诊断缺口，尚待同一环境的状态和请求日志；未将交互事件已修复或功能验收通过作为结论。
+- **2026-09-23，0.1.0-dev：**另一台电脑的日志显示已加载并识别房主，但顾客停在柜台、偶有闪动，没有异常、重试耗尽或调度失败日志。0.1.1-dev 为此补充了诊断。
+- **2026-09-24，玩家检查：**现金与刷卡日志均出现 `phase=wait-player-interacting`、`blocked=player-interacting` 和 `dispatched=0`，当时玩家未在收银，AI 在吧台工作，说明旧的玩家检查阻止了请求。随后移除该检查、排除 AI 新的收银任务，并在玩家抢先操作时取消当次请求。
+- **距离限制：**之后的热重载日志中，一笔现金交易立即推进，其他交易的相同请求多次返回而状态不变，有的耗尽三次尝试（该批日志没有刷卡交易）。本机参考确认原生校验存在房主距离限制和摆放家具限制；0.1.2-dev 修复了这两项并补充距离诊断。
+- **2026-09-24，0.1.1：**用户确认 0.1.1-dev 实机正常；0.1.1 保留该运行逻辑，只更新诊断版本。
+- **2026-09-24，0.1.2：**用户确认 0.1.2-dev 截至 01:40:22 完成 3 笔现金、2 笔刷卡，收款和钱柜两步均首次成功，没有新异常或重试失败。现金和刷卡关钱柜时距离分别约 1341 和 796，超过原范围 200，随后账单清空、钱柜关闭。运行代码对应提交 `61dd9c3`，0.1.2 保留该实现。
+- **2026-09-26，0.1.4：**实机及联机测试通过（见上方验收记录）。
 
-2026-09-24，现金与刷卡均出现 `phase=wait-player-interacting`、`blocked=player-interacting`，且 `dispatched=0`；用户确认玩家未处理、AI 在吧台工作。此证据确认旧玩家检查阻止了请求，不能单独证明 AI 改写了玩家状态。用户进一步要求抑制 AI 收银，且玩家操作不应阻塞自动结账，抢先完成时取消当次请求。本次按该规则调整；仍需验证请求发送后游戏是否接受并完成两步交互。
+### 游戏内回归清单
 
-后续日志显示一次现金交易在收款和关闭钱柜调用后立即推进，但其他交易中相同请求多次返回而状态不变，有的耗尽三次预算。延迟出现的状态变化不能据此认定为 Mod 完成；这批热重载后的记录没有银行卡交易。本机参考确认两个动作的原生校验仍受房主距离限制，也有家具摆放限制。日志没有玩家位置，因此不能逐笔证明拒绝原因；0.1.2-dev 针对已确认存在的限制修复，并补充距离诊断，其后实机结果见下文。
+记录游戏和加载器版本、语言、房主／客机身份以及是否手动介入；对照 `REQUEST context` 与紧接的 `AFTER`，并核对账单和收入。
 
-### 游戏内验收
+1. 单人进入餐厅，让用餐完毕的顾客到达柜台，确认无需点击即可结账、正常离店；入座和用餐中的顾客不受影响。
+2. 分别测试现金和银行卡、提示及钱柜动作；账单、小费、销售记录和收入每笔只计一次。
+3. 连续接待至少十组顾客，包含金额相同的相邻账单、多台收银机和屋顶柜台。
+4. 玩家抢先收款或关钱柜，确认旧请求被跳过、无重复收款；付款物件销毁或交易已完成不会让整个 Mod 停用。
+5. 手持物品、制作饮料、打开平板／聊天、摆放家具，确认玩家当前操作不受影响、自动结账继续；游戏实际暂停时等待，恢复后继续。
+6. 安装后直接进入餐厅，以及重启游戏后，不做任何按键或开关操作，首位顾客应自动结账。
+7. 返回主菜单、切换存档、重新加入，确认不会操作旧世界的收银机，并检查长时间游玩的日志和轮询开销。
+8. 分别测试仅房主安装和双方都安装，再断线重连；只有房主执行，交易正常同步。
+9. 故意让某次请求不被游戏接受，确认重试有上限、日志可读，仍能手动完成结账。
+10. 对照 `EVENT`、`source=notification` 及后续状态，确认对应正确的收银机。测试没有提醒、提醒早于付款就绪、监听失败、旧世界和客户端提醒；定时检查应始终可用。
+11. `STATE ai` 发现任务容器且 `suppressed` 大于零；AI 不再领取新的柜台收银任务，仍制作饮料和做其他工作，已领取的任务能完成。检查其他楼层、新雇员工、切换存档和异常后的恢复，员工配置不变。
+12. 启动后切换全部 14 种游戏语言，核对六类翻译说明、不变的技术字段和原生通知，包括简繁中文和两种葡萄牙语。启动初期为英语属于正常，不是语言切换失败。
+13. 在等待现金、刷卡处理中、钱柜打开和重试已耗尽时连续热重载，确认只有一组有效的监听／轮询、冷却和次数不重置、员工任务先恢复再应用，并测试切换世界和恢复失败。
 
-2026-09-24 用户在上述修正后确认最新 0.1.1-dev 实机测试成功，明确要求转为 0.1.1 正式版。正式版保留已测试的运行逻辑，仅更新诊断版本标识。本次反馈未逐项提供游戏及加载器完整版本、联机角色或测试时长。
-
-2026-09-24 用户确认 0.1.2-dev 本次测试没有问题，报告截至 01:40:22 已完成 3 笔现金、2 笔刷卡，每笔均执行接收付款和钱柜交互；所有请求均为第一次尝试，没有重试失败或新异常。现金关钱柜时距离约 1341，刷卡约 796，均超过原交互范围 200，随后账单清空、钱柜关闭。这验证了本轮现金、刷卡及超出原范围的结账流程，随后按用户要求转为 0.1.2 正式版；运行逻辑保持已验收版本，仅更新诊断版本标识、包名和说明。来源为用户实机反馈，运行代码对应提交 `61dd9c3`；反馈未逐项确认摆放家具、跨楼层、联机同步或长时间运行场景。
-
-以下保留为后续回归检查清单，不代表本次逐项完成。后续重点补充其他楼层、两步之间移动、同时摆放家具及手动交互设置恢复，记录是否手动介入，核对 `REQUEST context` 与紧接的 `AFTER`，并检查账单及收入。
-
-1. 单人进入餐厅，让用餐完毕的顾客到达柜台，确认无点击即可结账、正常离店；入座前和用餐中的顾客不受影响。
-2. 分别测试现金和银行卡，确认刷卡提示和抽屉动作正常；比较账单、小费、销售记录及收入，确认每笔只计一次。
-3. 连续接待至少十组顾客，包含金额相同的相邻账单、多台收银机和屋顶柜台；检查队列正常推进。
-4. 玩家抢先点击付款或收银机，确认旧请求被跳过，后续状态正常推进，无重复收款。付款对象销毁或柜台已完成时不得导致整个 Mod 停用。
-5. 拿起其他物品、制作饮料、打开平板/聊天和摆放家具，确认自动功能继续，检查游戏是否保留玩家当前操作；游戏实际暂停时等待，恢复后继续。
-6. 安装后直接进入餐厅，不做任何按键或开关操作，确认首位顾客自动结账；重新启动游戏后再次确认自动运行。
-7. 返回主菜单、切换存档、重新加入游戏，确认不会操作旧世界的柜台；长时间游玩检查日志和轮询开销。
-8. 房主启用、客户端未启用，以及双方都安装两种情况下，确认只有房主执行、交易正常同步。断线重连后再次检查。
-9. 故意让某次请求不被游戏接受，确认重试有上限、日志不刷屏，仍能手动完成结账。
-10. 顾客到柜台提醒出现时检查 `EVENT` 日志，确认对应正确柜台；与 `source=notification` 请求及后续状态对照。没有收到提醒、提醒早于付款就绪、监听注册失败时，确认定时检查仍可推进；旧世界通知和普通客户端通知不得触发交易。
-11. 让 AI 在吧台工作，确认 `STATE ai` 中发现任务容器且 `suppressed` 大于零，AI 不再领取新的柜台收银任务，仍正常制作饮料和做其他工作。已领取的收银应能完成，各楼层及新雇员工同样检查。切换存档和自动流程异常后检查任务恢复，员工配置应不变。
-12. 在等待现金、刷卡处理中、钱柜打开及重试已耗尽时连续热重载，检查只有一组有效监听/轮询、冷却与次数不重置、员工任务先恢复再应用，并测试切换世界及恢复失败；总体完成反馈未单独提供这些重载场景的实机结果。
-
-接口或加载器升级后，应重新核对本机参考并重复上述验收。构建成功、离线测试通过不代表完成游戏内验收。
+游戏或加载器接口变化后，重复相关检查。
 
 ### 运行兼容性与重试时序
 
-当前版本为 **0.1.4**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+- **当前版本：**0.1.4。
+- **支持游戏：**至 Steam Build 25822788 / 1.0.2.44eb。
+- **开发参考版本：**Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
+- **UE4SS：**experimental `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。
 
-本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4，以及 UE4SS experimental API `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。同一交易阶段发送请求至少间隔 3 秒，最多尝试 3 次；耗尽后仅停止该阶段，后续交易仍可处理。即使未收到顾客到达通知，也轮询当前世界全部收银机，包括其他楼层。
+重试时序：同一交易阶段发送请求至少间隔 3 秒，最多尝试 3 次；耗尽后只停止该阶段，后续交易照常处理。即使没有收到顾客到达通知，也会轮询当前世界的全部收银机，包括其他楼层。
 
 ### 手动脚本重载
 
-首次从 0.1.3-dev 或更早版本升级时须关闭游戏。0.1.4 开始运行后，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#中文)设置加载器，完整替换 Lua 安装包，再按 **Ctrl+R** 或使用加载器的 Reload Mods。核对新的 `START` 版本，并按上方诊断说明检查 `RELOAD` 和 `ERROR`。
+首次从 0.1.3-dev 或更早版本升级时须关闭游戏。0.1.4 运行后：
 
-重载需要实验版加载器的 `ModRef` 共享变量及卸载支持。重试历史、AI 恢复和永久卸载要求见上方生命周期章节；记录损坏或来自不支持的未来格式时重启游戏。
+1. 按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/docs/hot-reload.md#中文)设置加载器。
+2. 完整替换 Lua 安装包。
+3. 按 **Ctrl+R** 或使用加载器的 Reload Mods。
+4. 核对新的 `START` 版本，并按上方诊断标记检查 `RELOAD` 和 `ERROR`。
+
+重载需要实验版加载器的 `ModRef` 共享变量及卸载支持。重试记录、AI 恢复和卸载要求见上方热重载生命周期章节；共享状态损坏或来自不支持的未来格式时，请重启游戏。

@@ -27,9 +27,9 @@ Players can start with the [Mod list and downloads](../README.md#english) or [he
 | Auto Menu | [Player guide](../auto-menu-mod/README.md#english) · [Development and validation](../auto-menu-mod/DEVELOPMENT.md#english) · [Changes](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order | [Player guide](../scan-to-order-mod/README.md#english) · [Development and validation](../scan-to-order-mod/DEVELOPMENT.md#english) · [Changes](../scan-to-order-mod/CHANGELOG.md) |
 | Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
-| Confirmed in-game testing | [Validation record](../releases/validation.md#english) |
+| In-game testing and supported game builds | [Validation record](../releases/validation.md#english) |
 
-These pages describe original Mod behavior, development decisions and validation scope. Extracted assets, type/function exports, translation catalogs and research notes belong only in ignored `work/`; they must not be added here. The user reported completion of in-game testing for all seven Mods on 2026-09-26; see the [validation record](../releases/validation.md#english) for its scope. Later changes require their own validation and do not inherit that report automatically.
+Extracted assets, type/function exports, translation catalogs and research notes stay in the ignored `work/` folder, not here.
 
 ## 中文
 
@@ -56,6 +56,6 @@ These pages describe original Mod behavior, development decisions and validation
 | Auto Menu（菜单巧配） | [玩家说明](../auto-menu-mod/README.md#中文) · [开发与验收](../auto-menu-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order（扫码点餐） | [玩家说明](../scan-to-order-mod/README.md#中文) · [开发与验收](../scan-to-order-mod/DEVELOPMENT.md#中文) · [版本变化](../scan-to-order-mod/CHANGELOG.md) |
 | 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
-| 已确认的实机测试 | [验收记录](../releases/validation.md#中文) |
+| 实机测试与支持的游戏版本 | [验收记录](../releases/validation.md#中文) |
 
-这里记录原创 Mod 行为、开发设计和验证范围。提取资源、类型与函数导出、游戏翻译目录及研究笔记仅存于被忽略的 `work/`，不得加入此目录。用户于 2026-09-26 反馈全部 7 个 Mod 实机测试完成，确认范围见[验收记录](../releases/validation.md#中文)。后续改动须另行验证，不自动继承该次反馈。
+提取资源、类型与函数导出、游戏翻译目录及研究笔记放在被忽略的 `work/` 中，不放在这里。

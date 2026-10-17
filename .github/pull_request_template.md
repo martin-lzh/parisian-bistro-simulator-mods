@@ -12,7 +12,7 @@
 
 ## Validation
 
-<!-- List checks actually run, their results, and remaining in-game checks. Offline tests/builds do not establish gameplay, rendering or multiplayer acceptance. -->
+<!-- List the checks you ran, their results, and any in-game checks still to do. -->
 
 - [ ] Relevant tests and package checks completed, or limitations explained.
 - [ ] Player README and developer documentation updated in English and Chinese as needed.
@@ -21,4 +21,4 @@
 
 ## Release scope
 
-<!-- State whether any release is intended and link the existing explicit authorization record if applicable. A PR, unchanged version or passing CI does not authorize publication or changing repository visibility. -->
+<!-- Say whether a release is intended and, if so, link its authorization record. -->

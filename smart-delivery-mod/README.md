@@ -8,46 +8,53 @@
 
 Choose Free service, Budget delivery or Premium delivery for automatic smart orders on the restaurant computer.
 
-**Version: 0.1.5.** Single player or multiplayer host only. Only the host needs to install it; guests cannot edit the Mod's delivery choice.
-
-**Game support: through Steam Build 25822788 / 1.0.2.44eb.** Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
+**Version: 0.1.5.** Single player or multiplayer host. Only the host installs it; guests don't need it and can't change the delivery choice.
 
 ### How to use
 
-1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app. Click the game's **Automatic Smart Order** button to open its settings window.
-2. Check **Enable automatic ordering** if you want the game to replenish supplies automatically. Set **Minimum order value (€)** and **Order immediately when out of stock** as described below.
-3. At the bottom of this window, above **Save** and **Cancel**, open **Delivery method** and select **Free service**, **Budget delivery** or **Premium delivery**.
-4. Click **Save** to apply both the game's automatic-order settings and the Mod's delivery choice. Selecting an item in the dropdown alone does not apply it. If an order is already eligible when you save, the game can place it immediately using the saved delivery method.
-5. Reopen **Automatic Smart Order** to check the saved selection. Once saved, you can close the computer and continue playing; future automatic orders use this choice without another click.
+1. In single player, or as the multiplayer host, open the restaurant computer's **Menu** app and click **Automatic Smart Order**.
+2. To let the game restock automatically, check **Enable automatic ordering**, then set **Minimum order value (€)** and **Order immediately when out of stock** (see the table below).
+3. Above **Save** and **Cancel**, open **Delivery method** and pick **Free service**, **Budget delivery** or **Premium delivery**.
+4. Click **Save**. This applies both the game's settings and your delivery choice; picking from the list alone applies nothing. If an order is already due when you save, the game may place it straight away with the new method.
+5. Close the computer and keep playing. Every later automatic order uses the saved method. Reopen **Automatic Smart Order** any time to check it.
 
-Click **Cancel** to discard the unsaved settings and delivery selection. Reopening the window restores the last saved delivery choice. To stop automatic ordering, uncheck **Enable automatic ordering** and click **Save**; the delivery preference remains available for when you enable it again. The Mod adds no gameplay hotkey or separate settings window.
+- **Cancel** discards unsaved changes. Reopening the window shows the last saved choice.
+- To stop automatic ordering, uncheck **Enable automatic ordering** and click **Save**. Your delivery choice is kept for when you turn it back on.
+- There is no hotkey or separate settings window.
 
 ### Settings and delivery choices
 
-The first three controls belong to the game. The Mod adds only **Delivery method**.
+The first three settings are the game's own. The Mod adds **Delivery method**.
 
 | Setting | What it does |
 | --- | --- |
-| Enable automatic ordering | Lets the game monitor stock and place supply orders automatically. Choosing a delivery method does not enable this option for you. |
-| Minimum order value (€) | Holds an automatic order until its item subtotal reaches the specified amount. This is a purchase threshold, not a limit on shipping fees or total spending. |
-| Order immediately when out of stock | Allows a stockout to trigger an order below that purchase threshold. It does not bypass the game's other ordering conditions or money checks. |
-| Delivery method | Selects the service used when the game actually places an automatic smart order. |
+| Enable automatic ordering | The game watches stock and orders supplies automatically. Picking a delivery method doesn't turn this on for you. |
+| Minimum order value (€) | An automatic order waits until the goods total reaches this amount. Shipping fees don't count toward it. |
+| Order immediately when out of stock | A stockout can trigger an order below the minimum. The game still checks its other conditions and your money. |
+| Delivery method | The delivery service used whenever the game places an automatic smart order. |
 
 | Delivery method | Unloading staff |
 | --- | --- |
-| Free service | No unloading worker; handle the delivery yourself. |
-| Budget delivery | 1 unloading worker. |
-| Premium delivery | 4 unloading workers. This is the initial preference if no preference has been saved. |
+| Free service | None; you unload the delivery yourself. |
+| Budget delivery | 1 worker. |
+| Premium delivery | 4 workers. Used until you save a different choice. |
 
-Service fees, difficulty adjustments and night surcharges use the game's rules. Choosing Free service does not make the supplies free. The selected method applies to both small and large automatic orders; the Mod does not choose a different service based on order size.
+- Service fees, difficulty adjustments and night surcharges follow the game's rules. With Free service you still pay for the goods.
+- The chosen method is used for small and large automatic orders alike.
 
-### What changes and what stays under your control
+### What the Mod changes
 
-Automatic smart ordering is already a game feature. This Mod changes its delivery choice; it does not create an additional ordering system. Stock calculations, order quantities, purchase thresholds, available funds and delivery availability remain controlled by the game. If no automatic order is due, saving a delivery method alone does not buy supplies.
+The Mod only picks the delivery method for the game's existing automatic smart orders. The game still decides when to order, what and how much to buy, whether you can afford it and whether delivery is available. Saving a delivery method doesn't buy anything by itself.
 
-Manual ingredient orders and furniture deliveries keep their own delivery choices. An order already placed is not changed by selecting another method. The dropdown follows the game's settings lock and cannot be edited while the game locks automatic-order settings; it does not unlock unavailable game features.
+- Manual ingredient orders and furniture deliveries keep their own delivery choice.
+- Orders already placed keep the method they were placed with.
+- When the game locks the automatic-order settings, the **Delivery method** list is locked too.
 
-Only the host's installation controls the preference in multiplayer. Guests do not need the Mod and cannot change this setting, even if they install it. Your saved choice survives restarts and is shared by this installation's restaurants, rather than being stored separately in each game save. It is stored in `SmartDelivery/Scripts/delivery-preference.txt`; keep that file when updating. The Mod folder must be writable.
+### Multiplayer and saved choice
+
+- In multiplayer, only the host's choice counts. Guests don't need the Mod, and can't change the setting even if they install it.
+- Your choice survives restarts and applies to every restaurant on this installation (it isn't stored in each save).
+- It is saved in `SmartDelivery/Scripts/delivery-preference.txt`. Keep this file when updating. The Mod folder must be writable.
 
 ### In-game screenshots
 
@@ -61,52 +68,52 @@ Open the selector to choose **Free service**, **Budget delivery** or **Premium d
 
 ### Requirements
 
-Windows x64 Parisian Bistro Simulator and **UE4SS experimental**. The checked loader build is `v3.0.1-1140-gf58e8f84`; stable UE4SS 3.0.1 is not supported. Other loader builds have not been verified. UE4SS is installed separately. The ready-to-use Mod ZIP includes its helper; no compiling is needed.
+- Windows version of Parisian Bistro Simulator, up to game version 1.0.2.44eb (Steam Build 25822788).
+- [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental) `v3.0.1-1140-gf58e8f84`, installed separately (see **Install**). The older stable UE4SS 3.0.1 does not work.
+- Single player or multiplayer host. The Mod ZIP already includes its helper file `Scripts/delivery_bridge.dll`.
 
 ### Download
 
-Choose **one** download source; both provide the same Mod:
+Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Smart Delivery 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5), scroll to **Assets**, expand it if needed and click **SmartDelivery-0.1.5.zip**. `SHA256SUMS.txt` is an optional checksum file, not something to install. Do not choose **Source code**.
-- **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/4), sign in or register a free account, select **Files → Main files → Manual download** for version **0.1.5**. Continue through the requirements notice if shown, select **Slow download** for a free account and wait for the ZIP. Keep the ZIP in your **Downloads** folder until the extraction step below.
+- **GitHub (no account needed):** open [Smart Delivery 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) and download **SmartDelivery-0.1.5.zip** under **Assets**. Don't pick **Source code**.
+- **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/4), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
 
-These instructions start with only the Windows game installed. **Manual installation is free and does not require Vortex or a Nexus Premium subscription.** A web browser and Windows File Explorer are enough; Windows can extract ZIP files without WinRAR or 7-Zip. You do not need Git, Python, Visual Studio or Unreal Engine.
+Manual installation is free and needs neither Vortex nor Nexus Premium.
 
-UE4SS is the **mod loader**: it starts the Mod when the game starts. Install it once for this game, then add any of the seven Mods to its `Mods` folder. Vortex is an optional **mod manager**, which copies and removes Mod files for you; it does not replace UE4SS.
+UE4SS is the mod loader that runs Mods when the game starts. Install it once, then put Mods in its `Mods` folder. If UE4SS is already installed, start at step 6.
 
-1. **Exit the game completely.** In Steam, open **Library**, right-click **Parisian Bistro Simulator**, then choose **Manage → Browse local files**. The File Explorer window that opens is your game folder. Its name may be **Parisian Brasserie Simulator**. Do not use Documents or the save folder.
-2. **Open the installation destination.** In that window, double-click **BrasserieSimulator**, then **Binaries**, then **Win64**. You should see **BrasserieSimulator-Win64-Shipping.exe** (Windows may hide `.exe`). Keep this window open. This is where the loader goes; do not put the loader beside the top-level `BrasserieSimulator.exe`.
-3. **Download the loader.** Use [UE4SS_v3.0.1-1140-gf58e8f84.zip](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental/UE4SS_v3.0.1-1140-gf58e8f84.zip), the basic experimental build used as this project's reference. If the direct link fails, open [UE4SS experimental releases](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental), expand **Assets / Show all assets** and find that exact filename. Do not choose `zDEV`, `Source code` or the old stable `UE4SS_v3.0.1.zip`. Other experimental builds have not been verified for these Mods.
-4. **Extract the loader ZIP.** In File Explorer's **Downloads** folder, right-click the downloaded ZIP → **Extract All… → Extract**. Open the extracted folder. Inside it, select **dwmapi.dll** and the entire **ue4ss** folder, right-click → **Copy**; return to the game's **Win64** window, right-click empty space → **Paste**. Copy both items themselves, not the outer folder named after the ZIP. There is no UE4SS installer to run. If you already have UE4SS installed, back up its folder and settings before replacing anything; keep your existing Mods.
-5. **Check the loader location.** In **Win64**, `dwmapi.dll` must sit beside `BrasserieSimulator-Win64-Shipping.exe`. Open **ue4ss**: it must contain **UE4SS.dll**, **UE4SS-settings.ini** and **Mods**. If these are missing, repeat the extraction/copy step; an empty folder named `Mods` alone does not install the loader.
-6. **Extract the Mod ZIP** downloaded above: right-click it → **Extract All… → Extract**. Open the extracted folder until you can see **SmartDelivery**, the folder that contains **Scripts** and **enabled.txt**. Windows may show `enabled` without `.txt`; that is normal.
-7. **Copy the whole SmartDelivery folder.** Right-click it → **Copy**. In the game window, open **Win64 → ue4ss → Mods**, right-click empty space → **Paste**. Do not copy only `main.lua`, and do not place the ZIP itself in `Mods`. Also keep **Scripts/delivery_bridge.dll** in place; it is included in the ZIP.
-8. **Check the result.** Open **Mods → SmartDelivery → Scripts**: **main.lua** must be there. Go back once to **SmartDelivery**: **enabled.txt** must be there beside **Scripts**. An extra `SmartDelivery/SmartDelivery` layer is incorrect. Leave `enabled.txt` as supplied, even if it is empty; it enables the Mod. Do not replace the loader's `mods.txt`.
-9. **Start the game normally through Steam** and follow **How to use** above. Some Mods run in the background and have no startup message. Check the single-player/host/guest requirement at the top of this guide; the host is the player who opens the multiplayer restaurant for others to join.
+1. **Close the game.** In Steam, open **Library**, right-click **Parisian Bistro Simulator** → **Manage → Browse local files**. This opens the game folder (it may be named **Parisian Brasserie Simulator**).
+2. **Open BrasserieSimulator → Binaries → Win64.** You should see **BrasserieSimulator-Win64-Shipping.exe** (Windows may hide the `.exe`). Keep this window open; the loader goes here.
+3. **Download UE4SS:** [UE4SS_v3.0.1-1140-gf58e8f84.zip](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental/UE4SS_v3.0.1-1140-gf58e8f84.zip). If the link doesn't open, find that exact file under **Assets** on the [UE4SS experimental release page](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental). Don't use `zDEV`, `Source code` or the old stable `UE4SS_v3.0.1.zip`.
+4. **Copy the loader into Win64.** Right-click the ZIP → **Extract All… → Extract**. From the extracted folder, copy **dwmapi.dll** and the **ue4ss** folder and paste both into **Win64**. If you are replacing an existing UE4SS, back up its folder first.
+5. **Check the loader:** `dwmapi.dll` sits next to `BrasserieSimulator-Win64-Shipping.exe`, and the **ue4ss** folder contains **UE4SS.dll**, **UE4SS-settings.ini** and **Mods**.
+6. **Extract the Mod ZIP** and open it until you see the **SmartDelivery** folder, which contains **Scripts** and **enabled.txt**.
+7. **Copy the whole SmartDelivery folder** into **Win64 → ue4ss → Mods**.
+8. **Check the Mod:** `Mods/SmartDelivery/Scripts/main.lua`, `Mods/SmartDelivery/Scripts/delivery_bridge.dll` and `Mods/SmartDelivery/enabled.txt` should exist (not `SmartDelivery/SmartDelivery`). Keep `enabled.txt` even if it is empty, and keep `delivery_bridge.dll` in **Scripts**.
+9. **Start the game through Steam** and follow **How to use** above.
 
-The final entry point is `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/SmartDelivery/Scripts/main.lua`, starting from the Steam game folder. If the feature does not work, close the game, recheck the two folder layouts above, then open `Win64/ue4ss/UE4SS.log` with Notepad and look for a recent timestamp or an error. See [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) before reinstalling.
+If the Mod doesn't work, close the game, recheck steps 5 and 8, then see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
 
-**Using Vortex instead:** follow the [Vortex setup guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#english) to install Vortex, this game's extension and UE4SS first. Then import the original Mod ZIP, install, enable and deploy it. Use one installation method for this Mod. **The [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) currently requires an active Nexus Premium membership for one-click installation.** A free Nexus account or GitHub download can still be used for individual Mods; GitHub downloads need no account.
+**Using Vortex instead:** set up Vortex, the game extension and UE4SS with the [Vortex guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#english), then import the Mod ZIP, enable it and deploy. Install each Mod either with Vortex or manually, not both. One-click install of the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) requires Nexus Premium.
 
 ### Update or remove
 
-**Update:** close the game and back up `SmartDelivery/Scripts/delivery-preference.txt`. Download and extract the new Mod ZIP, copy its complete `SmartDelivery` folder into the same `Mods` folder and replace matching files. Keep or restore your preference file, then start the game again.
+**Update:** close the game and back up `SmartDelivery/Scripts/delivery-preference.txt`. Extract the new Mod ZIP, copy its whole `SmartDelivery` folder into the same `Mods` folder and replace the existing files. Put your preference file back if it was replaced, then start the game.
 
-**Remove:** close the game and delete only `Mods/SmartDelivery`. Leave UE4SS and other Mods in place. The game returns to its normal automatic delivery selection. Deleting the whole folder also deletes the saved Mod preference, so back up the preference file first if you want to reuse it later. Game saves need no conversion.
+**Remove:** close the game and delete only `Mods/SmartDelivery`, leaving UE4SS and other Mods in place. Automatic orders go back to the game's own delivery choice, and your saves keep working. Deleting the folder also deletes your saved delivery choice, so back up `delivery-preference.txt` first if you want it later.
 
 Optional: [reload scripts without restarting](DEVELOPMENT.md#manual-script-reload). This is not required for normal installation or updates.
 
 ### Languages and help
 
-The delivery names use the game's translations, and the added field label follows the game language. No language pack or separate setting is needed. Technical logs remain English.
+Delivery names and the new field label follow the game language: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
 
-Game languages: English, French, Simplified Chinese, Italian, Spanish, German, Russian, Japanese, Korean, Traditional Chinese, Turkish, Polish, Portuguese and Brazilian Portuguese.
-
-If the selector is missing, confirm you are host and installed the complete folder, including the bundled helper. If the saved choice is not retained, check that the folder can be written to. For a problem report, include relevant `[SmartDelivery]` lines from `UE4SS.log` and `SmartDelivery/Scripts/bridge-status.txt` if it exists.
-
-The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 25759268 on 2026-10-07. The earlier in-game and multiplayer confirmation dates to 2026-09-26; multiplayer was not separately reconfirmed for this update. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english) for both reports.
+- **The Delivery method list is missing:** make sure you are the host and copied the whole `SmartDelivery` folder, including `Scripts/delivery_bridge.dll`.
+- **Your choice isn't kept:** make sure the Mod folder can be written to.
+- **Reporting a problem:** include the `[SmartDelivery]` lines from `Win64/ue4ss/UE4SS.log` and, if it exists, `SmartDelivery/Scripts/bridge-status.txt`.
 
 [Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
 
@@ -114,46 +121,53 @@ The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 2575
 
 在餐厅电脑的自动智能订购设置中，选择免费服务、经济型配送或高级配送。
 
-**版本：0.1.5。** 仅单人或联机房主可设置，只需房主安装；客机不能修改 Mod 配送选项。
-
-**游戏支持至 Steam Build 25822788 / 1.0.2.44eb。** 2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+**版本：0.1.5。** 适用于单人游戏或联机房主。只需房主安装；客机无需安装，也不能修改配送选择。
 
 ### 怎么使用
 
-1. 在单人游戏中，或以联机房主身份打开餐厅电脑的 **菜单（Menu）** 应用，点击游戏原有的 **自动智能订购（Automatic Smart Order）** 按钮，进入设置窗口。
-2. 如需让游戏自动补货，勾选 **启用自动订购（Enable automatic ordering）**，再按下方说明设置 **最低订购金额（Minimum order value）** 与 **缺货时立即订购（Order immediately when out of stock）**。
-3. 在窗口底部、**保存（Save）** 与 **取消（Cancel）** 上方展开 **配送方式（Delivery method）**，选择 **免费服务**、**经济型配送** 或 **高级配送**。
-4. 点击 **保存**，应用游戏的自动订购设置和 Mod 的配送选择。只改变下拉框、尚未保存时不会生效。如果此时已经满足下单条件，游戏可能立即使用刚保存的配送方式下单。
-5. 重新打开 **自动智能订购**，即可核对已保存的选择。保存后可以关闭电脑继续经营，之后的自动订单会沿用该配送方式，无需每次点击。
+1. 在单人游戏中，或以联机房主身份，打开餐厅电脑的 **菜单（Menu）** 应用，点击 **自动智能订购（Automatic Smart Order）**。
+2. 想让游戏自动补货，就勾选 **启用自动订购（Enable automatic ordering）**，再设置 **最低订购金额（Minimum order value）** 和 **缺货时立即订购（Order immediately when out of stock）**（见下表）。
+3. 在 **保存（Save）** 和 **取消（Cancel）** 上方展开 **配送方式（Delivery method）**，选择 **免费服务**、**经济型配送** 或 **高级配送**。
+4. 点击 **保存**，游戏设置和配送选择一起生效；只在列表里选中而不保存，不会生效。如果保存时已经满足下单条件，游戏可能马上用新的配送方式下单。
+5. 关掉电脑继续经营即可，之后的自动订单都会用已保存的配送方式。随时可以重新打开 **自动智能订购** 查看。
 
-点击 **取消** 会放弃未保存的设置与配送选择；再次打开窗口时恢复上次保存的配送方式。如需停止自动订购，取消勾选 **启用自动订购** 后点击 **保存**；配送偏好仍会保留，供再次启用时使用。Mod 没有额外的游戏操作快捷键或独立设置窗口。
+- 点击 **取消** 会放弃未保存的修改，再次打开窗口时显示上次保存的选择。
+- 要停止自动订购，取消勾选 **启用自动订购** 并点击 **保存**；配送选择会保留，下次启用时继续使用。
+- 没有快捷键，也没有单独的设置窗口。
 
 ### 设置项与配送选择
 
-前三项为游戏自带设置，Mod 只新增 **配送方式**。
+前三项是游戏自带的设置，Mod 新增 **配送方式**。
 
-| 设置 | 实际作用 |
+| 设置 | 作用 |
 | --- | --- |
-| 启用自动订购 | 允许游戏监测库存并自动采购。选择配送方式不会替你勾选此项。 |
-| 最低订购金额 | 待采购商品的小计达到设定金额才自动下单。这是采购门槛，不是配送费或总花费上限。 |
-| 缺货时立即订购 | 缺货时允许低于上述采购门槛下单，但不会跳过游戏的其他下单条件或余额检查。 |
-| 配送方式 | 决定游戏实际发出自动智能订单时采用哪种配送服务。 |
+| 启用自动订购 | 游戏监测库存并自动采购。选了配送方式不会自动勾选此项。 |
+| 最低订购金额 | 商品金额达到设定值才自动下单，配送费不计入。 |
+| 缺货时立即订购 | 缺货时可以低于最低金额下单，游戏仍会检查其他下单条件和余额。 |
+| 配送方式 | 游戏发出自动智能订单时使用的配送服务。 |
 
 | 配送方式 | 卸货人员 |
 | --- | --- |
-| 免费服务（Free service） | 没有卸货员，需要自行处理到货。 |
+| 免费服务（Free service） | 无，需要自己卸货。 |
 | 经济型配送（Budget delivery） | 1 名卸货员。 |
-| 高级配送（Premium delivery） | 4 名卸货员；尚未保存过偏好时默认使用此项。 |
+| 高级配送（Premium delivery） | 4 名卸货员；保存其他选择前默认使用此项。 |
 
-服务费、难度调整和夜间附加费仍按游戏规则计算；免费服务不代表商品免费。大小自动订单都使用所选方式，Mod 不会再按订单规模切换配送服务。
+- 服务费、难度调整和夜间附加费按游戏规则计算。选择免费服务，商品仍要照常付钱。
+- 无论自动订单大小，都使用所选的配送方式。
 
-### 功能范围与联机行为
+### Mod 改变了什么
 
-自动智能订购原本就是游戏功能，Mod 为它增加配送选择，并未另外建立一套下单机制。库存计算、采购数量、金额门槛、可用余额和配送可用性仍由游戏控制；未满足自动下单条件时，只保存配送方式不会购买商品。
+Mod 只为游戏原有的自动智能订购选择配送方式。什么时候下单、买什么、买多少、余额够不够、能否配送，仍由游戏决定。只保存配送方式不会购买任何商品。
 
-手动购买食材和家具时，仍使用各自的配送选项。改变配送方式不会修改已经发出的订单。原版自动订购设置被锁定时，下拉框也会禁用；Mod 不会解锁尚不可用的游戏功能。
+- 手动购买食材和家具时，仍使用各自的配送选项。
+- 已经发出的订单保持下单时的配送方式。
+- 游戏锁定自动订购设置时，**配送方式** 列表也会一起锁定。
 
-联机只需房主安装，客机无需安装；即使客机安装也不能改变此设置。配送选择在重启后保留，同一安装下的各餐厅共用，并非每个游戏存档单独保存。偏好文件为 `SmartDelivery/Scripts/delivery-preference.txt`，更新时请保留；Mod 文件夹需允许写入。
+### 联机与偏好保存
+
+- 联机时只看房主的选择。客机无需安装；即使安装了也不能修改此设置。
+- 选择在重启后保留，同一安装下的所有餐厅共用（不随单个存档保存）。
+- 选择保存在 `SmartDelivery/Scripts/delivery-preference.txt`，更新时请保留此文件。Mod 文件夹需要可写入。
 
 ### 实机截图
 
@@ -167,51 +181,51 @@ The maintainer confirmed in-game testing passed on 1.0.2.44eb / Steam Build 2575
 
 ### 使用要求
 
-Windows x64 版 Parisian Bistro Simulator，以及 **UE4SS experimental**。已核对的加载器版本为 `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1；其他加载器版本尚未验证。UE4SS 需单独安装。Mod ZIP 已含可直接使用的辅助文件，无需自行编译。
+- Windows 版 Parisian Bistro Simulator，支持至游戏版本 1.0.2.44eb（Steam Build 25822788）。
+- [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental) `v3.0.1-1140-gf58e8f84`，需单独安装（见“安装”）。旧稳定版 UE4SS 3.0.1 无法使用。
+- 单人游戏或联机房主。Mod ZIP 已自带辅助文件 `Scripts/delivery_bridge.dll`。
 
 ### 下载
 
-以下来源**二选一**即可，提供的是同一个 Mod：
+以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [配送随心 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5)，向下找到并展开 **Assets（附件）**，点击 **SmartDelivery-0.1.5.zip**。`SHA256SUMS.txt` 是可选的校验文件，无需安装；不要下载 **Source code（源码）**。
-- **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/4)，登录或注册免费账号，在 **Files（文件）→ Main files（主要文件）** 找到 **0.1.5**，点击 **Manual download（手动下载）**。如出现前置要求提示，继续到下载页；免费账号选择 **Slow download（慢速下载）**，等待 ZIP 下载完成。先把 ZIP 保存在**下载**文件夹，下面再解压。
+- **GitHub（无需账号）：**打开 [配送随心 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5)，在 **Assets（附件）** 下载 **SmartDelivery-0.1.5.zip**。不要选 **Source code（源码）**。
+- **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/4)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装
 
-以下步骤从电脑上只安装了 Windows 版游戏开始。**手动安装免费，不需要 Vortex，也不需要 Nexus Premium 会员。** 用浏览器和 Windows 文件资源管理器即可操作；Windows 自带 ZIP 解压功能，无需安装 WinRAR 或 7-Zip，也不需要 Git、Python、Visual Studio 或虚幻引擎。
+手动安装免费，不需要 Vortex，也不需要 Nexus Premium。
 
-UE4SS 是**加载器**，作用是在启动游戏时运行 Mod。每个游戏安装目录只需装一次，之后把所需 Mod 加入它的 `Mods` 文件夹即可。Vortex 是可选的 **Mod 管理器**，负责复制和移除 Mod 文件，不能代替 UE4SS。
+UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一次，之后把 Mod 放进它的 `Mods` 文件夹。已经装好 UE4SS 的，从第 6 步开始。
 
-1. **完全退出游戏。** 在 Steam 打开**库**，右键 **Parisian Bistro Simulator（法式小馆儿模拟器）→ 管理 → 浏览本地文件**。弹出的文件资源管理器窗口就是游戏目录，文件夹名可能是 **Parisian Brasserie Simulator**。不是“文档”或存档文件夹。
-2. **打开安装位置。** 在该窗口依次双击 **BrasserieSimulator → Binaries → Win64**，应该能看到 **BrasserieSimulator-Win64-Shipping.exe**（Windows 可能隐藏 `.exe` 后缀）。保留此窗口，加载器就放在这里；不要放在最外层 `BrasserieSimulator.exe` 旁边。
-3. **下载加载器。** 点击 [UE4SS_v3.0.1-1140-gf58e8f84.zip](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental/UE4SS_v3.0.1-1140-gf58e8f84.zip)，这是本项目核对过的 experimental 基础包。若直链失效，打开 [UE4SS experimental 发布页](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental)，展开 **Assets / Show all assets（附件／显示全部附件）**，找到这个完整文件名。不要下载 `zDEV`、`Source code`，也不要使用旧稳定版 `UE4SS_v3.0.1.zip`。其他 experimental 构建尚未核验。
-4. **解压并放入加载器。** 在文件资源管理器的**下载**文件夹里，右键刚下载的 ZIP → **全部解压缩 → 提取**。打开解压后的文件夹，选中里面的 **dwmapi.dll** 和整个 **ue4ss** 文件夹，右键**复制**；回到游戏的 **Win64** 窗口，在空白处右键**粘贴**。复制这两个项目本身，不要把以压缩包命名的外层文件夹一起套进去。UE4SS 没有需要双击运行的安装程序。已经安装过加载器时，替换前备份其文件夹和设置，并保留现有 Mod。
-5. **检查加载器位置。** **Win64** 中的 `dwmapi.dll` 应与 `BrasserieSimulator-Win64-Shipping.exe` 并排。打开 **ue4ss**，里面应有 **UE4SS.dll**、**UE4SS-settings.ini** 和 **Mods**。缺少这些内容时回到上一步重新解压、复制；只新建一个空的 `Mods` 文件夹不能装好加载器。
-6. **解压上面下载的 Mod ZIP。** 右键 ZIP → **全部解压缩 → 提取**。打开解压后的文件夹，找到 **SmartDelivery** 文件夹；它里面应有 **Scripts** 和 **enabled.txt**。Windows 可能只显示 `enabled` 而隐藏 `.txt`，属于正常情况。
-7. **复制整个 SmartDelivery 文件夹。** 右键它 → **复制**。在游戏窗口打开 **Win64 → ue4ss → Mods**，在空白处右键**粘贴**。不要只复制 `main.lua`，也不要把 ZIP 本身放进去。 其中的 **Scripts/delivery_bridge.dll** 也必须保留在原位，ZIP 已包含此文件。
-8. **检查安装结果。** 依次打开 **Mods → SmartDelivery → Scripts**，应能看到 **main.lua**；返回一层到 **SmartDelivery**，应能看到与 **Scripts** 并排的 **enabled.txt**。不要多套成 `SmartDelivery/SmartDelivery`。即使 `enabled.txt` 是空文件也应原样保留，它用于启用 Mod；不要替换加载器的 `mods.txt`。
-9. **从 Steam 正常启动游戏**，按上方“怎么使用”操作。有的 Mod 在后台工作，没有启动提示。先核对本说明开头的单人／房主／客机要求；房主指开启联机餐厅、让其他人加入的玩家。
+1. **退出游戏。** 在 Steam **库**中右键 **Parisian Bistro Simulator（法式小馆儿模拟器）→ 管理 → 浏览本地文件**，打开游戏目录（文件夹名可能是 **Parisian Brasserie Simulator**）。
+2. **依次打开 BrasserieSimulator → Binaries → Win64**，能看到 **BrasserieSimulator-Win64-Shipping.exe**（Windows 可能隐藏 `.exe` 后缀）。保持这个窗口打开，加载器就装在这里。
+3. **下载 UE4SS：**[UE4SS_v3.0.1-1140-gf58e8f84.zip](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental/UE4SS_v3.0.1-1140-gf58e8f84.zip)。链接打不开时，到 [UE4SS experimental 发布页](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental)的 **Assets** 中找同名文件。不要下载 `zDEV`、`Source code` 或旧稳定版 `UE4SS_v3.0.1.zip`。
+4. **把加载器放进 Win64。** 右键 ZIP → **全部解压缩 → 提取**，从解压出的文件夹中复制 **dwmapi.dll** 和 **ue4ss** 文件夹，粘贴到 **Win64**。替换已有的 UE4SS 前，先备份原文件夹。
+5. **检查加载器：**`dwmapi.dll` 与 `BrasserieSimulator-Win64-Shipping.exe` 在同一层；**ue4ss** 文件夹里有 **UE4SS.dll**、**UE4SS-settings.ini** 和 **Mods**。
+6. **解压 Mod ZIP**，打开到能看到 **SmartDelivery** 文件夹，里面有 **Scripts** 和 **enabled.txt**。
+7. **把整个 SmartDelivery 文件夹**复制到 **Win64 → ue4ss → Mods**。
+8. **检查 Mod：**应有 `Mods/SmartDelivery/Scripts/main.lua`、`Mods/SmartDelivery/Scripts/delivery_bridge.dll` 和 `Mods/SmartDelivery/enabled.txt`（不要多套一层 `SmartDelivery/SmartDelivery`）。`enabled.txt` 即使是空文件也要保留，`delivery_bridge.dll` 也要留在 **Scripts** 中。
+9. **从 Steam 启动游戏**，按上方“怎么使用”操作。
 
-从 Steam 打开的游戏目录算起，最终脚本位置是 `BrasserieSimulator/Binaries/Win64/ue4ss/Mods/SmartDelivery/Scripts/main.lua`。功能未生效时，先退出游戏、核对上述加载器和 Mod 两处目录，再用记事本打开 `Win64/ue4ss/UE4SS.log`，查看有没有本次运行的时间或错误。重装前可查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+不生效时，先退出游戏，核对第 5、8 步，再查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
 
-**如果选择 Vortex：** 先按 [Vortex 安装说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#中文)装好 Vortex、本游戏扩展和 UE4SS，再导入原始 Mod ZIP，安装、启用并部署。同一个 Mod 只使用一种安装方式。**目前通过 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)一键安装需要有效的 Nexus Premium 会员。** 免费 Nexus 账号仍可逐个下载 Mod；GitHub 下载无需账号。
+**改用 Vortex：**先按 [Vortex 安装说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#中文)装好 Vortex、游戏扩展和 UE4SS，再导入 Mod ZIP，启用并部署。同一个 Mod 只用 Vortex 或手动其中一种方式安装。通过 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)一键安装需要 Nexus Premium。
 
 ### 更新与卸载
 
-**更新：** 关闭游戏，先备份 `SmartDelivery/Scripts/delivery-preference.txt`。下载并解压新版 Mod ZIP，把完整的 `SmartDelivery` 文件夹复制到原来的 `Mods` 目录并覆盖同名文件；保留或放回偏好文件，再启动游戏。
+**更新：**关闭游戏，先备份 `SmartDelivery/Scripts/delivery-preference.txt`。解压新版 Mod ZIP，把整个 `SmartDelivery` 文件夹复制到原来的 `Mods` 文件夹并覆盖同名文件。如果偏好文件被覆盖，再把备份放回去，然后启动游戏。
 
-**卸载：** 关闭游戏，只删除 `Mods/SmartDelivery`，保留 UE4SS 和其他 Mod。卸载后恢复游戏原有的自动配送选择。删除整个文件夹也会删除 Mod 保存的配送偏好，之后还想复用时请先备份偏好文件。游戏存档无需转换。
+**卸载：**关闭游戏，只删除 `Mods/SmartDelivery`，保留 UE4SS 和其他 Mod。自动订单会恢复使用游戏原本的配送选择，存档照常可用。删除文件夹会一并删除保存的配送选择，以后还想用的话，先备份 `delivery-preference.txt`。
 
 可选操作：[不重启游戏重新加载脚本](DEVELOPMENT.md#手动脚本重载)。正常安装和更新不需要此操作。
 
 ### 语言与帮助
 
-配送名称沿用游戏译文，新增字段标题跟随游戏语言，无需语言包或独立设置。技术日志保持英文。
+配送名称和新增字段标题跟随游戏语言：英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
 
-游戏语言包括英语、法语、简体中文、意大利语、西班牙语、德语、俄语、日语、韩语、繁体中文、土耳其语、波兰语、葡萄牙语和巴西葡萄牙语。
-
-选择框未出现时，先确认自己是房主，且已复制完整文件夹，包括包内辅助文件。选择无法保留时，请检查文件夹是否允许写入。反馈时附上 `UE4SS.log` 中相关的 `[SmartDelivery]` 日志，以及存在时的 `SmartDelivery/Scripts/bridge-status.txt`。
-
-维护者于 2026-10-07 确认 1.0.2.44eb / Steam Build 25759268 实机测试通过。此前实机及联机测试通过并授权正式发布的记录为 2026-09-26，本次更新未单独确认新版联机复测；两次反馈见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
+- **看不到配送方式列表：**确认自己是房主，并且复制了完整的 `SmartDelivery` 文件夹，包括 `Scripts/delivery_bridge.dll`。
+- **选择没有保留：**检查 Mod 文件夹是否可以写入。
+- **反馈问题：**附上 `Win64/ue4ss/UE4SS.log` 中的 `[SmartDelivery]` 日志；如果有 `SmartDelivery/Scripts/bridge-status.txt`，也一并附上。
 
 [实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)

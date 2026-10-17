@@ -4,32 +4,36 @@
 
 ## English
 
-### Cover artwork
+Screenshots and artwork for this Mod, following the Old Market Simulator Mods folder layout.
 
-[cover.png](cover.png) is the AI-generated promotional artwork used on the [Nexus Mods page](https://www.nexusmods.com/mods/1?game_id=10352), created with the built-in image generator on 2026-09-26. The original PNG is preserved without further edits. It illustrates the Mod and is not an in-game screenshot or test result.
+### Images
 
-Store this Mod's in-game test screenshots and promotional artwork here, following the Old Market Simulator Mods directory convention.
+| File | Size | Shows |
+| --- | --- | --- |
+| [cover.png](cover.png) | 2.00 MiB, 2089 × 753 | AI-generated cover artwork used on the [Nexus Mods page](https://www.nexusmods.com/mods/1?game_id=10352) |
+| [claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) | 12.02 MiB, 960 × 600, 13 s loop | Gameplay recording of the note showing claimed drinks |
 
-### Gameplay animation
+The GIF is stored with Git LFS. To download it, run this from the repository root:
 
-[claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) is a compressed copy of the Bartender's Note gameplay recording provided by the maintainer on 2026-09-26. It is stored using Git LFS: 960 × 600, 84 frames at approximately 6.25 fps, a 96-color palette, 13.28 seconds and continuous looping; 12,605,213 bytes (12.02 MiB), down 92.76% from 174,083,577 bytes. The complete recording duration, first and last frames, and full scene framing are retained; the local source recording is unchanged. The capture date, Mod/game/UE4SS versions and host/guest role were not supplied.
-
-With Git LFS installed, retrieve this animation from the repository root using `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"`.
+```powershell
+git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"
+```
 
 ### Adding images
 
 | Filename | Content |
 | --- | --- |
 | `cover.png` | Mod cover artwork for the README or a Mod listing |
-| `<scene>-gameplay.png` | Actual in-game test capture, for example `claimed-drinks-gameplay.png` |
-| `<scene>-gameplay.gif` | Animated gameplay recording, for example `claimed-drinks-gameplay.gif` |
+| `<scene>-gameplay.png` | In-game screenshot, for example `claimed-drinks-gameplay.png` |
+| `<scene>-gameplay.gif` | Gameplay recording, for example `claimed-drinks-gameplay.gif` |
 | `<scene>-promo.png` | Additional promotional artwork |
 
-Use PNG, JPG or WebP for still images and GIF for animations; use lowercase filenames with hyphens. Add image embeds only after the referenced files exist. Place the cover below the README title and gameplay images beside the relevant usage text in both languages.
+- Use PNG, JPG or WebP for still images and GIF for animations, with lowercase, hyphenated filenames.
+- Add an image embed only after the file exists. Put the cover below the README title and gameplay images next to the matching usage text in both languages.
+- For each gameplay capture, note here its date, Mod and game version, host or guest role, and what it shows. Label generated or edited artwork as such.
+- Images stay out of Mod ZIPs. Extracted game assets belong in the ignored `work/` folder.
 
-For each test capture, record its date, Mod/game/UE4SS versions, host or guest role, and observed result in this file. Identify generated or edited promotional artwork as such; it does not establish in-game acceptance. Keep extracted game assets and reverse-engineering material in ignored `work/`.
-
-These images are repository documentation and stay outside Mod ZIPs. See the [shared image guidance](../../DEVELOPMENT.md#mod-images) for links that also work from an extracted package. Repository-only README example (paths relative to this Mod's README):
+For links that also work inside an extracted download, see the [shared image guidance](../../DEVELOPMENT.md#mod-images). Repository-only README example (paths relative to this Mod's README):
 
 ```markdown
 ![Bartender's Note cover artwork](assets/cover.png)
@@ -38,32 +42,36 @@ These images are repository documentation and stay outside Mod ZIPs. See the [sh
 
 ## 中文
 
-### 宣传封面
+本 Mod 的实机图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
 
-[cover.png](cover.png) 是 [Nexus Mods 页面](https://www.nexusmods.com/mods/1?game_id=10352)使用的 AI 宣传图，于 2026-09-26 使用内置图像生成工具制作；保留原始 PNG，未再编辑。此图用于介绍 Mod，并非实机截图或测试结果。
+### 图片
 
-此目录存放本 Mod 的实机测试图和宣传图，沿用菜市场模拟器 Mods 的目录约定。
+| 文件 | 大小 | 内容 |
+| --- | --- | --- |
+| [cover.png](cover.png) | 2.00 MiB，2089 × 753 | [Nexus Mods 页面](https://www.nexusmods.com/mods/1?game_id=10352)使用的 AI 宣传封面 |
+| [claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) | 12.02 MiB，960 × 600，13 秒循环 | 手记显示认领饮料的实机录制 |
 
-### 实机动图
+动图通过 Git LFS 保存。在仓库根目录运行以下命令取回：
 
-实机动图 [claimed-drinks-gameplay.gif](claimed-drinks-gameplay.gif) 由维护者于 2026-09-26 提供的调饮手记录制压缩而来，通过 Git LFS 保存：960 × 600、84 帧、约 6.25 帧/秒、96 色、13.28 秒、循环播放；大小为 12,605,213 字节（12.02 MiB），较原始 174,083,577 字节减少 92.76%。保留完整录制时长、首尾画面及全画面范围，本地原始录制保持不变。拍摄日期、Mod／游戏／UE4SS 版本及房主／客机身份未提供。
-
-安装 Git LFS 后，在仓库根目录运行 `git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"` 即可取回此动图。
+```powershell
+git lfs pull --include="bartenders-note-mod/assets/claimed-drinks-gameplay.gif"
+```
 
 ### 添加图片
 
 | 文件名 | 内容 |
 | --- | --- |
 | `cover.png` | README 或 Mod 页面使用的宣传封面 |
-| `<scene>-gameplay.png` | 真实实机测试截图，例如 `claimed-drinks-gameplay.png` |
+| `<scene>-gameplay.png` | 实机截图，例如 `claimed-drinks-gameplay.png` |
 | `<scene>-gameplay.gif` | 实机录制动图，例如 `claimed-drinks-gameplay.gif` |
 | `<scene>-promo.png` | 其他宣传图 |
 
-静态图片可使用 PNG、JPG 或 WebP，动图使用 GIF；文件名使用小写英文和连字符。图片实际加入后再启用引用：封面放在 README 标题下，实机图放在中英文对应的使用说明附近。
+- 静态图片用 PNG、JPG 或 WebP，动图用 GIF；文件名用小写英文和连字符。
+- 图片实际加入后再添加引用：封面放在 README 标题下，实机图放在中英文对应的使用说明旁。
+- 每张实机图在本文件中注明拍摄日期、Mod 和游戏版本、房主或客机身份及画面内容；生成或编辑过的宣传图注明来源。
+- 图片不进入 Mod ZIP。提取的游戏资源放在被忽略的 `work/` 文件夹。
 
-每张测试图在本文件中记录拍摄日期、Mod／游戏／UE4SS 版本、房主或客机身份及观察结果。生成或编辑过的宣传图应注明来源，不能作为实机验收依据。提取的游戏资源和反编译资料仍放在被忽略的 `work/`。
-
-图片用于仓库文档，不进入 Mod ZIP。解压后的说明如何引用图片，见[公共图片说明](../../DEVELOPMENT.md#mod-图片)。仅在仓库中使用的 README 示例（路径相对于本 Mod 的 README）：
+解压后的说明中如何引用图片，见[公共图片说明](../../DEVELOPMENT.md#mod-图片)。仅在仓库中使用的 README 示例（路径相对于本 Mod 的 README）：
 
 ```markdown
 ![调饮手记宣传封面](assets/cover.png)

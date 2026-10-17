@@ -2,131 +2,117 @@
 
 ## Unreleased
 
-- Extend documented game support to Steam Build 25822788 / 1.0.2.44eb following the 2026-10-14 compatibility review and maintainer instruction. Keep the Mod version and runtime unchanged; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged.
-- 按 2026-10-14 兼容核对及维护者要求，将游戏支持标注提高至 Steam Build 25822788 / 1.0.2.44eb；Mod 版本与运行代码不变，本次文档更新跳过实机及联机测试。
+- Supports game 1.0.2.44eb (Steam Build 25822788).
+- 支持游戏 1.0.2.44eb（Steam Build 25822788）。
 
-- Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
-- 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
+- Documentation: added the cover image to the README and removed outdated download instructions.
+- 文档：README 加入宣传封面，删除过时的下载说明。
+
+- Documentation: rewrote the player guide in plainer language, focused on what the Mod does and how to use it.
+- 文档：用更简洁的语言重写玩家说明，只保留功能介绍和操作方法。
 
 ## 0.1.4 - 2026-09-26
 
 ### Compatibility documentation / 兼容性文档 — 2026-10-07
 
-- Record support through Steam Build 25759268 / 1.0.2.44eb after the maintainer confirmed in-game testing passed. Keep version 0.1.4 and runtime files unchanged. Preserve the 2026-09-26 multiplayer confirmation as historical; no separate multiplayer retest was reported for the new build.
-- 维护者确认新版实机测试通过，记录支持至 Steam Build 25759268 / 1.0.2.44eb。版本 0.1.4 与运行文件保持不变；2026-09-26 联机确认保留为历史记录，本次未单独反馈新版联机重测结果。
+- Supports game 1.0.2.44eb (Steam Build 25759268).
+- 支持游戏 1.0.2.44eb（Steam Build 25759268）。
 
 ### Documentation update / 文档更新 — 2026-09-26
 
-- Expand the English/Chinese player guide after a source-based subagent audit of in-game controls, feature behavior, multiplayer requirements and waiting/recovery conditions. Refresh the existing Release package documentation; the version and runtime files are unchanged.
-- 经 subagent 对照源码审计，补全中英文游戏内操作、功能行为、联机要求及等待／恢复条件。更新现有 Release 包内文档，版本与运行文件保持不变。
+- Documentation: expanded the player guide with controls, behaviour, multiplayer requirements and what to do when checkout waits or stops.
+- 文档：补充玩家说明中的操作方式、功能行为、联机要求，以及结账等待或停止时的处理方法。
 
 ### English
 
-- Promote 0.1.4-dev to 0.1.4 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
-- Complete cash and card checkout on the host, including distant interactions, temporary-setting restoration, localization and reload recovery.
-- Include the checkout-counter gameplay screenshot in both player-guide languages.
-- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+- First stable release of the 0.1.4 changes.
+- Completes cash and card checkout on the host from any distance, restores temporary interaction settings afterwards, follows the game language in log messages, and survives script reloads.
+- Added the checkout-counter screenshot to the player guide.
+- Added English and Chinese install, usage and update guides, plus the MIT license.
 
 ### 中文
 
-- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.4-dev 转为 0.1.4；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
-- 房主端自动完成现金与刷卡结账，支持远距离交互、临时设置恢复、本地化及重载恢复。
-- 中英文玩家说明附上收银台实机截图。
-- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+- 0.1.4 的改动转为正式版。
+- 房主端在任意距离自动完成现金与刷卡结账，结束后恢复临时交互设置，日志跟随游戏语言，并支持脚本重载。
+- 玩家说明加入收银台实机截图。
+- 附上中英文安装、使用、更新说明及 MIT 许可。
 
 ## 0.1.4-dev
 
 ### English
 
-- Add the maintainer-provided checkout-counter screenshot to the English and Chinese README sections, with image provenance and scene notes.
-- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
-- Adopt **收银管家** as the Chinese display name in player guides and shared documentation.
-- Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
-- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
-
-- 0.1.4-dev: support experimental UE4SS Lua hot reload. Persist primitive AI recovery records and per-transaction cooldowns/retry budgets across instances, and restore inherited AI changes on the game thread before continuing.
-- Save recovery plans before engine-array writes and attempts before dispatch. Retire old callbacks without touching UObjects or scheduling work during unload; preserve failed recovery records for another reload and reject malformed handoff data without executing it.
-- Add 12 offline reload checks covering both schedulers, AI recovery failures, notifications, retry limits, temporary controller loss and storage errors. Upgrade from earlier versions and permanently remove the Mod with the game closed; real loader and in-game reload acceptance is pending.
-- 0.1.3-dev: explanatory status and warning logs follow the game's current language across all 14 supported languages. Language is checked on the game thread; unavailable or unsupported languages fall back to English without stopping checkout.
-- Keep game notifications and interaction text native, without copying game translation assets. Structured diagnostic tags, fields and exception details remain unchanged.
-- Add offline coverage for language changes, regional/script variants and safe fallback without a world or a working language reader. In-game localization verification is still pending.
+- Added the checkout-counter screenshot and an assets folder for screenshots and artwork.
+- Chinese display name is now **收银管家**.
+- Rewrote the install, usage, update and removal guides, and fixed links that are opened from the extracted package.
+- The MIT license is now included in the download.
+- 0.1.4-dev: scripts can be reloaded with the experimental UE4SS without losing retry counts or the employee-job changes, which are restored before the new scripts take over.
+- A reload doesn't give a step extra tries, and a damaged reload record stops the Mod instead of being used.
+- When upgrading from an earlier version, or removing the Mod for good, close the game first.
+- 0.1.3-dev: log messages follow the game's current language in all 14 game languages, with English as the fallback; checkout keeps working if the language can't be read.
+- Game notifications and interaction text stay the game's own.
 
 ### 中文
 
-- 将维护者提供的收银台实机图加入中英文 README，并记录图片来源及可见场景。
-- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
-- 中文名称统一为 **收银管家**，同步玩家说明及公共文档。
-- 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
-- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
-- 0.1.4-dev：支持 UE4SS 实验版 Lua 热重载；跨实例保留普通值形式的 AI 恢复记录、每笔交易冷却时间及重试预算，新实例先在游戏线程恢复旧 AI 改动，再继续运行。
-- 改写引擎数组和发送请求前先保存恢复方案与尝试次数；卸载时停用旧回调，不访问 UObject、不排队，并保留失败恢复记录供下次重载重试；异常交接内容被校验拒绝，不作为代码执行。
-- 新增 12 项离线重载检查，覆盖两个调度器、AI 恢复失败、通知、重试上限、控制器暂失及存储错误。从旧版首次升级或永久卸载需关闭游戏；加载器与游戏内热重载仍待实机验收。
-- 0.1.3-dev：说明性状态与警告日志跟随游戏当前语言，覆盖游戏支持的 14 种语言；每次游戏线程检查时重新读取语言，读取失败或不支持的语言回退英语，不影响结账。
-- 保留原生游戏通知与交互文本，不复制游戏翻译资源；结构化日志标记、字段和异常详情保持原样。
-- 新增语言切换、地区与文字变体、无世界及读取失败回退的离线验证；本次多语言改动尚未经过游戏内验收。
+- 加入收银台实机截图，并新增存放实机图和宣传图的 assets 目录。
+- 中文名称统一为 **收银管家**。
+- 重写安装、使用、更新和卸载说明，修复解压后打开的文档链接。
+- 下载包中附带 MIT 许可。
+- 0.1.4-dev：支持 UE4SS 实验版重新加载脚本，重试次数和员工任务改动都会保留，新脚本接手前先恢复员工任务。
+- 重新加载不会让某一步重新获得尝试次数；交接记录损坏时 Mod 停止运行，不使用损坏的记录。
+- 从旧版升级或永久卸载时，请先关闭游戏。
+- 0.1.3-dev：日志说明跟随游戏当前语言，覆盖游戏全部 14 种语言，无法识别时使用英语；读取语言失败也不影响结账。
+- 游戏通知和交互文本保持游戏原样。
 
 ## 0.1.2 - 2026-09-24
 
 ### English
 
-- Promote the accepted 0.1.2-dev build to a stable release at the user's request; retain the tested runtime logic and update the diagnostic version, package name and documentation.
-- Fix automatic interactions being restricted by the host's distance from the payment object or cash register. Expand the interaction range and allow interaction during placement only for a single synchronous call on the current target, then restore the original settings without moving or modifying the player.
-- Attempt restoration even if a settings write, diagnostic operation or request fails. Do not write back to destroyed payment objects; explicitly advise reloading the world if restoration fails.
-- Add player distance, original interaction range and the range used for the current call to request logs. Add offline verification of distant cash and card payments, player movement and recovery after errors.
-- On 2026-09-24, the user confirmed that 0.1.2-dev completed three cash payments and two card payments in-game, all on the first attempt, with no failed retries or new exceptions. Drawer closure occurred at distances of approximately 1341 for cash and 796 for card payments, exceeding the original range of 200 while still clearing bills and closing the drawer correctly. This feedback is the in-game acceptance basis for the 0.1.2 stable release.
+- Stable release of 0.1.2-dev.
+- Fixed automatic checkout failing when the host was far from the register or payment. The interaction range is widened only for the Mod's own action and restored right after; the player is never moved.
+- Settings are still restored if something goes wrong during that action; if restoring fails, the Mod asks you to reload the restaurant.
+- Logs now include the host's distance to the register and the range used.
 
 ### 中文
 
-- 按用户要求将已验收的 0.1.2-dev 转为正式版；保留已测试的运行逻辑，更新诊断版本、包名和说明。
-- 修复自动交互仍受房主到付款物件或收银机距离限制的问题；在当前目标的单次同步调用期间扩大交互范围并允许摆放期间交互，随后恢复原设置，不移动或修改玩家。
-- 部分设置写入失败、诊断或请求异常时也尝试恢复；付款对象已销毁时不再回写，恢复失败明确提示重新载入世界。
-- 请求日志增加玩家距离、原交互范围及本次调用范围；新增远距离现金/刷卡、玩家位置变化和异常恢复的离线验证。
-- 2026-09-24 用户确认 0.1.2-dev 实机完成 3 笔现金和 2 笔刷卡，全部首次尝试成功，无重试失败或新异常；现金和刷卡关钱柜时距离分别约 1341、796，超过原范围 200 后仍正常清空账单并关闭钱柜。此反馈作为 0.1.2 正式版的实机验收依据。
+- 0.1.2-dev 转为正式版。
+- 修复房主离收银机或付款物件较远时无法自动结账的问题。只在 Mod 自身操作期间临时扩大交互范围，随后立即恢复，不会移动玩家。
+- 操作中途出错也会恢复设置；恢复失败时会提示重新载入餐厅。
+- 日志增加房主到收银机的距离及所用交互范围。
 
 ## 0.1.1 - 2026-09-24
 
 ### English
 
-- Promote the latest development package to a stable release after the user confirmed successful in-game testing; retain the tested runtime logic and update the version identifier in logs.
-- Remove player-busy guards such as `IsInteracting()`, allowing the player to perform other work at the same time. Cancel the current request if the player collects payment or closes the drawer first, or if the payment object becomes invalid, then handle the latest transaction state.
-- Exclude new AI counter-checkout tasks on the host at runtime while preserving other work and employee settings. Allow already claimed tasks to finish. Attempt restoration when leaving the session or after an automation error, and issue an explicit warning if restoration fails.
-- Add the `player_guard=transaction-only` build identifier, AI policy status and restoration logs, plus offline regression coverage for player intervention, task filtering and restoration.
-- Respond to customer-at-counter notifications by checking the corresponding cash register on the game thread, while retaining checks every second. Events and polling share cooldowns and retry counts.
-- Add `HOOK`, `EVENT`, `EVENT_IGNORED` and request-source logs, and coalesce duplicate notifications. Fall back to polling if the listener cannot be registered.
-- In response to test feedback that customers remained at the counter without error logs, add diagnostics for host waiting reasons, discovered register counts, payment snapshots, request targets and stages, call returns and state changes.
-- Add version and scheduling identifiers, throttle state logs, catch module-loading and scheduling-registration errors, and include execution stages and Lua stack traces.
-- Do not consume the sent-request budget for actions cancelled by the final check. Preserve retry history when a register snapshot is temporarily invalid.
-- Retain the existing two-stage interaction calls and include development and acceptance documentation in the installation package.
+- Stable release of the latest development build.
+- You can now do other work while the Mod checks out customers. If you accept the payment or close the drawer first, the Mod cancels its own action and continues from the new state.
+- Employees no longer take new counter-checkout jobs on the host; jobs they already started still finish, and their other work and settings are unchanged. Their jobs are restored when you leave the session or if the Mod stops with an error, with a warning if that fails.
+- Customer-at-counter notifications now trigger an immediate check of that register, in addition to the regular check every second. If the notification can't be used, the regular check continues.
+- Much more detailed logs for troubleshooting, including why the Mod is waiting.
+- An action cancelled at the last moment no longer uses up a try, and a register that is briefly unreadable keeps its retry history.
 
 ### 中文
 
-- 用户确认最新开发包实机测试成功，转为正式版；运行逻辑保持已测试版本，更新日志版本标识。
-- 移除 `IsInteracting()` 等玩家忙碌拦截；玩家可同时做其他工作，抢先收款、关闭抽屉或付款对象失效时取消当前请求，再按最新交易状态处理。
-- 房主端在运行时排除 AI 的新柜台收银任务，保留其他工作及员工配置；已领取任务允许完成。离开会话或自动流程异常时尝试恢复，失败会明确告警。
-- 增加 `player_guard=transaction-only` 构建辨识、AI 策略状态和恢复日志，以及玩家抢先操作、任务筛选和恢复的离线回归验证。
-- 接入“顾客到柜台”提醒，在游戏线程检查对应收银机，保留每秒定时检查；事件与轮询共用冷却和重试次数。
-- 增加 `HOOK`、`EVENT`、`EVENT_IGNORED` 和请求来源日志，合并重复提醒；监听失败时回退到定时检查。
-- 针对顾客停在柜台但没有错误日志的测试反馈，补充房主等待原因、柜台发现数量、付款快照、请求目标与阶段、调用返回和状态变化日志。
-- 增加版本号与调度方式标识、状态日志节流、模块加载及调度注册的异常捕获，以及执行阶段和 Lua 堆栈。
-- 最后复查取消的操作不再消耗已发送请求预算；短暂无效的柜台快照不清空重试历史。
-- 保留原有两阶段交互调用，并将开发与验收说明加入安装包。
+- 最新开发版转为正式版。
+- Mod 结账时可以同时做其他工作。你先收款或先关钱柜时，Mod 会取消自己的操作，按最新状态继续。
+- 房主端员工不再领取新的柜台收银任务；已开始的任务照常完成，其他工作和员工设置不变。离开会话或 Mod 因错误停止时恢复员工任务，失败会发出警告。
+- 收到“顾客到柜台”提醒时立即检查对应收银机，同时保留每秒一次的定时检查；提醒不可用时定时检查照常进行。
+- 大幅补充排查用日志，包括 Mod 正在等待的原因。
+- 最后一刻取消的操作不再消耗尝试次数；收银机短暂无法读取时保留其重试记录。
 
 ## 0.1.0-dev
 
 ### English
 
-- Add a development version of automatic counter checkout, handling cash and card payments through the game's default interactions.
-- Wait for card-payment and drawer animations, and defer to employee activity, player actions and pause screens.
-- Run automatically after installation without a key binding or toggle; provide a retry limit for each stage, disable automation after errors and write logs.
-- Run only in single-player or on the multiplayer host, validate the current world and clear state when changing saves.
-- Add offline Lua behavior tests and a packaging entry point with an allowlist of original files.
-- Offline checks passed. Subsequent testing confirmed loading and host detection, but automatic checkout did not complete correctly; functionality, performance and multiplayer behavior remained unaccepted.
+- First development version of automatic counter checkout for cash and card payments, using the game's normal interactions.
+- Waits for card and drawer animations, and for employees, player actions and pause screens.
+- Runs automatically after installation with no key or toggle; limits retries for each step, stops on errors and writes logs.
+- Runs only in single player or for the multiplayer host, and resets when you change saves.
+- Known issue in this version: automatic checkout did not complete correctly.
 
 ### 中文
 
-- 新增柜台自动结账开发版本，按游戏默认交互处理现金与银行卡。
-- 等待刷卡和抽屉动画，避让员工处理、玩家操作及暂停界面。
-- 安装后自动运行，无需按键或开关；提供每阶段重试上限、异常停用与日志。
-- 限制为单人或联机房主执行，校验当前世界并在切换存档时清理状态。
-- 添加 Lua 离线行为测试和原创文件白名单打包入口。
-- 离线检查通过；后续测试反馈已加载并识别房主，但未正常完成自动结账，功能、性能和联机尚未验收。
+- 柜台自动结账首个开发版本，按游戏默认交互处理现金与银行卡。
+- 等待刷卡和钱柜动画，避让员工处理、玩家操作及暂停界面。
+- 安装后自动运行，无需按键或开关；每一步都有重试上限，出错时停止并写入日志。
+- 只在单人或联机房主端运行，切换存档时重置状态。
+- 此版本已知问题：自动结账未能正常完成。

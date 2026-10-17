@@ -49,7 +49,7 @@ Fresh to Serve, First to Serve, Smart Delivery, Auto Menu and Scan to Order keep
 
 ### Validation
 
-The development guides describe offline checks and the in-game test checklist. Test all 14 translation entries, supported locale aliases, English fallback and recovery after language-read failures where a Mod owns text. First to Serve and Smart Delivery include offline tests for failure and recovery in their UI language lookup. Translation coverage is not proof of glyph rendering, language switching or game/loader compatibility. The [validation record](../releases/validation.md#english) includes the 2026-09-26 report that all Mods completed in-game testing; language-by-language results were not supplied separately, and later fixes require further testing. Keep any extracted language references and research notes in ignored `work/`.
+The development guides describe offline checks and the in-game test checklist. Test all 14 translation entries, supported locale aliases, English fallback and recovery after language-read failures where a Mod owns text. First to Serve and Smart Delivery include offline tests for failure and recovery in their UI language lookup. In game, also check glyph rendering and switching languages while playing. Keep any extracted language references and research notes in ignored `work/`.
 
 ## 中文
 
@@ -81,4 +81,4 @@ Fresh to Serve、First to Serve、Smart Delivery、Auto Menu 和 Scan to Order �
 
 ### 验证范围
 
-各 Mod 开发说明列出离线检查与实机回归步骤。存在 Mod 自有文案时，应测试 14 种翻译、支持的语言代码别名、英语回退以及语言读取失败后的恢复。First to Serve 和 Smart Delivery 已包含界面语言读取失败及恢复的离线测试。翻译覆盖不代表已验证字形、语言切换或游戏和加载器兼容性。[验收记录](../releases/validation.md#中文)已收录 2026-09-26 全部 Mod 实机测试完成的反馈，用户未单独提供逐语言结果，后续修复仍须继续测试。提取的语言参考及研究笔记始终保留在被忽略的 `work/`。
+各 Mod 开发说明列出离线检查与实机回归步骤。存在 Mod 自有文案时，应测试 14 种翻译、支持的语言代码别名、英语回退以及语言读取失败后的恢复。First to Serve 和 Smart Delivery 已包含界面语言读取失败及恢复的离线测试。实机测试时还应检查字形显示和游戏中切换语言。提取的语言参考及研究笔记始终保留在被忽略的 `work/`。

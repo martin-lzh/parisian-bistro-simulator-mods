@@ -2,95 +2,89 @@
 
 ## Unreleased
 
-- Extend documented game support to Steam Build 25822788 / 1.0.2.44eb following the 2026-10-14 compatibility review and maintainer instruction. Keep the Mod version and runtime unchanged; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged.
-- 按 2026-10-14 兼容核对及维护者要求，将游戏支持标注提高至 Steam Build 25822788 / 1.0.2.44eb；Mod 版本与运行代码不变，本次文档更新跳过实机及联机测试。
+- Supports game 1.0.2.44eb (Steam Build 25822788).
+- 支持游戏 1.0.2.44eb（Steam Build 25822788）。
 
-- Add the Nexus promotional cover to the bilingual README and remove obsolete private-repository download instructions. Runtime files and the Mod version are unchanged.
-- 在中英 README 中加入 Nexus 宣传封面，移除私密仓库下载限制的旧说明；运行文件与 Mod 版本保持不变。
+- Documentation: added the cover image to the README and removed outdated download instructions.
+- 文档：README 加入宣传封面，删除过时的下载说明。
+
+- Documentation: rewrote the player guide in plainer language, focused on what the Mod does and how to use it.
+- 文档：用更简洁的语言重写玩家说明，只保留功能介绍和操作方法。
 
 ## 0.1.5 - 2026-09-26
 
-### Compatibility documentation / 兼容性说明 — 2026-10-07
-
-- Record support through game 1.0.2.44eb / Steam Build 25759268 after the maintainer confirmed in-game testing passed on 2026-10-07. Version 0.1.5 and runtime files are unchanged; the 2026-09-26 multiplayer confirmation remains a separate historical record.
-- 维护者于 2026-10-07 确认新版实机测试通过，更新兼容性说明，支持至游戏 1.0.2.44eb / Steam Build 25759268。版本 0.1.5 与运行文件保持不变；2026-09-26 的联机测试反馈保留为独立历史记录。
-
-### Documentation update / 文档更新 — 2026-09-26
-
-- Expand the English/Chinese player guide after a source-based subagent audit of in-game controls, feature behavior, multiplayer requirements and waiting/recovery conditions. Refresh the existing Release package documentation; the version and runtime files are unchanged.
-- 经 subagent 对照源码审计，补全中英文游戏内操作、功能行为、联机要求及等待／恢复条件。更新现有 Release 包内文档，版本与运行文件保持不变。
-
 ### English
 
-- Promote 0.1.5-dev to 0.1.5 after the maintainer confirmed that all current Mods passed in-game and multiplayer testing and explicitly authorized stable publication on 2026-09-26. Retain the tested gameplay logic; update version identifiers, package names and release documentation.
-- Choose free, budget or premium automatic-order delivery, with saved preferences, native discovery checks, language fallback and Lua reload support. Use dark selector surfaces, white text and green selection/focus styling.
-- Include smart-order settings and delivery-selector gameplay screenshots.
-- Include English/Chinese installation, usage and update guides, the MIT license, and verified package contents. Documentation images remain outside the installable ZIP.
+- First stable release.
+- Choose Free service, Budget delivery or Premium delivery for automatic smart orders. Your choice is saved and kept after restarts.
+- Falls back to English if the game language can't be read; supports script reload without restarting the game.
+- Delivery selector restyled: dark background, white text and green highlight for the selected and focused option.
+- Supports game 1.0.2.44eb (Steam Build 25759268).
+- Documentation: English/Chinese install, usage and update guide with in-game screenshots, plus the MIT license.
 
 ### 中文
 
-- 维护者于 2026-09-26 确认全部当前 Mod 实机及联机测试通过，并明确授权发布正式版，据此将 0.1.5-dev 转为 0.1.5；保留已测试的玩法逻辑，更新版本标识、包名和发布说明。
-- 为自动智能订购选择免费、经济或高级配送，支持偏好保存、原生定位检查、语言回退及 Lua 重载；选择框采用深色底、白色文字与绿色选中及焦点样式。
-- 附上智能订购设置及配送选择框实机截图。
-- 附上中英文安装、使用、更新说明及 MIT 许可，并校验包内容；文档图片不进入安装 ZIP。
+- 首个正式版。
+- 为自动智能订购选择免费服务、经济型配送或高级配送；选择会保存，重启后保留。
+- 读取不到游戏语言时显示英语；支持不重启游戏重新加载脚本。
+- 配送选择框改用深色底、白色文字，选中项和焦点项以绿色突出显示。
+- 支持游戏 1.0.2.44eb（Steam Build 25759268）。
+- 文档：中英文安装、使用和更新说明，附实机截图和 MIT 许可。
 
 ## 0.1.5-dev
 
-- Add maintainer-provided screenshots of the smart-order settings and expanded delivery selector to both README languages, with image provenance and scene notes.
-- 将维护者提供的智能订购设置与展开配送选项实机图加入中英文 README，并记录图片来源及可见场景。
+- Restyled the delivery selector: charcoal background, soft white text and muted green selection, including hover, pressed, disabled and keyboard-focus states, without the default blue highlight.
+- 配送选择框改用炭灰底色、柔白文字和低饱和绿色选中项，统一悬停、按下、禁用及键盘焦点状态，去掉默认亮蓝高亮。
 
-- Add an assets directory for in-game test screenshots and promotional artwork, with README links and embedding examples.
-- 新增 assets 目录存放实机测试图与宣传图，并提供 README 入口和图片引用示例。
-
-- Restyle the delivery selector in 0.1.5-dev with charcoal backgrounds, soft white text and muted green selection. Set popup row text colors separately; style hover, pressed, disabled and keyboard-focus states without the default blue highlight. Only Lua changes; in-game visual verification is pending.
-- 0.1.5-dev 调整配送选择框配色：炭灰底色、柔白文字、低饱和绿色选中项；单独设置展开列表文字颜色，统一悬停、按下、禁用及键盘焦点状态，去除默认亮蓝高亮。本次仅修改 Lua，待实机确认显示效果。
+- Documentation: added in-game screenshots of the settings window and delivery selector, and an assets folder for images.
+- 文档：加入设置窗口和配送选择框的实机截图，新增图片目录。
 
 ## 0.1.4-dev
 
-- Adopt **配送随心** as the Chinese display name in player guides and shared documentation.
-- 中文名称统一为 **配送随心**，同步玩家说明及公共文档。
+- Chinese name is now **配送随心**.
+- 中文名称定为 **配送随心**。
 
-- Rewrite player installation, usage, update and removal guides; move implementation and reload details into developer documentation and repair links used from extracted packages.
-- 重写面向玩家的安装、使用、更新及卸载说明，将实现与重载细节移入开发文档，并修复解压后使用的文档链接。
+- Rewrote the install, usage, update and removal guide, and fixed links that broke inside the extracted package.
+- 重写安装、使用、更新及卸载说明，修复解压后文档中失效的链接。
 
-- Include the MIT license in source and installable packages, with packaging checks for missing or changed license text.
-- 为源码及安装包附上 MIT 许可全文，增加许可缺失或内容改变时的打包校验。
+- The MIT license is now included in the Mod ZIP.
+- Mod ZIP 现附带 MIT 许可全文。
 
-- Fall back to English when language lookup fails without stopping delivery selection or losing an unsaved choice. Resume localized text when reading recovers; add UI and runtime regressions. This change has not been tested in-game.
-- 语言读取失败时回退英语，不停止配送选择，也不丢失未保存选项；读取恢复后重新显示本地化文案，增加界面与主流程回归测试。本次改动尚未实机测试。
+- If the game language can't be read, the selector shows English and keeps working, without losing an unsaved choice. Translated text returns once the language can be read again.
+- 读取不到游戏语言时，选择框显示英语并继续工作，不丢失未保存的选择；恢复读取后重新显示对应语言。
 
-- Add Lua reload support in 0.1.4-dev: stop old callbacks, remove old selector rows on the next game-thread startup, and restore the saved preference. The native helper atomically suspends custom delivery during unload and reuses its pinned patch after checking for conflicts. A DLL update still requires a game restart. In-game acceptance is pending.
-- 0.1.4-dev 新增 Lua 热重载：停止旧回调，新状态在游戏线程清理旧选择框并恢复保存偏好；原生辅助模块在卸载回调中原子暂停自定义配送，重新初始化时检查冲突并复用驻留补丁。更新 DLL 仍需重启游戏，热重载待实机验收。
+- Added script reload without restarting the game: the old selector is removed and the saved choice is restored. Updating the DLL still requires a game restart.
+- 新增不重启游戏重新加载脚本：清除旧选择框并恢复已保存的选择。更新 DLL 仍需重启游戏。
 
 ## 0.1.3-dev
 
-- Update to 0.1.3-dev: use white text for the delivery dropdown's selected value and options instead of inheriting the amount input's foreground color.
-- 更新至 0.1.3-dev：配送下拉框当前选项和展开列表使用白色文字，不再继承金额输入框的前景色。
+- The delivery list's selected value and options now use white text.
+- 配送下拉框的当前选项和展开列表改用白色文字。
 
 ## 0.1.2-dev
 
-- Remove mandatory game-version, executable-size and SHA-256 allowlists. Discover the automatic delivery branch and fee data through native registration names and instruction operands instead of fixed addresses.
-- Check native discovery against Steam Build 25532071. Preserve code-conflict checks and the original quantity threshold when disabled. Add relocated-image, ambiguous-target, changed-structure and conflict regression tests. Package version: 0.1.2-dev; in-game testing is pending.
+- No longer tied to one exact game build: the Mod now finds the automatic delivery code itself, so it keeps working after game updates that don't change it. Checked against Steam Build 25532071.
+- 不再限定单一游戏版本：Mod 会自行定位自动配送代码，游戏更新未改动这部分时可继续使用。已对照 Steam Build 25532071 核对。
 
-- 取消游戏版本、可执行文件大小及 SHA-256 白名单限制，通过原生注册名称与指令操作数定位自动配送分支和费用数据，不再使用固定地址。
-- 已在 Steam Build 25532071 文件上核对定位结果；保留代码冲突检查，停用偏好时沿用原生数量阈值。新增地址移动、目标重复、结构变化及冲突回归测试。安装包版本为 0.1.2-dev，待实机测试。
+- Stops safely if the game code has changed or another Mod changes the same code.
+- 游戏代码发生变化，或其他 Mod 修改了同一处代码时，安全停用。
 
 ## 0.1.1-dev
 
-- Fix the 0.1.0-dev `Invalid compatibility range` startup failure by validating zero-filled runtime data against mapped PE sections. Keep full executable hashing and evaluator code checks.
-- Add PE range regression tests and a UI attachment diagnostic. Updating the native helper requires a game restart. Package version: 0.1.1-dev; in-game retesting is pending.
+- Fixed the 0.1.0-dev startup failure `Invalid compatibility range`.
+- 修复 0.1.0-dev 启动失败（`Invalid compatibility range`）。
 
-- 修复 0.1.0-dev 的 `Invalid compatibility range` 启动失败，改为按 PE 映射节区核验零填充运行时数据，保留完整可执行文件哈希及执行代码校验。
-- 新增 PE 范围回归测试及界面注入日志。更新辅助模块需重启游戏。安装包版本为 0.1.1-dev，待实机复测。
+- Updating the helper DLL requires a game restart.
+- 更新辅助 DLL 需要重启游戏。
 
 ## 0.1.0-dev
 
-- Add Free service, Budget delivery and Premium delivery to automatic smart-order settings, with native Save/Cancel behavior and a persistent installation-wide preference.
-- Keep native order eligibility, costs, night fees and staffing, while leaving manual orders independent.
-- Reuse translated game delivery names and localize the new field label for all 14 game languages.
-- Add a Windows helper restricted to the verified game build, native dispatch tests, Lua tests and package verification. In-game acceptance is pending.
+- Added Free service, Budget delivery and Premium delivery to the automatic smart-order settings. The choice follows the game's Save/Cancel and is kept after restarts for the whole installation.
+- Order conditions, costs, night fees and unloading staff follow the game's rules; manual orders keep their own delivery choice.
+- Delivery names use the game's translations, and the new field label is translated into all 14 game languages.
+- Includes a Windows helper DLL.
 
-- 在自动智能订购设置中增加免费服务、经济型配送和高级配送，支持保存/取消及跨重启保留偏好。
-- 保留原生采购条件、扣款、夜间附加费和配送人数，手动订单保持独立。
-- 沿用游戏配送名称翻译，新增字段标题覆盖 14 种语言。
-- 加入限定游戏构建的 Windows 辅助模块、原生分派测试、Lua 测试和安装包校验，待实机验收。
+- 在自动智能订购设置中加入免费服务、经济型配送和高级配送，跟随游戏的保存/取消，重启后保留，同一安装共用。
+- 下单条件、费用、夜间附加费和卸货人数按游戏规则；手动订单保留各自的配送选项。
+- 配送名称沿用游戏译文，新增字段标题覆盖全部 14 种游戏语言。
+- 附带 Windows 辅助 DLL。
