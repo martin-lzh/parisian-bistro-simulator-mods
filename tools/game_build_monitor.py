@@ -11,7 +11,7 @@ import subprocess
 import sys
 import time
 
-from release import GitHub
+from modrelease import GitHub
 
 BASELINE = Path(__file__).with_name("game-build-baseline.json")
 MARKER = "<!-- steam-build-monitor:v1 "

@@ -31,9 +31,14 @@ def run(*args: str) -> None:
 
 def config(slug: str) -> dict:
     namespace = runpy.run_path(str(ROOT / f"{slug}-mod/build.py"))
+    settings = json.loads((ROOT / f"{slug}-mod/release.json").read_text(encoding="utf-8"))
+    if (set(settings) != {"displayName", "prerelease"} or type(settings["prerelease"]) is not bool
+            or not isinstance(settings["displayName"], str) or not settings["displayName"].strip()):
+        raise ValueError(f"{slug}: release.json needs displayName and prerelease")
     return {"slug": slug, "name": MODS[slug], "version": namespace["VERSION"],
             "source": namespace["SOURCE"], "output": namespace["OUTPUT"],
-            "files": namespace["FILES"], "generated": namespace.get("GENERATED_FILES", {})}
+            "files": namespace["FILES"], "generated": namespace.get("GENERATED_FILES", {}),
+            "display_name": settings["displayName"], "prerelease": settings["prerelease"]}
 
 
 def validate_config(mod: dict) -> None:
@@ -46,7 +51,7 @@ def validate_config(mod: dict) -> None:
         rf"^## {re.escape(version)}(?: - \d{{4}}-\d{{2}}-\d{{2}})?$", changelog, re.M
     ):
         raise ValueError(f"{mod['slug']}: missing numbered CHANGELOG entry")
-    if version not in (source / "README.md").read_text(encoding="utf-8"):
+    if not re.search(rf"(?<![\d.]){re.escape(version)}(?![\d])", (source / "README.md").read_text(encoding="utf-8")):
         raise ValueError(f"{mod['slug']}: README version is missing")
     diagnostics = source / "Scripts/diagnostics.lua"
     if diagnostics.is_file():
@@ -169,8 +174,19 @@ def build() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["validate", "build"])
+    parser.add_argument("command", choices=["validate", "build", "release-plan", "publish"])
+    parser.add_argument("--repository")
+    parser.add_argument("--commit")
     args = parser.parse_args()
+    if args.command in ("release-plan", "publish"):
+        import release  # imports this module; keep it out of the build path
+        if not args.repository or (args.command == "publish" and not args.commit):
+            parser.error("--repository is required; publish also requires --commit")
+        if args.command == "release-plan":
+            release.plan(args.repository)
+        else:
+            release.publish(args.repository, args.commit)
+        return
     {"validate": validate, "build": build}[args.command]()
 
 
