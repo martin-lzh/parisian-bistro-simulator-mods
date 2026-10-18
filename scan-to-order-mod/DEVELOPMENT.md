@@ -92,7 +92,7 @@ Keep the game installation read-only during development. Report in-game results 
 ### Runtime compatibility
 
 - Current version: **0.1.3**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
-- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 by the maintainer is still pending.
+- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference: Windows, Steam Build 25532071 / 1.0.1.44eb, Unreal Engine 5.4, with the table-class follow-up checked against Build 25759268 / 1.0.2.44eb.
 - UE4SS: experimental `v3.0.1-1140-gf58e8f84`. Stable UE4SS 3.0.1 is not supported.
 - Analysis and reference material stays in the ignored `work/` folder.
@@ -199,7 +199,7 @@ git diff --check
 ### 运行兼容性
 
 - 当前版本：**0.1.3**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
-- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.1.3 的实机测试尚待进行。
+- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.3 的实机测试。
 - 开发参考：Windows、Steam Build 25532071 / 1.0.1.44eb、Unreal Engine 5.4；餐桌类兼容修复针对 Build 25759268 / 1.0.2.44eb 核对。
 - UE4SS：experimental `v3.0.1-1140-gf58e8f84`。不支持旧稳定版 UE4SS 3.0.1。
 - 分析和参考资料保留在被忽略的 `work/` 文件夹。

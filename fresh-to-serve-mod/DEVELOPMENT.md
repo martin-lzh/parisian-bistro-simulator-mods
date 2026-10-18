@@ -7,7 +7,7 @@
 ### Version and compatibility
 
 - Current version: **0.1.4**.
-- **0.1.4 test status:** compared with 0.1.3, 0.1.4 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.4 by the maintainer is still pending.
+- **0.1.4 test status:** compared with 0.1.3, 0.1.4 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.4 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Supported game: up to **1.0.2.44eb (Steam Build 25822788)**.
 - Development reference: Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported.
@@ -148,7 +148,7 @@ If an older version stopped at startup because a table API was missing, install 
 ### 版本与兼容性
 
 - 当前版本：**0.1.4**。
-- **0.1.4 测试状态：**与 0.1.3 相比，0.1.4 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.1.4 的实机测试尚待进行。
+- **0.1.4 测试状态：**与 0.1.3 相比，0.1.4 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.4 的实机测试。
 - 支持游戏：至 **1.0.2.44eb（Steam Build 25822788）**。
 - 开发参考：Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1。

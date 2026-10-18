@@ -90,7 +90,7 @@ The package contains only the original Lua, README, DEVELOPMENT, CHANGELOG, LICE
 ### Runtime compatibility
 
 - Current version: **0.1.3**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
-- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 by the maintainer is still pending.
+- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference: Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
 - UE4SS: experimental `v3.0.1-1140-gf58e8f84`. `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required; if either is missing, the Mod stops and writes a `[Bartender's Note]` log entry. Stable UE4SS 3.0.1 is not supported.
 
@@ -189,7 +189,7 @@ git diff --check
 ### 运行兼容性
 
 - 当前版本：**0.1.3**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
-- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.1.3 的实机测试尚待进行。
+- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.3 的实机测试。
 - 开发参考：Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
 - UE4SS：experimental `v3.0.1-1140-gf58e8f84`。需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`；缺少任一接口时停止 Mod 并记录 `[Bartender's Note]` 日志。不支持旧稳定版 UE4SS 3.0.1。
 

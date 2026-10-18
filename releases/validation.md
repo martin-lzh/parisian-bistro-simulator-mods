@@ -4,7 +4,7 @@
 
 ## English
 
-### 2026-10-18: license-only patch versions, in-game testing pending
+### 2026-10-18: license-only patch versions, in-game testing waived
 
 At the maintainer's request, all seven Mods advance by one patch version so that the published downloads carry the PolyForm Noncommercial License 1.0.0 (relicensing commits `d8c08ab` and `e811667`). Compared with the previous release, each new version changes only `LICENSE`, the bundled documentation (README, DEVELOPMENT, CHANGELOG) and the version number in `build.py` and the start log; gameplay code and helper source are unchanged.
 
@@ -18,7 +18,7 @@ At the maintainer's request, all seven Mods advance by one patch version so that
 | Auto Menu | 0.5.0 → 0.5.1 |
 | Scan to Order | 0.1.2 → 0.1.3 |
 
-Offline checks and package builds passed on `dev`. In-game testing of these versions by the maintainer is still pending; the release PR to `main` waits for that confirmation. Earlier acceptance records remain tied to their own builds.
+Offline checks and package builds passed on `dev`. The maintainer waived in-game testing of these versions on 2026-10-19 because gameplay code is unchanged; the release PR to `main` can follow. Earlier acceptance records remain tied to their own builds.
 
 ### 2026-10-14: support through Steam Build 25822788
 
@@ -154,7 +154,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 
 ## 中文
 
-### 2026-10-18：仅更改许可的补丁版本，实机测试待进行
+### 2026-10-18：仅更改许可的补丁版本，维护者免除实机测试
 
 按维护者要求，七款 Mod 各升一个补丁版本，使发布下载附带 PolyForm Noncommercial 1.0.0 许可（改许可提交 `d8c08ab` 与 `e811667`）。与上一发布版相比，新版本只更改 `LICENSE`、随包文档（README、DEVELOPMENT、CHANGELOG），以及 `build.py` 和启动日志中的版本号；玩法代码和辅助模块源码不变。
 
@@ -168,7 +168,7 @@ This confirms cash, card and distant two-stage checkout in that test environment
 | 菜单巧配 | 0.5.0 → 0.5.1 |
 | 扫码点餐 | 0.1.2 → 0.1.3 |
 
-`dev` 上的离线检查和打包已通过。维护者对这些版本的实机测试尚待进行，合入 `main` 的发布 PR 等待该确认。以往验收记录仍对应各自构建。
+`dev` 上的离线检查和打包已通过。维护者于 2026-10-19 以玩法代码未改为由免除这些版本的实机测试，可以发起合入 `main` 的发布 PR。以往验收记录仍对应各自构建。
 
 ### 2026-10-14：支持至 Steam Build 25822788
 

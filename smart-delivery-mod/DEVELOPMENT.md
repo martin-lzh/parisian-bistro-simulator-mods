@@ -7,7 +7,7 @@
 ### Compatibility
 
 - Current version: **0.1.6**.
-- **0.1.6 test status:** compared with 0.1.5, 0.1.6 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.6 by the maintainer is still pending.
+- **0.1.6 test status:** compared with 0.1.5, 0.1.6 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.6 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Supported game: up to **1.0.2.44eb / Steam Build 25822788**. Last in-game acceptance: Build 25759268 (2026-10-07); see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 - Native discovery reference build: Steam Build 25532071 / game 1.0.1.44eb. Detailed evidence is in `work/smart-delivery-research/build-25532071/`.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`. Stable UE4SS 3.0.1 is not supported.
@@ -116,7 +116,7 @@ Reloading discards unsaved selector changes, removes the old selector on the new
 ### 兼容性
 
 - 当前版本：**0.1.6**。
-- **0.1.6 测试状态：**与 0.1.5 相比，0.1.6 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.1.6 的实机测试尚待进行。
+- **0.1.6 测试状态：**与 0.1.5 相比，0.1.6 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.6 的实机测试。
 - 支持游戏：至 **1.0.2.44eb / Steam Build 25822788**。最近一次实机验收：Build 25759268（2026-10-07），见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 - 原生定位参考构建：Steam Build 25532071 / 游戏 1.0.1.44eb，详细证据位于 `work/smart-delivery-research/build-25532071/`。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持稳定版 UE4SS 3.0.1。

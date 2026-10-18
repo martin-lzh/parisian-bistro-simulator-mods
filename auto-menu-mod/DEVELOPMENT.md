@@ -7,7 +7,7 @@
 Auto Menu is an independent Lua Mod with an original Windows x64 helper DLL.
 
 - Current version: **0.5.1**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
-- **0.5.1 test status:** compared with 0.5.0, 0.5.1 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.5.1 by the maintainer is still pending.
+- **0.5.1 test status:** compared with 0.5.0, 0.5.1 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.5.1 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference build: Steam Build 25532071 / ProjectVersion 1.0.1.44eb.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`.
 
@@ -113,7 +113,7 @@ For later Lua-only updates, follow the [shared reload configuration](https://git
 菜单巧配是独立的 Lua Mod，附带原创 Windows x64 辅助 DLL。
 
 - 当前版本：**0.5.1**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
-- **0.5.1 测试状态：**与 0.5.0 相比，0.5.1 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.5.1 的实机测试尚待进行。
+- **0.5.1 测试状态：**与 0.5.0 相比，0.5.1 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.5.1 的实机测试。
 - 开发参考版本：Steam Build 25532071 / ProjectVersion 1.0.1.44eb。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`。
 
