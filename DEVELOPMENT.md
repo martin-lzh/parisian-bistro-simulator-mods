@@ -71,7 +71,7 @@ Each Mod owns its runtime and build inputs:
 
 ### License
 
-On 2026-10-18 the maintainer decided to switch the original code and documentation from the MIT License to the PolyForm Noncommercial License 1.0.0 for future versions. Versions released before that stay under MIT. Third-party files keep their own licenses. `vortex-extension/` switched too, at the maintainer's request on the same day; its `LICENSE` is the same file as the root one. To ship the new license, every Mod advances one patch version that changes only the license, documentation and version number; in-game testing of these versions was waived by the maintainer on 2026-10-19 because gameplay code is unchanged (see the [validation record](releases/validation.md#english)).
+On 2026-10-18 the maintainer decided to switch the original code and documentation from the MIT License to the PolyForm Noncommercial License 1.0.0 for future versions. Versions released before that stay under MIT. Third-party files keep their own licenses. `vortex-extension/` switched too, at the maintainer's request on the same day; its `LICENSE` is the same file as the root one. Its version 0.1.1 (author shown as Zhaohan Liu) carries the new license and is uploaded to Nexus by hand, outside the automatic releases. To ship the new license, every Mod advances one patch version that changes only the license, documentation and version number; in-game testing of these versions was waived by the maintainer on 2026-10-19 because gameplay code is unchanged (see the [validation record](releases/validation.md#english)).
 
 ### Vortex game support
 
@@ -201,7 +201,7 @@ cd parisian-bistro-simulator-mods
 
 ### 许可
 
-维护者于 2026-10-18 决定，原创代码和文档今后的版本由 MIT 许可改为 PolyForm Noncommercial 1.0.0 许可。此前已发布的版本仍为 MIT 许可。第三方文件保留各自的许可。维护者同日要求 `vortex-extension/` 也一起改用，其 `LICENSE` 与根目录相同。为让下载附带新许可，每款 Mod 各升一个补丁版本，只更改许可、文档和版本号；维护者于 2026-10-19 以玩法代码未改为由免除这些版本的实机测试（见[验收记录](releases/validation.md#中文)）。
+维护者于 2026-10-18 决定，原创代码和文档今后的版本由 MIT 许可改为 PolyForm Noncommercial 1.0.0 许可。此前已发布的版本仍为 MIT 许可。第三方文件保留各自的许可。维护者同日要求 `vortex-extension/` 也一起改用，其 `LICENSE` 与根目录相同。扩展 0.1.1（作者显示为 Zhaohan Liu）附带新许可，不走自动发布，手动上传到 Nexus。为让下载附带新许可，每款 Mod 各升一个补丁版本，只更改许可、文档和版本号；维护者于 2026-10-19 以玩法代码未改为由免除这些版本的实机测试（见[验收记录](releases/validation.md#中文)）。
 
 ### Vortex 游戏支持
 

@@ -4,7 +4,7 @@
 
 ## English
 
-**Version 0.1.0.** Adds Parisian Bistro Simulator to Vortex, so Vortex can find the game (Steam App ID `3058360`) and install UE4SS Lua Mods with their folders intact. This is a Vortex extension, separate from the seven gameplay Mods.
+**Version 0.1.1.** Adds Parisian Bistro Simulator to Vortex, so Vortex can find the game (Steam App ID `3058360`) and install UE4SS Lua Mods with their folders intact. This is a Vortex extension, separate from the seven gameplay Mods.
 
 ### Install
 
@@ -26,7 +26,7 @@ Set up all three before adding the collection.
 
 #### 2. Add this game extension
 
-1. Open [Parisian Bistro Simulator — Vortex Support on Nexus](https://www.nexusmods.com/site/mods/2421) and under **Files** choose **Manual download** for version **0.1.0**. Keep the ZIP as it is.
+1. Open [Parisian Bistro Simulator — Vortex Support on Nexus](https://www.nexusmods.com/site/mods/2421) and under **Files** choose **Manual download** for version **0.1.1**. Keep the ZIP as it is.
 2. In **Vortex → Home → Extensions**, click **Drop File(s)** and pick the ZIP, or drag the ZIP onto that area.
 3. Restart Vortex when prompted. (The extension goes in **Extensions**, not the **Mods** page.)
 
@@ -85,7 +85,7 @@ The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths
 
 ## 中文
 
-**版本 0.1.0。** 为 Vortex 添加《法式小馆儿模拟器》支持：通过 Steam App ID `3058360` 找到游戏，并按完整文件夹安装 UE4SS Lua Mod。这是 Vortex 游戏扩展，独立于七款游戏功能 Mod。
+**版本 0.1.1。** 为 Vortex 添加《法式小馆儿模拟器》支持：通过 Steam App ID `3058360` 找到游戏，并按完整文件夹安装 UE4SS Lua Mod。这是 Vortex 游戏扩展，独立于七款游戏功能 Mod。
 
 ### 安装
 
@@ -107,7 +107,7 @@ The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths
 
 #### 2. 添加本游戏扩展
 
-1. 打开 [Parisian Bistro Simulator — Vortex Support 扩展页面](https://www.nexusmods.com/site/mods/2421)，在 **Files（文件）** 中手动下载 **0.1.0** 版本。保留 ZIP，不要解压。
+1. 打开 [Parisian Bistro Simulator — Vortex Support 扩展页面](https://www.nexusmods.com/site/mods/2421)，在 **Files（文件）** 中手动下载 **0.1.1** 版本。保留 ZIP，不要解压。
 2. 在 **Vortex → Home（主页）→ Extensions（扩展）** 点击 **Drop File(s)** 选择该 ZIP，或直接把 ZIP 拖进这个区域。
 3. 按提示重启 Vortex。（扩展装在 **Extensions**，不是 **Mods** 页面。）
 
