@@ -1,7 +1,8 @@
 """Exercise release-package rejection paths without game files."""
 
 from hashlib import sha256
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -194,6 +195,46 @@ class PackageChecks(unittest.TestCase):
         self.mod["files"] += ("../work/reference.lua",)
         with self.assertRaisesRegex(ValueError, "Disallowed"):
             self.validate()
+
+
+class ChangeTests(unittest.TestCase):
+    """CI skips build and test only for files that never reach a package, validation or tests."""
+
+    def test_examples(self):
+        mod = "smart-delivery-mod"
+        core = [f"{mod}/Scripts/main.lua", f"{mod}/README.md", f"{mod}/DEVELOPMENT.md", f"{mod}/CHANGELOG.md",
+                f"{mod}/LICENSE", f"{mod}/release.json", f"{mod}/build.py", f"{mod}/native_build.py",
+                f"{mod}/Native/bridge.cpp", f"{mod}/tests/run.py", "vortex-extension/README.md",
+                "vortex-extension/gameart.png", "vortex-extension/index.js", "tools/ci.py",
+                "tools/enable_hot_reload.ps1", "tools/tests/test_ci.py", ".github/workflows/mods.yml",
+                ".github/main-ruleset.json", ".editorconfig", ".gitattributes", ".gitignore", "LICENSE",
+                "new-mod/Scripts/main.lua"]
+        non_core = ["README.md", "AGENTS.md", "DEVELOPMENT.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md",
+                    "SECURITY.md", "SUPPORT.md", "docs/hot-reload.md", "assets/cover.png", "assets/cover-prompt.txt",
+                    "releases/README.md", "releases/approvals/smart-delivery-v0.1.5.json", f"{mod}/assets/cover.png",
+                    f"{mod}/assets/README.md", "bartenders-note-mod/assets/claimed-drinks-gameplay.gif"]
+        for path in core:
+            with self.subTest(core=path):
+                self.assertTrue(ci.changes.is_core(path, ci.NON_CORE))
+        for path in non_core:
+            with self.subTest(non_core=path):
+                self.assertFalse(ci.changes.is_core(path, ci.NON_CORE))
+
+    def test_package_inputs_and_build_files_are_core(self):
+        for slug in ci.MODS:
+            mod = ci.config(slug)
+            native = ci.NATIVE.get(slug, ("", set()))[1]
+            for name in (*mod["files"], *native, "build.py", "release.json"):
+                path = (mod["source"] / name).relative_to(ci.ROOT).as_posix()
+                with self.subTest(path=path):
+                    self.assertTrue(ci.changes.is_core(path, ci.NON_CORE))
+        names = subprocess.check_output(["git", "ls-files", "-z"], cwd=ci.ROOT).decode("utf-8").split("\0")
+        for name in filter(None, names):
+            path = PurePosixPath(name)
+            if (path.parts[0] in {"vortex-extension", "tools", ".github"}
+                    or (path.parts[0].endswith("-mod") and path.parts[1] != "assets")):
+                with self.subTest(name=name):
+                    self.assertTrue(ci.changes.is_core(name, ci.NON_CORE))
 
 
 if __name__ == "__main__":

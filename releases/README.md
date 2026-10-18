@@ -7,8 +7,22 @@ Each Mod is versioned and released on its own, with tags named `<mod>-v<version>
 1. **Work on `dev`.** Changes are recorded under `Unreleased` in the Mod's `CHANGELOG.md`; version numbers stay as they are. Versions ending in `-dev` are never released.
 2. **Test in game.** Before any release, beta included, the maintainer tests the build in game. Test builds are identified by commit and SHA256.
 3. **Prepare the version** (only on the maintainer's instruction). Update `VERSION` in `build.py`, the diagnostic version, the Mod README and the root README; move `Unreleased` into `## X.Y.Z - YYYY-MM-DD`; set `prerelease` in `release.json`.
-4. **Open a PR from `dev` to `main`.** CI checks repository boundaries and syntax, runs the Vortex extension and Lua tests, builds every package, checks its contents and shows a **Release plan** table in the build job summary.
+4. **Open a PR from `dev` to `main`.** CI checks repository boundaries and syntax, runs the Vortex extension and Lua tests, builds every package, checks its contents and shows a **Release plan** table in the summary of the **Changes and release plan** job.
 5. **The maintainer merges.** The release job publishes every new version and promotes betas, using the packages built and verified in the same run.
+
+## When CI runs
+
+The workflow runs on pull requests into `main`, on pushes to `main` (merges) and when started by hand. Pushes to `dev` alone don't start it, so an open `dev` → `main` PR is checked once per push. To check `dev` without a PR, run `gh workflow run mods.yml --repo martin-lzh/parisian-bistro-simulator-mods --ref dev`.
+
+| Job | Runner | When |
+| --- | --- | --- |
+| Changes and release plan | Linux | Always. Lists the changed files and shows the release plan; a release-plan error fails it. |
+| Script, data and workflow syntax | Linux | Always. Runs actionlint only when files under `.github/` changed or on a manual run. |
+| Build and test | Windows | When core files changed, a Mod would be published or promoted, the run was started by hand, or the first job failed. Otherwise skipped. |
+| Publish new versions and promote betas | Linux | On pushes to `main` whose release plan publishes or promotes something. |
+| CI result | Linux | Always. Passes when every job passed or was skipped on purpose. |
+
+Only these files are non-core, so a change touching nothing else skips Build and test (`NON_CORE` in `tools/ci.py`): the root `README.md`, `AGENTS.md`, `DEVELOPMENT.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `SECURITY.md` and `SUPPORT.md`, `docs/`, the root `assets/`, `releases/` and each Mod's `assets/` (packages hold only `Scripts/*.lua` and the Mod documents). Everything else is core, including each Mod's `README.md`, `DEVELOPMENT.md`, `CHANGELOG.md` and `LICENSE` (they are packaged), `release.json`, `vortex-extension/`, `tools/`, tests and `.github/`. For a pull request the changes are compared with its base; for a push with the previous commit of `main`; a manual run, or a push whose previous commit is unknown, counts as a core change. A skipped Build and test still counts as passed for the required checks on `main`.
 
 ## Betas and stable releases
 
@@ -53,7 +67,7 @@ $env:GH_TOKEN = gh auth token; python tools/ci.py release-plan --repository mart
 
 ## Shared release code
 
-[`tools/modrelease.py`](../tools/modrelease.py) and its tests are identical in all three Mod repositories. Change them in all three together. This repository's `tools/release.py` checks the CI packages and describes the Mods to the shared code.
+[`tools/modrelease.py`](../tools/modrelease.py) and its tests are identical in all three Mod repositories. Change them in all three together; the same goes for [`tools/changes.py`](../tools/changes.py), which decides which CI jobs a change needs. This repository's `tools/release.py` checks the CI packages and describes the Mods to the shared code.
 
 ## History
 
