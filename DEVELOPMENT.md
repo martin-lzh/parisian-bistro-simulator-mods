@@ -71,7 +71,7 @@ Each Mod owns its runtime and build inputs:
 
 ### License
 
-On 2026-10-18 the maintainer decided to switch the original code and documentation from the MIT License to the PolyForm Noncommercial License 1.0.0 for future versions. Versions released before that stay under MIT. Third-party files keep their own licenses. `vortex-extension/` has its own MIT `LICENSE` and was not part of this change.
+On 2026-10-18 the maintainer decided to switch the original code and documentation from the MIT License to the PolyForm Noncommercial License 1.0.0 for future versions. Versions released before that stay under MIT. Third-party files keep their own licenses. `vortex-extension/` switched too, at the maintainer's request on the same day; its `LICENSE` is the same file as the root one.
 
 ### Vortex game support
 
@@ -201,7 +201,7 @@ cd parisian-bistro-simulator-mods
 
 ### 许可
 
-维护者于 2026-10-18 决定，原创代码和文档今后的版本由 MIT 许可改为 PolyForm Noncommercial 1.0.0 许可。此前已发布的版本仍为 MIT 许可。第三方文件保留各自的许可。`vortex-extension/` 有自己的 MIT `LICENSE`，不在本次变更范围内。
+维护者于 2026-10-18 决定，原创代码和文档今后的版本由 MIT 许可改为 PolyForm Noncommercial 1.0.0 许可。此前已发布的版本仍为 MIT 许可。第三方文件保留各自的许可。维护者同日要求 `vortex-extension/` 也一起改用，其 `LICENSE` 与根目录相同。
 
 ### Vortex 游戏支持
 

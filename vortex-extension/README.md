@@ -77,7 +77,7 @@ node --test vortex-extension/tests/*.test.js
 python vortex-extension/build.py
 ```
 
-The ZIP and its SHA-256 file are written to the ignored `outputs/vortex-extension/`. The package contains the extension files and the MIT license. `gameart.svg` is the vector source of the bundled 640 × 360 PNG (a serving cloche).
+The ZIP and its SHA-256 file are written to the ignored `outputs/vortex-extension/`. The package contains the extension files and the license text (PolyForm Noncommercial License 1.0.0). `gameart.svg` is the vector source of the bundled 640 × 360 PNG (a serving cloche).
 
 The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths, duplicate destinations and incomplete or unsafe packages. On 2026-10-05, Vortex 2.6.3 loaded the extension, detected the Steam install and deployed all seven published LZH packages to a test directory; all 76 files matched the original ZIPs byte for byte.
 
@@ -151,6 +151,6 @@ Vortex 和合集都不会安装 UE4SS，需要自己装。已按下列结构装�
 
 ### 构建
 
-在仓库根目录执行上方两条命令，运行安装器测试并生成扩展 ZIP。ZIP 及 SHA-256 文件写入被忽略的 `outputs/vortex-extension/`，包内为扩展文件和 MIT 许可。`gameart.svg` 是随包 640 × 360 PNG 图标（餐盘罩）的矢量源文件。
+在仓库根目录执行上方两条命令，运行安装器测试并生成扩展 ZIP。ZIP 及 SHA-256 文件写入被忽略的 `outputs/vortex-extension/`，包内为扩展文件和许可文本（PolyForm Noncommercial 1.0.0 许可）。`gameart.svg` 是随包 640 × 360 PNG 图标（餐盘罩）的矢量源文件。
 
 测试覆盖完整 Mod 文件夹、多个 Mod、随包 DLL、Windows 路径、重复目标以及不完整或不安全的压缩包。2026-10-05 在 Vortex 2.6.3 中加载扩展、识别 Steam 安装，并把七个已发布的 LZH 安装包部署到测试目录，全部 76 个文件与原 ZIP 逐字节一致。
