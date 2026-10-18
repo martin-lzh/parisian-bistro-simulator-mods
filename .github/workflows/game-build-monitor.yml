@@ -5,7 +5,7 @@ on:
     - cron: '41 */6 * * *'
   workflow_dispatch:
   push:
-    branches: [dev, development, main]
+    branches: [dev, main]
     paths:
       - .github/workflows/game-build-monitor.yml
       - tools/game_build_monitor.py

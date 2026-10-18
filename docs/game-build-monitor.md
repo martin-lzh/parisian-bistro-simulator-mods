@@ -24,7 +24,7 @@ The committed [baseline](../tools/game-build-baseline.json) was queried directly
 | Build ID | `25532071` |
 | Branch updated | `2026-09-25 15:46:15 UTC` |
 
-With no monitor history, the workflow compares against this baseline rather than accepting whichever build exists on the first run. Build IDs are not the game's displayed version or proof of Mod compatibility. Follow [Development](../DEVELOPMENT.md) and the [validation record](../releases/validation.md) before claiming compatibility with a new build. The monitor does not change Mod versions, packages, game files or release authorization.
+With no monitor history, the workflow compares against this baseline rather than accepting whichever build exists on the first run. A build ID differs from the version shown in game. When a new build appears, check the Mods as described in [Development](../DEVELOPMENT.md) and record the result in the [validation record](../releases/validation.md). The monitor only opens Issues; it never changes Mods, packages or releases.
 
 ## Permissions and local checks
 

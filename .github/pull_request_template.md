@@ -1,24 +1,27 @@
-## Problem and behavior
+## What changes
 
-<!-- Explain the player or contributor problem, the resulting behavior, and relevant limitations. -->
+<!-- What players or developers get from this PR, in a few lines. Link related issues. -->
 
 ## Version status
 
-<!-- List affected Mods. Use "Unchanged (current version)" unless a version advance was explicitly authorized. Describe Unreleased notes separately. Leave historical release records intact. -->
+<!-- One row per Mod touched by this PR. Version status is one of:
+     a new version, e.g. "0.2.2 (beta)" or "0.2.2 (stable)";
+     "0.2.1 beta → stable" when release.json promotes an existing beta;
+     "Unchanged (0.1.5)" with the actual current version.
+     Unreleased: what still waits in the CHANGELOG's Unreleased section, or "none". -->
 
-| Mod | Version status | Unreleased changes |
+| Mod | Version status | Unreleased |
 | --- | --- | --- |
 | | | |
 
+## Release plan
+
+<!-- Paste the "Release plan" table from this PR's CI run (build job summary).
+     Merging publishes every row marked "publish" and promotes every row marked "promote". -->
+
 ## Validation
 
-<!-- List checks actually run, their results, and remaining in-game checks. Offline tests/builds do not establish gameplay, rendering or multiplayer acceptance. -->
-
-- [ ] Relevant tests and package checks completed, or limitations explained.
-- [ ] Player README and developer documentation updated in English and Chinese as needed.
-- [ ] LICENSE included in affected packages; no game files, extracted material, generated binaries or secrets staged.
-- [ ] Staged diff, repository boundaries and whitespace reviewed.
-
-## Release scope
-
-<!-- State whether any release is intended and link the existing explicit authorization record if applicable. A PR, unchanged version or passing CI does not authorize publication or changing repository visibility. -->
+- [ ] Tests, builds and package checks ran (list commands and results, or what couldn't run and why).
+- [ ] The maintainer tested every Mod being released in game, on the build identified by commit and SHA256.
+- [ ] No game files, decompiled material, generated binaries, logs or secrets are included.
+- [ ] Player docs say what the Mod does and how to use it, English first, then 中文.

@@ -1,123 +1,62 @@
-# Release records / 版本记录
+# Releases
 
-[English](#english) · [中文](#中文)
+Each Mod is versioned and released on its own, with tags named `<mod>-v<version>` (for example `scan-to-order-v0.1.2`). Pull requests into `main` exist to ship new versions: merging one is the maintainer's approval, and CI then publishes automatically. The same flow and the same release code run in the sibling repositories [old-market-simulator-mods](https://github.com/martin-lzh/old-market-simulator-mods) and farming-simulator-25-mods.
 
-## English
+## How a version ships
 
-### Accepted versions and current source
+1. **Work on `dev`.** Changes are recorded under `Unreleased` in the Mod's `CHANGELOG.md`; version numbers stay as they are. Versions ending in `-dev` are never released.
+2. **Test in game.** Before any release, beta included, the maintainer tests the build in game. Test builds are identified by commit and SHA256.
+3. **Prepare the version** (only on the maintainer's instruction). Update `VERSION` in `build.py`, the diagnostic version, the Mod README and the root README; move `Unreleased` into `## X.Y.Z - YYYY-MM-DD`; set `prerelease` in `release.json`.
+4. **Open a PR from `dev` to `main`.** CI checks repository boundaries and syntax, runs the Vortex extension and Lua tests, builds every package, checks its contents and shows a **Release plan** table in the build job summary.
+5. **The maintainer merges.** The release job publishes every new version and promotes betas, using the packages built and verified in the same run.
 
-On **2026-10-14**, the maintainer requested documenting support through **Steam Build 25822788 / game 1.0.2.44eb** after the compatibility review. All seven current Mod versions are unchanged; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [current support table and validation scope](validation.md#english).
+## Betas and stable releases
 
-On 2026-09-26, the maintainer confirmed that all seven current Mods passed in-game and multiplayer testing and explicitly authorized removing the development suffix and publishing stable Releases. The [validation record](validation.md#english) ties this acceptance to source `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`. The approved stable packages from that test report are:
+`"prerelease": true` in a Mod's `release.json` publishes the version as a GitHub pre-release: a closed beta for a few early testers. When it's ready for everyone, set `"prerelease": false` without changing the version and merge again; CI turns the existing release into a stable one without re-uploading anything. A stable release is never turned back into a beta.
 
-| Mod | Stable version | In-game and multiplayer confirmation | Package |
-| --- | --- | --- | --- |
-| Bartender's Note | 0.1.2 | 2026-09-26 | [`BartendersNote-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) |
-| Auto Checkout | 0.1.4 | 2026-09-26 | [`AutoCheckout-0.1.4.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) |
-| Fresh to Serve | 0.1.2 | 2026-09-26 | [`FreshToServe-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2) |
-| First to Serve | 0.1.7 | 2026-09-26 | [`FirstToServe-0.1.7.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) |
-| Smart Delivery | 0.1.5 | 2026-09-26 | [`SmartDelivery-0.1.5.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) |
-| Auto Menu | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
-| Scan to Order | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
+## The release plan
 
-On **2026-10-07**, the maintainer confirmed in-game testing passed on **game 1.0.2.44eb / Steam Build 25759268** and requested support be recorded for all seven Mods. Current source advances **Fresh to Serve 0.1.2 → 0.1.3** and **Scan to Order 0.1.1 → 0.1.2** to fix table-class lookup while retaining the earlier spelling; the other five Mod versions are unchanged. See the [current supported-version table and acceptance scope](validation.md#english). The maintainer authorized publishing [Fresh to Serve 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3) and [Scan to Order 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2), plus a [documentation refresh](documentation-refresh-2026-10-07.md#english) of the other five existing packages. The older two patch packages in the table above do not include the fix. The historical acceptance records remain in the validation history; building current source does not reproduce those historical packages.
-
-The maintainer separately authorized a [gameplay-guide update](documentation-refresh-2026-09-26.md#english) for these seven existing Releases. That update replaces only the ZIP documentation and associated checksums/build records; runtime files, versions and tag targets remain unchanged. The normal workflow below still skips published versions.
-
-Each Mod maintains its own version and CHANGELOG. Before a release, specify the target version, compatible game version, validation results and package contents. Packages contain only original Mod files and required notices. Automatic publication requires a [source-bound authorization record](approvals/README.md#english). Build output stays in the ignored root `outputs/` directory; this directory tracks release records only.
-
-CI runs all seven independent build entry points and all Lua offline tests, then checks package allowlists, every file's source content and SHA-256. The `mod-packages` artifact contains the seven current ZIPs, their `.zip.sha256` files and `build-info.json` with the source commit, versions and attachment hashes. Artifacts are retained for 14 days. GitHub source downloads are not installable Mod packages.
-
-Keep development changes under `Unreleased`; update numbered versions, diagnostic identifiers and documentation when requested by the maintainer. CI success is not in-game acceptance. Versions advance independently for each Mod.
-
-### GitHub Release workflow
-
-The `Publish new CHANGELOG versions` job in `.github/workflows/mods.yml` runs only for a push to `main`, after syntax checks and Lua tests/package checks pass. PRs, `dev`, `development` and manual runs only check, build and preflight; they do not publish. No personal access token is required. Only the publishing job grants `GITHUB_TOKEN` the `contents: write` permission.
-
-| Mod | Independent tag |
+| Result | Meaning |
 | --- | --- |
-| Bartender's Note | `bartenders-note-v<version>` |
-| Auto Checkout | `auto-checkout-v<version>` |
-| Fresh to Serve | `fresh-to-serve-v<version>` |
-| First to Serve | `first-to-serve-v<version>` |
-| Smart Delivery | `smart-delivery-v<version>` |
-| Auto Menu | `auto-menu-v<version>` |
-| Scan to Order | `scan-to-order-v<version>` |
+| publish | New numbered version: it is released when the PR is merged. |
+| promote | Existing beta whose `release.json` now says stable. |
+| current | Already released; nothing to do. |
+| waiting | Already released; its `Unreleased` changes ship with the next version. |
+| skip | Development (`-dev`) version, never released. |
+| error | Something must be fixed before merging. CI fails. |
 
-Following the Old Market Simulator project:
+Errors include: a version not newer than the latest release; a new version while `Unreleased` still has entries; no CHANGELOG entry for the version; a status note in the version heading; a tag without a release; `release.json` asking for a beta when the release is already stable.
 
-1. Read-only preflight checks the current version against existing GitHub Releases. It skips `-dev`, versions without authorization records and already published versions; an invalid existing authorization record fails the check. The version must be the first numbered stable CHANGELOG entry, include release notes, and leave `Unreleased` empty.
-2. Compare the highest published numbered version's tag with the current commit for that Mod. Skip when its directory has no net changes and reject version regressions. A first release must contain tracked Mod files. Build and release checks fetch full Git history and tags.
-3. Download `mod-packages` from the same workflow run. Verify its source commit, versions, complete file list, hashes and every ZIP file against the source. Do not rebuild or replace the verified ZIP.
-4. Create a draft at the exact current commit with the numbered CHANGELOG notes and installation link. Upload that Mod's ZIP, `SHA256SUMS.txt` and `build-info.json` containing the commit, version, source digest and ZIP hash. Download each attachment from GitHub and compare the original bytes, then publish and verify the tag target.
-5. Published Releases and tags remain unchanged. After an interrupted upload, rerun the original main-push workflow. A draft resumes only if its source commit, body, prerelease status and existing attachment bytes all match. Conflicts or corruption preserve the draft and fail; nothing is automatically deleted or overwritten.
+## What the release job guarantees
 
-Adding the workflow does not backfill historical Releases or promote development packages. Record authorization only from an actual maintainer instruction to release the specified version; the workflow can then publish after merging into `main`.
+- It publishes from the packages of the same CI run, after checking the file list, every file's content and the build evidence against the merged commit.
+- It creates a draft, uploads the ZIP and `SHA256SUMS.txt`, downloads them again to compare the bytes, then publishes and checks that the tag points at the merged commit.
+- Published files and tags are never replaced or moved. A broken release is fixed with a new patch version. Documentation-only changes wait for the next version; published ZIPs are no longer refreshed in place.
+- One Mod's problem doesn't stop the others; the job fails at the end with every error listed.
+- After an interrupted run, rerun the failed jobs. A leftover draft is only reused when it belongs to the same commit and notes.
 
-Read-only check:
+Release titles use the Mod's `displayName` from `release.json`. The release text names the ZIP to download, links to the Mod README and adds the CHANGELOG entry.
+
+## Package contents
+
+Each package is `<Name>-<version>.zip` with a `<Name>/` folder holding the Lua scripts, `README.md`, `DEVELOPMENT.md`, `CHANGELOG.md`, `LICENSE` and an empty `enabled.txt`. Smart Delivery and Auto Menu also include their helper DLL, built in CI from tracked source. UE4SS, game files and reference material are never packaged.
+
+## Commands
 
 ```powershell
-python tools/release.py check --repository martin-lzh/parisian-bistro-simulator-mods
+python tools/ci.py validate
+python tools/ci.py build
+$env:GH_TOKEN = gh auth token; python tools/ci.py release-plan --repository martin-lzh/parisian-bistro-simulator-mods
 ```
 
-This command queries the repository's GitHub API using `GH_TOKEN` and requires a committed working tree. Offline tests simulate GitHub creation, resumption, skipping, corruption and conflicts; these are not acceptance tests of a real Release publication.
+`release-plan` only reads from GitHub. Publishing runs only in CI on `main`.
 
-## 中文
+## Shared release code
 
-### 已验收版本与当前源码
+[`tools/modrelease.py`](../tools/modrelease.py) and its tests are identical in all three Mod repositories. Change them in all three together. This repository's `tools/release.py` checks the CI packages and describes the Mods to the shared code.
 
-**2026-10-14**，兼容核对后维护者要求将游戏支持标注提高至 **Steam Build 25822788／游戏 1.0.2.44eb**。当前七款 Mod 版本不变，本次仅更新文档，运行代码不变，实机及联机测试跳过。见[当前支持表及验证范围](validation.md#中文)。
+## History
 
-2026-09-26，维护者确认全部 7 个当前 Mod 实机及联机测试通过，明确要求去掉开发版后缀并发布正式 Release。[验收记录](validation.md#中文)将本次确认关联源码 `4c51f21a1fd9acb05e6b4a9da6ffa9ddea8706a1`。该次验收对应的获准正式包版本如下：
-
-| Mod | 正式版本 | 实机与联机确认日期 | 安装包 |
-| --- | --- | --- | --- |
-| Bartender's Note（调饮手记） | 0.1.2 | 2026-09-26 | [`BartendersNote-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) |
-| Auto Checkout（收银管家） | 0.1.4 | 2026-09-26 | [`AutoCheckout-0.1.4.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) |
-| Fresh to Serve（焕鲜上桌） | 0.1.2 | 2026-09-26 | [`FreshToServe-0.1.2.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.2) |
-| First to Serve（出餐有序） | 0.1.7 | 2026-09-26 | [`FirstToServe-0.1.7.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) |
-| Smart Delivery（配送随心） | 0.1.5 | 2026-09-26 | [`SmartDelivery-0.1.5.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) |
-| Auto Menu（菜单巧配） | 0.5.0 | 2026-09-26 | [`AutoMenu-0.5.0.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) |
-| Scan to Order（扫码点餐） | 0.1.1 | 2026-09-26 | [`ScanToOrder-0.1.1.zip`](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.1) |
-
-**2026-10-07**，维护者确认**游戏 1.0.2.44eb／Steam Build 25759268** 实机测试通过，并要求全部七款 Mod 标注支持至该版本。当前源码将**焕鲜上桌 0.1.2 → 0.1.3**、**扫码点餐 0.1.1 → 0.1.2**，修复餐桌类查询并兼容旧拼写；另外五款版本不变。支持版本及验收范围见[当前验收记录](validation.md#中文)。维护者已授权发布[焕鲜上桌 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3) 与[扫码点餐 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2)，同时[更新另外五款现有安装包的文档](documentation-refresh-2026-10-07.md#中文)。上表对应的两个旧补丁包不包含此次修复。历史验收继续保留；当前源码构建不会重新生成历史版本安装包。
-
-维护者另行授权对这 7 个现有 Release 进行[游戏操作说明更新](documentation-refresh-2026-09-26.md#中文)，仅替换 ZIP 内文档及对应校验／构建记录；运行文件、版本及标签指向不变。下述常规工作流仍跳过已发布版本。
-
-每个 Mod 独立维护版本和 CHANGELOG。发布前明确目标版本、兼容的游戏版本、验证结果和包文件清单。包内只包含原创 Mod 文件和必要声明。自动发布必须具有[绑定源码的授权记录](approvals/README.md#中文)。构建包保存在被忽略的根目录 `outputs/`；本目录只跟踪文字发布记录。
-
-CI 使用全部 7 个 Mod 的独立构建入口，运行全部 Lua 离线测试，并核对包白名单、逐文件源码内容与 SHA-256。`mod-packages` artifact 包含当前 7 个 ZIP、对应的 `.zip.sha256` 及 `build-info.json`（源码提交、版本和附件哈希），保留 14 天。GitHub 源码下载不等于可安装 Mod 包。
-
-开发期间将改动记录在 `Unreleased`，按维护者要求更新编号、诊断标识和说明。不能把 CI 成功当作游戏内验收；每个 Mod 独立推进版本。
-
-### GitHub Release 工作流
-
-`.github/workflows/mods.yml` 的 `Publish new CHANGELOG versions` 任务只在 `main` push 且语法检查、Lua 测试与打包检查成功后执行。PR、`dev`、`development` 和手动运行只检查、打包与预检，不发布。无需个人访问令牌；只有发布任务授予 `GITHUB_TOKEN` 的 `contents: write` 权限。
-
-| Mod | 独立标签 |
-| --- | --- |
-| Bartender's Note（调饮手记） | `bartenders-note-v<版本>` |
-| Auto Checkout（收银管家） | `auto-checkout-v<版本>` |
-| Fresh to Serve（焕鲜上桌） | `fresh-to-serve-v<版本>` |
-| First to Serve（出餐有序） | `first-to-serve-v<版本>` |
-| Smart Delivery（配送随心） | `smart-delivery-v<版本>` |
-| Auto Menu（菜单巧配） | `auto-menu-v<版本>` |
-| Scan to Order（扫码点餐） | `scan-to-order-v<版本>` |
-
-发布流程沿用菜市场模拟器项目：
-
-1. 只读预检结合 GitHub 已有 Release 筛选当前版本。跳过 `-dev`、缺少授权记录和已发布版本；已有记录失效则报错。当前编号必须为 CHANGELOG 的首个正式编号条目且有说明，`Unreleased` 内容为空。
-2. 对比该 Mod 最高已发布编号版本的标签与当前提交。Mod 目录没有净变化时跳过，拒绝版本倒退；首次发布必须有已跟踪的 Mod 文件。所有构建和发布检查获取完整 Git 历史及标签。
-3. 下载同一次工作流的 `mod-packages`，核对来源提交、版本、完整文件清单、哈希及 ZIP 中每个文件的源码内容；不重新构建或替换已验证的 ZIP。
-4. 在当前准确提交创建草稿，附上编号 CHANGELOG 及安装说明链接。上传该 Mod 的 ZIP、`SHA256SUMS.txt` 和 `build-info.json`（提交、版本、源码摘要和 ZIP 哈希）。逐个从 GitHub 下载附件并比较原始字节，再完成发布并核对标签指向。
-5. 已发布的 Release 和标签保持不变。上传中断可重跑原 main-push 工作流；只有来源提交、说明、预发布状态和已有附件字节都一致的草稿才可续传。冲突或损坏会保留草稿并失败，不自动删除或覆盖。
-
-新增工作流本身不补建历史 Release，也不将开发包自动升级为正式版。只有维护者实际要求发布指定版本后才记录授权，工作流随后可在合入 `main` 后发布。
-
-只读检查命令：
-
-```powershell
-python tools/release.py check --repository martin-lzh/parisian-bistro-simulator-mods
-```
-
-命令通过 `GH_TOKEN` 查询仓库的 GitHub API，工作区须已提交。离线测试模拟 GitHub 的创建、续传、跳过、损坏和冲突，不代表真实 Release 发布验收。
+- [`validation.md`](validation.md): in-game testing records, including the 2026-09-26 acceptance of all seven Mods and later game-build support.
+- `documentation-refresh-*.md`: three earlier occasions when published ZIPs had their documentation replaced in place. This is no longer done.
+- [`approvals/`](approvals/README.md): source-bound approval records used before merging became the approval. Kept for history only.

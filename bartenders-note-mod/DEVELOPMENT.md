@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.2.** The maintainer confirmed in-game and multiplayer testing passed on 2026-09-26; see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#english) for its scope. Individual checklist results were not reported separately. Version 0.1.0's earlier user confirmation is recorded below.
+Player instructions: [README](README.md#english). **Current source: 0.1.2.**
 
 ### Implementation
 
@@ -18,23 +18,43 @@ Player instructions: [README](README.md#english). **Current source: 0.1.2.** The
 | `Scripts/main.lua` | Handles events, 750 ms reconciliation, HUD rebuilds and clearing after failures |
 | `Scripts/reload.lua` | Stops old callbacks and hands off widget identities as shared strings for cleanup on the next game-thread refresh |
 
-All Unreal object access happens on the game thread. The Mod does not execute order actions. Each update builds from the current queue, so no additional save state is needed. Finished drinks leave the list immediately, without waiting for delivery. The HUD does not capture input or change the original name bar.
+#### Data and threading
 
-`ModRef.OnUnload` may run outside the game thread. It only marks the old lifetime stopped: it does not touch UObjects or schedule callbacks into the state being destroyed. UE4SS removes that state's hooks, timers and object notifications. Shared variables contain only full-name/address identity strings for the banner and measurement widget. The next state resolves those identities on the game thread and removes matching widgets before creating new ones. Failed cleanup is retried; normal destruction removes its records. No transient UObject or callback is shared between states.
+- All Unreal object access happens on the game thread.
+- The Mod never executes order actions. Each update rebuilds the list from the current queue, so it keeps no save state.
+- Finished drinks leave the list immediately, without waiting for delivery.
+- The HUD captures no input and leaves the original name bar unchanged.
 
-The new widgets use the name bar's actual anchors, alignment, size and transform. Each side reserves 18% of the bar width, with a minimum of 56 HUD-scaled layout units; the body container clips text inside the faded ends. A hidden text widget on the same canvas measures the native font. It participates in layout without drawing or receiving input. Available width comes from viewport dimensions and DPI scaling, and measurements are recalculated on refresh to reflect language, font and window changes.
+#### Reload handoff
 
-Measurement caches last one refresh. Unchanged body text is not rewritten. Panel height follows the final measured multiline height and shrinks when the content returns to one line. Removing the HUD also removes its measurement widget.
+- `ModRef.OnUnload` may run outside the game thread. It only marks the old lifetime stopped: it touches no UObjects and schedules no callbacks into the state being destroyed. UE4SS removes that state's hooks, timers and object notifications.
+- Shared variables hold only full-name/address identity strings for the banner and measurement widget. No transient UObject or callback is shared between states.
+- The next state resolves those identities on the game thread and removes matching widgets before creating new ones. Failed cleanup is retried; normal destruction removes the records.
 
-Layout retains the longest complete prefix of the stable drink order. If a single name is too wide, it and subsequent types are counted in the overflow indicator instead of truncating the name. The count is drink types, not quantities. If even the localized indicator cannot fit, the panel hides until sufficient width returns.
+#### Widgets and measurement
+
+- New widgets copy the name bar's anchors, alignment, size and transform.
+- Each side reserves 18% of the bar width, at least 56 HUD-scaled layout units; the body container clips text inside the faded ends.
+- A hidden text widget on the same canvas measures the native font. It takes part in layout but neither draws nor receives input.
+- Available width comes from viewport size and DPI scaling. Measurements are recalculated on every refresh, so language, font and window changes are picked up.
+- Measurement caches last one refresh, and unchanged body text is not rewritten.
+- Panel height follows the final measured multiline height and shrinks when content returns to one line. Removing the HUD also removes the measurement widget.
+
+#### Layout rules
+
+- Layout keeps the longest complete prefix of the stable drink order.
+- A name that is too wide is not truncated: it and every later type go into the overflow count instead. The count is drink types, not quantities.
+- If even the localized overflow indicator cannot fit, the panel hides until there is enough width again.
 
 ### Localization
 
-The language is read through `KismetInternationalizationLibrary:GetCurrentLanguage()` during game-thread refreshes. Native names come from `LocaleGameInstanceSubsystem:GetDishTranslation`. If an individual name is missing, `GetUITranslation('Drinks')` supplies a native category label plus `#ID`; only if both fail does the original translated generic label apply. Missing localization services do not discard valid order counts.
+- The language is read with `KismetInternationalizationLibrary:GetCurrentLanguage()` during game-thread refreshes.
+- Drink names come from `LocaleGameInstanceSubsystem:GetDishTranslation`. If a name is missing, `GetUITranslation('Drinks')` supplies a native category label plus `#ID`; only if both fail is the Mod's own translated generic label used. Missing localization services never discard valid order counts.
+- Supported cultures: `en`, `fr`, `zh-Hans`, `it`, `es`, `de`, `ru`, `ja`, `ko`, `zh-Hant`, `tr`, `pl`, `pt` and `pt-BR`. Resolution tolerates case, underscores and regional variants; explicit Chinese scripts take precedence over region aliases, and Brazilian Portuguese stays distinct. Unsupported or unreadable languages fall back to English for Mod-owned wording.
+- Language events and periodic reconciliation both reflow the current list.
+- The Mod authors only the overflow and final-fallback text. The overflow indicator is measured in the current native font with the same width budget as drink entries. Loader and error diagnostics are English.
 
-The 14 supported cultures are `en`, `fr`, `zh-Hans`, `it`, `es`, `de`, `ru`, `ja`, `ko`, `zh-Hant`, `tr`, `pl`, `pt` and `pt-BR`. Resolution tolerates case, underscores and regional variants; explicit Chinese scripts take precedence over region aliases, and Brazilian Portuguese stays distinct. Unsupported or unreadable languages fall back to English for Mod-owned wording. Language events and periodic reconciliation both reflow the current list.
-
-Only overflow and final-fallback text is authored by the Mod. The overflow indicator is measured in the current native font with the same width budget as drink entries. Technical loader/error diagnostics remain English. Do not commit extracted translation catalogs or native game text tables; all references and research notes stay under ignored `work/`.
+Extracted translation catalogs, native text tables and research notes stay in the ignored `work/` folder.
 
 ### Offline checks and packaging
 
@@ -47,15 +67,16 @@ python tools/check_repository.py
 git diff --check
 ```
 
-The tests execute Lua 5.4 without the game or UE4SS. They cover ownership/state filtering, deduplication, unavailable sources, HUD lifecycle, margins, measured wrapping, hidden-type counts, height recovery and reflow when the window/font changes. Localization coverage checks the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes while the order list stays the same.
+The tests run on Lua 5.4 without the game or UE4SS, using substitute engine objects. They cover:
 
-The fixed package allowlist includes original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`. The output is `outputs/bartenders-note/BartendersNote-0.1.2.zip` with a SHA-256 file. It contains no loader, tools, tests or game files and writes nothing to the game installation. Substitute engine objects verify Mod logic, not real UE4SS bridging or rendering. Reload tests cover stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
+- ownership/state filtering, deduplication and unavailable sources;
+- HUD lifecycle, margins, measured wrapping, hidden-type counts, height recovery and reflow after window/font changes;
+- the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes with an unchanged order list;
+- reload: stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
 
-### In-game validation
+The package contains only the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`. The build writes `outputs/bartenders-note/BartendersNote-0.1.2.zip` and a SHA-256 file; it includes no loader, tools, tests or game files.
 
-On 2026-09-24, the user confirmed 0.1.0-dev worked in-game and requested the 0.1.0 release, retaining the same runtime logic. The feedback did not enumerate full game/loader versions, resolution, multiplayer role or test duration. It does not cover the 0.1.1-dev layout or localization changes.
-
-The following remains a regression checklist, not a list of completed tests:
+### In-game regression checklist
 
 1. Enter a single-player restaurant. Confirm no list before claiming orders; claim ten of one drink and another type and check totals and one-line layout when space permits.
 2. Cancel a claim, cancel an order, start preparation and finish preparation. Preparing drinks still count; finished drinks disappear, and the panel hides after the final drink.
@@ -68,19 +89,20 @@ The following remains a regression checklist, not a list of completed tests:
 
 ### Runtime compatibility
 
-Current version: **0.1.2**, supporting **Steam Build 25822788 / 1.0.2.44eb**. Support was extended on 2026-10-14 after interface, asset, native-discovery and offline checks found no required compatibility changes. In-game acceptance remains recorded for Build 25759268 on 2026-10-07; in-game and multiplayer testing for this documentation update is skipped because runtime code is unchanged. See the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
-
-The local reference baseline is Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4. The checked UE4SS experimental API is `v3.0.1-1140-gf58e8f84`; `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required. Missing required APIs stop the Mod and produce a `[Bartender's Note]` log entry. Old stable UE4SS 3.0.1 is not the target.
+- Current version: **0.1.2**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- Development reference: Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
+- UE4SS: experimental `v3.0.1-1140-gf58e8f84`. `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required; if either is missing, the Mod stops and writes a `[Bartender's Note]` log entry. Stable UE4SS 3.0.1 is not supported.
 
 ### Manual script reload
 
-Install or upgrade to 0.1.2 with the game closed once, clearing widgets left by earlier runtimes. For subsequent Lua-only updates, follow the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/docs/hot-reload.md#english), copy every updated script, then press **Ctrl+R**. No reload is needed for a normal closed-game update.
+1. Install or upgrade to 0.1.2 once with the game closed, which clears widgets left by earlier versions.
+2. For later Lua-only updates, set up the [shared reload configuration](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/docs/hot-reload.md#english), copy every updated script, then press **Ctrl+R**.
 
-The implementation and handoff are described above; the 2026-09-26 overall report does not provide a separate result for repeated reload, host/client isolation or live language changes.
+A normal update with the game closed needs no reload.
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2。** 维护者于 2026-09-26 确认实机及联机测试全部通过并授权正式发布，范围见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/releases/validation.md#中文)；未单独反馈清单各项结果。0.1.0 的历史用户确认见下文。
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2。**
 
 ### 实现
 
@@ -94,23 +116,43 @@ The implementation and handoff are described above; the 2026-09-26 overall repor
 | `Scripts/main.lua` | 事件通知、750 毫秒核对、HUD 重建及异常清空 |
 | `Scripts/reload.lua` | 停止旧回调，以共享字符串传递控件身份，由新状态在游戏线程清理 |
 
-所有 Unreal 对象访问在游戏线程执行，不操作订单。每次从当前队列生成清单，无需维护额外存档状态；完成制作立即移出清单，不等待送达。HUD 不截获输入，不改变原名称条。
+#### 数据与线程
 
-`ModRef.OnUnload` 可能不在游戏线程，仅标记旧生命周期停止，不访问 UObject，也不向将销毁的状态安排回调。UE4SS 清理该状态的 Hook、定时器及对象通知。跨重载仅保存显示栏和测量控件的完整名称/地址字符串；新状态在游戏线程重新解析并移除对应控件后才创建新控件，失败时重试。正常销毁时删除身份记录，不共享临时 UObject 或回调。离线测试覆盖旧回调停止、身份匹配、重复清理及错误恢复；实机仍需连续重载、切换餐厅和语言验证。
+- 所有 Unreal 对象访问都在游戏线程执行。
+- Mod 不操作订单。每次都从当前队列重新生成清单，不保存额外存档状态。
+- 饮料做完立即移出清单，不等待送达。
+- HUD 不截获输入，不改动原名称条。
 
-新增控件依据名称条实际锚点、对齐、尺寸和变换定位。左右各预留 18% 栏宽、至少 56 个随 HUD 缩放的布局单位，正文裁剪在渐隐区内侧。同画布上的隐藏文字控件参与布局测量原生字体，但不绘制、不接收输入。可用宽度依据视口尺寸和 DPI 缩放计算，每次刷新重新测量，响应语言、字体和窗口变化。
+#### 重载交接
 
-测量缓存只保留一次刷新，正文未变时不重写文字。面板高度根据最终多行文字的实测高度决定，恢复一行时同步缩回。销毁 HUD 时同时移除测量控件。
+- `ModRef.OnUnload` 可能不在游戏线程运行，只标记旧生命周期停止：不访问 UObject，也不向将销毁的状态安排回调。UE4SS 负责清理该状态的 Hook、定时器和对象通知。
+- 跨重载只保存显示栏和测量控件的完整名称/地址字符串，不共享临时 UObject 或回调。
+- 新状态在游戏线程重新解析这些身份，移除对应控件后才创建新控件；清理失败时重试，正常销毁时删除身份记录。
 
-布局保留稳定顺序中能完整显示的最长前缀。单个名称过宽时，将该种类及后续种类纳入溢出计数，不截断名称；计数代表饮料种类而非杯数。极窄窗口连本地化提示也容纳不下时隐藏面板，宽度恢复后重新显示。
+#### 控件与测量
+
+- 新增控件沿用名称条的锚点、对齐、尺寸和变换。
+- 左右各预留 18% 栏宽，至少 56 个随 HUD 缩放的布局单位；正文裁剪在渐隐区内侧。
+- 同画布上的隐藏文字控件用于测量原生字体，参与布局但不绘制、不接收输入。
+- 可用宽度依据视口尺寸和 DPI 缩放计算。每次刷新都重新测量，以响应语言、字体和窗口变化。
+- 测量缓存只保留一次刷新，正文未变时不重写文字。
+- 面板高度取最终多行文字的实测高度，恢复一行时同步缩回。销毁 HUD 时一并移除测量控件。
+
+#### 布局规则
+
+- 布局保留稳定顺序中能完整显示的最长前缀。
+- 单个名称过宽时不截断，而是把它和后续种类都计入溢出数；计数代表饮料种类而非杯数。
+- 窗口窄到连本地化溢出提示都放不下时隐藏面板，宽度恢复后重新显示。
 
 ### 多语言适配
 
-游戏线程刷新时通过 `KismetInternationalizationLibrary:GetCurrentLanguage()` 读取语言。饮料名称来自 `LocaleGameInstanceSubsystem:GetDishTranslation`；某个名称缺失时，先用 `GetUITranslation('Drinks')` 的原生分类名称加 `#编号`，两者均失败才使用原创本地化通用标签。翻译服务不可用不会丢弃有效订单数量。
+- 游戏线程刷新时通过 `KismetInternationalizationLibrary:GetCurrentLanguage()` 读取语言。
+- 饮料名称来自 `LocaleGameInstanceSubsystem:GetDishTranslation`；某个名称缺失时，用 `GetUITranslation('Drinks')` 的原生分类名称加 `#编号`，两者都失败才使用 Mod 自带的本地化通用标签。翻译服务不可用时不会丢弃有效订单数量。
+- 支持 `en`、`fr`、`zh-Hans`、`it`、`es`、`de`、`ru`、`ja`、`ko`、`zh-Hant`、`tr`、`pl`、`pt` 和 `pt-BR`。解析兼容大小写、下划线和地区变体；显式中文书写系统优先于地区别名，巴西葡萄牙语单独处理。语言不支持或无法读取时，Mod 自有文案回退英语。
+- 语言事件和定时核对都会重新排版当前清单。
+- Mod 只自行翻译溢出提示和最终后备文案。溢出提示用当前原生字体测量，与饮料条目共用宽度。加载器和异常诊断使用英文。
 
-覆盖 `en`、`fr`、`zh-Hans`、`it`、`es`、`de`、`ru`、`ja`、`ko`、`zh-Hant`、`tr`、`pl`、`pt` 和 `pt-BR`。解析兼容大小写、下划线和地区变体；显式中文书写系统优先于地区别名，巴西葡萄牙语独立处理。语言不支持或不可读时，自有文案回退英语。语言事件与定时核对都会重新排版当前清单。
-
-Mod 仅自行翻译溢出提示与最终后备文案。溢出提示使用当前原生字体测量，与饮料条目共用可用宽度。加载器及异常等技术诊断保留英文。不提交提取的游戏翻译目录或原生文案表，参考与研究笔记始终放在被忽略的 `work/`。
+提取的游戏翻译目录、原生文案表和研究笔记放在被忽略的 `work/` 文件夹。
 
 ### 离线检查与打包
 
@@ -123,15 +165,16 @@ python tools/check_repository.py
 git diff --check
 ```
 
-测试使用 Lua 5.4，无需游戏或 UE4SS。覆盖认领者与状态过滤、去重、数据源不可用、HUD 生命周期、留白、实测换行、隐藏种类计数、面板高度恢复及窗口和字体变化后的重排。多语言检查覆盖 14 种语言、地区别名、原生名称/分类/最终后备优先级、服务缺失和订单不变时切换语言。
+测试在 Lua 5.4 上运行，使用替代引擎对象，不需要游戏或 UE4SS。覆盖：
 
-固定白名单包含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 与 `enabled.txt`。生成 `outputs/bartenders-note/BartendersNote-0.1.2.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏内容，也不写入游戏目录。替代引擎对象只能验证 Mod 逻辑，不能证明真实 UE4SS 桥接或渲染正常。
+- 认领者与状态过滤、去重、数据源不可用；
+- HUD 生命周期、留白、实测换行、隐藏种类计数、面板高度恢复，以及窗口和字体变化后的重排；
+- 14 种语言、地区别名、原生名称/分类/最终后备的优先级、服务缺失，以及订单不变时切换语言；
+- 重载：延迟回调停止、仅传递基本类型、身份精确清理、重复清理及移除出错后的重试。
 
-### 游戏内验收
+安装包只包含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`。构建生成 `outputs/bartenders-note/BartendersNote-0.1.2.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏文件。
 
-2026-09-24 用户确认 0.1.0-dev 实机成功，并要求转为 0.1.0 正式版，运行逻辑不变。反馈未逐项提供完整游戏与加载器版本、分辨率、联机角色或测试时长；不覆盖 0.1.1-dev 的布局和多语言改动。
-
-以下仍是回归清单，不代表已逐项完成：
+### 实机回归清单
 
 1. 单人进入餐厅，未认领时不显示；认领同类 10 杯和另一种饮料，检查计数与宽度足够时的单行布局。
 2. 取消认领、取消订单、开始制作、完成制作，检查数量；制作中仍计入，做完后移除，最后一杯完成后隐藏。
@@ -140,15 +183,17 @@ git diff --check
 5. 有订单时切换全部 14 种语言，包含简繁中文和两种葡萄牙语，检查原生名称、本地化提示与后备值、字体及即时重排。在 1920×1080、2560×1600 和 3440×1440 下测试长名称，检查渐隐留白、两行布局、隐藏种类计数及不缩小字体的单行恢复。
 6. 房主与客户端分别认领订单，确认各自只显示自己的清单，远端取消、制作完成及重连能正确更新。
 7. 检查 UE4SS 日志与长时间运行，确认无持续异常或刷新卡顿，记录实际游戏和加载器完整版本、语言、分辨率与结果。
+8. 显示认领饮料时、以及有延迟刷新待执行时反复重载，确认只有一个显示栏和一个测量控件、数量为最新、Hook 和定时器不重复，切换场景或语言后能正确恢复。
 
 ### 运行兼容性
 
-当前版本为 **0.1.2**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。2026-10-14 经接口、资产、原生定位及离线核对后更新支持标注，未发现需要适配的变化。实机验收仍对应 2026-10-07 的 Build 25759268；本次仅更新文档，运行代码不变，实机及联机测试跳过。见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
-
-本机参考基线为 Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。已核对的 UE4SS experimental API 为 `v3.0.1-1140-gf58e8f84`，需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`。缺少必需接口时停止 Mod，并记录 `[Bartender's Note]` 日志；不以旧稳定版 UE4SS 3.0.1 为目标。
+- 当前版本：**0.1.2**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- 开发参考：Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
+- UE4SS：experimental `v3.0.1-1140-gf58e8f84`。需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`；缺少任一接口时停止 Mod 并记录 `[Bartender's Note]` 日志。不支持旧稳定版 UE4SS 3.0.1。
 
 ### 手动脚本重载
 
-首次安装或升级至 0.1.2 时先关闭游戏，以清除旧版本遗留控件。之后仅更新 Lua 文件时，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/docs/hot-reload.md#中文)设置加载器，复制完所有更新脚本，再按 **Ctrl+R**。正常关游戏更新不需要热重载。
+1. 首次安装或升级到 0.1.2 时先关闭游戏，以清除旧版本遗留的控件。
+2. 之后只更新 Lua 文件时，按[统一重载配置](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/bartenders-note-v0.1.2/docs/hot-reload.md#中文)设置加载器，复制所有更新的脚本，再按 **Ctrl+R**。
 
-实现与交接见上文；2026-09-26 总体测试反馈未单独提供连续重载、房主/客机隔离或运行中切换语言的结果。
+关闭游戏后正常更新不需要重载。
