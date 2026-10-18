@@ -124,7 +124,7 @@ Selectively stage intended files, run `python tools/check_repository.py`, review
 The `.github/workflows/mods.yml` workflow runs on pushes to `main` and `dev`, PRs targeting `main`, and manual dispatch:
 
 - **Script, data and workflow syntax:** repository boundaries, Python/JSON syntax, whitespace and actionlint. The actionlint download uses a pinned version and SHA-256.
-- **Lua tests and packages:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only **Release plan** table in the job summary.
+- **Build and test:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only **Release plan** table in the job summary.
 - The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
 - A successful **main push** runs the release job: it publishes new numbered versions and promotes betas. Only that job receives `contents: write`; `-dev` versions are never released. See [releases](releases/README.md).
 
@@ -250,7 +250,7 @@ git diff --check
 `.github/workflows/mods.yml` 在 `main`、`dev` 推送，目标为 `main` 的 PR，以及手动运行时执行：
 
 - **Script, data and workflow syntax：**检查仓库边界、Python/JSON 语法、空白和 actionlint。actionlint 下载固定版本并校验 SHA-256。
-- **Lua tests and packages：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后在任务摘要中显示只读的 **Release plan** 表。
+- **Build and test：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后在任务摘要中显示只读的 **Release plan** 表。
 - **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
 - **main 推送**通过检查后运行发布任务：发布新的编号版本，并把已改为正式的测试版转正。仅该任务拥有 `contents: write`；`-dev` 版本不会发布。详见[发布说明](releases/README.md)。
 

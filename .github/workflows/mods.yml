@@ -52,7 +52,7 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
 
   build:
-    name: Lua tests and packages
+    name: Build and test
     runs-on: windows-latest
     timeout-minutes: 15
     steps:

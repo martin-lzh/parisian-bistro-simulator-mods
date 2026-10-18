@@ -29,7 +29,7 @@
         "strict_required_status_checks_policy": true,
         "do_not_enforce_on_create": false,
         "required_status_checks": [
-          {"context": "Lua tests and packages", "integration_id": 15368},
+          {"context": "Build and test", "integration_id": 15368},
           {"context": "Script, data and workflow syntax", "integration_id": 15368}
         ]
       }
