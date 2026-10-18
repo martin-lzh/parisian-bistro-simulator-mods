@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>Windows</strong> · <strong>7 Mods</strong> · <a href="LICENSE">MIT License</a>
+  <strong>Windows</strong> · <strong>7 Mods</strong> · <a href="LICENSE">PolyForm Noncommercial 1.0.0</a>
 </p>
 
 <p align="center">
@@ -27,13 +27,13 @@ All seven support the game up to **1.0.2.44eb (Steam Build 25822788)**.
 
 | Mod | What it does | GitHub download | Nexus |
 | --- | --- | --- | --- |
-| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/1) |
-| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards and completes checkout automatically | [0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/2) |
-| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks and requests replacements when the customer can still wait | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/3) |
-| [First to Serve](first-to-serve-mod/README.md#english) | Hold at a kitchen pass or drink output area to collect the oldest ready items with a tray or food trolley | [0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/6) |
-| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | [0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/4) |
-| [Auto Menu](auto-menu-mod/README.md#english) | Choose a lunch or dinner menu with the highest estimated selection rate | [0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
-| [Scan to Order](scan-to-order-mod/README.md#english) | Takes customer orders automatically, waits for missing stock and continues after replenishment | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
+| [Bartender's Note](bartenders-note-mod/README.md#english) | Shows your claimed, unfinished drinks below the restaurant name | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/1) |
+| [Auto Checkout](auto-checkout-mod/README.md#english) | Accepts cash or cards and completes checkout automatically | [0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/2) |
+| [Fresh to Serve](fresh-to-serve-mod/README.md#english) | Clears spoiled meals and drinks and requests replacements when the customer can still wait | [0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.4) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/3) |
+| [First to Serve](first-to-serve-mod/README.md#english) | Hold at a kitchen pass or drink output area to collect the oldest ready items with a tray or food trolley | [0.1.8](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.8) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/6) |
+| [Smart Delivery](smart-delivery-mod/README.md#english) | Choose free, budget or premium delivery for automatic smart orders | [0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/4) |
+| [Auto Menu](auto-menu-mod/README.md#english) | Choose a lunch or dinner menu with the highest estimated selection rate | [0.5.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.1) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
+| [Scan to Order](scan-to-order-mod/README.md#english) | Takes customer orders automatically, waits for missing stock and continues after replenishment | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
 
 Some Mods only need to be installed by the multiplayer host, others by each player who wants the feature — see each guide.
 
@@ -96,7 +96,7 @@ Running a market too? Try [Old Market Simulator Mods](https://github.com/martin-
 
 ### About the project
 
-Mod code and documentation by **Zhaohan Liu**, released under the [MIT License](LICENSE). Each Mod ZIP includes the license. This is a fan project, not affiliated with the game's developers.
+Mod code and documentation by **Zhaohan Liu**, released under the [PolyForm Noncommercial License 1.0.0](LICENSE). Free for non-commercial use; commercial use is not allowed. Each Mod ZIP includes the license. This is a fan project, not affiliated with the game's developers.
 
 [Contributing](CONTRIBUTING.md#english) · [Development](DEVELOPMENT.md#english) · [Security](SECURITY.md#english) · [Community guidelines](CODE_OF_CONDUCT.md#english)
 
@@ -110,13 +110,13 @@ Mod code and documentation by **Zhaohan Liu**, released under the [MIT License](
 
 | Mod | 功能 | GitHub 下载 | Nexus |
 | --- | --- | --- | --- |
-| [Bartender's Note（调饮手记）](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/1) |
-| [Auto Checkout（收银管家）](auto-checkout-mod/README.md#中文) | 自动接收现金或银行卡并完成结账 | [0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/2) |
-| [Fresh to Serve（焕鲜上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；顾客还等得及时请求重做 | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/3) |
-| [First to Serve（出餐有序）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早做好的成品 | [0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/6) |
-| [Smart Delivery（配送随心）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | [0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/4) |
-| [Auto Menu（菜单巧配）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | [0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
-| [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | [0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
+| [Bartender's Note（调饮手记）](bartenders-note-mod/README.md#中文) | 在餐厅名称下显示自己认领且尚未做完的饮料 | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/1) |
+| [Auto Checkout（收银管家）](auto-checkout-mod/README.md#中文) | 自动接收现金或银行卡并完成结账 | [0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/2) |
+| [Fresh to Serve（焕鲜上桌）](fresh-to-serve-mod/README.md#中文) | 清理低劣食物和饮料；顾客还等得及时请求重做 | [0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.4) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/3) |
+| [First to Serve（出餐有序）](first-to-serve-mod/README.md#中文) | 持托盘或推餐车，对准出餐口或饮料出品台长按，优先拿取最早做好的成品 | [0.1.8](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.8) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/6) |
+| [Smart Delivery（配送随心）](smart-delivery-mod/README.md#中文) | 为自动智能订购选择免费服务、经济型配送或高级配送 | [0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/4) |
+| [Auto Menu（菜单巧配）](auto-menu-mod/README.md#中文) | 为午餐或晚餐选择预计选择率最高的菜单 | [0.5.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.1) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/5) |
+| [Scan to Order（扫码点餐）](scan-to-order-mod/README.md#中文) | 自动提交顾客订单，缺货时等待、补货后继续 | [0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.3) | [Nexus](https://www.nexusmods.com/parisianbistrosimulator/mods/7) |
 
 联机时，有的 Mod 只需房主安装，有的需要想用该功能的玩家各自安装，详见各 Mod 说明。
 
@@ -179,6 +179,6 @@ Mod 文案跟随游戏语言，支持英语、法语、简体中文、意大利�
 
 ### 关于项目
 
-Mod 代码及文档由 **Zhaohan Liu** 编写，以 [MIT 许可证](LICENSE)发布，每份 Mod ZIP 均附许可全文。本项目为玩家自制，与游戏开发商无关。
+Mod 代码及文档由 **Zhaohan Liu** 编写，以 [PolyForm Noncommercial 1.0.0 许可](LICENSE)发布，可免费用于非商业用途，不允许商用。每份 Mod ZIP 均附许可全文。本项目为玩家自制，与游戏开发商无关。
 
 [参与贡献](CONTRIBUTING.md#中文) · [开发说明](DEVELOPMENT.md#中文) · [安全反馈](SECURITY.md#中文) · [社区规范](CODE_OF_CONDUCT.md#中文)

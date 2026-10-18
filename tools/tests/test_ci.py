@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import ci
 
 
-MIT_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
+REPOSITORY_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
 
 
 class PackageChecks(unittest.TestCase):
@@ -26,8 +26,8 @@ class PackageChecks(unittest.TestCase):
                    "README.md": "Example 1.0.0\n",
                    "DEVELOPMENT.md": "Development\n",
                    "CHANGELOG.md": "## Unreleased\n\n## 1.0.0 - 2026-09-24\n\n- Release\n",
-                   "LICENSE": MIT_LICENSE}
-        (self.root / "LICENSE").write_text(MIT_LICENSE, encoding="utf-8")
+                   "LICENSE": REPOSITORY_LICENSE}
+        (self.root / "LICENSE").write_text(REPOSITORY_LICENSE, encoding="utf-8")
         for name, text in content.items():
             (source / name).write_text(text, encoding="utf-8")
         self.mod = {"slug": "example", "name": "Example", "version": "1.0.0",
@@ -70,7 +70,7 @@ class PackageChecks(unittest.TestCase):
             self.validate()
 
     def test_source_license_must_match_repository_license(self):
-        for text in ("MIT License\n", MIT_LICENSE.replace("Zhaohan Liu", "Unrelated Author")):
+        for text in ("Other License\n", REPOSITORY_LICENSE.replace("Zhaohan Liu", "Unrelated Author")):
             with self.subTest(license=text):
                 (self.mod["source"] / "LICENSE").write_text(text, encoding="utf-8")
                 with self.assertRaisesRegex(ValueError, "LICENSE must match"):
@@ -82,7 +82,7 @@ class PackageChecks(unittest.TestCase):
             self.validate()
 
     def test_license_line_endings_are_normalized(self):
-        (self.mod["source"] / "LICENSE").write_bytes(MIT_LICENSE.replace("\n", "\r\n").encode())
+        (self.mod["source"] / "LICENSE").write_bytes(REPOSITORY_LICENSE.replace("\n", "\r\n").encode())
         self.validate()
         self.write_package()
         ci.verify_package(self.mod, self.archive)
@@ -93,7 +93,7 @@ class PackageChecks(unittest.TestCase):
             ci.verify_package(self.mod, self.archive)
 
     def test_changed_packaged_license_is_rejected_even_with_matching_checksum(self):
-        self.write_package(self.payload | {"Example/LICENSE": b"MIT License\n"})
+        self.write_package(self.payload | {"Example/LICENSE": b"Other License\n"})
         with self.assertRaisesRegex(ValueError, "differs from source.*LICENSE"):
             ci.verify_package(self.mod, self.archive)
 

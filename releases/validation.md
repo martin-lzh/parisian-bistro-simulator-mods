@@ -4,6 +4,22 @@
 
 ## English
 
+### 2026-10-18: license-only patch versions, in-game testing waived
+
+At the maintainer's request, all seven Mods advance by one patch version so that the published downloads carry the PolyForm Noncommercial License 1.0.0 (relicensing commits `d8c08ab` and `e811667`). Compared with the previous release, each new version changes only `LICENSE`, the bundled documentation (README, DEVELOPMENT, CHANGELOG) and the version number in `build.py` and the start log; gameplay code and helper source are unchanged.
+
+| Mod | Previous release → new version |
+| --- | --- |
+| Bartender's Note | 0.1.2 → 0.1.3 |
+| Auto Checkout | 0.1.4 → 0.1.5 |
+| Fresh to Serve | 0.1.3 → 0.1.4 |
+| First to Serve | 0.1.7 → 0.1.8 |
+| Smart Delivery | 0.1.5 → 0.1.6 |
+| Auto Menu | 0.5.0 → 0.5.1 |
+| Scan to Order | 0.1.2 → 0.1.3 |
+
+Offline checks and package builds passed on `dev`. The maintainer waived in-game testing of these versions on 2026-10-19 because gameplay code is unchanged; the release PR to `main` can follow. Earlier acceptance records remain tied to their own builds.
+
 ### 2026-10-14: support through Steam Build 25822788
 
 The maintainer requested extending all seven Mods' documented support to **Steam Build 25822788 / game 1.0.2.44eb** after the compatibility review found no required source changes. Current supported versions are:
@@ -137,6 +153,22 @@ The user confirmed that the 0.1.2-dev in-game test had no problems, then request
 This confirms cash, card and distant two-stage checkout in that test environment. Runtime code corresponds to commit `61dd9c3`; the stable version retains that implementation and changes only the diagnostic version identifier, package name and documentation. The feedback did not separately confirm furniture placement, other floors, multiplayer synchronization, manual actions taking precedence or extended play, and did not provide complete environment versions. These scenarios remain in the development guide's regression checklist.
 
 ## 中文
+
+### 2026-10-18：仅更改许可的补丁版本，维护者免除实机测试
+
+按维护者要求，七款 Mod 各升一个补丁版本，使发布下载附带 PolyForm Noncommercial 1.0.0 许可（改许可提交 `d8c08ab` 与 `e811667`）。与上一发布版相比，新版本只更改 `LICENSE`、随包文档（README、DEVELOPMENT、CHANGELOG），以及 `build.py` 和启动日志中的版本号；玩法代码和辅助模块源码不变。
+
+| Mod | 上一发布版 → 新版本 |
+| --- | --- |
+| 调饮手记 | 0.1.2 → 0.1.3 |
+| 收银管家 | 0.1.4 → 0.1.5 |
+| 焕鲜上桌 | 0.1.3 → 0.1.4 |
+| 出餐有序 | 0.1.7 → 0.1.8 |
+| 配送随心 | 0.1.5 → 0.1.6 |
+| 菜单巧配 | 0.5.0 → 0.5.1 |
+| 扫码点餐 | 0.1.2 → 0.1.3 |
+
+`dev` 上的离线检查和打包已通过。维护者于 2026-10-19 以玩法代码未改为由免除这些版本的实机测试，可以发起合入 `main` 的发布 PR。以往验收记录仍对应各自构建。
 
 ### 2026-10-14：支持至 Steam Build 25822788
 

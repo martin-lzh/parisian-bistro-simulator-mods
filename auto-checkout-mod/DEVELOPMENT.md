@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.4.** Recorded testing: [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english).
+Player instructions: [README](README.md#english). **Current source: 0.1.5.** Recorded testing: [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#english).
 
 ### Implementation
 
@@ -107,7 +107,7 @@ Diagnostics are on by default in `UE4SS.log`, under `[AutoCheckout]`. Unchanged 
 
 | Marker | Meaning |
 | --- | --- |
-| `START version=0.1.4` | Loaded version, scheduler and `player_guard=transaction-only` |
+| `START version=0.1.5` | Loaded version, scheduler and `player_guard=transaction-only` |
 | `RELOAD` | Inherited AI recovery completed before resuming retained retry history |
 | `HOOK installed event=customer-at-billing` | Notification listener registered |
 | `EVENT customer-at-billing` | Deferred game-thread register state and number of coalesced notifications |
@@ -145,7 +145,7 @@ The suite has 68 offline tests plus 12 reload tests, run on Lua 5.4 with substit
 
 Loader teardown, real hook delivery and engine behaviour are covered by the in-game checklist below.
 
-The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.4.zip` and its SHA-256 file. The package holds the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. The loading marker is `START version=0.1.4` with `player_guard=transaction-only`.
+The fixed allowlist produces `outputs/auto-checkout/AutoCheckout-0.1.5.zip` and its SHA-256 file. The package holds the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`, with no tests, development tools, loader or game material. The loading marker is `START version=0.1.5` with `player_guard=transaction-only`.
 
 ### Earlier investigation and acceptance
 
@@ -178,7 +178,8 @@ Repeat the relevant checks after game or loader interface changes.
 
 ### Runtime compatibility and retry timing
 
-- **Current version:** 0.1.4.
+- **Current version:** 0.1.5.
+- **0.1.5 test status:** compared with 0.1.4, 0.1.5 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.5 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - **Supported game:** up to Steam Build 25822788 / 1.0.2.44eb.
 - **Development reference build:** Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
 - **UE4SS:** experimental `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported.
@@ -198,7 +199,7 @@ Reload needs the experimental loader's `ModRef` shared-variable and unload suppo
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码：0.1.4。** 测试记录见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
+玩家说明见 [README](README.md#中文)。**当前源码：0.1.5。** 测试记录见[验收记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/auto-checkout-v0.1.4/releases/validation.md#中文)。
 
 ### 实现
 
@@ -301,7 +302,7 @@ Reload needs the experimental loader's `ModRef` shared-variable and unload suppo
 
 | 日志标记 | 含义 |
 | --- | --- |
-| `START version=0.1.4` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
+| `START version=0.1.5` | 已加载，并显示调度方式及 `player_guard=transaction-only` |
 | `RELOAD` | 已恢复旧实例的 AI 变更，并继续沿用保留的重试记录 |
 | `HOOK installed event=customer-at-billing` | 提醒监听注册成功 |
 | `EVENT customer-at-billing` | 延后在游戏线程检查时的收银机状态和合并的提醒次数 |
@@ -339,7 +340,7 @@ git diff --check
 
 加载器实际卸载、Hook 是否真实触发以及引擎行为，由下方游戏内清单覆盖。
 
-打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.4.zip` 及其 SHA-256 文件。包内含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`，不含测试、开发工具、加载器或游戏资料。加载标记为 `START version=0.1.4`，并带 `player_guard=transaction-only`。
+打包使用固定文件白名单，生成 `outputs/auto-checkout/AutoCheckout-0.1.5.zip` 及其 SHA-256 文件。包内含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`，不含测试、开发工具、加载器或游戏资料。加载标记为 `START version=0.1.5`，并带 `player_guard=transaction-only`。
 
 ### 早期排查与验收
 
@@ -372,7 +373,8 @@ git diff --check
 
 ### 运行兼容性与重试时序
 
-- **当前版本：**0.1.4。
+- **当前版本：**0.1.5。
+- **0.1.5 测试状态：**与 0.1.4 相比，0.1.5 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.5 的实机测试。
 - **支持游戏：**至 Steam Build 25822788 / 1.0.2.44eb。
 - **开发参考版本：**Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
 - **UE4SS：**experimental `v3.0.1-1140-gf58e8f84`；不支持旧稳定版 UE4SS 3.0.1。

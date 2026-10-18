@@ -6,7 +6,8 @@
 
 Auto Menu is an independent Lua Mod with an original Windows x64 helper DLL.
 
-- Current version: **0.5.0**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- Current version: **0.5.1**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- **0.5.1 test status:** compared with 0.5.0, 0.5.1 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.5.1 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference build: Steam Build 25532071 / ProjectVersion 1.0.1.44eb.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`.
 
@@ -85,7 +86,7 @@ The build runs the native tests before packaging.
 - **Native harness:** every supported dish/profile/intent cache key, cache lifetime and thread isolation, exhaustive non-additive search, empty menus, ties, exact ceilings, float comparisons, synthetic full-projection differential checks, native array ownership and restoration on failure. A non-game executable must be rejected before patching.
 - **Native discovery** is also checked read-only against the local reference executable.
 
-Build output: `outputs/auto-menu/AutoMenu-0.5.0.zip` and its SHA-256.
+Build output: `outputs/auto-menu/AutoMenu-0.5.1.zip` and its SHA-256.
 
 - The package allowlist contains seven Lua modules, one generated helper DLL, README, DEVELOPMENT, CHANGELOG, LICENSE and the activation marker. CI verifies the generated DLL hash.
 - Source, tests, request/result files, tools and game references are excluded.
@@ -111,7 +112,8 @@ For later Lua-only updates, follow the [shared reload configuration](https://git
 
 菜单巧配是独立的 Lua Mod，附带原创 Windows x64 辅助 DLL。
 
-- 当前版本：**0.5.0**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- 当前版本：**0.5.1**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- **0.5.1 测试状态：**与 0.5.0 相比，0.5.1 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.5.1 的实机测试。
 - 开发参考版本：Steam Build 25532071 / ProjectVersion 1.0.1.44eb。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`。
 
@@ -190,7 +192,7 @@ git diff --check
 - **原生测试：**全部支持的菜品／顾客类型／用餐意图缓存键、缓存生命周期和线程隔离、非加性完整枚举、空菜单、同分、精确上限、浮点比较、合成完整预测的逐组合缓存对照、原生数组归属以及失败时的恢复。非游戏 EXE 必须在打补丁前被拒绝。
 - **原生目标发现**另外以只读方式对照本机参考 EXE 核对。
 
-构建产物：`outputs/auto-menu/AutoMenu-0.5.0.zip` 及其 SHA-256。
+构建产物：`outputs/auto-menu/AutoMenu-0.5.1.zip` 及其 SHA-256。
 
 - 打包白名单只含七个 Lua 模块、一个编译生成的辅助 DLL、README、DEVELOPMENT、CHANGELOG、LICENSE 和启用标记。CI 核对生成 DLL 的哈希。
 - 不包含源码、测试、请求／结果文件、工具或游戏参考资料。

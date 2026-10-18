@@ -84,7 +84,7 @@ def validate_config(mod: dict) -> None:
         raise ValueError("Repository LICENSE must be a tracked regular file")
     license_text = license_path.read_bytes().replace(b"\r\n", b"\n")
     if (source / "LICENSE").read_bytes().replace(b"\r\n", b"\n") != license_text:
-        raise ValueError(f"{mod['slug']}: LICENSE must match the repository MIT license")
+        raise ValueError(f"{mod['slug']}: LICENSE must match the repository license")
     generated = mod.get("generated", {})
     if mod["slug"] in NATIVE and not generated:
         raise ValueError("Native helper must be included in the package")

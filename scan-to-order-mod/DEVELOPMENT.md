@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.2.**
+Player instructions: [README](README.md#english). **Current source: 0.1.3.**
 
 ### Implementation
 
@@ -69,7 +69,7 @@ Behavior tests:
 - Cover partial stock, replenishment, several customers sharing the last unit, repeated polls, later courses, normal native refusal, stale tickets, clients, world mismatch, pause, departed/served customers, native queue/notification disagreement, reload stops and queued callbacks.
 - Cover both table-class spellings, alias resolution, rejected lookups, stock-aware dispatch and reload stops.
 
-The package uses a fixed source allowlist and deterministic ZIP metadata; CI verifies source bytes and checksums. Build output is `outputs/scan-to-order/ScanToOrder-0.1.2.zip` plus its SHA-256 file. Builds never install or control the game.
+The package uses a fixed source allowlist and deterministic ZIP metadata; CI verifies source bytes and checksums. Build output is `outputs/scan-to-order/ScanToOrder-0.1.3.zip` plus its SHA-256 file. Builds never install or control the game.
 
 ### In-game regression checklist
 
@@ -91,7 +91,8 @@ Keep the game installation read-only during development. Report in-game results 
 
 ### Runtime compatibility
 
-- Current version: **0.1.2**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- Current version: **0.1.3**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference: Windows, Steam Build 25532071 / 1.0.1.44eb, Unreal Engine 5.4, with the table-class follow-up checked against Build 25759268 / 1.0.2.44eb.
 - UE4SS: experimental `v3.0.1-1140-gf58e8f84`. Stable UE4SS 3.0.1 is not supported.
 - Analysis and reference material stays in the ignored `work/` folder.
@@ -110,7 +111,7 @@ After a reload:
 
 ## 中文
 
-玩家说明：[README](README.md#中文)。**当前源码版本：0.1.2。**
+玩家说明：[README](README.md#中文)。**当前源码版本：0.1.3。**
 
 ### 实现
 
@@ -175,7 +176,7 @@ git diff --check
 - 覆盖部分缺货、补货、多人争用最后一份库存、重复轮询、后续菜序、原生正常拒绝、过期候选、客机、跨世界、暂停、离席／已上餐顾客、队列与提醒不一致、热重载停止和排队回调。
 - 覆盖餐桌类的两种拼写、别名解析、查询拒绝、库存感知下单及重载停止。
 
-包使用固定的源码白名单和确定性 ZIP 元数据，CI 校验源码内容及哈希。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.2.zip` 及 SHA-256 文件。构建不安装、不控制游戏。
+包使用固定的源码白名单和确定性 ZIP 元数据，CI 校验源码内容及哈希。构建产物为 `outputs/scan-to-order/ScanToOrder-0.1.3.zip` 及 SHA-256 文件。构建不安装、不控制游戏。
 
 ### 实机回归清单
 
@@ -197,7 +198,8 @@ git diff --check
 
 ### 运行兼容性
 
-- 当前版本：**0.1.2**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- 当前版本：**0.1.3**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.3 的实机测试。
 - 开发参考：Windows、Steam Build 25532071 / 1.0.1.44eb、Unreal Engine 5.4；餐桌类兼容修复针对 Build 25759268 / 1.0.2.44eb 核对。
 - UE4SS：experimental `v3.0.1-1140-gf58e8f84`。不支持旧稳定版 UE4SS 3.0.1。
 - 分析和参考资料保留在被忽略的 `work/` 文件夹。

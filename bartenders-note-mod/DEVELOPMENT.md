@@ -4,7 +4,7 @@
 
 ## English
 
-Player instructions: [README](README.md#english). **Current source: 0.1.2.**
+Player instructions: [README](README.md#english). **Current source: 0.1.3.**
 
 ### Implementation
 
@@ -74,7 +74,7 @@ The tests run on Lua 5.4 without the game or UE4SS, using substitute engine obje
 - the 14 cultures, region aliases, native-name/category/final fallback precedence, missing services and language changes with an unchanged order list;
 - reload: stopped delayed callbacks, primitive-only handoff, exact identity cleanup, repeated cleanup and retry after removal errors.
 
-The package contains only the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`. The build writes `outputs/bartenders-note/BartendersNote-0.1.2.zip` and a SHA-256 file; it includes no loader, tools, tests or game files.
+The package contains only the original Lua, README, DEVELOPMENT, CHANGELOG, LICENSE and `enabled.txt`. The build writes `outputs/bartenders-note/BartendersNote-0.1.3.zip` and a SHA-256 file; it includes no loader, tools, tests or game files.
 
 ### In-game regression checklist
 
@@ -89,7 +89,8 @@ The package contains only the original Lua, README, DEVELOPMENT, CHANGELOG, LICE
 
 ### Runtime compatibility
 
-- Current version: **0.1.2**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- Current version: **0.1.3**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- **0.1.3 test status:** compared with 0.1.2, 0.1.3 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.3 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference: Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
 - UE4SS: experimental `v3.0.1-1140-gf58e8f84`. `LoopInGameThreadWithDelay` and `ExecuteInGameThreadWithDelay` are required; if either is missing, the Mod stops and writes a `[Bartender's Note]` log entry. Stable UE4SS 3.0.1 is not supported.
 
@@ -102,7 +103,7 @@ A normal update with the game closed needs no reload.
 
 ## 中文
 
-玩家说明见 [README](README.md#中文)。**当前源码为 0.1.2。**
+玩家说明见 [README](README.md#中文)。**当前源码为 0.1.3。**
 
 ### 实现
 
@@ -172,7 +173,7 @@ git diff --check
 - 14 种语言、地区别名、原生名称/分类/最终后备的优先级、服务缺失，以及订单不变时切换语言；
 - 重载：延迟回调停止、仅传递基本类型、身份精确清理、重复清理及移除出错后的重试。
 
-安装包只包含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`。构建生成 `outputs/bartenders-note/BartendersNote-0.1.2.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏文件。
+安装包只包含原创 Lua、README、DEVELOPMENT、CHANGELOG、LICENSE 和 `enabled.txt`。构建生成 `outputs/bartenders-note/BartendersNote-0.1.3.zip` 及 SHA-256 文件，不含加载器、工具、测试或游戏文件。
 
 ### 实机回归清单
 
@@ -187,7 +188,8 @@ git diff --check
 
 ### 运行兼容性
 
-- 当前版本：**0.1.2**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- 当前版本：**0.1.3**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- **0.1.3 测试状态：**与 0.1.2 相比，0.1.3 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.3 的实机测试。
 - 开发参考：Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
 - UE4SS：experimental `v3.0.1-1140-gf58e8f84`。需要 `LoopInGameThreadWithDelay` 和 `ExecuteInGameThreadWithDelay`；缺少任一接口时停止 Mod 并记录 `[Bartender's Note]` 日志。不支持旧稳定版 UE4SS 3.0.1。
 

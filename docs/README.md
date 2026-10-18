@@ -16,7 +16,7 @@ Players can start with the [Mod list and downloads](../README.md#english) or [he
 | Official game updates and compatibility alerts | [Steam build monitor](game-build-monitor.md) |
 | Vulnerability reports | [Security](../SECURITY.md#english) |
 | Participation and moderation | [Community guidelines](../CODE_OF_CONDUCT.md#english) |
-| Original code and documentation terms | [MIT License](../LICENSE) |
+| Original code and documentation terms | [PolyForm Noncommercial License 1.0.0](../LICENSE) |
 | Supported languages and native text | [Localization](localization.md#english) |
 | Reload Lua scripts with Ctrl+R | [Hot reload](hot-reload.md#english) |
 | Bartender's Note | [Player guide](../bartenders-note-mod/README.md#english) · [Development and validation](../bartenders-note-mod/DEVELOPMENT.md#english) · [Changes](../bartenders-note-mod/CHANGELOG.md) |
@@ -45,7 +45,7 @@ Extracted assets, type/function exports, translation catalogs and research notes
 | 官方游戏更新与兼容性提醒 | [Steam 构建监控](game-build-monitor.md) |
 | 漏洞反馈 | [安全反馈](../SECURITY.md#中文) |
 | 参与及管理规则 | [社区规范](../CODE_OF_CONDUCT.md#中文) |
-| 原创代码和文档许可 | [MIT 许可证](../LICENSE) |
+| 原创代码和文档许可 | [PolyForm Noncommercial 1.0.0 许可](../LICENSE) |
 | 支持语言与原生文案 | [多语言适配](localization.md#中文) |
 | Ctrl+R 重载 Lua 脚本 | [热重载](hot-reload.md#中文) |
 | Bartender's Note（调饮手记） | [玩家说明](../bartenders-note-mod/README.md#中文) · [开发与验收](../bartenders-note-mod/DEVELOPMENT.md#中文) · [版本变化](../bartenders-note-mod/CHANGELOG.md) |

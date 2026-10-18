@@ -6,7 +6,8 @@
 
 ### Compatibility
 
-- Current version: **0.1.5**.
+- Current version: **0.1.6**.
+- **0.1.6 test status:** compared with 0.1.5, 0.1.6 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.6 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Supported game: up to **1.0.2.44eb / Steam Build 25822788**. Last in-game acceptance: Build 25759268 (2026-10-07); see the [validation record](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#english).
 - Native discovery reference build: Steam Build 25532071 / game 1.0.1.44eb. Detailed evidence is in `work/smart-delivery-research/build-25532071/`.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`. Stable UE4SS 3.0.1 is not supported.
@@ -98,10 +99,10 @@ The build requires Windows x64, MSVC C++ and MASM, and the Windows SDK. Compiler
 
 ### Loader, packaging and diagnostics
 
-- The build writes `outputs/smart-delivery/SmartDelivery-0.1.5.zip` and its SHA-256 file. Builds don't install the Mod, start or stop the game, or edit saves.
+- The build writes `outputs/smart-delivery/SmartDelivery-0.1.6.zip` and its SHA-256 file. Builds don't install the Mod, start or stop the game, or edit saves.
 - The compiled `Scripts/delivery_bridge.dll` is loaded by Lua, not from UE4SS's `dlls` folder.
 - The preference file is `Scripts/delivery-preference.txt`; premium is the initial fallback.
-- After upgrading with the game closed, check `UE4SS.log` for `[SmartDelivery] START version=0.1.5` and `UI attached to automatic-order settings`.
+- After upgrading with the game closed, check `UE4SS.log` for `[SmartDelivery] START version=0.1.6` and `UI attached to automatic-order settings`.
 - Keep the original startup error from that log: cleanup may later replace `Scripts/bridge-status.txt` with `disabled`.
 
 ### Manual script reload
@@ -114,7 +115,8 @@ Reloading discards unsaved selector changes, removes the old selector on the new
 
 ### 兼容性
 
-- 当前版本：**0.1.5**。
+- 当前版本：**0.1.6**。
+- **0.1.6 测试状态：**与 0.1.5 相比，0.1.6 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.6 的实机测试。
 - 支持游戏：至 **1.0.2.44eb / Steam Build 25822788**。最近一次实机验收：Build 25759268（2026-10-07），见[验证记录](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/releases/validation.md#中文)。
 - 原生定位参考构建：Steam Build 25532071 / 游戏 1.0.1.44eb，详细证据位于 `work/smart-delivery-research/build-25532071/`。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持稳定版 UE4SS 3.0.1。
@@ -206,10 +208,10 @@ git diff --check
 
 ### 加载器、打包与诊断
 
-- 构建生成 `outputs/smart-delivery/SmartDelivery-0.1.5.zip` 及 SHA-256 文件。构建不安装 Mod、不启停游戏，也不修改存档。
+- 构建生成 `outputs/smart-delivery/SmartDelivery-0.1.6.zip` 及 SHA-256 文件。构建不安装 Mod、不启停游戏，也不修改存档。
 - 编译出的 `Scripts/delivery_bridge.dll` 由 Lua 加载，不放入 UE4SS 的 `dlls` 目录。
 - 偏好文件为 `Scripts/delivery-preference.txt`，初始后备选择为高级配送。
-- 关闭游戏升级后，在 `UE4SS.log` 中核对 `[SmartDelivery] START version=0.1.5` 和 `UI attached to automatic-order settings`。
+- 关闭游戏升级后，在 `UE4SS.log` 中核对 `[SmartDelivery] START version=0.1.6` 和 `UI attached to automatic-order settings`。
 - 保留该日志中的原始启动错误：后续清理可能把 `Scripts/bridge-status.txt` 改为 `disabled`。
 
 ### 手动脚本重载

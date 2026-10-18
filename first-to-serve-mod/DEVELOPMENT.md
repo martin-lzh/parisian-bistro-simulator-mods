@@ -91,7 +91,8 @@ The package uses an explicit allowlist, normalized source bytes and a SHA-256 si
 
 ### Runtime compatibility
 
-- Current version: **0.1.7**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- Current version: **0.1.8**, supporting **Steam Build 25822788 / 1.0.2.44eb**.
+- **0.1.8 test status:** compared with 0.1.7, 0.1.8 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.8 was waived by the maintainer on 2026-10-19 because gameplay code is unchanged.
 - Development reference for the pickup areas: Windows, Steam Build 25532071 / ProjectVersion 1.0.1.44eb, Unreal Engine 5.4.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`. Stable UE4SS 3.0.1 is not the target.
 
@@ -195,7 +196,8 @@ git diff --check
 
 ### 运行兼容性
 
-- 当前版本：**0.1.7**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- 当前版本：**0.1.8**，支持至 **Steam Build 25822788 / 1.0.2.44eb**。
+- **0.1.8 测试状态：**与 0.1.7 相比，0.1.8 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者于 2026-10-19 以玩法代码未改为由免除 0.1.8 的实机测试。
 - 出餐区域开发参考：Windows、Steam Build 25532071 / ProjectVersion 1.0.1.44eb、Unreal Engine 5.4。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`；不以旧稳定版 UE4SS 3.0.1 为目标。
 

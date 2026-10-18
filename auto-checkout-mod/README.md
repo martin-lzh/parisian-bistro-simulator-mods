@@ -8,7 +8,7 @@
 
 Automatically accepts customers' cash or cards at the counter and finishes checkout at the register.
 
-**Version: 0.1.4.** Works in single player or for the multiplayer host. Only the host needs to install it.
+**Version: 0.1.5.** Works in single player or for the multiplayer host. Only the host needs to install it.
 
 ### How to use
 
@@ -46,7 +46,7 @@ A customer stands at the checkout counter, with the bill displayed on the regist
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Auto Checkout 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) and download **AutoCheckout-0.1.4.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Auto Checkout 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5) and download **AutoCheckout-0.1.5.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/2), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -87,13 +87,13 @@ Payment prompts and notifications are the game's own. The Mod's log messages fol
 
 **If automation stops with an error,** or a warning says employee jobs or interaction settings couldn't be restored, leave the restaurant and load it again. When reporting a problem, include the `[AutoCheckout]` lines from `Win64/ue4ss/UE4SS.log`.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
 自动接收柜台顾客递出的现金或银行卡，并在收银机上完成结账。
 
-**版本：0.1.4。** 适用于单人游戏或联机房主，只需房主安装。
+**版本：0.1.5。** 适用于单人游戏或联机房主，只需房主安装。
 
 ### 怎么使用
 
@@ -131,7 +131,7 @@ Payment prompts and notifications are the game's own. The Mod's log messages fol
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [收银管家 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4)，在 **Assets（附件）** 下载 **AutoCheckout-0.1.4.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [收银管家 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5)，在 **Assets（附件）** 下载 **AutoCheckout-0.1.5.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/2)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装
@@ -172,4 +172,4 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 
 **自动结账因错误停止，**或提示员工任务、交互设置无法恢复时，请退出餐厅后重新载入。反馈问题时，请附上 `Win64/ue4ss/UE4SS.log` 中的 `[AutoCheckout]` 日志。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)

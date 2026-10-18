@@ -1,6 +1,6 @@
 {
   "name": "Parisian Bistro Simulator",
-  "author": "LZHSimulators",
-  "version": "0.1.0",
+  "author": "Zhaohan Liu",
+  "version": "0.1.1",
   "description": "Vortex support for Parisian Bistro Simulator UE4SS Lua mods. Install UE4SS experimental separately."
 }

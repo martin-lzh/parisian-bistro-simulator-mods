@@ -8,7 +8,7 @@
 
 Choose Free service, Budget delivery or Premium delivery for automatic smart orders on the restaurant computer.
 
-**Version: 0.1.5.** Single player or multiplayer host. Only the host installs it; guests don't need it and can't change the delivery choice.
+**Version: 0.1.6.** Single player or multiplayer host. Only the host installs it; guests don't need it and can't change the delivery choice.
 
 ### How to use
 
@@ -76,7 +76,7 @@ Open the selector to choose **Free service**, **Budget delivery** or **Premium d
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Smart Delivery 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) and download **SmartDelivery-0.1.5.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Smart Delivery 0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6) and download **SmartDelivery-0.1.6.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/4), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -115,13 +115,13 @@ Delivery names and the new field label follow the game language: English, French
 - **Your choice isn't kept:** make sure the Mod folder can be written to.
 - **Reporting a problem:** include the `[SmartDelivery]` lines from `Win64/ue4ss/UE4SS.log` and, if it exists, `SmartDelivery/Scripts/bridge-status.txt`.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
 在餐厅电脑的自动智能订购设置中，选择免费服务、经济型配送或高级配送。
 
-**版本：0.1.5。** 适用于单人游戏或联机房主。只需房主安装；客机无需安装，也不能修改配送选择。
+**版本：0.1.6。** 适用于单人游戏或联机房主。只需房主安装；客机无需安装，也不能修改配送选择。
 
 ### 怎么使用
 
@@ -189,7 +189,7 @@ Mod 只为游戏原有的自动智能订购选择配送方式。什么时候下�
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [配送随心 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5)，在 **Assets（附件）** 下载 **SmartDelivery-0.1.5.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [配送随心 0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6)，在 **Assets（附件）** 下载 **SmartDelivery-0.1.6.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/4)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装
@@ -228,4 +228,4 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 - **选择没有保留：**检查 Mod 文件夹是否可以写入。
 - **反馈问题：**附上 `Win64/ue4ss/UE4SS.log` 中的 `[SmartDelivery]` 日志；如果有 `SmartDelivery/Scripts/bridge-status.txt`，也一并附上。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)
