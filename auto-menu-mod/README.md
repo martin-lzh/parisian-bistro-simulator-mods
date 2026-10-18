@@ -8,7 +8,7 @@
 
 Adds an **Auto-compose** button beside **Print menu** on the computer's daily-menu page. One click picks the lunch or dinner menu with the highest estimated selection rate.
 
-**Version: 0.5.0.** Single player or multiplayer host. Only the host installs it; guests don't get the button.
+**Version: 0.5.1.** Single player or multiplayer host. Only the host installs it; guests don't get the button.
 
 ### How to use
 
@@ -65,7 +65,7 @@ The forecast for this menu shows **86% estimated adoption**, compatibility by cu
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Auto Menu 0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0) and download **AutoMenu-0.5.0.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Auto Menu 0.5.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.1) and download **AutoMenu-0.5.1.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/5), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -110,7 +110,7 @@ The button follows the game language: English, French, Simplified Chinese, Itali
 
 在电脑每日菜单页面的“打印菜单”旁增加 **自动组合** 按钮，一键为午餐或晚餐选出预计选择率最高的菜单。
 
-**版本：0.5.0。** 适用于单人游戏或联机房主。只需房主安装；客机不显示该按钮。
+**版本：0.5.1。** 适用于单人游戏或联机房主。只需房主安装；客机不显示该按钮。
 
 ### 怎么使用
 
@@ -167,7 +167,7 @@ The button follows the game language: English, French, Simplified Chinese, Itali
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [菜单巧配 0.5.0](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.0)，在 **Assets（附件）** 下载 **AutoMenu-0.5.0.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [菜单巧配 0.5.1](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-menu-v0.5.1)，在 **Assets（附件）** 下载 **AutoMenu-0.5.1.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/5)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

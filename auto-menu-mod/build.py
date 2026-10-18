@@ -6,7 +6,7 @@ import runpy
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 SOURCE = Path(__file__).resolve().parent
 OUTPUT = SOURCE.parent / "outputs" / "auto-menu"
 FILES = (

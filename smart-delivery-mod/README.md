@@ -8,7 +8,7 @@
 
 Choose Free service, Budget delivery or Premium delivery for automatic smart orders on the restaurant computer.
 
-**Version: 0.1.5.** Single player or multiplayer host. Only the host installs it; guests don't need it and can't change the delivery choice.
+**Version: 0.1.6.** Single player or multiplayer host. Only the host installs it; guests don't need it and can't change the delivery choice.
 
 ### How to use
 
@@ -76,7 +76,7 @@ Open the selector to choose **Free service**, **Budget delivery** or **Premium d
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Smart Delivery 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5) and download **SmartDelivery-0.1.5.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Smart Delivery 0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6) and download **SmartDelivery-0.1.6.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/4), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -121,7 +121,7 @@ Delivery names and the new field label follow the game language: English, French
 
 在餐厅电脑的自动智能订购设置中，选择免费服务、经济型配送或高级配送。
 
-**版本：0.1.5。** 适用于单人游戏或联机房主。只需房主安装；客机无需安装，也不能修改配送选择。
+**版本：0.1.6。** 适用于单人游戏或联机房主。只需房主安装；客机无需安装，也不能修改配送选择。
 
 ### 怎么使用
 
@@ -189,7 +189,7 @@ Mod 只为游戏原有的自动智能订购选择配送方式。什么时候下�
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [配送随心 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.5)，在 **Assets（附件）** 下载 **SmartDelivery-0.1.5.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [配送随心 0.1.6](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/smart-delivery-v0.1.6)，在 **Assets（附件）** 下载 **SmartDelivery-0.1.6.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/4)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

@@ -8,7 +8,7 @@
 
 Clears spoiled cooked meals and finished drinks from kitchen passes, drink output areas and elevator serving slots. If the original customer is still waiting and has enough patience, it orders a replacement that your staff prepare and serve as usual.
 
-**Version: 0.1.3.** Single player or multiplayer host. Only the host installs it; guests don't need it.
+**Version: 0.1.4.** Single player or multiplayer host. Only the host installs it; guests don't need it.
 
 ### How to use
 
@@ -65,7 +65,7 @@ Only the host needs the Mod. Cleanup and replacement orders run on the host's re
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Fresh to Serve 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3) and download **FreshToServe-0.1.3.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Fresh to Serve 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.4) and download **FreshToServe-0.1.4.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/3), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -114,7 +114,7 @@ The Mod adds no text of its own. Dish names, drink names and order messages foll
 
 自动清理厨房出餐口、饮料出品区和升降机出餐位上变质的熟食和成品饮料。原顾客仍在等待且耐心足够时，自动补单，由员工照常制作并送达。
 
-**版本：0.1.3。** 适用于单人游戏或联机房主。只需房主安装，客机无需安装。
+**版本：0.1.4。** 适用于单人游戏或联机房主。只需房主安装，客机无需安装。
 
 ### 怎么使用
 
@@ -171,7 +171,7 @@ The Mod adds no text of its own. Dish names, drink names and order messages foll
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [焕鲜上桌 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.3)，在 **Assets（附件）** 下载 **FreshToServe-0.1.3.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [焕鲜上桌 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/fresh-to-serve-v0.1.4)，在 **Assets（附件）** 下载 **FreshToServe-0.1.4.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/3)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

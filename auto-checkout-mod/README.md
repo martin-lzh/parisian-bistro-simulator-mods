@@ -8,7 +8,7 @@
 
 Automatically accepts customers' cash or cards at the counter and finishes checkout at the register.
 
-**Version: 0.1.4.** Works in single player or for the multiplayer host. Only the host needs to install it.
+**Version: 0.1.5.** Works in single player or for the multiplayer host. Only the host needs to install it.
 
 ### How to use
 
@@ -46,7 +46,7 @@ A customer stands at the checkout counter, with the bill displayed on the regist
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Auto Checkout 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4) and download **AutoCheckout-0.1.4.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Auto Checkout 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5) and download **AutoCheckout-0.1.5.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/2), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -93,7 +93,7 @@ Payment prompts and notifications are the game's own. The Mod's log messages fol
 
 自动接收柜台顾客递出的现金或银行卡，并在收银机上完成结账。
 
-**版本：0.1.4。** 适用于单人游戏或联机房主，只需房主安装。
+**版本：0.1.5。** 适用于单人游戏或联机房主，只需房主安装。
 
 ### 怎么使用
 
@@ -131,7 +131,7 @@ Payment prompts and notifications are the game's own. The Mod's log messages fol
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [收银管家 0.1.4](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.4)，在 **Assets（附件）** 下载 **AutoCheckout-0.1.4.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [收银管家 0.1.5](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/auto-checkout-v0.1.5)，在 **Assets（附件）** 下载 **AutoCheckout-0.1.5.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/2)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

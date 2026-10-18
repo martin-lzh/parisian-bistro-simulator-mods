@@ -8,7 +8,7 @@
 
 Hold the interaction key at a kitchen pass or drink output area to collect the oldest ready items onto your tray or food trolley.
 
-**Version: 0.1.7.** Works in single player and for multiplayer hosts and guests. Only players who want the hold action need to install it.
+**Version: 0.1.8.** Works in single player and for multiplayer hosts and guests. Only players who want the hold action need to install it.
 
 ### How to use
 
@@ -71,7 +71,7 @@ With a tray at the drink output area, the same hint appears above **Take drinks*
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [First to Serve 0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7) and download **FirstToServe-0.1.7.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [First to Serve 0.1.8](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.8) and download **FirstToServe-0.1.8.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/6), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -124,7 +124,7 @@ When reporting a problem, include the `[FirstToServe]` lines from `Win64/ue4ss/U
 
 拿着托盘或推着送餐餐车，对准厨房出餐口或饮料出品台长按交互键，按做好的先后依次拿取成品。
 
-**版本：0.1.7。** 单人、联机房主和客机均可使用。只有想用长按拿取的玩家需要安装。
+**版本：0.1.8。** 单人、联机房主和客机均可使用。只有想用长按拿取的玩家需要安装。
 
 ### 怎么使用
 
@@ -187,7 +187,7 @@ When reporting a problem, include the `[FirstToServe]` lines from `Win64/ue4ss/U
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [出餐有序 0.1.7](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.7)，在 **Assets（附件）** 下载 **FirstToServe-0.1.7.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [出餐有序 0.1.8](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/first-to-serve-v0.1.8)，在 **Assets（附件）** 下载 **FirstToServe-0.1.8.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/6)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

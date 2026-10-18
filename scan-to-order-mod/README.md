@@ -8,7 +8,7 @@
 
 Automatically places seated customers' food and drink orders, so neither you nor a waiter has to take them. There is no QR code or phone to use.
 
-**Version: 0.1.2.** Works in single player or for the multiplayer host. Only the host needs to install it.
+**Version: 0.1.3.** Works in single player or for the multiplayer host. Only the host needs to install it.
 
 ### How to use
 
@@ -50,7 +50,7 @@ Food and drink order icons beside seated customers display green check marks.
 
 Pick either source; both have the same file. Use version 0.1.2 or newer on the current game.
 
-- **GitHub (no account needed):** open [Scan to Order 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2) and download **ScanToOrder-0.1.2.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Scan to Order 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.3) and download **ScanToOrder-0.1.3.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/7), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -97,7 +97,7 @@ The Mod adds no text of its own. Dish names and order notifications appear in th
 
 自动为已入座的顾客提交食物和饮料订单，不用玩家或服务员去点餐，也不需要扫二维码或用手机。
 
-**版本：0.1.2。** 适用于单人游戏或联机房主，只需房主安装。
+**版本：0.1.3。** 适用于单人游戏或联机房主，只需房主安装。
 
 ### 怎么使用
 
@@ -139,7 +139,7 @@ The Mod adds no text of its own. Dish names and order notifications appear in th
 
 以下两个来源任选其一，文件相同。当前游戏版本请使用 0.1.2 或更新版本。
 
-- **GitHub（无需账号）：**打开 [扫码点餐 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.2)，在 **Assets（附件）** 下载 **ScanToOrder-0.1.2.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [扫码点餐 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/scan-to-order-v0.1.3)，在 **Assets（附件）** 下载 **ScanToOrder-0.1.3.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/7)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

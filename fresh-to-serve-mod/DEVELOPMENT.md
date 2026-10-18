@@ -6,12 +6,13 @@
 
 ### Version and compatibility
 
-- Current version: **0.1.3**.
+- Current version: **0.1.4**.
+- **0.1.4 test status:** compared with 0.1.3, 0.1.4 changes only the license (PolyForm Noncommercial 1.0.0), the documentation and the version number; gameplay code is unchanged. In-game testing of 0.1.4 by the maintainer is still pending.
 - Supported game: up to **1.0.2.44eb (Steam Build 25822788)**.
 - Development reference: Windows, Steam Build 25393699 / ProjectVersion 1.0.0.44eb, Unreal Engine 5.4.
 - Loader: UE4SS experimental `v3.0.1-1140-gf58e8f84`. Old stable UE4SS 3.0.1 is not supported.
 
-`python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`.
+`python fresh-to-serve-mod/build.py` writes `outputs/fresh-to-serve/FreshToServe-0.1.4.zip` and its SHA-256 file. Successful PR/CI builds include the package in `mod-packages`.
 
 The Mod uses reflected game and engine APIs checked against the local reference. It ships no executable patches, native addresses, custom memory layouts or game assets. Research material stays in ignored `work/`; implementation, fixtures and documentation are original.
 
@@ -146,12 +147,13 @@ If an older version stopped at startup because a table API was missing, install 
 
 ### 版本与兼容性
 
-- 当前版本：**0.1.3**。
+- 当前版本：**0.1.4**。
+- **0.1.4 测试状态：**与 0.1.3 相比，0.1.4 只更改许可（PolyForm Noncommercial 1.0.0）、文档和版本号，玩法代码不变。维护者对 0.1.4 的实机测试尚待进行。
 - 支持游戏：至 **1.0.2.44eb（Steam Build 25822788）**。
 - 开发参考：Windows、Steam Build 25393699 / ProjectVersion 1.0.0.44eb、Unreal Engine 5.4。
 - 加载器：UE4SS experimental `v3.0.1-1140-gf58e8f84`，不支持旧稳定版 UE4SS 3.0.1。
 
-`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.3.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包。
+`python fresh-to-serve-mod/build.py` 输出 `outputs/fresh-to-serve/FreshToServe-0.1.4.zip` 及 SHA-256 文件。成功的 PR/CI 构建在 `mod-packages` 附件中提供安装包。
 
 本 Mod 使用按本机参考核对过的游戏及引擎反射接口，不分发可执行补丁、原生地址、自定义内存布局或游戏资产。研究资料只放在被忽略的 `work/`；实现、合成夹具及文档均为原创。
 

@@ -8,7 +8,7 @@
 
 See the drinks you have claimed but not yet made, right below the restaurant name. Repeated orders are grouped, such as `Espresso x 10 · Lemonade x 3`.
 
-**Version: 0.1.2.** Works in single player and for both the multiplayer host and guests. Each player who wants the note installs it on their own computer and sees only their own claimed orders.
+**Version: 0.1.3.** Works in single player and for both the multiplayer host and guests. Each player who wants the note installs it on their own computer and sees only their own claimed orders.
 
 ### How to use
 
@@ -36,7 +36,7 @@ In multiplayer, each player's note shows their own claims. Guests can use the no
 
 Pick either source; both have the same file.
 
-- **GitHub (no account needed):** open [Bartender's Note 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2) and download **BartendersNote-0.1.2.zip** under **Assets**. Don't pick **Source code**.
+- **GitHub (no account needed):** open [Bartender's Note 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.3) and download **BartendersNote-0.1.3.zip** under **Assets**. Don't pick **Source code**.
 - **Nexus:** open the [Mod page](https://www.nexusmods.com/parisianbistrosimulator/mods/1), go to **Files → Main files → Manual download**, then choose **Slow download** if you have a free account.
 
 ### Install
@@ -87,7 +87,7 @@ If it still doesn't appear, ask for [help](https://github.com/martin-lzh/parisia
 
 在餐厅名称下方显示自己认领但还没做的饮料，同类订单合并计数，例如“浓缩咖啡 x 10 · 柠檬水 x 3”。
 
-**版本：0.1.2。** 单人、联机房主和客机均可使用。想看手记的玩家在自己电脑上安装，各自只显示自己认领的订单。
+**版本：0.1.3。** 单人、联机房主和客机均可使用。想看手记的玩家在自己电脑上安装，各自只显示自己认领的订单。
 
 ### 怎么使用
 
@@ -115,7 +115,7 @@ If it still doesn't appear, ask for [help](https://github.com/martin-lzh/parisia
 
 以下两个来源任选其一，文件相同。
 
-- **GitHub（无需账号）：**打开 [调饮手记 0.1.2](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.2)，在 **Assets（附件）** 下载 **BartendersNote-0.1.2.zip**。不要选 **Source code（源码）**。
+- **GitHub（无需账号）：**打开 [调饮手记 0.1.3](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases/tag/bartenders-note-v0.1.3)，在 **Assets（附件）** 下载 **BartendersNote-0.1.3.zip**。不要选 **Source code（源码）**。
 - **Nexus：**打开 [Mod 页面](https://www.nexusmods.com/parisianbistrosimulator/mods/1)，进入 **Files（文件）→ Main files（主要文件）→ Manual download（手动下载）**；免费账号选择 **Slow download（慢速下载）**。
 
 ### 安装

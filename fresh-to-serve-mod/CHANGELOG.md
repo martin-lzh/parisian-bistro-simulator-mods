@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.4 - 2026-10-18
+
 - Supports game 1.0.2.44eb (Steam Build 25822788).
 - 支持游戏 1.0.2.44eb（Steam Build 25822788）。
 
