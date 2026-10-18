@@ -10,7 +10,7 @@ Source, build tooling and release automation for the Parisian Bistro Simulator M
 
 ## Hard rules
 
-1. **The game install is read-only.** Builds never install Mods, edit saves, or start or stop the game. The maintainer installs builds and does the in-game testing.
+1. **The game install is read-only.** Builds never install Mods, edit saves, or start or stop the game. The maintainer installs builds and does the in-game testing. When the maintainer explicitly asks, the agent may install a build: with the game closed, copy only that Mod's package into the game's Mods folder, replacing only that Mod's old files, then report what it replaced and the SHA256.
 2. **No game content in git.** Game files, assets, mappings, blueprints, native-code analysis, SDK/header dumps, memory snapshots, logs, third-party tools, extraction scripts and analysis notes stay in the ignored `work/` folder, even though the repository is public; never `git add -f`. Packages contain only original files, chosen by each Mod's `build.py` allowlist.
 3. **Check game APIs against the real game.** Verify Unreal types and calls against local references; never invent signatures, and never describe extracted assets as recovered C++ source. Don't copy Old Market Simulator's Unity/C# APIs, loader or SDK; only its folder layout.
 4. **Versions change only when the maintainer says so.** Until then, record every change under `Unreleased` in that Mod's `CHANGELOG.md` and keep all version numbers. Identify test builds by commit and SHA256, not by a made-up version.
