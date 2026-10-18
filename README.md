@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>Windows</strong> · <strong>7 Mods</strong> · <a href="LICENSE">MIT License</a>
+  <strong>Windows</strong> · <strong>7 Mods</strong> · <a href="LICENSE">PolyForm Noncommercial 1.0.0</a>
 </p>
 
 <p align="center">
@@ -96,7 +96,7 @@ Running a market too? Try [Old Market Simulator Mods](https://github.com/martin-
 
 ### About the project
 
-Mod code and documentation by **Zhaohan Liu**, released under the [MIT License](LICENSE). Each Mod ZIP includes the license. This is a fan project, not affiliated with the game's developers.
+Mod code and documentation by **Zhaohan Liu**, released under the [PolyForm Noncommercial License 1.0.0](LICENSE). Free for non-commercial use; commercial use is not allowed. Each Mod ZIP includes the license. This is a fan project, not affiliated with the game's developers.
 
 [Contributing](CONTRIBUTING.md#english) · [Development](DEVELOPMENT.md#english) · [Security](SECURITY.md#english) · [Community guidelines](CODE_OF_CONDUCT.md#english)
 
@@ -179,6 +179,6 @@ Mod 文案跟随游戏语言，支持英语、法语、简体中文、意大利�
 
 ### 关于项目
 
-Mod 代码及文档由 **Zhaohan Liu** 编写，以 [MIT 许可证](LICENSE)发布，每份 Mod ZIP 均附许可全文。本项目为玩家自制，与游戏开发商无关。
+Mod 代码及文档由 **Zhaohan Liu** 编写，以 [PolyForm Noncommercial 1.0.0 许可](LICENSE)发布，可免费用于非商业用途，不允许商用。每份 Mod ZIP 均附许可全文。本项目为玩家自制，与游戏开发商无关。
 
 [参与贡献](CONTRIBUTING.md#中文) · [开发说明](DEVELOPMENT.md#中文) · [安全反馈](SECURITY.md#中文) · [社区规范](CODE_OF_CONDUCT.md#中文)

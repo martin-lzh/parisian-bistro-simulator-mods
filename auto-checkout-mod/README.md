@@ -87,7 +87,7 @@ Payment prompts and notifications are the game's own. The Mod's log messages fol
 
 **If automation stops with an error,** or a warning says employee jobs or interaction settings couldn't be restored, leave the restaurant and load it again. When reporting a problem, include the `[AutoCheckout]` lines from `Win64/ue4ss/UE4SS.log`.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
@@ -172,4 +172,4 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 
 **自动结账因错误停止，**或提示员工任务、交互设置无法恢复时，请退出餐厅后重新载入。反馈问题时，请附上 `Win64/ue4ss/UE4SS.log` 中的 `[AutoCheckout]` 日志。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/auto-checkout-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)

@@ -15,7 +15,7 @@ import ci
 import release
 
 
-MIT_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
+REPOSITORY_LICENSE = (Path(__file__).resolve().parents[2] / "LICENSE").read_text(encoding="utf-8")
 
 
 class ReleaseAdapterTests(unittest.TestCase):
@@ -37,8 +37,8 @@ class ReleaseAdapterTests(unittest.TestCase):
         self.addCleanup(mock.stop)
         self.git("init", "--quiet")
         self.write(".gitignore", "/outputs/\n")
-        self.write("LICENSE", MIT_LICENSE)
-        self.write("sample-mod/LICENSE", MIT_LICENSE)
+        self.write("LICENSE", REPOSITORY_LICENSE)
+        self.write("sample-mod/LICENSE", REPOSITORY_LICENSE)
         self.write("sample-mod/Scripts/main.lua", "return {}\n")
         self.write("sample-mod/README.md", "Sample 1.1.0\n")
         self.write("sample-mod/DEVELOPMENT.md", "Original development notes\n")

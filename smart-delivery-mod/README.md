@@ -115,7 +115,7 @@ Delivery names and the new field label follow the game language: English, French
 - **Your choice isn't kept:** make sure the Mod folder can be written to.
 - **Reporting a problem:** include the `[SmartDelivery]` lines from `Win64/ue4ss/UE4SS.log` and, if it exists, `SmartDelivery/Scripts/bridge-status.txt`.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
@@ -228,4 +228,4 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 - **选择没有保留：**检查 Mod 文件夹是否可以写入。
 - **反馈问题：**附上 `Win64/ue4ss/UE4SS.log` 中的 `[SmartDelivery]` 日志；如果有 `SmartDelivery/Scripts/bridge-status.txt`，也一并附上。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/smart-delivery-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)

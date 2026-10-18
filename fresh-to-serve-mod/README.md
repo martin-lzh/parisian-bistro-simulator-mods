@@ -108,7 +108,7 @@ The Mod adds no text of its own. Dish names, drink names and order messages foll
 - **The log shows `Missing Fresh to Serve` followed by `automation-stopped`:** close the game, install the latest version and start the game again. Ctrl+R doesn't clear this.
 - **Reporting a problem:** include the `[FreshToServe]` lines from `Win64/ue4ss/UE4SS.log`. `DISCARDED` means an item was removed, `REQUEUED` means a replacement order was accepted (not yet served), and `SKIPPED` or `DEFERRED` give the reason an attempt ended or is waiting.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [MIT License](LICENSE)
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
@@ -214,4 +214,4 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 - **日志出现 `Missing Fresh to Serve`，随后是 `automation-stopped`：** 关闭游戏，安装最新版本后重新启动游戏。Ctrl+R 无法解除这种停止。
 - **反馈问题：** 附上 `Win64/ue4ss/UE4SS.log` 中的 `[FreshToServe]` 日志。`DISCARDED` 表示已移除餐品，`REQUEUED` 表示补单已被接受（尚未上桌），`SKIPPED`／`DEFERRED` 说明本次补单结束或等待的原因。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [MIT 许可证](LICENSE)
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/fresh-to-serve-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)

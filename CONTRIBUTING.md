@@ -18,7 +18,7 @@ Bug reports, translations, documentation improvements and focused code changes a
 - Keep every README in English and Chinese, including repository, Mod, image-directory and documentation-index READMEs. Mod player guides cover download, installation, gameplay, updates, removal and help. Put architecture, API details, build commands and debugging in DEVELOPMENT; documents other than READMEs may be English-only.
 - Keep runtime text aligned with all 14 supported game languages. Prefer native text, translate only Mod-owned wording, and test English fallback and recovery after language-read failures. See [localization](docs/localization.md#english).
 - Keep the current version unless the maintainer asks for a new one, and add changes to the Mod's `Unreleased` notes.
-- Keep the root and per-Mod MIT licenses identical and include the license in every package. Contributions must be your own work or carry compatible terms with attribution.
+- Keep the root and per-Mod licenses (PolyForm Noncommercial 1.0.0) identical and include the license text in every package. Contributions must be your own work or carry compatible terms with attribution.
 - Keep all game files, extracted material, analysis, third-party research tools and related scripts in ignored `work/`. Do not attach them to commits, issues or PRs. Game installations are read-only; builds do not install Mods or modify saves.
 
 ### Before opening a pull request
@@ -45,7 +45,7 @@ The maintainer reviews and merges. Releases follow the separate [release authori
 - 所有 README 均须中英双语，包括仓库、各 Mod、图片目录和文档索引的 README。Mod 玩家说明涵盖下载、安装、游戏内操作、更新、卸载和求助。架构、API、构建命令及调试内容放入 DEVELOPMENT；README 以外的文档可以仅使用英语。
 - 新增文案覆盖游戏支持的 14 种语言；优先复用原生文案，只翻译 Mod 自有内容。测试语言读取失败时的英语回退及恢复，见[多语言适配](docs/localization.md#中文)。
 - 维护者未要求升级时保留现有版本，将改动记入 Mod 的 `Unreleased` 条目。
-- 根目录与各 Mod 的 MIT 许可证保持一致，每个安装包都附许可全文。贡献内容须为原创，或具有兼容条款并注明出处。
+- 根目录与各 Mod 的许可证（PolyForm Noncommercial 1.0.0）保持一致，每个安装包都附许可全文。贡献内容须为原创，或具有兼容条款并注明出处。
 - 游戏文件、提取资料、分析、第三方研究工具及相关脚本全部留在被忽略的 `work/`，不提交，也不附到 Issue 或 PR。游戏安装目录只读；构建不自动安装 Mod 或修改存档。
 
 ### 提交 PR 前

@@ -47,7 +47,7 @@ See [languages](docs/localization.md#english), [validation](releases/validation.
 | `docs/` | Original design, compatibility and documentation index | Yes |
 | `tools/` | Original build, packaging and repository checks | Yes |
 | `releases/` | Version, authorization and validation records | Yes |
-| `LICENSE` | MIT license for original code and documentation | Yes |
+| `LICENSE` | PolyForm Noncommercial 1.0.0 license for original code and documentation | Yes |
 | `work/` | All game references, extracted material, analysis, logs, tools and research scripts | No |
 | `outputs/` | Local ZIPs, checksums and CI packages | No |
 
@@ -67,7 +67,11 @@ Each Mod owns its runtime and build inputs:
 | `assets/` | In-game test screenshots and promotional artwork for documentation; excluded from Mod ZIPs |
 | `DEVELOPMENT.md` | Implementation details and test checklist |
 | `CHANGELOG.md` | Pending changes and version history |
-| `LICENSE` | Complete MIT text, identical to the root license |
+| `LICENSE` | Complete license text, identical to the root license |
+
+### License
+
+On 2026-10-18 the maintainer decided to switch the original code and documentation from the MIT License to the PolyForm Noncommercial License 1.0.0 for future versions. Versions released before that stay under MIT. Third-party files keep their own licenses. `vortex-extension/` has its own MIT `LICENSE` and was not part of this change.
 
 ### Vortex game support
 
@@ -101,7 +105,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` runs all registered Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Every ZIP includes its complete `LICENSE`; configuration validation requires each Mod's license to match the root MIT license. Stage new intended package inputs before validation because the allowlist accepts only Git-tracked files. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
+`tools/ci.py build` runs all registered Mods' tests, creates packages through their independent `build.py` entry points, and verifies their file lists, source bytes and SHA-256 checksums. Every ZIP includes its complete `LICENSE`; configuration validation requires each Mod's license to match the root license. Stage new intended package inputs before validation because the allowlist accepts only Git-tracked files. Each Mod can also be tested and built separately as its development guide describes. Keep `outputs/ci/` empty or limited to the current versions before a combined build; move older output aside after a version change.
 
 In-game test results and supported game builds are recorded in the [validation record](releases/validation.md#english).
 
@@ -173,7 +177,7 @@ cd parisian-bistro-simulator-mods
 | `docs/` | 原创设计、兼容性与文档索引 | 是 |
 | `tools/` | 原创构建、打包与仓库检查脚本 | 是 |
 | `releases/` | 版本、授权与验收记录 | 是 |
-| `LICENSE` | 原创代码和文档的 MIT 许可证 | 是 |
+| `LICENSE` | 原创代码和文档的 PolyForm Noncommercial 1.0.0 许可证 | 是 |
 | `work/` | 全部游戏参考、提取资料、分析、日志、工具及研究脚本 | 否 |
 | `outputs/` | 本地 ZIP、校验文件与 CI 产物 | 否 |
 
@@ -193,7 +197,11 @@ cd parisian-bistro-simulator-mods
 | `assets/` | 文档用实机测试图与宣传图，不进入 Mod ZIP |
 | `DEVELOPMENT.md` | 实现细节及验收清单 |
 | `CHANGELOG.md` | 待发布改动及版本历史 |
-| `LICENSE` | 与根目录一致的完整 MIT 许可 |
+| `LICENSE` | 与根目录一致的完整许可全文 |
+
+### 许可
+
+维护者于 2026-10-18 决定，原创代码和文档今后的版本由 MIT 许可改为 PolyForm Noncommercial 1.0.0 许可。此前已发布的版本仍为 MIT 许可。第三方文件保留各自的许可。`vortex-extension/` 有自己的 MIT `LICENSE`，不在本次变更范围内。
 
 ### Vortex 游戏支持
 
@@ -227,7 +235,7 @@ python tools/ci.py build
 git diff --check
 ```
 
-`tools/ci.py build` 运行所有已登记 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。每个 ZIP 均包含完整 `LICENSE`，配置验证要求各 Mod 许可与根 MIT 许可一致。新增且准备入包的文件须先暂存再验证，白名单仅接受 Git 已跟踪文件。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
+`tools/ci.py build` 运行所有已登记 Mod 的测试，调用各自独立的 `build.py` 打包，再检查文件清单、源码字节和 SHA-256。每个 ZIP 均包含完整 `LICENSE`，配置验证要求各 Mod 许可与根许可一致。新增且准备入包的文件须先暂存再验证，白名单仅接受 Git 已跟踪文件。各 Mod 也可按自己的开发说明单独测试和构建。组合构建前，`outputs/ci/` 应为空或只含当前版本；升级版本后先移走旧产物。
 
 实机测试结果和支持的游戏版本记录在[验收记录](releases/validation.md#中文)中。
 

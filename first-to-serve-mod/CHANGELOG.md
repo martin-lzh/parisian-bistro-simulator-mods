@@ -11,6 +11,9 @@
 - Documentation: rewrote the player guide in plainer language, focused on what the Mod does and how to use it.
 - 文档：用更简洁的语言重写玩家说明，只保留功能介绍和操作方法。
 
+- The Mod is now licensed under the PolyForm Noncommercial License 1.0.0: free to use, share and modify for non-commercial purposes; commercial use is not allowed. Versions released before this stay under MIT.
+- 本 Mod 改用 PolyForm Noncommercial 1.0.0 许可：可免费用于非商业用途的使用、分享和修改，不允许商用。此前已发布的版本仍为 MIT 许可。
+
 ## 0.1.7 - 2026-09-26
 
 ### Compatibility / 兼容性 — 2026-10-07
