@@ -134,7 +134,7 @@ The `.github/workflows/mods.yml` workflow runs on PRs targeting `main`, pushes t
 - The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
 - A successful **main push** whose release plan publishes or promotes something runs the release job: it publishes new numbered versions and promotes betas. Only that job receives `contents: write`; `-dev` versions are never released. See [releases](releases/README.md).
 
-`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. To change the live rules, the maintainer applies this file through the GitHub API and reads it back; CI has no admin credentials.
+`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, the three required checks (Build and test, Script, data and workflow syntax, CI result) passing, no force-push/delete or bypass, and zero required approving reviewers. To change the live rules, the maintainer applies this file through the GitHub API and reads it back; CI has no admin credentials.
 
 ## 中文
 
@@ -266,4 +266,4 @@ git diff --check
 - **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
 - 发布计划含发布或转正项的 **main 推送**通过检查后运行发布任务：发布新的编号版本，并把已改为正式的测试版转正。仅该任务拥有 `contents: write`；`-dev` 版本不会发布。详见[发布说明](releases/README.md)。
 
-`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改远端规则时，由维护者通过 GitHub API 应用此文件并回读核对；CI 不持有仓库管理凭据。
+`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、三个必需检查（Build and test、Script, data and workflow syntax、CI result）均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改远端规则时，由维护者通过 GitHub API 应用此文件并回读核对；CI 不持有仓库管理凭据。
