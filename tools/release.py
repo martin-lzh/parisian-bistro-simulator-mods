@@ -73,8 +73,8 @@ def verify_artifacts(commit: str) -> None:
                           evidence.get("generated", {}).get(mod["slug"]))
 
 
-def plan(repository: str) -> None:
-    modrelease.check(modrelease.GitHub(repository), release_mods(repository))
+def plan(repository: str) -> list[modrelease.Decision]:
+    return modrelease.check(modrelease.GitHub(repository), release_mods(repository))
 
 
 def publish(repository: str, commit: str, api=None) -> None:

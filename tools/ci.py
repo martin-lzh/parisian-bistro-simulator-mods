@@ -11,8 +11,18 @@ import subprocess
 import sys
 from zipfile import ZipFile
 
+import changes
+
 
 ROOT = Path(__file__).resolve().parents[1]
+# Files that never enter a package and never affect validation or tests; CI skips
+# build and test when a change touches only these (tools/changes.py). Each Mod's
+# README, DEVELOPMENT and CHANGELOG are packaged, so they stay core; validate_config
+# limits packages to Scripts/*.lua and those documents, so Mod assets never ship.
+NON_CORE = (
+    "README.md", "AGENTS.md", "DEVELOPMENT.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md",
+    "SECURITY.md", "SUPPORT.md", "docs/**", "assets/**", "releases/**", "*-mod/assets/**",
+)
 MODS = {"bartenders-note": "BartendersNote", "auto-checkout": "AutoCheckout",
         "fresh-to-serve": "FreshToServe", "first-to-serve": "FirstToServe",
         "smart-delivery": "SmartDelivery", "scan-to-order": "ScanToOrder",
@@ -174,16 +184,23 @@ def build() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["validate", "build", "release-plan", "publish"])
+    parser.add_argument("command", choices=["validate", "build", "changes", "release-plan", "publish"])
     parser.add_argument("--repository")
     parser.add_argument("--commit")
+    parser.add_argument("--base", help="changes: commit to compare from (omit to treat everything as changed)")
+    parser.add_argument("--head", help="changes: commit to compare to")
+    parser.add_argument("--merge-base", action="store_true", help="changes: compare from the merge base (pull requests)")
     args = parser.parse_args()
+    if args.command == "changes":
+        changes.main(ROOT, NON_CORE, args.base, args.head, args.merge_base)
+        return
     if args.command in ("release-plan", "publish"):
         import release  # imports this module; keep it out of the build path
         if not args.repository or (args.command == "publish" and not args.commit):
             parser.error("--repository is required; publish also requires --commit")
         if args.command == "release-plan":
-            release.plan(args.repository)
+            decisions = release.plan(args.repository)
+            changes.write_outputs({"release": any(d.action in ("publish", "promote") for d in decisions)})
         else:
             release.publish(args.repository, args.commit)
         return

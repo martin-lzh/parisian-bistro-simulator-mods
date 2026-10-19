@@ -125,14 +125,16 @@ Use the current working directory without creating worktrees. Work on `dev` and 
 
 Selectively stage intended files, run `python tools/check_repository.py`, review `git diff --staged`, and check `git diff --check` and `git status --short` before committing. The repository checker examines tracked and staged paths, so stage new intended files before the final check. Ignored `work/` and `outputs/` can stay.
 
-The `.github/workflows/mods.yml` workflow runs on pushes to `main` and `dev`, PRs targeting `main`, and manual dispatch:
+The `.github/workflows/mods.yml` workflow runs on PRs targeting `main`, pushes to `main` and manual dispatch; pushes to `dev` alone don't start it (run `gh workflow run mods.yml --ref dev` to check `dev` without a PR):
 
-- **Script, data and workflow syntax:** repository boundaries, Python/JSON syntax, whitespace and actionlint. The actionlint download uses a pinned version and SHA-256.
-- **Build and test:** version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums, followed by a read-only **Release plan** table in the job summary.
+- **Changes and release plan** (Linux): lists the files the PR or push changed, decides whether build and test are needed, and shows the read-only **Release plan** table in the job summary.
+- **Script, data and workflow syntax** (Linux): repository boundaries, Python/JSON syntax and whitespace; actionlint when files under `.github/` changed or on a manual run. The actionlint download uses a pinned version and SHA-256.
+- **Build and test** (Windows): version and CHANGELOG checks, diagnostic version and package allowlists, packaging tests, all Mod behavior tests, ZIP contents and checksums. It is skipped when a change touches only non-core files and nothing would be published or promoted; `NON_CORE` in `tools/ci.py` lists them and [releases](releases/README.md#when-ci-runs) explains the rules. A skipped job counts as passed for required checks.
+- **CI result** passes when every job passed or was skipped on purpose.
 - The **mod-packages** artifact contains the registered Mods' current ZIPs, their checksum files and commit-tagged `build-info.json`, retained for 14 days. Actions are pinned to commit SHAs and default to read-only repository access.
-- A successful **main push** runs the release job: it publishes new numbered versions and promotes betas. Only that job receives `contents: write`; `-dev` versions are never released. See [releases](releases/README.md).
+- A successful **main push** whose release plan publishes or promotes something runs the release job: it publishes new numbered versions and promotes betas. Only that job receives `contents: write`; `-dev` versions are never released. See [releases](releases/README.md).
 
-`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, both required checks passing, no force-push/delete or bypass, and zero required approving reviewers. To change the live rules, the maintainer applies this file through the GitHub API and reads it back; CI has no admin credentials.
+`.github/main-ruleset.json` describes the intended GitHub ruleset: PR required, branch up to date with `main`, the three required checks (Build and test, Script, data and workflow syntax, CI result) passing, no force-push/delete or bypass, and zero required approving reviewers. To change the live rules, the maintainer applies this file through the GitHub API and reads it back; CI has no admin credentials.
 
 ## 中文
 
@@ -255,11 +257,13 @@ git diff --check
 
 选择性暂存目标文件，执行 `python tools/check_repository.py`，审查 `git diff --staged`，并在提交前检查 `git diff --check` 和 `git status --short`。仓库检查器审查已跟踪及暂存路径，因此新增目标文件应先暂存再做最终检查。被忽略的 `work/` 和 `outputs/` 可以保留。
 
-`.github/workflows/mods.yml` 在 `main`、`dev` 推送，目标为 `main` 的 PR，以及手动运行时执行：
+`.github/workflows/mods.yml` 在目标为 `main` 的 PR、`main` 推送以及手动运行时执行；只推送到 `dev` 不会触发（不开 PR 检查 `dev` 时运行 `gh workflow run mods.yml --ref dev`）：
 
-- **Script, data and workflow syntax：**检查仓库边界、Python/JSON 语法、空白和 actionlint。actionlint 下载固定版本并校验 SHA-256。
-- **Build and test：**核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查，然后在任务摘要中显示只读的 **Release plan** 表。
+- **Changes and release plan**（Linux）：列出 PR 或推送改动的文件，判断是否需要构建和测试，并在任务摘要中显示只读的 **Release plan** 表。
+- **Script, data and workflow syntax**（Linux）：检查仓库边界、Python/JSON 语法和空白；`.github/` 下的文件有改动或手动运行时再运行 actionlint。actionlint 下载固定版本并校验 SHA-256。
+- **Build and test**（Windows）：核对版本与 CHANGELOG、诊断版本与打包白名单，运行包检查器测试、全部 Mod 行为测试及 ZIP 内容和哈希检查。改动只涉及非核心文件且没有要发布或转正的版本时跳过；非核心文件见 `tools/ci.py` 的 `NON_CORE`，规则见[发布说明](releases/README.md#when-ci-runs)。跳过的任务在必需检查中算作通过。
+- **CI result** 在每个任务都通过或按规则跳过时通过。
 - **mod-packages** artifact 包含已登记 Mod 的当前 ZIP、各自校验文件，以及记录提交号的 `build-info.json`，保留 14 天。Actions 固定提交 SHA，默认只读仓库。
-- **main 推送**通过检查后运行发布任务：发布新的编号版本，并把已改为正式的测试版转正。仅该任务拥有 `contents: write`；`-dev` 版本不会发布。详见[发布说明](releases/README.md)。
+- 发布计划含发布或转正项的 **main 推送**通过检查后运行发布任务：发布新的编号版本，并把已改为正式的测试版转正。仅该任务拥有 `contents: write`；`-dev` 版本不会发布。详见[发布说明](releases/README.md)。
 
-`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、两个必需检查均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改远端规则时，由维护者通过 GitHub API 应用此文件并回读核对；CI 不持有仓库管理凭据。
+`.github/main-ruleset.json` 记录 GitHub 规则集目标：必须经 PR、分支包含最新 `main`、三个必需检查（Build and test、Script, data and workflow syntax、CI result）均通过；禁止强推和删除、无绕过者，要求审批人数为零。修改远端规则时，由维护者通过 GitHub API 应用此文件并回读核对；CI 不持有仓库管理凭据。
