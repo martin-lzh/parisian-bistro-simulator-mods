@@ -3,6 +3,7 @@
 const path = require('path');
 const { fs, util } = require('vortex-api');
 const { install, testSupported } = require('./installer');
+const { getGameVersion } = require('./game-version');
 
 const GAME_ID = 'parisianbistrosimulator';
 const STEAM_ID = '3058360';
@@ -28,6 +29,7 @@ function main(context) {
         queryPath: () => util.GameStoreHelper.findByAppId([STEAM_ID]).then(game => game.gamePath),
         queryModPath: () => MODS,
         executable: () => 'BrasserieSimulator.exe',
+        getGameVersion,
         requiredFiles: [
             'BrasserieSimulator.exe',
             path.join(BINARIES, 'BrasserieSimulator-Win64-Shipping.exe'),
