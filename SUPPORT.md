@@ -8,13 +8,13 @@ First go through the [manual installation steps](README.md#manual-download-and-i
 
 ### Download or installation problems
 
-- **Vortex asks for Premium when adding the collection:** one-click collection install requires Nexus Premium. With a free account, download each Mod ZIP and install it manually, or import it with Vortex's **Install From File**, enable it and deploy. GitHub downloads need no account. With or without Premium, install the game extension and UE4SS yourself first.
+- **Vortex offers Premium when adding the collection:** free accounts can install the collection by starting each Mod download when prompted; Premium starts them automatically. You can also download each Mod ZIP and install it manually, or import it with Vortex's **Install From File**, enable it and deploy. GitHub downloads need no account. With or without Premium, install the game extension and UE4SS yourself first.
 - **Windows says `VCRUNTIME140`, `MSVCP140` or a similar DLL is missing:** install or repair the [Microsoft Visual C++ v14 Redistributable X64](https://aka.ms/vc14/vc_redist.x64.exe) and restart if asked. Don't download single DLLs from other sites.
 - **GitHub shows 404 or no download:** check the link, or open [Mod Releases](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases) and download the ZIP under **Assets**. If a file is missing, open an [issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues).
 - **The download contains another ZIP:** a CI artifact has an outer `mod-packages` archive — extract it, then extract the Mod ZIP inside. Release downloads are already individual Mod ZIPs. Don't install the **Source code** archive.
 - **The Mod doesn't appear:** check the folder layout. It should be `Mods/AutoMenu/Scripts/main.lua` plus `Mods/AutoMenu/enabled.txt`, not `Mods/AutoMenu/AutoMenu/Scripts/main.lua`. Keep every file from the ZIP, including any DLL.
 - **The loader doesn't start:** these Mods need UE4SS experimental `v3.0.1-1140-gf58e8f84`; the old stable 3.0.1 doesn't work. See the [official UE4SS installation guide](https://docs.ue4ss.com/dev/installation-guide.html). If UE4SS is installed somewhere else, use that installation's `Mods` folder.
-- **Still not working:** after running the game once, open `Win64/ue4ss/UE4SS.log` with Notepad. If there is no log, UE4SS isn't starting; recheck the loader install. If there is one, look for lines tagged with the Mod's name.
+- **Still not working:** after running the game once, in Steam Library right-click Parisian Bistro Simulator → Manage → Browse local files. Open BrasserieSimulator → Binaries → Win64 → ue4ss, then right-click UE4SS.log → Open with → Notepad. If there is no log, UE4SS isn't starting; recheck the loader install. If there is one, look for lines tagged with the Mod's name.
 
 Always close the game before changing Mod files. Check the Mod's host/guest requirements. To find a conflict, change one Mod at a time and leave the loader and other Mods in place.
 
@@ -35,13 +35,13 @@ Before uploading, remove usernames, local paths, room codes and other private de
 
 ### 下载或安装遇到问题
 
-- **Vortex 添加合集时要求 Premium：**合集一键安装需要 Nexus Premium。免费账号可以逐个下载 Mod ZIP 手动安装，或用 Vortex 的 **Install From File（从文件安装）**导入，再启用并部署。GitHub 下载无需账号。无论是否有 Premium，都要先自行装好游戏扩展和 UE4SS。
+- **Vortex 添加合集时推荐 Premium：**免费账号可按提示逐个开始每款 Mod 的下载，Premium 会自动开始下载。也可以逐个下载 Mod ZIP 手动安装，或用 Vortex 的 **Install From File（从文件安装）**导入，再启用并部署。GitHub 下载无需账号。无论是否有 Premium，都要先自行装好游戏扩展和 UE4SS。
 - **Windows 提示缺少 `VCRUNTIME140`、`MSVCP140` 等 DLL：**安装或修复 [Microsoft Visual C++ v14 Redistributable X64](https://aka.ms/vc14/vc_redist.x64.exe)，按提示重启。不要从其他网站下载单个 DLL。
 - **GitHub 显示 404 或找不到下载：**检查链接，或打开 [Mod 发布页](https://github.com/martin-lzh/parisian-bistro-simulator-mods/releases)，在 **Assets** 下载 ZIP。文件缺失时请提交 [Issue](https://github.com/martin-lzh/parisian-bistro-simulator-mods/issues)。
 - **解压后还有 ZIP：**CI artifact 外层是 `mod-packages` 压缩包，先解压外层，再解压里面的 Mod ZIP。Release 下载的已经是单个 Mod ZIP。不要安装 **Source code** 源码包。
 - **Mod 没有出现：**检查目录层级，应为 `Mods/AutoMenu/Scripts/main.lua` 加 `Mods/AutoMenu/enabled.txt`，而不是 `Mods/AutoMenu/AutoMenu/Scripts/main.lua`。保留 ZIP 内全部文件，包括 DLL。
 - **加载器没有启动：**这些 Mod 需要 UE4SS experimental `v3.0.1-1140-gf58e8f84`，旧稳定版 3.0.1 无法使用。可参考 [UE4SS 官方安装说明](https://docs.ue4ss.com/dev/installation-guide.html)。UE4SS 装在其他位置时，使用那份安装的 `Mods` 文件夹。
-- **仍然无效：**运行一次游戏后，用记事本打开 `Win64/ue4ss/UE4SS.log`。没有日志说明 UE4SS 没有启动，请重新检查加载器安装；有日志时，查找带有该 Mod 名称的行。
+- **仍然无效：**运行一次游戏后，在 Steam 库中右键 Parisian Bistro Simulator → 管理 → 浏览本地文件，依次打开 BrasserieSimulator → Binaries → Win64 → ue4ss，再右键 UE4SS.log → 打开方式 → 记事本。没有日志说明 UE4SS 没有启动，请重新检查加载器安装；有日志时，查找带有该 Mod 名称的行。
 
 修改 Mod 文件前务必退出游戏。注意各 Mod 的房主／客机要求。排查冲突时一次只调整一个 Mod，保留加载器和其他 Mod。
 

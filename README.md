@@ -21,7 +21,7 @@
 
 **LZH’s MODS** are seven independent quality-of-life Mods for **Parisian Bistro Simulator** on Windows. Keep track of drinks, serve orders in sequence and automate routine restaurant tasks. Pick the ones you want; each has its own guide.
 
-All seven support the game up to **1.0.2.44eb (Steam Build 25822788)**.
+All seven support game **1.0.1.44eb–1.0.2.44eb**. Latest confirmed version: **1.0.2.44eb (Steam Build 25822788)**. Each Mod guide records the historical build used for testing.
 
 ### Choose a Mod
 
@@ -37,7 +37,7 @@ All seven support the game up to **1.0.2.44eb (Steam Build 25822788)**.
 
 Some Mods only need to be installed by the multiplayer host, others by each player who wants the feature — see each guide.
 
-**Want all seven at once?** Install the [Nexus collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) with Vortex (one-click install requires Nexus Premium). Set up the [Vortex game extension](https://www.nexusmods.com/site/mods/2421) and UE4SS first, following the [Vortex guide](vortex-extension/README.md#english). Without Premium, download the Mods individually and install them as below.
+**Want all seven at once?** Install the [Nexus collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) with Vortex. Free accounts start each Mod download one by one; Premium starts them automatically. Set up the [Vortex game extension](https://www.nexusmods.com/site/mods/2421) and UE4SS first, following the [Vortex guide](vortex-extension/README.md#english). You can also download the Mods individually and install them as below.
 
 ### Manual download and installation
 
@@ -82,7 +82,7 @@ For example, Bartender's Note should end up as `Win64/ue4ss/Mods/BartendersNote/
 
 Vortex is an optional **mod manager** that copies and removes Mod files for you. It still needs UE4SS. You'll install three things: **Vortex**, the **Parisian Bistro Simulator game extension** and **UE4SS**. The [Vortex setup guide](vortex-extension/README.md#english) walks through each step.
 
-One-click install of the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) requires Nexus Premium. The Mods themselves are free: with a free account, download individual ZIPs and install them manually or import them into Vortex.
+Free accounts can install the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) by starting each Mod download when prompted; Premium starts them automatically. The Mods themselves are free. Individual ZIPs can also be installed manually or imported into Vortex.
 
 ### Languages and help
 
@@ -104,7 +104,7 @@ Mod code and documentation by **Zhaohan Liu**, released under the [PolyForm Nonc
 
 **LZH’s MODS** 是为 Windows 版 **Parisian Bistro Simulator（法式小馆儿模拟器）** 制作的七款独立便利 Mod：记住待调饮料、有序出餐，并自动处理日常经营事务。按需挑选，每款 Mod 都有独立说明。
 
-七款 Mod 均支持至游戏版本 **1.0.2.44eb（Steam Build 25822788）**。
+七款 Mod 均支持游戏 **1.0.1.44eb–1.0.2.44eb**，最新确认版本为 **1.0.2.44eb（Steam Build 25822788）**。各 Mod 说明分别记录历史测试所用构建。
 
 ### 选择 Mod
 
@@ -120,7 +120,7 @@ Mod code and documentation by **Zhaohan Liu**, released under the [PolyForm Nonc
 
 联机时，有的 Mod 只需房主安装，有的需要想用该功能的玩家各自安装，详见各 Mod 说明。
 
-**想一次装齐七款？** 用 Vortex 安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)（一键安装需要 Nexus Premium）。请先按 [Vortex 安装说明](vortex-extension/README.md#中文)装好 [Vortex 游戏扩展](https://www.nexusmods.com/site/mods/2421)和 UE4SS。没有 Premium 时，逐个下载 Mod，按下方步骤手动安装。
+**想一次装齐七款？** 用 Vortex 安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)。免费账号按提示逐个开始每款 Mod 的下载，Premium 会自动开始下载。请先按 [Vortex 安装说明](vortex-extension/README.md#中文)装好 [Vortex 游戏扩展](https://www.nexusmods.com/site/mods/2421)和 UE4SS。也可以逐个下载 Mod，按下方步骤手动安装。
 
 ### 手动下载与安装
 
@@ -165,7 +165,7 @@ UE4SS 是 **Mod 加载器**，负责在游戏启动时运行 Mod。只需安装�
 
 Vortex 是可选的 **Mod 管理器**，帮你复制和移除 Mod 文件，但仍然需要 UE4SS。需要准备三样：**Vortex**、**Parisian Bistro Simulator 游戏扩展**和 **UE4SS**，逐步操作见 [Vortex 安装说明](vortex-extension/README.md#中文)。
 
-一键安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)需要 Nexus Premium。Mod 本身免费：免费账号可逐个下载 ZIP，手动安装或导入 Vortex。
+免费账号可以安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)，按提示逐个开始每款 Mod 的下载；Premium 会自动开始下载。Mod 本身免费，也可以逐个下载 ZIP，手动安装或导入 Vortex。
 
 ### 语言与帮助
 

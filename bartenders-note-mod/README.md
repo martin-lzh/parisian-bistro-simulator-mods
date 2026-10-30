@@ -1,6 +1,6 @@
 # Bartender's Note / 调饮手记
 
-[![Bartender's Note / 调饮手记 — AI-generated cover / AI 宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)](https://www.nexusmods.com/mods/1?game_id=10352)
+[![Bartender's Note / 调饮手记 — AI-generated cover / AI 宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/bartenders-note-mod/assets/cover.png?raw=1)](https://www.nexusmods.com/mods/1?game_id=10352)
 
 [English](#english) · [中文](#中文)
 
@@ -29,8 +29,12 @@ In multiplayer, each player's note shows their own claims. Guests can use the no
 
 ### Requirements
 
-- Windows version of Parisian Bistro Simulator, up to game version 1.0.2.44eb (Steam Build 25822788).
+- Windows version of Parisian Bistro Simulator, game 1.0.1.44eb–1.0.2.44eb. Latest confirmed game version: 1.0.2.44eb (Steam Build 25822788).
 - [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental) `v3.0.1-1140-gf58e8f84`, installed separately (see **Install**). The older stable UE4SS 3.0.1 does not work.
+
+### Testing
+
+2026-10-07: Bartender's Note 0.1.2 passed in-game testing on game 1.0.2.44eb (Steam Build 25759268). On 2026-09-26, the 0.1.2-dev build passed in-game and multiplayer testing and became stable 0.1.2. Version 0.1.3 retains the gameplay implementation of 0.1.2.
 
 ### Download
 
@@ -55,9 +59,9 @@ UE4SS is the mod loader that runs Mods when the game starts. Install it once, th
 8. **Check the Mod:** `Mods/BartendersNote/Scripts/main.lua` and `Mods/BartendersNote/enabled.txt` should exist (not `BartendersNote/BartendersNote`). Keep `enabled.txt` even if it is empty.
 9. **Start the game through Steam** and follow **How to use** above.
 
-If the Mod doesn't work, close the game, recheck steps 5 and 8, then see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If the Mod doesn't work, close the game, recheck steps 5 and 8, then see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#english).
 
-**Using Vortex instead:** set up Vortex, the game extension and UE4SS with the [Vortex guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#english), then import the Mod ZIP, enable it and deploy. Install each Mod either with Vortex or manually, not both. One-click install of the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) requires Nexus Premium.
+**Using Vortex instead:** set up Vortex, the game extension and UE4SS with the [Vortex guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/vortex-extension/README.md#english), then import the Mod ZIP, enable it and deploy. Install each Mod either with Vortex or manually, not both. Free accounts can install the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) in Vortex by starting each Mod download one by one; Premium starts the downloads automatically.
 
 ### Update or remove
 
@@ -79,9 +83,11 @@ If the note is missing:
 - Widen the game window if it is very narrow.
 - While a game is loading, the note hides and comes back once the orders are available again.
 
-If it still doesn't appear, ask for [help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) and include the `[Bartender's Note]` lines from `Win64/ue4ss/UE4SS.log`.
+If it still doesn't appear, ask for [help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#english) and include the `[Bartender's Note]` lines from `Win64/ue4ss/UE4SS.log`.
 
-[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
+To open the log, in Steam Library right-click Parisian Bistro Simulator → Manage → Browse local files. Open BrasserieSimulator → Binaries → Win64 → ue4ss, right-click UE4SS.log and choose Open with → Notepad. Use Ctrl+F to find the Mod name and include the relevant lines when reporting the problem.
+
+[Screenshots and artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/bartenders-note-mod/assets/README.md#english) · [Changes](CHANGELOG.md) · [Help and feedback](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#english) · [PolyForm Noncommercial License 1.0.0](LICENSE)
 
 ## 中文
 
@@ -108,8 +114,12 @@ If it still doesn't appear, ask for [help](https://github.com/martin-lzh/parisia
 
 ### 使用要求
 
-- Windows 版 Parisian Bistro Simulator，支持至游戏版本 1.0.2.44eb（Steam Build 25822788）。
+- Windows 版 Parisian Bistro Simulator，支持游戏 1.0.1.44eb–1.0.2.44eb；最新确认游戏版本为 1.0.2.44eb（Steam Build 25822788）。
 - [UE4SS experimental](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/experimental) `v3.0.1-1140-gf58e8f84`，需单独安装（见“安装”）。旧稳定版 UE4SS 3.0.1 无法使用。
+
+### 测试记录
+
+2026-10-07：调饮手记 0.1.2 在游戏 1.0.2.44eb（Steam Build 25759268）完成实机测试。2026-09-26，0.1.2-dev 构建通过实机和联机测试，随后转为正式版 0.1.2。当前 0.1.3 沿用 0.1.2 的玩法实现。
 
 ### 下载
 
@@ -134,9 +144,9 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 8. **检查 Mod：**应有 `Mods/BartendersNote/Scripts/main.lua` 和 `Mods/BartendersNote/enabled.txt`（不要多套一层 `BartendersNote/BartendersNote`）。`enabled.txt` 即使是空文件也要保留。
 9. **从 Steam 启动游戏**，按上方“怎么使用”操作。
 
-不生效时，先退出游戏，核对第 5、8 步，再查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+不生效时，先退出游戏，核对第 5、8 步，再查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#中文)。
 
-**改用 Vortex：**先按 [Vortex 安装说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/vortex-extension/README.md#中文)装好 Vortex、游戏扩展和 UE4SS，再导入 Mod ZIP，启用并部署。同一个 Mod 只用 Vortex 或手动其中一种方式安装。通过 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)一键安装需要 Nexus Premium。
+**改用 Vortex：**先按 [Vortex 安装说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/vortex-extension/README.md#中文)装好 Vortex、游戏扩展和 UE4SS，再导入 Mod ZIP，启用并部署。同一个 Mod 只用 Vortex 或手动其中一种方式安装。免费账号也能在 Vortex 中安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)，需要逐个开始每款 Mod 的下载；Premium 会自动开始下载。
 
 ### 更新与卸载
 
@@ -158,6 +168,8 @@ UE4SS 是 Mod 加载器，负责在游戏启动时运行 Mod。只需安装一�
 - 游戏窗口太窄时把它拉宽。
 - 游戏加载期间手记会暂时隐藏，订单恢复后自动重新显示。
 
-仍然不显示时，查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)，并附上 `Win64/ue4ss/UE4SS.log` 中带 `[Bartender's Note]` 的日志行。
+仍然不显示时，查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#中文)，并附上 `Win64/ue4ss/UE4SS.log` 中带 `[Bartender's Note]` 的日志行。
 
-[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)
+打开日志：在 Steam 库中右键 Parisian Bistro Simulator（法式小馆儿模拟器）→ 管理 → 浏览本地文件，依次打开 BrasserieSimulator → Binaries → Win64 → ue4ss。右键 UE4SS.log → 打开方式 → 记事本，用 Ctrl+F 查找 Mod 名称，反馈时附上相关行。
+
+[实机图与宣传图](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/bartenders-note-mod/assets/README.md#中文) · [版本变化](CHANGELOG.md) · [问题反馈](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#中文) · [PolyForm Noncommercial 1.0.0 许可](LICENSE)

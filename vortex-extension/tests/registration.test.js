@@ -6,6 +6,7 @@ const vm = require('node:vm');
 const fs = require('node:fs');
 const path = require('node:path');
 const installer = require('../installer');
+const gameVersion = require('../game-version');
 
 function load(statAsync) {
     const registered = {};
@@ -15,6 +16,7 @@ function load(statAsync) {
         require: name => {
             if (name === 'path') return path.win32;
             if (name === './installer') return installer;
+            if (name === './game-version') return gameVersion;
             if (name === 'vortex-api') return {
                 fs: { statAsync },
                 util: { GameStoreHelper: { findByAppId: async ids => {
@@ -40,6 +42,7 @@ test('registers the actual Steam game and relative UE4SS destination', async () 
     assert.equal(await game.queryPath(), 'X:\\Steam\\Bistro');
     assert.equal(game.queryModPath(), 'BrasserieSimulator\\Binaries\\Win64\\ue4ss\\Mods');
     assert.equal(game.executable(), 'BrasserieSimulator.exe');
+    assert.equal(game.getGameVersion, gameVersion.getGameVersion);
     assert.equal((await api.supports(['A/Scripts/main.lua'], 'oldmarketsimulator')).supported, false);
     assert.equal((await api.supports(['A/Scripts/main.lua'], game.id)).supported, true);
 });

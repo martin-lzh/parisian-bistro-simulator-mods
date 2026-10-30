@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Clarify the supported game versions and historical test results, and add steps to open the log and use free Vortex downloads.
+- 明确支持的游戏版本和历史测试记录，补充打开日志及免费使用 Vortex 下载的步骤。
+
 ## 0.1.3 - 2026-10-18
 
 - Supports game 1.0.2.44eb (Steam Build 25822788).

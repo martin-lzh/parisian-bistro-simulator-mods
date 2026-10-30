@@ -18,7 +18,7 @@ def main() -> None:
     output = source.parent / "outputs" / "vortex-extension"
     output.mkdir(parents=True, exist_ok=True)
     archive = output / f"ParisianBistroSimulator-Vortex-{info['version']}.zip"
-    allowlist = ("index.js", "installer.js", "info.json", "gameart.png", "README.md", "LICENSE")
+    allowlist = ("index.js", "installer.js", "game-version.js", "info.json", "gameart.png", "README.md", "LICENSE")
     with ZipFile(archive, "w", ZIP_DEFLATED, compresslevel=9) as package:
         for name in allowlist:
             package.write(source / name, name)

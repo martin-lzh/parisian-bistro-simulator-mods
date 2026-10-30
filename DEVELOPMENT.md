@@ -36,7 +36,7 @@ If a checkout already exists, use that directory and inspect `git status --short
 | Auto Menu | [Development guide](auto-menu-mod/DEVELOPMENT.md#english) |
 | Scan to Order | [Development guide](scan-to-order-mod/DEVELOPMENT.md#english) |
 
-See [languages](docs/localization.md#english), [validation](releases/validation.md#english) and [release management](releases/README.md#english) for shared requirements and recorded testing.
+See [languages](docs/localization.md#english), [validation](releases/validation.md#english) and [release management](releases/README.md) for shared requirements and recorded testing.
 
 ### Repository layout and boundaries
 
@@ -84,7 +84,7 @@ Each Mod has an `assets/README.md` with naming and embedding examples. Following
 Repository-only documents can use relative image paths. Player READMEs also ship in Mod ZIPs, which exclude `assets/`, so use a full GitHub image URL with `?raw=1` when embedding images there. Use a branch or tag that contains the image; public images do not require repository access. For example, after adding the actual file:
 
 ```markdown
-![Bartender's Note cover artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
+![Bartender's Note cover artwork](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/bartenders-note-mod/assets/cover.png?raw=1)
 ```
 
 Keep social-platform exports, drafts and archives in ignored `outputs/<mod>/promo/`; extracted assets and reverse-engineering material remain in `work/`.
@@ -113,7 +113,7 @@ In-game test results and supported game builds are recorded in the [validation r
 
 Create an independent `<feature>-mod/` only when there is an actual feature to implement. Keep every README in English and Chinese, including player guides, image-directory guides and documentation indexes. Use `DEVELOPMENT.md` for implementation and validation and `CHANGELOG.md` for pending changes under `Unreleased`; documents other than READMEs may be English-only. Add meaningful tests for behavior that can be verified offline. Keep package allowlists explicit and update version/diagnostic checks together when a version advances.
 
-Keep a copy of the root `LICENSE` in each Mod and include it in `build.py`'s allowlist. Bundled documentation may use relative links to files in the same Mod, such as `CHANGELOG.md` or `LICENSE`. For root documentation, shared guides or another Mod, use a full GitHub URL for the matching branch or tag, such as [the development branch's support guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md). A `../docs/` or `../SUPPORT.md` link does not resolve inside an extracted individual ZIP.
+Keep a copy of the root `LICENSE` in each Mod and include it in `build.py`'s allowlist. Bundled documentation may use relative links to files in the same Mod, such as `CHANGELOG.md` or `LICENSE`. For root documentation, shared guides or another Mod, use a full GitHub URL on `main` (or a fixed release tag for historical evidence), such as [the support guide](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md). A `../docs/` or `../SUPPORT.md` link does not resolve inside an extracted individual ZIP.
 
 Read the game language at runtime and reuse native text before adding original translations; see [localization](docs/localization.md#english). Keep each Mod self-contained. The folder convention follows Old Market Simulator Mods, but its Unity/C# interfaces, loaders and SDK are not applicable to this Unreal game. Verify engine types and calls against local references; do not invent signatures or describe extracted assets as recovered original C++ source.
 
@@ -168,7 +168,7 @@ cd parisian-bistro-simulator-mods
 | Auto Menu（菜单巧配） | [开发说明](auto-menu-mod/DEVELOPMENT.md#中文) |
 | Scan to Order（扫码点餐） | [开发说明](scan-to-order-mod/DEVELOPMENT.md#中文) |
 
-通用要求及既有测试另见[多语言适配](docs/localization.md#中文)、[验收记录](releases/validation.md#中文)和[版本管理](releases/README.md#中文)。
+通用要求及既有测试另见[多语言适配](docs/localization.md#中文)、[验收记录](releases/validation.md#中文)和[版本管理](releases/README.md)。
 
 ### 目录与内容边界
 
@@ -216,7 +216,7 @@ cd parisian-bistro-simulator-mods
 仅供仓库阅读的文档可以使用相对路径。玩家 README 同时进入 Mod ZIP，而 `assets/` 不打包，因此其中展示图片时使用带 `?raw=1` 的完整 GitHub 图片地址。使用包含该图片的分支或标签，公开图片无需仓库访问权限。实际添加图片后，可按以下示例引用：
 
 ```markdown
-![调饮手记宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/bartenders-note-mod/assets/cover.png?raw=1)
+![调饮手记宣传封面](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/bartenders-note-mod/assets/cover.png?raw=1)
 ```
 
 社交平台专用导出、草稿及打包文件存放在被忽略的 `outputs/<mod>/promo/`；提取资源和反编译资料继续留在 `work/`。
@@ -245,7 +245,7 @@ git diff --check
 
 有实际功能要实现时才创建独立 `<feature>-mod/`。所有 README 均须中英双语，包括玩家说明、图片目录说明和文档索引。`DEVELOPMENT.md` 记录实现与验收，`CHANGELOG.md` 将待发布内容放在 `Unreleased`；README 以外的文档可以仅使用英语。仅为适合离线验证的行为添加有意义的测试。打包使用固定白名单；推进版本时同步更新版本与诊断检查。
 
-每个 Mod 保存根 `LICENSE` 的副本，并纳入 `build.py` 白名单。随包文档链接同一 Mod 内文件时，可以使用 `CHANGELOG.md`、`LICENSE` 等相对路径；链接根文档、公共说明或其他 Mod 时，应使用对应分支或标签的完整 GitHub URL，例如[开发分支帮助说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md)。单个 ZIP 解压后，`../docs/` 或 `../SUPPORT.md` 之类链接无法找到仓库内目标。
+每个 Mod 保存根 `LICENSE` 的副本，并纳入 `build.py` 白名单。随包文档链接同一 Mod 内文件时，可以使用 `CHANGELOG.md`、`LICENSE` 等相对路径；链接根文档、公共说明或其他 Mod 时，应使用 `main` 上的完整 GitHub URL（历史证据使用固定发布标签），例如[帮助说明](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md)。单个 ZIP 解压后，`../docs/` 或 `../SUPPORT.md` 之类链接无法找到仓库内目标。
 
 运行时读取游戏语言，优先复用原生文案，再补充原创翻译，详见[多语言适配](docs/localization.md#中文)。各 Mod 保持独立。目录组织参考菜市场模拟器，但该项目的 Unity/C# 接口、加载器及 SDK 不适用于本 Unreal 游戏。类型和调用须经本机参考核对，不编造签名，也不把资源提取称为恢复原始 C++ 源码。
 
