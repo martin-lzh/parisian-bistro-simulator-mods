@@ -26,7 +26,7 @@ Players can start with the [Mod list and downloads](../README.md#english) or [he
 | Smart Delivery | [Player guide](../smart-delivery-mod/README.md#english) · [Development and validation](../smart-delivery-mod/DEVELOPMENT.md#english) · [Changes](../smart-delivery-mod/CHANGELOG.md) |
 | Auto Menu | [Player guide](../auto-menu-mod/README.md#english) · [Development and validation](../auto-menu-mod/DEVELOPMENT.md#english) · [Changes](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order | [Player guide](../scan-to-order-mod/README.md#english) · [Development and validation](../scan-to-order-mod/DEVELOPMENT.md#english) · [Changes](../scan-to-order-mod/CHANGELOG.md) |
-| Versions and publishing | [Release management](../releases/README.md#english) · [Authorization records](../releases/approvals/README.md#english) |
+| Versions and publishing | [Release management](../releases/README.md) · [Authorization records](../releases/approvals/README.md) |
 | In-game testing and supported game builds | [Validation record](../releases/validation.md#english) |
 
 Extracted assets, type/function exports, translation catalogs and research notes stay in the ignored `work/` folder, not here.
@@ -55,7 +55,7 @@ Extracted assets, type/function exports, translation catalogs and research notes
 | Smart Delivery（配送随心） | [玩家说明](../smart-delivery-mod/README.md#中文) · [开发与验收](../smart-delivery-mod/DEVELOPMENT.md#中文) · [版本变化](../smart-delivery-mod/CHANGELOG.md) |
 | Auto Menu（菜单巧配） | [玩家说明](../auto-menu-mod/README.md#中文) · [开发与验收](../auto-menu-mod/DEVELOPMENT.md#中文) · [版本变化](../auto-menu-mod/CHANGELOG.md) |
 | Scan to Order（扫码点餐） | [玩家说明](../scan-to-order-mod/README.md#中文) · [开发与验收](../scan-to-order-mod/DEVELOPMENT.md#中文) · [版本变化](../scan-to-order-mod/CHANGELOG.md) |
-| 版本与发布 | [版本管理](../releases/README.md#中文) · [授权记录](../releases/approvals/README.md#中文) |
+| 版本与发布 | [版本管理](../releases/README.md) · [授权记录](../releases/approvals/README.md) |
 | 实机测试与支持的游戏版本 | [验收记录](../releases/validation.md#中文) |
 
 提取资源、类型与函数导出、游戏翻译目录及研究笔记放在被忽略的 `work/` 中，不放在这里。

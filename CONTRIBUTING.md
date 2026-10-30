@@ -27,7 +27,7 @@ Run the relevant checks from [Development](DEVELOPMENT.md#build-and-checks). For
 
 In the PR, describe the player-visible problem, the new behavior, the tests you ran and any in-game checks still to do. List the affected Mods and their version status. Keep commits focused and generated output out of Git.
 
-The maintainer reviews and merges. Releases follow the separate [release authorization process](releases/approvals/README.md#english).
+The maintainer reviews and merges. Merging an approved release PR into `main` publishes the new versions through CI; see [release management](releases/README.md).
 
 ## 中文
 
@@ -54,4 +54,4 @@ The maintainer reviews and merges. Releases follow the separate [release authori
 
 PR 中说明玩家遇到的问题、修改后的行为、已运行的测试和尚需进行的实机检查，列出受影响的 Mod 及其版本情况。提交按目的组织，生成产物不进入 Git。
 
-维护者审查后合并。发布版本另按[发布授权流程](releases/approvals/README.md#中文)处理。
+维护者审查后合并。获准发布的 PR 合入 `main` 后，CI 自动发布新版本，见[发布说明](releases/README.md)。
