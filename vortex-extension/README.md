@@ -6,9 +6,13 @@
 
 **Version 0.1.1.** Adds Parisian Bistro Simulator to Vortex, so Vortex can find the game (Steam App ID `3058360`) and install UE4SS Lua Mods with their folders intact. This is a Vortex extension, separate from the seven gameplay Mods.
 
+### Compatibility and testing
+
+Version 0.1.1 supports the Windows Steam installation layout used by game 1.0.1.44eb–1.0.2.44eb. Install Vortex and UE4SS experimental v3.0.1-1140-gf58e8f84 separately. On 2026-10-05, extension 0.1.0 was tested with Vortex 2.6.3: it detected the Steam installation and deployed all seven published LZH Mod packages. Version 0.1.1 keeps that installer and updates the license and author information.
+
 ### Install
 
-**Vortex is optional** — you can also [install the Mods manually](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/README.md#manual-download-and-installation) for free. One-click install of the [Nexus collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) requires Nexus Premium; with a free account, download the Mod ZIPs individually and import them into Vortex one by one.
+**Vortex is optional** — you can also [install the Mods manually](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/README.md#manual-download-and-installation) for free. Free accounts can install the [Nexus collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz) by starting each Mod download one by one; Premium starts the downloads automatically. You can also download individual Mod ZIPs and import them into Vortex.
 
 You need three things:
 
@@ -22,7 +26,7 @@ Set up all three before adding the collection.
 
 1. Close the game. Download the Windows installer from the [official Vortex page](https://www.nexusmods.com/about/vortex/) (sign in or register a free Nexus account if asked; free accounts use **Slow download**).
 2. Run the installer, then open **Vortex** from the Start menu.
-3. Click **Log In / Log In On Website**, sign in to your Nexus account in the browser and authorise Vortex. Your username should appear in Vortex. For the collection, use the account that has Premium.
+3. Click **Log In / Log In On Website**, sign in to your Nexus account in the browser and authorise Vortex. Your username should appear in Vortex. For automatic collection downloads, use the account that has Premium.
 
 #### 2. Add this game extension
 
@@ -49,9 +53,9 @@ Vortex and the collection don't install UE4SS, so do this yourself. If UE4SS is 
 
 #### 5. Add, enable and deploy Mods
 
-**Collection (Premium):** while signed in with Premium, open the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz), choose the Vortex install option and let the browser open Vortex. Follow the prompts until everything is installed, make sure the Mods are enabled, then click **Deploy Mods** if it's offered.
+**Collection:** open the [collection](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz), choose the Vortex install option and let the browser open Vortex. With a free account, start each Mod download when prompted; Premium starts them automatically. Follow the prompts until everything is installed, make sure the Mods are enabled, then click **Deploy Mods** if it's offered.
 
-**Individual ZIPs (free):** download each Mod from its Nexus page (**Files → Manual download → Slow download**) or from the [GitHub links](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/README.md#choose-a-mod). In Vortex, with Parisian Bistro Simulator selected, open **Mods → Install From File**, pick a Mod ZIP, install it and set it to **Enabled**. Repeat for each Mod, then click **Deploy Mods**. Only gameplay Mod ZIPs go here — not the UE4SS or extension ZIP.
+**Individual ZIPs (free):** download each Mod from its Nexus page (**Files → Manual download → Slow download**) or from the [GitHub links](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/README.md#choose-a-mod). In Vortex, with Parisian Bistro Simulator selected, open **Mods → Install From File**, pick a Mod ZIP, install it and set it to **Enabled**. Repeat for each Mod, then click **Deploy Mods**. Only gameplay Mod ZIPs go here — not the UE4SS or extension ZIP.
 
 **Deploying** is what puts the files into the game. Afterwards, open **BrasserieSimulator → Binaries → Win64 → ue4ss → Mods** and check that each Mod's folder contains **Scripts/main.lua** and **enabled.txt** — for example `Mods/BartendersNote/Scripts/main.lua`. Auto Menu and Smart Delivery also have a DLL in their `Scripts` folder.
 
@@ -66,7 +70,7 @@ Close the game first.
 - **Switching from a manual install:** back up the Mod's existing folder, delete it from `ue4ss/Mods`, then let Vortex deploy its copy. Keep only one copy of each Mod.
 - **Smart Delivery:** back up `SmartDelivery/Scripts/delivery-preference.txt` before updating or switching, and put it back after deploying.
 
-If deployment fails, read Vortex's notification and check the staging folder. If a deployed Mod does nothing in game, check the loader location, the Mod's folder and its host/guest requirements, then see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#english).
+If deployment fails, read Vortex's notification and check the staging folder. If a deployed Mod does nothing in game, check the loader location, the Mod's folder and its host/guest requirements, then see [Help](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#english).
 
 ### Build
 
@@ -79,7 +83,7 @@ python vortex-extension/build.py
 
 The ZIP and its SHA-256 file are written to the ignored `outputs/vortex-extension/`. The package contains the extension files and the license text (PolyForm Noncommercial License 1.0.0). `gameart.svg` is the vector source of the bundled 640 × 360 PNG (a serving cloche).
 
-The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths, duplicate destinations and incomplete or unsafe packages. On 2026-10-05, Vortex 2.6.3 loaded the extension, detected the Steam install and deployed all seven published LZH packages to a test directory; all 76 files matched the original ZIPs byte for byte.
+The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths, duplicate destinations and incomplete or unsafe packages. On 2026-10-05, Vortex 2.6.3 loaded extension 0.1.0, detected the Steam install and deployed all seven published LZH packages to a test directory; all 76 files matched the original ZIPs byte for byte.
 
 [Source and support](https://github.com/martin-lzh/parisian-bistro-simulator-mods) · [Vortex extension documentation](https://github.com/Nexus-Mods/Vortex/wiki/LEGACY-General-Creating-a-game-extension)
 
@@ -87,9 +91,13 @@ The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths
 
 **版本 0.1.1。** 为 Vortex 添加《法式小馆儿模拟器》支持：通过 Steam App ID `3058360` 找到游戏，并按完整文件夹安装 UE4SS Lua Mod。这是 Vortex 游戏扩展，独立于七款游戏功能 Mod。
 
+### 兼容性与测试记录
+
+0.1.1 版本支持 Windows Steam 版游戏 1.0.1.44eb–1.0.2.44eb 所用的安装目录结构。请单独安装 Vortex 和 UE4SS experimental v3.0.1-1140-gf58e8f84。2026-10-05，扩展 0.1.0 在 Vortex 2.6.3 中完成测试：识别 Steam 安装并部署七款已发布的 LZH Mod 安装包。0.1.1 沿用该安装器，更新许可和作者信息。
+
 ### 安装
 
-**Vortex 是可选的**，也可以按[手动安装指南](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/README.md#手动下载与安装)免费安装 Mod。一键安装 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)需要 Nexus Premium；免费账号可以逐个下载 Mod ZIP，再逐个导入 Vortex。
+**Vortex 是可选的**，也可以按[手动安装指南](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/README.md#手动下载与安装)免费安装 Mod。免费账号可在 [Nexus 合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)中逐个开始每款 Mod 的下载；Premium 会自动开始下载。也可以逐个下载 Mod ZIP，再导入 Vortex。
 
 需要准备三样：
 
@@ -103,7 +111,7 @@ The tests cover complete Mod folders, multiple Mods, bundled DLLs, Windows paths
 
 1. 退出游戏。从 [Vortex 官方页面](https://www.nexusmods.com/about/vortex/)下载 Windows 安装程序（如要求登录，登录或注册免费 Nexus 账号；免费账号选择 **Slow download（慢速下载）**）。
 2. 运行安装程序，完成后从开始菜单打开 **Vortex**。
-3. 点击 **Log In / Log In On Website（登录／在网站登录）**，在浏览器中登录 Nexus 账号并授权 Vortex，回到 Vortex 应能看到用户名。安装合集时请使用有 Premium 的账号。
+3. 点击 **Log In / Log In On Website（登录／在网站登录）**，在浏览器中登录 Nexus 账号并授权 Vortex，回到 Vortex 应能看到用户名。需要自动下载合集时，请使用有 Premium 的账号。
 
 #### 2. 添加本游戏扩展
 
@@ -130,9 +138,9 @@ Vortex 和合集都不会安装 UE4SS，需要自己装。已按下列结构装�
 
 #### 5. 添加、启用并部署 Mod
 
-**合集（Premium）：**用 Premium 账号打开[合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)，选择 Vortex 安装，允许浏览器打开 Vortex。按提示完成安装，确认 Mod 已启用；出现 **Deploy Mods（部署 Mod）** 时点击部署。
+**合集：**打开[合集](https://www.nexusmods.com/games/parisianbistrosimulator/collections/fymmvz)，选择 Vortex 安装，允许浏览器打开 Vortex。免费账号按提示逐个开始每款 Mod 的下载，Premium 会自动开始下载。按提示完成安装，确认 Mod 已启用；出现 **Deploy Mods（部署 Mod）** 时点击部署。
 
-**逐个 ZIP（免费）：**在各 Mod 的 Nexus 页面通过 **Files → Manual download → Slow download** 下载，或使用 [GitHub 链接](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/README.md#选择-mod)。在 Vortex 选中本游戏，打开 **Mods → Install From File（从文件安装）**，选择 Mod ZIP，安装后设为 **Enabled（已启用）**。每个 Mod 操作一次，最后点击 **Deploy Mods（部署 Mod）**。这里只导入游戏功能 Mod，不要导入 UE4SS 或扩展的 ZIP。
+**逐个 ZIP（免费）：**在各 Mod 的 Nexus 页面通过 **Files → Manual download → Slow download** 下载，或使用 [GitHub 链接](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/README.md#选择-mod)。在 Vortex 选中本游戏，打开 **Mods → Install From File（从文件安装）**，选择 Mod ZIP，安装后设为 **Enabled（已启用）**。每个 Mod 操作一次，最后点击 **Deploy Mods（部署 Mod）**。这里只导入游戏功能 Mod，不要导入 UE4SS 或扩展的 ZIP。
 
 **部署**才会把文件放进游戏。部署后打开 **BrasserieSimulator → Binaries → Win64 → ue4ss → Mods**，检查每个 Mod 的文件夹里有 **Scripts/main.lua** 和 **enabled.txt**，例如 `Mods/BartendersNote/Scripts/main.lua`。菜单巧配和配送随心的 `Scripts` 里还有各自的 DLL。
 
@@ -147,10 +155,10 @@ Vortex 和合集都不会安装 UE4SS，需要自己装。已按下列结构装�
 - **从手动安装切换：**先备份原 Mod 文件夹，再从 `ue4ss/Mods` 删除，然后由 Vortex 部署。每个 Mod 只保留一份。
 - **配送随心：**更新或切换前备份 `SmartDelivery/Scripts/delivery-preference.txt`，部署后放回。
 
-部署失败时查看 Vortex 通知并检查暂存文件夹；部署成功但游戏内没有效果时，核对加载器位置、Mod 文件夹和房主／客机要求，再查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/dev/SUPPORT.md#中文)。
+部署失败时查看 Vortex 通知并检查暂存文件夹；部署成功但游戏内没有效果时，核对加载器位置、Mod 文件夹和房主／客机要求，再查看[帮助](https://github.com/martin-lzh/parisian-bistro-simulator-mods/blob/main/SUPPORT.md#中文)。
 
 ### 构建
 
 在仓库根目录执行上方两条命令，运行安装器测试并生成扩展 ZIP。ZIP 及 SHA-256 文件写入被忽略的 `outputs/vortex-extension/`，包内为扩展文件和许可文本（PolyForm Noncommercial 1.0.0 许可）。`gameart.svg` 是随包 640 × 360 PNG 图标（餐盘罩）的矢量源文件。
 
-测试覆盖完整 Mod 文件夹、多个 Mod、随包 DLL、Windows 路径、重复目标以及不完整或不安全的压缩包。2026-10-05 在 Vortex 2.6.3 中加载扩展、识别 Steam 安装，并把七个已发布的 LZH 安装包部署到测试目录，全部 76 个文件与原 ZIP 逐字节一致。
+测试覆盖完整 Mod 文件夹、多个 Mod、随包 DLL、Windows 路径、重复目标以及不完整或不安全的压缩包。2026-10-05 在 Vortex 2.6.3 中加载扩展 0.1.0、识别 Steam 安装，并把七个已发布的 LZH 安装包部署到测试目录，全部 76 个文件与原 ZIP 逐字节一致。
